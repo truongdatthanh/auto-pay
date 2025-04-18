@@ -1,40 +1,39 @@
-import { Tabs } from 'expo-router';
+import { Stack, Tabs } from 'expo-router';
 import '../../global.css';
-import AppHeader from '@/components/App.header';
-
 
 
 export default function TabsLayout ()
 {
   return (
-    <Tabs>
+    <Tabs initialRouteName='home'>
       <Tabs.Screen
-        name="index"
+        name="home"
         options={ {
-          title: 'Notification',
-          header: () => <AppHeader />,
+          title: 'Home',
+          headerShown: false,
         } }
 
       />
+
       <Tabs.Screen
-        name="(information)"
+        name="QR-scanner"
         options={ {
-          title: 'Infomation',
+          title: 'QR',
           headerShown: false,
         } }
       />
 
-      {/* can fix */}
       <Tabs.Screen
-        name="details"
+        name="history"
         options={ {
-          title: 'Infomation',
+          title: 'History',
           headerShown: false,
         } }
       />
     </Tabs>
   );
 }
+
 
 
 

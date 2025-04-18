@@ -1,13 +1,15 @@
 
-import { Button, Image, SafeAreaView, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Button, Image, SafeAreaView, StatusBar, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { useLocalSearchParams, useNavigation, usePathname, useRouter } from 'expo-router';
 import { useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
+
 export default function Login ()
 {
     const logo = 'https://interdata.vn/assets/interdata-logo.png'
+    const logo1 = '../../assets/images/logo-autopay-2.png'
     const pathname = usePathname();
     const router = useRouter();
     const [ email, setEmail ] = useState( 'truongdat@gmail.com' );
@@ -15,8 +17,8 @@ export default function Login ()
 
     const navigation = useNavigation();
     const user = [
-        { id: 1, email: 'truongdat@gmail.com',fullName: "Truong Thanh Dat", password: '123456' },
-        { id: 2, email: '123456@gmail.com',fullName: "Truong Thanh Dat 1", password: '123456' },
+        { id: 1, email: 'truongdat@gmail.com', fullName: "Truong Thanh Dat", password: '123456' },
+        { id: 2, email: '123456@gmail.com', fullName: "Truong Thanh Dat 1", password: '123456' },
     ]
 
     const handleLogin = () =>
@@ -27,7 +29,7 @@ export default function Login ()
         if ( userFound )
         {
             AsyncStorage.setItem( 'user', JSON.stringify( userFound ) );
-            router.replace( '/' );
+            router.replace( '/tabs/home');
         }
         else
         {
@@ -37,14 +39,18 @@ export default function Login ()
 
     const handleRegister = () =>
     {
-        router.push( '/register' );
+        router.push( '/auth/register' );
+    }
+
+    const handleForgotPassword = () => 
+    {
+        router.push( '/auth/forgot-password' );
     }
 
     return (
         <>
             <SafeAreaView className='flex-1 min-h-screen'>
                 <View className="flex-1 bg-white p-8 items-center justify-center">
-                    <Text>Đây là trang: { pathname }</Text>
                     <View className="flex w-full max-w-sm justify-center">
                         <View className="mb-8">
                             <Image style={ { width: 'auto', height: 100 } } source={ { uri: logo } } />
@@ -67,11 +73,11 @@ export default function Login ()
                             title="Đăng nhập"
                             onPress={ handleLogin }
                         />
-                        <TouchableOpacity className="mt-4">
-                            <Text className="text-center text-blue-500">Forgot Password?</Text>
+                        <TouchableOpacity className="mt-4" onPress={ handleForgotPassword }>
+                            <Text className="text-center text-blue-500">Quên mật khẩu?</Text>
                         </TouchableOpacity>
                         <TouchableOpacity className="mt-4" onPress={ handleRegister }>
-                            <Text className="text-center text-blue-500">Chua co tai khoan? Dang ky di</Text>
+                            <Text className="text-center text-blue-500">Chưa có tài khoản? Đăng ký ngay</Text>
                         </TouchableOpacity>
                     </View>
                 </View>

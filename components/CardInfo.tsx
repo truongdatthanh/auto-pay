@@ -22,10 +22,7 @@ export default function CardInfo ( props: ICardInfoProps )
     const handlePressCard = () =>
     {
         console.log( "Card pressed", id );
-        router.push( {
-            pathname: "/details",
-            params: { card: JSON.stringify( card ) },
-        } );
+        router.push( `/details?id=${ id }` );
         //AsyncStorage.setItem( "info_banking", JSON.stringify( props ) );
     }
 

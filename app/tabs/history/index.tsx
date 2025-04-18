@@ -4,9 +4,8 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { formatDate } from '@/utils/formatDate';
 import Feather from '@expo/vector-icons/Feather';
 import CardInfo from '@/components/CardInfo';
-import "../../global.css";
 
-export default function Home ()
+export default function History ()
 {
   const mockDataBanking = [
     {
@@ -82,7 +81,7 @@ export default function Home ()
 
   const onChange = ( event: any, selectedDate?: Date ) =>
   {
-    setShowPicker( Platform.OS === 'ios' ); // iOS giữ picker mở, Android tự ẩn
+    setShowPicker( Platform.OS === 'ios' );
     if ( selectedDate )
     {
       setDate( selectedDate );
