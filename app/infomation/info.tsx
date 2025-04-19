@@ -18,14 +18,14 @@ export default function Information ()
 
     const handleLogout = () =>
     {
-        router.replace( '/login' );
+        router.replace( '/auth/login' );
         alert( 'Logout successful' );
         console.log( 'Ban da dang xuat' );
     };
 
     const handleChangePassword = () =>
     {
-        router.push( '/change-password' );
+        router.push( '/infomation/change-password' );
     };
 
     useEffect( () =>
@@ -35,7 +35,7 @@ export default function Information ()
             const user = await AsyncStorage.getItem( 'user' );
             if ( !user )
             {
-                router.replace( '/login' );
+                router.replace( '/auth/login' );
             }
             console.log( 'user', user );
             setUser( JSON.parse( user || '{}' ) );

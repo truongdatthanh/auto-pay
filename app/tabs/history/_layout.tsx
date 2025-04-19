@@ -1,5 +1,6 @@
 import { Stack } from "expo-router";
 import '../../../global.css';
+import AppHeaderInfo from "@/components/App.headerInfo";
 
 export default function HistoryLayout ()
 {
@@ -8,16 +9,9 @@ export default function HistoryLayout ()
       <Stack.Screen
         name='index'
         options={ {
-            headerShown: true,
-            title: 'Lịch sử giao dịch',
+          header: () => <AppHeaderInfo title='Lịch sử giao dịch' />,
         } }
-        
-      />
-      <Stack.Screen
-        name='detail-history'
-        options={ {
-          headerShown: true,
-        } }
+
       />
     </Stack>
   );

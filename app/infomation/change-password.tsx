@@ -15,7 +15,7 @@ export default function ChangePassword ()
             alert( 'Mật khẩu mới không khớp' );
             return;
         }
-        router.replace( "/login" )
+        router.replace( "/auth/login" )
         alert( 'Đổi mật khẩu thành công' );
     }
     return (

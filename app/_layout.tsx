@@ -24,5 +24,5 @@ export default function RootLayout ()
     }
   }, []);
 
-  return <Slot />;
+  return <Slot initialRouteName='tabs'/>;
 }
