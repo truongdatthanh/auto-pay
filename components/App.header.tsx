@@ -9,12 +9,12 @@ export default function AppHeader ()
   const avatar = "../assets/images/500.jpg";
   const handlePress = () =>
   {
-    router.push( "/tabs/home" );
+    router.push( "/(tabs)" );
   };
 
   const handleUserProfile = () =>
   {
-    router.push( "/infomation/info" );
+    router.push( "/user" );
   };
 
   return (
@@ -39,21 +39,3 @@ export default function AppHeader ()
   );
 }
 
-
-{/* <View>
-<TouchableOpacity onPress={toggleDropdown} className="flex-row items-center">
-  <Text className="text-white mr-2">Tất cả</Text>
-  <AntDesign name="caretdown" size={15} color="white" />
-</TouchableOpacity>
-
-{showDropdown && (
-  <View className="absolute w-48 top-10 right-0 bg-white rounded-md shadow-lg p-2 z-10">
-    <TouchableOpacity onPress={() => alert("Thông tin 1")}>
-      <Text className="text-black py-1 px-2">Thông tin 1</Text>
-    </TouchableOpacity>
-    <TouchableOpacity onPress={() => alert("Thông tin 2")}>
-      <Text className="text-black py-1 px-2">Thông tin 2</Text>
-    </TouchableOpacity>
-  </View>
-)}
-</View> */}

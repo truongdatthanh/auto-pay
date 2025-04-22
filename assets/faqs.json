@@ -1,0 +1,30 @@
+[
+    {
+        "question": "Số lượng giao dịch là gì?",
+        "answer": "Số lượng giao dịch được tính = giao dịch tiền vào + giao dịch tiền ra."
+    },
+    {
+        "question": "API Open Banking là gì?",
+        "answer": "API Open Banking là công nghệ giúp kết nối và đồng bộ dữ liệu các tài khoản ngân hàng như lịch sử giao dịch, biến động số dư cho bên thứ ba có quyền truy cập vào. AutoPAY đã ký kết và hợp tác trực tiếp với các ngân hàng như BIDV, MBBANK, ACB...để kết nối cung cấp giải pháp cho khách hàng."
+    },
+    {
+        "question": "Tôi được thêm bao nhiêu tài khoản ngân hàng?",
+        "answer": "Chúng tôi không giới hạn số lượng tài khoản ngân hàng. Hãy chọn tài khoản ngân hàng liên kết mà bạn thấy phù hợp."
+    },
+    {
+        "question": "Tính năng có giới hạn theo gói không?",
+        "answer": "Hiện tại, tất cả các gói đều dùng được tất cả tính năng của hệ thống. Ngoại trừ gói Business dành riêng cho các đối tác Agency."
+    },
+    {
+        "question": "Hệ thống hỗ trợ tài khoản cá nhân hay doanh nghiệp?",
+        "answer": "Chúng tôi hỗ trợ kết nối cả hai loại tài khoản ngân hàng cá nhân và doanh nghiệp."
+    },
+    {
+        "question": "Nếu tôi dùng quá hạn mức của gói đang sử dụng thì sao?",
+        "answer": "Bạn có thể nâng cấp lên gói cao hơn hoặc trả thêm tiền cho số lượng giao dịch vượt mức so với gói đang sử dụng."
+    },
+    {
+        "question": "Hệ thống có hỗ trợ hoàn tiền không?",
+        "answer": "Hiện tại chúng tôi hỗ trợ hoàn tiền trong 15 ngày đầu tiên nếu khách hàng không hài lòng khi sử dụng dịch vụ."
+    }
+]

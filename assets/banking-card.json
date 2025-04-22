@@ -1,0 +1,30 @@
+[
+    {
+        "id": "1",
+        "STK": "123456789",
+        "name": "Truong Thanh Dat",
+        "logoBanking": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Logo_Nam_A_Bank.svg/2560px-Logo_Nam_A_Bank.svg.png",
+        "bankName": "Nam A Bank"
+    },
+    {
+        "id": "2",
+        "STK": "4531234534345",
+        "name": "Truong Thanh Dat",
+        "logoBanking": "https://cdn.haitrieu.com/wp-content/uploads/2022/01/Icon-BIDV-.png",
+        "bankName": "BIDV"
+    },
+    {
+        "id": "3",
+        "STK": "453453453378",
+        "name": "Truong Thanh Dat",
+        "logoBanking": "https://cdn.haitrieu.com/wp-content/uploads/2022/02/Icon-Vietcombank.png",
+        "bankName": "Vietcombank"
+    },
+    {
+        "id": "4",
+        "STK": "2224567843",
+        "name": "Truong Thanh Dat",
+        "logoBanking": "https://cdn.haitrieu.com/wp-content/uploads/2022/02/Icon-Vietcombank.png",
+        "bankName": "Vietcombank"
+    }
+]

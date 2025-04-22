@@ -29,7 +29,7 @@ export default function Login ()
         if ( userFound )
         {
             AsyncStorage.setItem( 'user', JSON.stringify( userFound ) );
-            router.replace( '/tabs/home');
+            router.replace( '/(tabs)');
         }
         else
         {
@@ -39,12 +39,12 @@ export default function Login ()
 
     const handleRegister = () =>
     {
-        router.push( '/auth/register' );
+        router.push( '/(auth)/register' );
     }
 
     const handleForgotPassword = () => 
     {
-        router.push( '/auth/forgot-password' );
+        router.push( '/(auth)/forgot-password' );
     }
 
     return (

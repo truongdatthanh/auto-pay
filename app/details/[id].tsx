@@ -6,8 +6,8 @@ import { formatCurrencyVND } from "@/utils/formatCurrencyVND";
 import { formatDate } from "@/utils/formatDate";
 import { Ionicons } from '@expo/vector-icons';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
-
 import { useEffect, useState } from "react";
+import InfoText from "@/components/InfoText";
 
 export default function Details ()
 {
@@ -20,7 +20,7 @@ export default function Details ()
 
     const handleBackTo = () =>
     {
-        router.replace( "/tabs/history" );
+        router.replace( "/(tabs)/history" );
     }
 
     const handleAddNote = () =>
@@ -41,7 +41,7 @@ export default function Details ()
 
     useEffect(() => {
         const backAction = () => {
-          router.push('/tabs/history'); // Quay lại trang trước đó
+          router.push('/(tabs)/history'); // Quay lại trang trước đó
           return true;   // Ngăn hành vi back mặc định
         };
       
@@ -79,7 +79,7 @@ export default function Details ()
                             <Text className="text-3xl text-green-500">+{ formatCurrencyVND( data.amount ) }</Text>
                             <Text className="text-sm ">Thanh toán thành công</Text>
                         </View>
-                        <View className="flex-row items-center justify-between w-full mt-4">
+                        <View className="flex-row items-center justify-between w-full mt-4"> 
                             <Text className="text-sm">Mã giao dịch</Text>
                             <Text className="text-sm">{ data.transactionId }</Text>
                         </View>

@@ -1,6 +1,7 @@
-import { Stack } from "expo-router";
+import { router, Stack } from "expo-router";
 import '../../../global.css';
 import AppHeaderInfo from "@/components/App.headerInfo";
+import { useHideTabBarOnScroll } from "@/hooks/useHideTabbarOnScroll";
 
 export default function HistoryLayout ()
 {
@@ -9,9 +10,8 @@ export default function HistoryLayout ()
       <Stack.Screen
         name='index'
         options={ {
-          header: () => <AppHeaderInfo title='Lịch sử giao dịch' />,
+          header: () => <AppHeaderInfo title='Lịch sử giao dịch' onPress={() => router.back()}/>,
         } }
-
       />
     </Stack>
   );

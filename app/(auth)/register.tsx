@@ -37,7 +37,7 @@ export default function Register ()
         };
 
         router.push( {
-            pathname: '/auth/login',
+            pathname: '/login',
             params: user,
         } );
         alert( 'Dang ky thanh cong' );
@@ -121,7 +121,7 @@ export default function Register ()
                         </TouchableOpacity>
                     </View>
                     <View className="p-4">
-                        <Text className="text-center mt-4">Bạn đã có tài khoản? <Link href="/auth/login" className="text-black font-bold">Đăng nhập</Link></Text>
+                        <Text className="text-center mt-4">Bạn đã có tài khoản? <Link href="/login" className="text-black font-bold">Đăng nhập</Link></Text>
                     </View>
                 </View>
         </SafeAreaView>

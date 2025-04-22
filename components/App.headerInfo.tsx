@@ -14,16 +14,15 @@ export default function AppHeaderInfo ( { title, onPress }: { title: string, onP
                     <TouchableOpacity onPress={ onPress }>
                         <Ionicons name="arrow-back-circle-outline" size={ 30 } color="white" />
                     </TouchableOpacity>
-
                     <View className="flex-1 items-center">
                         <Text className="text-white font-bold text-lg">{ title }</Text>
                     </View>
 
-                    <Image
+                    {/* <Image
                         source={ require( "../assets/images/500.jpg" ) }
                         resizeMode="cover"
                         className="w-12 h-12 rounded-full"
-                    />
+                    /> */}
                 </View>
             </SafeAreaView>
 
