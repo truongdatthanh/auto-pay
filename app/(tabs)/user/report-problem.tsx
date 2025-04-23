@@ -1,7 +1,7 @@
 import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { useState } from 'react';
 import AntDesign from '@expo/vector-icons/AntDesign';
-import mockFaqs from '../../assets/faqs.json'
+import mockFaqs from '../../../assets/faqs.json'
 
 export default function ReportProblem ()
 {

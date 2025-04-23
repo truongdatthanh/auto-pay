@@ -1,0 +1,72 @@
+[
+    {
+        "id": 2,
+        "name": "Ngân hàng TMCP Á Châu",
+        "code": "ACB",
+        "bin": "970416",
+        "shortName": "ACB",
+        "logo": "https://api.vietqr.io/img/ACB.png",
+        "transferSupported": 1,
+        "lookupSupported": 1,
+        "short_name": "ACB",
+        "support": 3,
+        "isTransfer": 1,
+        "swift_code": "ASCBVNVX"
+    },
+    {
+        "id": 4,
+        "name": "Ngân hàng TMCP Đầu tư và Phát triển Việt Nam",
+        "code": "BIDV",
+        "bin": "970418",
+        "shortName": "BIDV",
+        "logo": "https://api.vietqr.io/img/BIDV.png",
+        "transferSupported": 1,
+        "lookupSupported": 1,
+        "short_name": "BIDV",
+        "support": 3,
+        "isTransfer": 1,
+        "swift_code": "BIDVVNVX"
+    },
+    {
+        "id": 21,
+        "name": "Ngân hàng TMCP Quân đội",
+        "code": "MB",
+        "bin": "970422",
+        "shortName": "MBBank",
+        "logo": "https://api.vietqr.io/img/MB.png",
+        "transferSupported": 1,
+        "lookupSupported": 1,
+        "short_name": "MBBank",
+        "support": 3,
+        "isTransfer": 1,
+        "swift_code": "MSCBVNVX"
+    },
+    {
+        "id": 23,
+        "name": "Ngân hàng TMCP Nam Á",
+        "code": "NAB",
+        "bin": "970428",
+        "shortName": "NamABank",
+        "logo": "https://api.vietqr.io/img/NAB.png",
+        "transferSupported": 1,
+        "lookupSupported": 1,
+        "short_name": "NamABank",
+        "support": 3,
+        "isTransfer": 1,
+        "swift_code": "NAMAVNVX"
+    },
+    {
+        "id": 38,
+        "name": "Ngân hàng TMCP Kỹ thương Việt Nam",
+        "code": "TCB",
+        "bin": "970407",
+        "shortName": "Techcombank",
+        "logo": "https://api.vietqr.io/img/TCB.png",
+        "transferSupported": 1,
+        "lookupSupported": 1,
+        "short_name": "Techcombank",
+        "support": 3,
+        "isTransfer": 1,
+        "swift_code": "VTCBVNVX"
+    }
+]

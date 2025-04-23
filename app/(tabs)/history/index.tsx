@@ -5,6 +5,7 @@ import { formatDate, groupByDate } from '@/utils/formatDate';
 import Feather from '@expo/vector-icons/Feather';
 import CardInfo from '@/components/CardInfo';
 import mockBanking from '../../../assets/data.json';
+import NotFound from '@/app/error/404';
 
 
 export default function History ()
@@ -33,7 +34,7 @@ export default function History ()
     console.log( "now", now.getDate() );
     past.setDate( now.getDate() - days );
     console.log( "past- - ", past.setDate( now.getDate() - days ) );
-    console.log( "now- - ", now.getDate() - days);
+    console.log( "now- - ", now.getDate() - days );
 
     const filtered = mockBanking.filter( item =>
     {
@@ -109,31 +110,35 @@ export default function History ()
           </TouchableOpacity>
         </View>
 
-        <SectionList
-          sections={ sections }
-          keyExtractor={ ( item ) => item.id.toString() }
-          renderItem={ ( { item } ) => (
-            <CardInfo
-              id={ item.id }
-              STK={ item.STK }
-              name={ item.name }
-              date={ item.date }
-              amount={ item.amount }
-              content={ item.content }
-              logoBanking={ item.logoBanking }
-              transactionId={ item.transactionId }
-            />
-          ) }
-          renderSectionHeader={ ( { section: { title } } ) => (
-            <Text className="px-4 py-2 bg-gray-200 text-gray-700 font-semibold">{ title }</Text>
-          ) }
-          stickySectionHeadersEnabled
-          refreshing={ refreshing }
-          onRefresh={ onRefresh }
-          showsVerticalScrollIndicator={ false }
-          className="bg-white"
-          contentContainerStyle={ { paddingBottom: 100 } }
-        />
+        { sections.length === 0 ? (
+           <NotFound contentErr="Không có giao dịch nào!!!" />
+        ) : (
+          <SectionList
+            sections={ sections }
+            keyExtractor={ ( item ) => item.id.toString() }
+            renderItem={ ( { item } ) => (
+              <CardInfo
+                id={ item.id }
+                STK={ item.STK }
+                name={ item.name }
+                date={ item.date }
+                amount={ item.amount }
+                content={ item.content }
+                logoBanking={ item.logoBanking }
+                transactionId={ item.transactionId }
+              />
+            ) }
+            renderSectionHeader={ ( { section: { title } } ) => (
+              <Text className="px-4 py-2 bg-gray-200 text-gray-700 font-semibold">{ title }</Text>
+            ) }
+            stickySectionHeadersEnabled
+            refreshing={ refreshing }
+            onRefresh={ onRefresh }
+            showsVerticalScrollIndicator={ false }
+            className="bg-white"
+            contentContainerStyle={ { paddingBottom: 100 } }
+          />
+        )}
       </View>
     </>
   );

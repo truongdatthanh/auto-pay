@@ -10,7 +10,14 @@ export default function HistoryLayout ()
       <Stack.Screen
         name='index'
         options={ {
-          header: () => <AppHeaderInfo title='Lịch sử giao dịch' onPress={() => router.back()}/>,
+          header: () => <AppHeaderInfo title='Lịch sử giao dịch' onPress={ () => router.back() } />,
+        } }
+      />
+
+      <Stack.Screen
+        name='details/[id]'
+        options={ {
+          header: () => <AppHeaderInfo title='Chi tiết giao dịch' onPress={ () => router.back() } />,
         } }
       />
     </Stack>

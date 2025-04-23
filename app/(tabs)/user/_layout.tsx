@@ -1,6 +1,6 @@
 
 import { router, Stack } from 'expo-router';
-import '../../global.css';
+import '../../../global.css';
 import AppHeaderInfo from '@/components/App.headerInfo';
 import { StatusBar } from 'react-native';
 

@@ -38,7 +38,7 @@ export default function UserInformation ()
 
         <ScrollView className="flex-1 bg-white">
             <View className="flex-row items-center justify-center my-4">
-                <Image source={ require( '../../assets/images/500.jpg' ) } className="h-28 w-28 rounded-full" />
+                <Image source={ require( '../../../assets/images/500.jpg' ) } className="h-28 w-28 rounded-full" />
             </View>
             <View className="p-6 m-2 bg-gray-200 rounded-3xl">
                 <InfoText className="text-md font-semibold" label="Họ tên" value={ fullName } />

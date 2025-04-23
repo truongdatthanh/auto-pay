@@ -74,7 +74,7 @@
         "STK": "4564534554",
         "name": "????????",
         "date": "2025-01-18",
-        "amount": 1000000,
+        "amount": -1000000,
         "content": "Xin chao the gioi",
         "logoBanking": "https://cdn.haitrieu.com/wp-content/uploads/2022/02/Icon-Vietcombank.png",
         "transactionId": "asdasd-12312-asdasd"
@@ -84,7 +84,7 @@
         "STK": "4564534554",
         "name": "????????",
         "date": "2024-03-18",
-        "amount": 1000000,
+        "amount": -1000000,
         "content": "Xin chao the gioi",
         "logoBanking": "https://cdn.haitrieu.com/wp-content/uploads/2022/02/Icon-Vietcombank.png",
         "transactionId": "asdasd-12312-asdasd"
@@ -94,7 +94,7 @@
         "STK": "4564534554",
         "name": "????????",
         "date": "2025-02-18",
-        "amount": 1000000,
+        "amount": -1000000,
         "content": "Xin chao the gioi",
         "logoBanking": "https://cdn.haitrieu.com/wp-content/uploads/2022/02/Icon-Vietcombank.png",
         "transactionId": "asdasd-12312-asdasd"

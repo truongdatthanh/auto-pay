@@ -1,41 +1,65 @@
-import { View } from 'react-native';
+import { View, Keyboard, SafeAreaView } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Tabs } from 'expo-router';
 import AppHeader from '@/components/App.header';
-
+import { useState, useEffect } from 'react';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 export default function TabLayout ()
 {
+  const [ isTabBarVisible, setIsTabBarVisible ] = useState( true );
+
+  useEffect( () =>
+  {
+    // Listener for when the keyboard is shown
+    const keyboardDidShowListener = Keyboard.addListener( 'keyboardDidShow', () =>
+    {
+      setIsTabBarVisible( false ); // Hide the tab bar when the keyboard is shown
+    } );
+
+    // Listener for when the keyboard is hidden
+    const keyboardDidHideListener = Keyboard.addListener( 'keyboardDidHide', () =>
+    {
+      setIsTabBarVisible( true ); // Show the tab bar when the keyboard is hidden
+    } );
+
+    // Cleanup listeners on unmount
+    return () =>
+    {
+      keyboardDidHideListener.remove();
+      keyboardDidShowListener.remove();
+    };
+  }, [] );
 
   return (
-    <>
+    <SafeAreaView style={ { flex: 1 } }>
       <Tabs
         initialRouteName="index"
         screenOptions={ {
-          tabBarShowLabel: true,//Chữ dưới icon
-          tabBarActiveTintColor: 'blue',//tabbar active sẽ có màu xanh
-          tabBarInactiveTintColor: 'gray',//tabbar inactive sẽ có màu xám
-          tabBarStyle: {//thanh tabbar
-            marginHorizontal: 10,
+          tabBarHideOnKeyboard: true, // Hide tabbar when the keyboard is visible
+          tabBarShowLabel: true, // Show label below the icon
+          tabBarActiveTintColor: 'blue', // Active tab color
+          tabBarInactiveTintColor: 'gray', // Inactive tab color
+          tabBarStyle: {
             position: 'absolute',
-            bottom: 20,
+            bottom: isTabBarVisible ? 20 : -70, // Hide or show based on isTabBarVisible
             left: 20,
             right: 20,
             height: 70,
-            backgroundColor: 'white',
-            borderRadius: 35,
-            elevation: 5,
+            borderRadius: 50,
+            marginHorizontal: 20,
+            elevation: 10,
             shadowColor: '#000',
-            shadowOffset: { width: 0, height: 5 },
             shadowOpacity: 0.1,
-            shadowRadius: 5,
+            shadowOffset: { width: 0, height: 5 },
+            shadowRadius: 10,
           },
-          tabBarLabelStyle: {//chữ dưới icon
+          tabBarLabelStyle: {
             fontSize: 12,
             fontWeight: 'bold',
             marginBottom: 5,
           },
-          tabBarItemStyle: {//cac item trong tabbar
+          tabBarItemStyle: {
             marginTop: 10,
           },
         } }
@@ -54,7 +78,10 @@ export default function TabLayout ()
         <Tabs.Screen
           name="qr/QR-scanner"
           options={ {
+            tabBarShowLabel: false, // Hide the label for this tab
             title: '',
+            tabBarStyle: { display: 'none' }, // Hide the tab bar for this screen
+            headerShown: false,
             tabBarIcon: () => (
               <View
                 style={ {
@@ -89,13 +116,19 @@ export default function TabLayout ()
             headerShown: false,
           } }
         />
+
+        <Tabs.Screen
+          name="user"
+          options={ {
+            title: 'User',
+            tabBarIcon: ( { color } ) => (
+              <FontAwesome name="user-o" size={24} color={ color } />
+            ),
+            headerShown: false,
+            tabBarStyle: {display: 'none'}, // Hide the tab bar for this screen
+          } }
+        />
       </Tabs>
-    </>
+    </SafeAreaView>
   );
 }
-
-
-
-
-
-

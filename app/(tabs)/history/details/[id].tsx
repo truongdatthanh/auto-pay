@@ -1,13 +1,13 @@
 import { router, useLocalSearchParams, useNavigation } from "expo-router";
 import { Alert, BackHandler, Image, Modal, ScrollView, Text, TextInput, Touchable, TouchableOpacity, View } from "react-native";
-import mockDataBanking from "../../assets/data.json";
+import mockDataBanking from "../../../../assets/data.json";
 import AppHeaderInfo from "@/components/App.headerInfo";
 import { formatCurrencyVND } from "@/utils/formatCurrencyVND";
 import { formatDate } from "@/utils/formatDate";
 import { Ionicons } from '@expo/vector-icons';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { useEffect, useState } from "react";
-import InfoText from "@/components/InfoText";
+
 
 export default function Details ()
 {
@@ -64,8 +64,7 @@ export default function Details ()
     }
     return (
         <>
-            <AppHeaderInfo title="Chi tiết giao dịch" onPress={ handleBackTo } />
-            <ScrollView className="flex-1 px-6 py-6 bg-blue-100" contentContainerStyle={ { paddingBottom: 50 } } showsVerticalScrollIndicator={ false } >
+            <ScrollView className="flex-1 px-6 py-6 bg-blue-100" contentContainerStyle={ { paddingBottom: 150 } } showsVerticalScrollIndicator={ false } >
                 <View className="flex-1 px-6 py-8 bg-white rounded-lg">
                     {/* Header */ }
                     <View className="items-center mb-4 border-b border-gray-300 pb-4">

@@ -10,6 +10,7 @@ import { AntDesign } from '@expo/vector-icons';
 import MyQRPopup from '@/components/MyQR';
 
 
+
 interface IUser
 {
     id: number;
@@ -20,7 +21,7 @@ interface IUser
 
 export default function Information ()
 {
-    const avatar = '../../assets/images/500.jpg';
+    const avatar = '../../../assets/images/500.jpg';
     const [ user, setUser ] = useState<IUser>();
     const [ isVisible, setIsVisible ] = useState( false );
 
@@ -42,6 +43,9 @@ export default function Information ()
 
     return (
         <ScrollView className='bg-#cccccc flex-1' contentContainerStyle={ { paddingBottom: 20 } }>
+            <TouchableOpacity className='absolute top-12 left-4 p-4 rounded-full z-10' onPress={ () => router.back() }>
+                <Ionicons name="arrow-back-outline" size={ 24 } color="black" />
+            </TouchableOpacity>
             <View className='items-center bg-#cccccc p-4 mt-20'>
                 <Image source={ require( avatar ) } className='h-28 w-28 rounded-full' />
                 <Text className='text-lg font-semibold'>{ user?.fullName }</Text>
@@ -118,7 +122,7 @@ export default function Information ()
                 transparent={ true }
                 onRequestClose={ () => setIsVisible( !isVisible ) }
                 className='justify-center items-center bg-white mt-20'
-                
+
             >
                 <View className='flex-1 justify-center items-center bg-black/40'>
                     <View className='bg-white p-6 rounded-2xl w-[300] shadow-2xl'>
