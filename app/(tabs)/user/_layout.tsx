@@ -3,12 +3,13 @@ import { router, Stack } from 'expo-router';
 import '../../../global.css';
 import AppHeaderInfo from '@/components/App.headerInfo';
 import { StatusBar } from 'react-native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 
 export default function InfomationLayout ()
 {
     return (
-        <>
+        <GestureHandlerRootView className="flex-1">
             <StatusBar translucent backgroundColor="transparent" barStyle="dark-content" />
             <Stack initialRouteName='index'>
                 <Stack.Screen
@@ -55,8 +56,16 @@ export default function InfomationLayout ()
                         header: () => <AppHeaderInfo title='sinh trac hoc' onPress={ () => router.back() } />,
                     } }
                 />
+
+                <Stack.Screen
+                    name="MyQR"
+                    options={ {
+                        headerShown: true,
+                        header: () => <AppHeaderInfo title='sinh trac hoc' onPress={ () => router.back() } />,
+                    } }
+                />
             </Stack>
-        </>
+        </GestureHandlerRootView>
 
     )
 }

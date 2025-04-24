@@ -27,16 +27,19 @@ export default function CardInfo ( props: ICardInfoProps )
     }
 
     return (
-        <TouchableOpacity onPress={ handlePressCard } className="p-4 flex-row items-center justify-between bg-white border-b border-gray-200">
+        <TouchableOpacity onPress={ handlePressCard } className="min-h-[50px] flex-row items-center justify-between bg-white px-4 py-2">
             <AntDesign name="creditcard" size={ 24 } color="black" />
             <View className="flex-1 ml-4">
-                <Text className="text-green-500">{ formatCurrencyVND( card.amount ) }</Text>
+                <Text className={ `font-semibold ${ amount < 0 ? 'text-red-500' : 'text-green-500' }` }>
+                    { formatCurrencyVND( card.amount ) }
+                </Text>
                 <Text className="text-sm text-gray-500">{ card.transactionId }</Text>
             </View>
-            <View>
+            <View className="items-end">
                 <Text className="text-sm text-gray-500">{ card.date }</Text>
-                <Text className="text-sm text-gray-500">{ card.date }</Text>
+                <Text className="text-sm text-gray-500">{ card.name }</Text>
             </View>
         </TouchableOpacity>
     );
+
 }

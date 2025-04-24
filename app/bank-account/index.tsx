@@ -1,90 +1,299 @@
-// import { Image, Text, View } from "react-native";
-// import myBankingAccount from "../../assets/my-bank-account.json"
-// import { useState } from "react";
-// import QRCode from "react-native-qrcode-svg";
-
-// export default function BankAccount ()
-// {
-//     const [ bankAccount, setBankAccount ] = useState( myBankingAccount );
-//     console.log( "bankAccount", bankAccount );
-//     const jsonData = bankAccount.filter( ( item: any ) => item.id === "1" );
-//     const jsonString = JSON.stringify( jsonData[0].bank_name );
-
-//     return (
-//         <>
-//             <View className="flex-1 bg-white pt-10">
-//                 <View className="bg-red-500 p-4">
-//                     <Text>Header</Text>
-//                 </View>
-
-//                 <View className="flex-1 items-center bg-blue-500">
-//                     <View className="bg-white p-8 items-center border-2 border-gray-200">
-//                         <Text>{ jsonData[ 0 ].name }</Text>
-//                         <Text>{ jsonData[ 0 ].STK }</Text>
-//                         <QRCode
-//                             value={ jsonString }
-//                             size={ 200 }
-//                             logo={ require( "../../assets/images/logo-autopay-4.png" ) }
-//                             logoSize={ 50 }
-//                             logoBackgroundColor="transparent" />
-//                         <View className="flex-row items-center justify-between mt-4  border-2 border-gray-200">
-//                             <Text>AutoPAY</Text>
-//                             <Image source={{uri: jsonData[0].bank_logo}} className="w-20 h-10" />
-//                         </View>
-//                     </View>
-//                     <Text>Body</Text>
-//                 </View>
-
-
-//             </View>
-//         </>
-//     )
-
-// }
-
-import { Image, Text, View } from "react-native";
-import myBankingAccount from "../../assets/my-bank-account.json";
-import { useState } from "react";
+import { Image, ScrollView, Text, Touchable, TouchableOpacity, View } from "react-native";
+import { useEffect, useState } from "react";
 import QRCode from "react-native-qrcode-svg";
+import BankingCard from "@/components/BankCard";
+import Seperate from "@/components/Seperate";
+import Entypo from '@expo/vector-icons/Entypo';
+import { FontAwesome } from "@expo/vector-icons";
+import myBankingAccount from "../../assets/my-bank-account.json";
+import mockDataTransation from "../../assets/data.json"
+import CardInfo from "@/components/CardInfo";
 
+
+interface IBankingTransaction
+{
+    id: string,
+    STK: string,
+    name: string,
+    date: string,
+    amount: number,
+    content: string,
+    logoBanking: string,
+    transactionId: string,
+}
 export default function BankAccount ()
 {
     const [ bankAccount ] = useState( myBankingAccount );
     const jsonData = bankAccount.filter( ( item: any ) => item.id === "1" );
     const jsonString = JSON.stringify( jsonData[ 0 ].bank_name );
+    const [ selected, setSelected ] = useState( "income" );
+    const [ dataBanking, setDataBanking ] = useState( mockDataTransation );
+
+    const incomeItems: any[] = [];
+    const outcomeItems: any[] = [];
+
+    // dataBanking.map( ( item: any ) =>
+    // {
+    //     if ( item.amount > 0 )
+    //     {
+    //         setIncome( prev => [ ...prev, item ] );
+    //     }
+    //     else
+    //     {
+    //         setOutcome( prev => [ ...prev, item ] );
+    //     }
+    // } );
+
+    for ( const item of dataBanking )
+    {
+        if ( item.amount > 0 )
+        {
+            incomeItems.push( item );
+        } else
+        {
+            outcomeItems.push( item );
+        }
+    }
 
     return (
-        <View className="flex-1 bg-white pt-10">
-            {/* Header */ }
-            <View className="bg-red-500 px-4 py-3">
-                <Text className="text-white text-lg font-semibold">Thông tin tài khoản</Text>
-            </View>
-
-            {/* Body */ }
-            <View className="flex-1 items-center justify-center px-4 bg-blue-50">
-                <View className="bg-white p-6 rounded-2xl border-t border-gray-200 shadow-md w-full max-w-[340px] items-center">
-                    <Text className="text-lg font-bold mb-2">{ jsonData[ 0 ].name }</Text>
-                    <Text className="text-gray-700 text-base mb-4">STK: { jsonData[ 0 ].STK }</Text>
-                    <View className="w-full border-t border-gray-200 mb-4"></View>
-                    <QRCode
-                        value={ jsonString }
-                        size={ 200 }
-                        logo={ require( "../../assets/images/logo-autopay-4.png" ) }
-                        logoSize={ 50 }
-                        logoBackgroundColor="transparent"
-                    />
-                    <View className="flex-row items-center justify-between mt-6 w-full border-t border-gray-200 pt-3">
-                        <Text className="text-base font-medium text-gray-800">AutoPAY</Text>
-                        <Image source={ { uri: jsonData[ 0 ].bank_logo } } className="w-20 h-10 ml-4" />
+        <>
+            <ScrollView className="flex-1">
+                <View className="justify-center items-center bg-[#FFC300]">
+                    <View className="p-4">
+                        <BankingCard
+                            id={ jsonData[ 0 ].id }
+                            STK={ jsonData[ 0 ].STK }
+                            name={ jsonData[ 0 ].name }
+                            logoBanking={ jsonData[ 0 ].bank_logo }
+                            bankName={ jsonData[ 0 ].bank_name }
+                        />
                     </View>
-                </View>
 
-                <View>
-                    <Text className="text-gray-500 text-sm mt-4">Để nhận tiền, bạn có thể chia sẻ mã QR này với người khác.</Text>
-                    <Text className="text-gray-500 text-sm">Hoặc cung cấp số tài khoản và tên ngân hàng của bạn.</Text>
-                </View>
+                    {/* QR */ }
+                    <View className="justify-center items-center w-full max-w-[340px] p-4 mx-4 bg-white rounded-3xl shadow-md">
+                        <Text className="font-bold">{ jsonData[ 0 ].name.toUpperCase() }</Text>
+                        <Text className="text-lg">{ jsonData[ 0 ].STK }</Text>
+                        <Text className="text-base">{ jsonData[ 0 ].bank_name }</Text>
+                        <Seperate />
+                        <View className="bg-white border-2 border-gray-300 p-4 rounded-lg">
+                            <QRCode
+                                value={ jsonString }
+                                size={ 150 }
+                                logo={ require( "../../assets/images/logo-autopay-4.png" ) }
+                                logoSize={ 30 }
+                            />
+                        </View>
+                        <Seperate />
+                        <View style={ { maxWidth: 250 } } className="flex-row w-full justify-between items-center bg-white">
+                            <Text className="text-xl text-black font-bold">⛛AutoPAY</Text>
+                            <Image source={ { uri: jsonData[ 0 ].bank_logo } } className="w-20 h-16" resizeMode="contain" />
+                        </View>
+                        <View className="flex-row justify-between items-center w-full">
+                            <TouchableOpacity className="border border-gray-300 bg-gray-50 px-4 py-2 rounded-full flex-row items-center" onPress={ () => console.log( "Lưu mã QR" ) }>
+                                <Entypo name="download" size={ 18 } color="black" />
+                                <Text className="text-base ml-2">Lưu mã QR</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity className="px-4 py-2 rounded-full flex-row items-center bg-blue-500" onPress={ () => console.log( "Chia sẻ mã QR" ) }>
+                                <FontAwesome name="share-square-o" size={ 20 } color="white" />
+                                <Text className="text-base text-white ml-2">Chia sẻ QR</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                    {/* Ket thuc QR */ }
 
-            </View>
-        </View>
+
+                    {/* lich su giao dich gan day */ }
+                    <View className="w-full min-h-[200px] rounded-t-3xl p-4 bg-blue-50 mt-4">
+                        <View className="flex-row justify-between items-center px-4">
+                            <Text className="text-lg text-black font-bold">
+                                Giao dịch gần đây
+                            </Text>
+                            <Text className="text-base text-black">
+                                Xem thêm
+                            </Text>
+                        </View>
+                        <View className="flex-row items-center justify-between bg-white p-2 rounded-xl mt-4">
+                            <TouchableOpacity
+                                className={ `flex-1 p-3 rounded-lg ${ selected === "income" ? "bg-black" : "bg-gray-100" }` }
+                                onPress={ () => setSelected( "income" ) }
+                            >
+                                <Text
+                                    className={ `text-center text-base font-medium ${ selected === "income" ? "text-white" : "text-black" }` }
+                                >
+                                    Giao dịch đến
+                                </Text>
+                            </TouchableOpacity>
+
+                            <TouchableOpacity
+                                className={ `flex-1 p-3 rounded-lg ${ selected === "outcome" ? "bg-black" : "bg-gray-100" }` }
+                                onPress={ () => setSelected( "outcome" ) }
+                            >
+                                <Text
+                                    className={ `text-center text-base font-medium ${ selected === "outcome" ? "text-white" : "text-black" }` }
+                                >
+                                    Giao dịch đi
+                                </Text>
+                            </TouchableOpacity>
+                        </View>
+                        <View className="mt-4">
+                            {
+                                selected === "income"
+                                    ? incomeItems.map( ( item, index ) => (
+                                        <View key={ index } className="bg-white p-4 border rounded-lg shadow-sm mb-1">
+                                            <CardInfo
+                                                id={ item.id }
+                                                STK={ item.STK }
+                                                name={ item.name }
+                                                date={ item.date }
+                                                amount={ item.amount }
+                                                content={ item.content }
+                                                logoBanking={ item.logoBanking }
+                                                transactionId={ item.transactionId } />
+                                        </View>
+                                    ) )
+                                    : outcomeItems.map( ( item, index ) => (
+                                        <View key={ index } className="bg-white p-4 border rounded-lg shadow-sm mb-1">
+                                            <CardInfo
+                                                id={ item.id }
+                                                STK={ item.STK }
+                                                name={ item.name }
+                                                date={ item.date }
+                                                amount={ item.amount }
+                                                content={ item.content }
+                                                logoBanking={ item.logoBanking }
+                                                transactionId={ item.transactionId } />
+                                        </View>
+                                    ) )
+                            }
+                        </View>
+                    </View>
+                    {/* Ket thuc lich su giao dich */ }
+                </View>
+            </ScrollView>
+            <TouchableOpacity className=" absolute bottom-5 right-2 px-4 py-2 rounded-full flex-row items-center bg-blue-500" onPress={ () => console.log( "Tạo QR giao dịch" ) }>
+                <Text>Tạo QR giao dịch</Text>
+            </TouchableOpacity>
+        </>
     );
 }
+
+
+//#region testCode
+// import { Image, Text, TouchableOpacity, View } from "react-native";
+// import { useState } from "react";
+// import QRCode from "react-native-qrcode-svg";
+// import BankingCard from "@/components/BankCard";
+// import Seperate from "@/components/Seperate";
+// import Entypo from '@expo/vector-icons/Entypo';
+// import { FontAwesome } from "@expo/vector-icons";
+// import myBankingAccount from "../../assets/my-bank-account.json";
+// import mockDataTransation from "../../assets/data.json";
+// import { FlatList } from "react-native-gesture-handler";
+
+// interface IBankingTransaction {
+//   id: string,
+//   STK: string,
+//   name: string,
+//   date: string,
+//   amount: number,
+//   content: string,
+//   logoBanking: string,
+//   transactionId: string,
+// }
+
+// export default function BankAccount() {
+//   const [bankAccount] = useState(myBankingAccount);
+//   const jsonData = bankAccount.filter((item: any) => item.id === "1");
+//   const jsonString = JSON.stringify(jsonData[0].bank_name);
+//   const [selected, setSelected] = useState("income");
+//   const [dataBanking] = useState(mockDataTransation);
+
+//   const incomeItems = dataBanking.filter((item: any) => item.amount > 0);
+//   const outcomeItems = dataBanking.filter((item: any) => item.amount <= 0);
+
+//   const selectedData = selected === "income" ? incomeItems : outcomeItems;
+
+//   return (
+//     <FlatList
+//       data={selectedData}
+//       keyExtractor={(item) => item.id.toString()}
+//       ListHeaderComponent={
+//         <View className="justify-center items-center">
+//           <View className="p-4">
+//             <BankingCard
+//               id={jsonData[0].id}
+//               STK={jsonData[0].STK}
+//               name={jsonData[0].name}
+//               logoBanking={jsonData[0].bank_logo}
+//               bankName={jsonData[0].bank_name}
+//             />
+//           </View>
+//           <View className="justify-center items-center w-full max-w-[340px] p-4 mx-4 bg-white rounded-3xl shadow-md">
+//             <Text className="font-bold">{jsonData[0].name.toUpperCase()}</Text>
+//             <Text className="text-lg">{jsonData[0].STK}</Text>
+//             <Text className="text-base">{jsonData[0].bank_name}</Text>
+//             <Seperate />
+//             <View className="bg-white border-2 border-gray-300 p-4 rounded-lg">
+//               <QRCode
+//                 value={jsonString}
+//                 size={150}
+//                 logo={require("../../assets/images/logo-autopay-4.png")}
+//                 logoSize={30}
+//               />
+//             </View>
+//             <Seperate />
+//             <View style={{ maxWidth: 250 }} className="flex-row w-full justify-between items-center bg-white">
+//               <Text className="text-xl text-black font-bold">⛛AutoPAY</Text>
+//               <Image source={{ uri: jsonData[0].bank_logo }} className="w-20 h-16" resizeMode="contain" />
+//             </View>
+//             <View className="flex-row justify-between items-center w-full">
+//               <TouchableOpacity className="border border-gray-300 bg-gray-50 px-4 py-2 rounded-full flex-row items-center" onPress={() => console.log("Lưu mã QR")}>
+//                 <Entypo name="download" size={18} color="black" />
+//                 <Text className="text-base ml-2">Lưu mã QR</Text>
+//               </TouchableOpacity>
+//               <TouchableOpacity className="px-4 py-2 rounded-full flex-row items-center bg-blue-500" onPress={() => console.log("Chia sẻ mã QR")}>
+//                 <FontAwesome name="share-square-o" size={20} color="white" />
+//                 <Text className="text-base text-white ml-2">Chia sẻ QR</Text>
+//               </TouchableOpacity>
+//             </View>
+
+//             <View className="w-full min-h-[200px] rounded-t-3xl p-4 bg-red-500 mt-4">
+//               <View className="flex-row justify-between items-center px-4">
+//                 <Text className="text-lg font-bold text-white">Giao dịch gần đây</Text>
+//                 <Text className="text-base text-white">Xem thêm</Text>
+//               </View>
+
+//               <View className="flex-row items-center justify-between bg-white p-2 rounded-xl mt-4">
+//                 <TouchableOpacity
+//                   className={`flex-1 p-3 rounded-lg ${selected === "income" ? "bg-black" : "bg-gray-100"}`}
+//                   onPress={() => setSelected("income")}
+//                 >
+//                   <Text className={`text-center text-base font-medium ${selected === "income" ? "text-white" : "text-black"}`}>
+//                     Giao dịch đến
+//                   </Text>
+//                 </TouchableOpacity>
+
+//                 <TouchableOpacity
+//                   className={`flex-1 p-3 rounded-lg ${selected === "outcome" ? "bg-black" : "bg-gray-100"}`}
+//                   onPress={() => setSelected("outcome")}
+//                 >
+//                   <Text className={`text-center text-base font-medium ${selected === "outcome" ? "text-white" : "text-black"}`}>
+//                     Giao dịch đi
+//                   </Text>
+//                 </TouchableOpacity>
+//               </View>
+//             </View>
+//           </View>
+//         </View>
+//       }
+//       renderItem={({ item }) => (
+//         <View className="bg-white p-4 rounded-lg shadow-sm mx-4 mt-2">
+//           <Text className={`font-semibold ${selected === "income" ? "text-green-500" : "text-red-500"}`}>{item.amount}đ</Text>
+//           <Text className="text-gray-700">{item.content}</Text>
+//           <Text className="text-sm text-gray-500">{item.date}</Text>
+//         </View>
+//       )}
+//     />
+//   );
+// }
+//#endregion

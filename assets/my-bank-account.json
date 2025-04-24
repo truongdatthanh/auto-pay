@@ -6,7 +6,9 @@
         "bank_name": "Ngân hàng TMCP Á Châu",
         "bank_code": "ACB",
         "bank_bin": "970416",
-        "bank_logo": "https://api.vietqr.io/img/ACB.png"
+        "bank_logo": "https://api.vietqr.io/img/ACB.png",
+        "account_type": "Thanh toán",
+        "balance": 1000000
     },
     {
         "id": "2",
@@ -15,7 +17,9 @@
         "bank_name": "Ngân hàng TMCP Đầu tư và Phát triển Việt Nam",
         "bank_code": "BIDV",
         "bank_bin": "970418",
-        "bank_logo": "https://api.vietqr.io/img/BIDV.png"
+        "bank_logo": "https://api.vietqr.io/img/BIDV.png",
+        "account_type": "Thanh toán",
+        "balance": 1000000
     },
     {
         "id": "3",
@@ -24,7 +28,9 @@
         "bank_name": "Ngân hàng TMCP Nam Á",
         "bank_code": "NAB",
         "bank_bin": "970428",
-        "bank_logo": "https://api.vietqr.io/img/NAB.png"
+        "bank_logo": "https://api.vietqr.io/img/NAB.png",
+        "account_type": "Thanh toán",
+        "balance": 1000000
     },
     {
         "id": "4",
@@ -33,6 +39,8 @@
         "bank_name": "Ngân hàng TMCP Quân đội",
         "bank_code": "MB",
         "bank_bin": "970416",
-        "bank_logo": "https://api.vietqr.io/img/MB.png"
+        "bank_logo": "https://api.vietqr.io/img/MB.png",
+        "account_type": "Thanh toán",
+        "balance": 1000000
     }
 ]

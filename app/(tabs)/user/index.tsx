@@ -7,7 +7,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import Octicons from '@expo/vector-icons/Octicons';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { AntDesign } from '@expo/vector-icons';
-import MyQRPopup from '@/components/MyQR';
+import MyQRPopup from '@/components/MyQRPopup';
 
 
 

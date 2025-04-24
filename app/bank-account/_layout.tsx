@@ -1,20 +1,20 @@
-import { Stack } from 'expo-router';
-import { SafeAreaView, StatusBar } from 'react-native';
+
+import AppHeaderInfo from "@/components/App.headerInfo";
+import { router, Stack } from "expo-router";
+
+
 
 export default function BankAccountLayout ()
 {
     return (
-        <>
-            <StatusBar translucent backgroundColor="transparent" barStyle="dark-content" />
-            
-            <Stack
-                screenOptions={ {
-                    headerShown: false,
-                    headerStyle: { backgroundColor: '#f2f2f2' },
-                    headerTintColor: '#333',
+        <Stack initialRouteName="index" >
+            <Stack.Screen
+                name="index"
+                options={ {
+                    header: () => <AppHeaderInfo title="Chi tiết" onPress={() => router.replace("/(tabs)")}/>,
                 } }
             />
-        </>
-
+    
+        </Stack>
     );
 }

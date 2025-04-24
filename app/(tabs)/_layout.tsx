@@ -4,6 +4,7 @@ import { Tabs } from 'expo-router';
 import AppHeader from '@/components/App.header';
 import { useState, useEffect } from 'react';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 export default function TabLayout ()
 {
@@ -36,7 +37,7 @@ export default function TabLayout ()
       <Tabs
         initialRouteName="index"
         screenOptions={ {
-          tabBarHideOnKeyboard: true, // Hide tabbar when the keyboard is visible
+          //tabBarHideOnKeyboard: true, // Hide tabbar when the keyboard is visible
           tabBarShowLabel: true, // Show label below the icon
           tabBarActiveTintColor: 'blue', // Active tab color
           tabBarInactiveTintColor: 'gray', // Inactive tab color
@@ -54,13 +55,15 @@ export default function TabLayout ()
             shadowOffset: { width: 0, height: 5 },
             shadowRadius: 10,
           },
-          tabBarLabelStyle: {
-            fontSize: 12,
-            fontWeight: 'bold',
-            marginBottom: 5,
-          },
+          headerPressColor: '#3377f2',
+          // tabBarLabelStyle: {
+          //   fontSize: 12,
+          //   fontWeight: 'bold',
+          //   // marginBottom: 5,
+          // },
           tabBarItemStyle: {
-            marginTop: 10,
+            marginTop: 8,
+            position: 'relative',
           },
         } }
       >
@@ -69,7 +72,7 @@ export default function TabLayout ()
           options={ {
             title: 'Home',
             tabBarIcon: ( { color } ) => (
-              <MaterialCommunityIcons name="home" size={ 24 } color={ color } />
+              <MaterialCommunityIcons name="home" size={ 30 } color={ color } />
             ),
             header: () => <AppHeader />,
           } }
@@ -79,29 +82,29 @@ export default function TabLayout ()
           name="qr/QR-scanner"
           options={ {
             tabBarShowLabel: false, // Hide the label for this tab
-            title: '',
+            title: 'Scan',
             tabBarStyle: { display: 'none' }, // Hide the tab bar for this screen
             headerShown: false,
-            tabBarIcon: () => (
-              <View
-                style={ {
-                  position: 'absolute',
-                  top: -35,
-                  width: 70,
-                  height: 70,
-                  borderRadius: 35,
-                  backgroundColor: 'green',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  shadowColor: '#000',
-                  shadowOffset: { width: 0, height: 4 },
-                  shadowOpacity: 0.3,
-                  shadowRadius: 5,
-                  elevation: 5,
-                } }
-              >
-                <MaterialCommunityIcons name="qrcode-scan" size={ 32 } color="white" />
-              </View>
+            tabBarIcon: ( { color } ) => (
+              // <View
+              //   style={ {
+              //     position: 'absolute',
+              //     top: -35,
+              //     width: 70,
+              //     height: 70,
+              //     borderRadius: 35,
+              //     backgroundColor: 'green',
+              //     justifyContent: 'center',
+              //     alignItems: 'center',
+              //     shadowColor: '#000',
+              //     shadowOffset: { width: 0, height: 4 },
+              //     shadowOpacity: 0.3,
+              //     shadowRadius: 5,
+              //     elevation: 5,
+              //   } }
+              // >
+              <MaterialCommunityIcons name="qrcode-scan" size={ 24 } color={ color } />
+              // </View>
             ),
           } }
         />
@@ -122,10 +125,10 @@ export default function TabLayout ()
           options={ {
             title: 'User',
             tabBarIcon: ( { color } ) => (
-              <FontAwesome name="user-o" size={24} color={ color } />
+              <FontAwesome name="user-o" size={ 24 } color={ color } />
             ),
             headerShown: false,
-            tabBarStyle: {display: 'none'}, // Hide the tab bar for this screen
+            tabBarStyle: { display: 'none' }, // Hide the tab bar for this screen
           } }
         />
       </Tabs>

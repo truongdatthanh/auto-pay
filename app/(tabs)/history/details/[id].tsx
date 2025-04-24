@@ -18,11 +18,6 @@ export default function Details ()
 
     const data = mockDataBanking.find( ( item ) => item.id === Number( id ) );
 
-    const handleBackTo = () =>
-    {
-        router.replace( "/(tabs)/history" );
-    }
-
     const handleAddNote = () =>
     {
         setModalVisible( true );
@@ -39,19 +34,21 @@ export default function Details ()
         setModalVisible( false );
     };
 
-    useEffect(() => {
-        const backAction = () => {
-          router.push('/(tabs)/history'); // Quay lại trang trước đó
-          return true;   // Ngăn hành vi back mặc định
+    useEffect( () =>
+    {
+        const backAction = () =>
+        {
+            router.push( '/(tabs)/history' ); // Quay lại trang trước đó
+            return true;   // Ngăn hành vi back mặc định
         };
-      
+
         const backHandler = BackHandler.addEventListener(
-          "hardwareBackPress",
-          backAction
+            "hardwareBackPress",
+            backAction
         );
-      
+
         return () => backHandler.remove();
-      }, []);
+    }, [] );
 
     if ( !data )
     {
@@ -68,17 +65,21 @@ export default function Details ()
                 <View className="flex-1 px-6 py-8 bg-white rounded-lg">
                     {/* Header */ }
                     <View className="items-center mb-4 border-b border-gray-300 pb-4">
+                        <Text className="text-3xl font-bold">⛛ AUTOPAY</Text>
                         <Ionicons
-                            name="checkmark-circle-outline"
+                            name={ data.amount < 0 ? "close-circle-outline" : "checkmark-circle-outline" }
                             size={ 80 }
-                            color="green"
+                            color={ data.amount < 0 ? "red" : "green" }
                         />
-                        <Text className="text-2xl font-bold">⛛ AUTOPAY</Text>
                         <View className="items-center justify-between w-full mt-4 mb-4">
-                            <Text className="text-3xl text-green-500">+{ formatCurrencyVND( data.amount ) }</Text>
+                            <View className="items-center justify-between w-full mt-4 mb-4">
+                                <Text className={ `text-3xl font-bold ${ data.amount < 0 ? 'text-red-500' : 'text-green-500' }` }>
+                                    { data.amount < 0 ? '-' : '+' }{ formatCurrencyVND( Math.abs( data.amount ) ) }
+                                </Text>
+                            </View>
                             <Text className="text-sm ">Thanh toán thành công</Text>
                         </View>
-                        <View className="flex-row items-center justify-between w-full mt-4"> 
+                        <View className="flex-row items-center justify-between w-full mt-4">
                             <Text className="text-sm">Mã giao dịch</Text>
                             <Text className="text-sm">{ data.transactionId }</Text>
                         </View>

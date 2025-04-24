@@ -30,11 +30,8 @@ export default function History ()
   {
     const now = new Date();
     const past = new Date();
-    console.log( "past", past );
-    console.log( "now", now.getDate() );
     past.setDate( now.getDate() - days );
-    console.log( "past- - ", past.setDate( now.getDate() - days ) );
-    console.log( "now- - ", now.getDate() - days );
+
 
     const filtered = mockBanking.filter( item =>
     {

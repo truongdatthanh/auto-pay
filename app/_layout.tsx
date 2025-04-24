@@ -1,6 +1,8 @@
 import { Redirect, Slot, usePathname, useRouter } from 'expo-router';
 import { useEffect } from 'react';
 import * as SplashScreen from 'expo-splash-screen';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { StatusBar } from 'react-native';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -8,7 +10,7 @@ export default function RootLayout ()
 {
   const router = useRouter();
   const pathname = usePathname();
-  console.log( pathname );
+  console.log( "layout tong: ", pathname );
   const isLoggedIn = false;
 
   useEffect( () =>
@@ -34,5 +36,12 @@ export default function RootLayout ()
     }
   }, [ isLoggedIn ] );
 
-  return <Slot />;
+  return (
+    <GestureHandlerRootView style={ { flex: 1 } }>
+      <StatusBar barStyle="dark-content" backgroundColor="#fff" translucent={ false } />
+      <Slot />
+    </GestureHandlerRootView>
+
+
+  );
 }
