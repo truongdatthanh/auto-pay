@@ -7,7 +7,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import Octicons from '@expo/vector-icons/Octicons';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { AntDesign } from '@expo/vector-icons';
-import MyQRPopup from '@/components/MyQRPopup';
+import { generateQR } from '@/utils/generateQR';
 
 
 
@@ -49,7 +49,7 @@ export default function Information ()
             <View className='items-center bg-#cccccc p-4 mt-20'>
                 <Image source={ require( avatar ) } className='h-28 w-28 rounded-full' />
                 <Text className='text-lg font-semibold'>{ user?.fullName }</Text>
-                <MyQRPopup userData={ user } />
+                <Text className='text-sm text-gray-500'>{ user?.email }</Text>
             </View>
 
             <View className='m-4'>

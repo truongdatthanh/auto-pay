@@ -79,7 +79,7 @@ export default function TabLayout ()
         />
 
         <Tabs.Screen
-          name="qr/QR-scanner"
+          name="qr"
           options={ {
             tabBarShowLabel: false, // Hide the label for this tab
             title: 'Scan',
@@ -123,7 +123,7 @@ export default function TabLayout ()
         <Tabs.Screen
           name="user"
           options={ {
-            title: 'User',
+            title: 'Profile',
             tabBarIcon: ( { color } ) => (
               <FontAwesome name="user-o" size={ 24 } color={ color } />
             ),

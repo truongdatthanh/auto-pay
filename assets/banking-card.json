@@ -4,27 +4,95 @@
         "STK": "123456789",
         "name": "Truong Thanh Dat",
         "logoBanking": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Logo_Nam_A_Bank.svg/2560px-Logo_Nam_A_Bank.svg.png",
-        "bankName": "Nam A Bank"
+        "bankName": "Nam A Bank",
+        "transactionHistory": [
+            {
+                "date": "2023-10-01",
+                "amount": 1000000,
+                "description": "Deposit"
+            },
+            {
+                "date": "2023-10-02",
+                "amount": -500000,
+                "description": "Withdrawal"
+            },
+            {
+                "date": "2023-10-03",
+                "amount": 200000,
+                "description": "Transfer"
+            }
+        ]
     },
     {
         "id": "2",
         "STK": "4531234534345",
         "name": "Truong Thanh Dat",
         "logoBanking": "https://cdn.haitrieu.com/wp-content/uploads/2022/01/Icon-BIDV-.png",
-        "bankName": "BIDV"
+        "bankName": "BIDV",
+        "transactionHistory": [
+            {
+                "date": "2023-10-01",
+                "amount": 1500000,
+                "description": "Deposit"
+            },
+            {
+                "date": "2023-10-02",
+                "amount": -700000,
+                "description": "Withdrawal"
+            },
+            {
+                "date": "2023-10-03",
+                "amount": 300000,
+                "description": "Transfer"
+            }
+        ]
     },
     {
         "id": "3",
         "STK": "453453453378",
         "name": "Truong Thanh Dat",
         "logoBanking": "https://cdn.haitrieu.com/wp-content/uploads/2022/02/Icon-Vietcombank.png",
-        "bankName": "Vietcombank"
+        "bankName": "Vietcombank",
+        "transactionHistory": [
+            {
+                "date": "2023-10-01",
+                "amount": 2000000,
+                "description": "Deposit"
+            },
+            {
+                "date": "2023-10-02",
+                "amount": -800000,
+                "description": "Withdrawal"
+            },
+            {
+                "date": "2023-10-03",
+                "amount": 400000,
+                "description": "Transfer"
+            }
+        ]
     },
     {
         "id": "4",
         "STK": "2224567843",
         "name": "Truong Thanh Dat",
         "logoBanking": "https://cdn.haitrieu.com/wp-content/uploads/2022/02/Icon-Vietcombank.png",
-        "bankName": "Vietcombank"
+        "bankName": "Vietcombank",
+        "transactionHistory": [
+            {
+                "date": "2023-10-01",
+                "amount": 2500000,
+                "description": "Deposit"
+            },
+            {
+                "date": "2023-10-02",
+                "amount": -900000,
+                "description": "Withdrawal"
+            },
+            {
+                "date": "2023-10-03",
+                "amount": 500000,
+                "description": "Transfer"
+            }
+        ]
     }
 ]

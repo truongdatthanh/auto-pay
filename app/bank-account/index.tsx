@@ -8,6 +8,8 @@ import { FontAwesome } from "@expo/vector-icons";
 import myBankingAccount from "../../assets/my-bank-account.json";
 import mockDataTransation from "../../assets/data.json"
 import CardInfo from "@/components/CardInfo";
+import AntDesign from '@expo/vector-icons/AntDesign';
+import { router } from "expo-router";
 
 
 interface IBankingTransaction
@@ -32,18 +34,6 @@ export default function BankAccount ()
     const incomeItems: any[] = [];
     const outcomeItems: any[] = [];
 
-    // dataBanking.map( ( item: any ) =>
-    // {
-    //     if ( item.amount > 0 )
-    //     {
-    //         setIncome( prev => [ ...prev, item ] );
-    //     }
-    //     else
-    //     {
-    //         setOutcome( prev => [ ...prev, item ] );
-    //     }
-    // } );
-
     for ( const item of dataBanking )
     {
         if ( item.amount > 0 )
@@ -54,6 +44,16 @@ export default function BankAccount ()
             outcomeItems.push( item );
         }
     }
+
+    const handleCreateQR = () =>
+    {
+        router.push( {
+            pathname: '/(tabs)/qr/CreateMyQR',
+            params: {
+                STK: jsonData[ 0 ].STK,
+            }
+        })
+    };
 
     return (
         <>
@@ -170,8 +170,8 @@ export default function BankAccount ()
                     {/* Ket thuc lich su giao dich */ }
                 </View>
             </ScrollView>
-            <TouchableOpacity className=" absolute bottom-5 right-2 px-4 py-2 rounded-full flex-row items-center bg-blue-500" onPress={ () => console.log( "Tạo QR giao dịch" ) }>
-                <Text>Tạo QR giao dịch</Text>
+            <TouchableOpacity className="absolute bottom-5 right-2 w-16 h-16 rounded-full bg-blue-500 items-center justify-center" onPress={ handleCreateQR }>
+                <Entypo name="plus" size={ 30 } color="white" />
             </TouchableOpacity>
         </>
     );

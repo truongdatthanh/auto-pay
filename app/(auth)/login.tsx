@@ -1,21 +1,17 @@
 
 import { Button, Image, SafeAreaView, StatusBar, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import { useLocalSearchParams, useNavigation, usePathname, useRouter } from 'expo-router';
+import { Link, useLocalSearchParams, useNavigation, usePathname, useRouter } from 'expo-router';
 import { useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
 
 
 export default function Login ()
 {
     const logo = 'https://interdata.vn/assets/interdata-logo.png'
-    const logo1 = '../../assets/images/logo-autopay-2.png'
-    const pathname = usePathname();
     const router = useRouter();
     const [ email, setEmail ] = useState( 'truongdat@gmail.com' );
     const [ password, setPassword ] = useState( '123456' );
 
-    const navigation = useNavigation();
     const user = [
         { id: 1, email: 'truongdat@gmail.com', fullName: "Truong Thanh Dat", password: '123456' },
         { id: 2, email: '123456@gmail.com', fullName: "Truong Thanh Dat 1", password: '123456' },
@@ -29,7 +25,7 @@ export default function Login ()
         if ( userFound )
         {
             AsyncStorage.setItem( 'user', JSON.stringify( userFound ) );
-            router.replace( '/(tabs)');
+            router.replace( '/(tabs)' );
         }
         else
         {
@@ -49,35 +45,47 @@ export default function Login ()
 
     return (
         <>
-            <SafeAreaView className='flex-1 min-h-screen'>
+            <StatusBar barStyle="dark-content" backgroundColor="white" />
+            <SafeAreaView className='flex-1'>
                 <View className="flex-1 bg-white p-8 items-center justify-center">
                     <View className="flex w-full max-w-sm justify-center">
                         <View className="mb-8">
                             <Image style={ { width: 'auto', height: 100 } } source={ { uri: logo } } />
                         </View>
                         <TextInput
-                            className="w-full mb-4 p-4 border border-gray-300 rounded-lg"
+                            className="mb-4 h-16 pl-8 border border-gray-500 rounded-full"
                             placeholder="Email"
                             keyboardType="email-address"
                             value={ email }
                             onChangeText={ setEmail }
                         />
                         <TextInput
-                            className="w-full mb-6 p-4 border border-gray-300 rounded-lg"
+                            className="mb-4 h-16 pl-8 border border-gray-500 rounded-full"
                             placeholder="Password"
                             value={ password }
                             onChangeText={ setPassword }
                             secureTextEntry
                         />
-                        <Button
-                            title="Đăng nhập"
-                            onPress={ handleLogin }
-                        />
-                        <TouchableOpacity className="mt-4" onPress={ handleForgotPassword }>
-                            <Text className="text-center text-blue-500">Quên mật khẩu?</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity className="mt-4" onPress={ handleRegister }>
-                            <Text className="text-center text-blue-500">Chưa có tài khoản? Đăng ký ngay</Text>
+
+                        <View className='mb-4 flex-row justify-end items-center'>
+                            <TouchableOpacity onPress={ handleForgotPassword }>
+                                <Text className="text-center text-sm text-[#1c40f2] font-semibold underline">Quên mật khẩu?</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </View>
+                <View className='absolute bottom-3 w-full p-4'>
+                    <TouchableOpacity
+                        className="mt-2 bg-[#1c40f2] rounded-full h-16 justify-center w-full"
+                        onPress={ handleLogin }
+                    >
+                        <Text className="text-white text-center font-bold text-md">Đăng nhập</Text>
+                    </TouchableOpacity>
+
+                    <View className="p-4 flex-row items-center justify-center mt-2">
+                        <Text className="text-center text-base">Bạn chưa có tài khoản? </Text>
+                        <TouchableOpacity className="flex-row items-center justify-center" onPress={ handleRegister }>
+                            <Text className="text-[#1c40f2] font-bold text-lg">Đăng ký ngay</Text>
                         </TouchableOpacity>
                     </View>
                 </View>

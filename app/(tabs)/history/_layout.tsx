@@ -10,7 +10,7 @@ export default function HistoryLayout ()
       <Stack.Screen
         name='index'
         options={ {
-          header: () => <AppHeaderInfo title='Lịch sử giao dịch' onPress={ () => router.push("/(tabs)") } />,
+          header: () => <AppHeaderInfo title='Lịch sử giao dịch' onPress={ () => router.push( "/(tabs)" ) } />,
         } }
       />
 
@@ -18,6 +18,13 @@ export default function HistoryLayout ()
         name='details/[id]'
         options={ {
           header: () => <AppHeaderInfo title='Chi tiết giao dịch' onPress={ () => router.back() } />,
+        } }
+      />
+
+      <Stack.Screen
+        name='statistics'
+        options={ {
+          header: () => <AppHeaderInfo title='Thống kê giao dịch' onPress={ () => router.back() } />,
         } }
       />
     </Stack>

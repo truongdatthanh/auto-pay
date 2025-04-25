@@ -3,44 +3,39 @@ import { Link, usePathname, useRouter } from 'expo-router';
 import { useState } from 'react';
 import { Text, TextInput, TouchableOpacity, View, SafeAreaView, StatusBar, Pressable } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import AntDesign from '@expo/vector-icons/AntDesign';
+
+
 
 export default function Register ()
 {
     const router = useRouter();
-    const [ fullName, setFullName ] = useState( 'Dat ne' );
-    const [ email, setEmail ] = useState( 'truongdat1@gmail.com' );
-    const [ password, setPassword ] = useState( '123456' );
-    const [ confirmPassword, setConfirmPassword ] = useState( '123456' );
+    const [ fullName, setFullName ] = useState( '' );
+    const [ email, setEmail ] = useState( '' );
+    const [ password, setPassword ] = useState( '' );
+    const [ confirmPassword, setConfirmPassword ] = useState( '' );
     const [ checked, setChecked ] = useState( false );
-
-    console.log( 'checked', checked );
-
+    const [isVisible, setIsVisible] = useState(true);
 
     const handleSubmit = () =>
     {
-        console.log( 'fullName', fullName );
-        console.log( 'email', email );
-        console.log( 'password', password );
-        console.log( 'confirmPassword', confirmPassword );
+        // if ( password !== confirmPassword )
+        // {
+        //     alert( 'Mat khau khong khop' );
+        //     return;
+        // }
 
-        if ( password !== confirmPassword )
-        {
-            alert( 'Mat khau khong khop' );
-            return;
-        }
+        // const user = {
+        //     fullName,
+        //     email,
+        //     password,
+        // };
 
-        const user = {
-            fullName,
-            email,
-            password,
-        };
+        // router.push( {
+        //     pathname: '/login',
+        //     params: user,
+        // } );
 
-        router.push( {
-            pathname: '/login',
-            params: user,
-        } );
-        alert( 'Dang ky thanh cong' );
+       router.push( '/(auth)/pinInput' );
     }
 
     const handleBackToLogin = () =>
@@ -48,80 +43,106 @@ export default function Register ()
         router.back();
     }
 
+    const handleSetChecked = () =>
+    {
+        setChecked( !checked );
+    }
+
+    const handleSeenPassword = () =>
+    {
+        setIsVisible( !isVisible );
+    }
+
+    const handleSignUpWithPhoneNumber = () =>
+    {
+        router.push( '/(auth)/withPhoneNumber' );
+    }
+
     return (
         <>
+            <StatusBar barStyle="dark-content" backgroundColor="white" />
             <SafeAreaView className="flex-1">
-                <View className="flex-1 bg-white">
+                <View className="flex-1 bg-white px-4">
                     <TouchableOpacity onPress={ handleBackToLogin } className="absolute top-4 left-4">
-                        <Ionicons name="return-up-back" size={35} color="black" />
+                        <Ionicons name="return-up-back" size={35} color="#1c40f2" />
                     </TouchableOpacity>
-                    <View className="mt-16 p-4">
-                        <Text className="text-3xl font-bold">ĐĂNG KÝ</Text>
-                        <Text className="pt-4 text-5xl font-bold">TÀI KHOẢN</Text>
+                    <View className="mt-16">
+                        <Text className="text-3xl text-[#1c40f2] font-bold">ĐĂNG KÝ</Text>
+                        <Text className="pt-4 text-5xl font-bold text-[#1c40f2]">TÀI KHOẢN</Text>
                     </View>
-                    <View className="p-4">
+                    <View className='mt-4'>
                         <View>
-                            <Text className='mb-2'>Họ tên</Text>
+                            <Text className='mb-2 font-semibold'>Họ tên</Text>
                             <TextInput
-                            className="mb-2 h-16 pl-8 border border-gray-300 rounded-full bg-white"
-                            placeholder="Họ tên"
+                            className="mb-2 h-16 pl-8 border border-gray-500 rounded-full bg-white"
+                            placeholder="Họ tên..."                             
                             value={ fullName }
                             onChangeText={ setFullName }
                         />
                         </View>
-
                         <View>
-                            <Text className="mb-2">Email</Text>
+                            <Text className="mb-2 font-semibold">Email</Text>
                             <TextInput
-                            className="mb-2 h-16 pl-8 border border-gray-300 rounded-full bg-white"
-                            placeholder="Email"
+                            className="mb-2 h-16 pl-8 border border-gray-500 rounded-full bg-white"
+                            placeholder="Email..."                               
                             keyboardType="email-address"
                             value={ email }
                                 onChangeText={ setEmail }
                             />
                         </View>
-                        <View>
-                            <Text className="mb-2">Mật khẩu</Text>
-                            <TextInput
-                            className="mb-2 h-16 pl-8 border border-gray-300 rounded-full bg-white"
-                            placeholder="Mật khẩu"
-                            secureTextEntry
-                            value={ password }
-                                onChangeText={ setPassword }
-                            />
+                        <View className='mb-2'>
+                            <Text className="mb-2 font-semibold">Mật khẩu</Text>
+                            <View className="h-16 px-8 border border-gray-500 rounded-full bg-white flex-row items-center justify-between">
+                                <TextInput
+                                placeholder="Mật khẩu..."
+                                secureTextEntry={ isVisible }
+                                value={ password }
+                                    onChangeText={ setPassword }
+                                />
+                                <TouchableOpacity onPress={ handleSeenPassword }>
+                                    <Ionicons name={isVisible ? "eye" : "eye-off"} size={24} color="gray" />
+                                </TouchableOpacity>
+                            </View>
+                         
                         </View>
                         <View>
-                            <Text className="mb-2">Xác nhận mật khẩu</Text>
+                            <Text className="mb-2 font-semibold">Xác nhận mật khẩu</Text>
                             <TextInput
-                            className="mb-2 h-16 pl-8 border border-gray-300 rounded-full bg-white"
-                            placeholder="Xác nhận mật khẩu"
+                            className="mb-2 h-16 pl-8 border border-gray-500 rounded-full bg-white"
+                            placeholder="Xác nhận mật khẩu..."
                             secureTextEntry
                             value={ confirmPassword }
                                 onChangeText={ setConfirmPassword }
                             />
                         </View>
-                        <View className="flex-row my-4">
+                        <View className="flex-row my-4 items-center">
                             <Pressable
-                                onPress={() => setChecked(!checked)}
+                                onPress={ () => handleSetChecked }
                                 className={`w-6 h-6 mr-2 rounded border-2 border-gray-500 justify-center items-center ${
                                 checked ? 'bg-blue-500' : 'bg-white'
                                 }`}
                             >
                                 {checked && <Ionicons name="checkmark" size={16} color="white" />}
                             </Pressable>
-                            <Text>Tôi đồng ý với mọi
-                                <Link className='text-gray-600 underline' href={ "/term" }>Chính sách & điều khoản</Link>
-                            </Text>
+                            <Text>Tôi đồng ý với mọi </Text>
+                            <Link className='text-[#1c40f2] underline font-medium' href={ "/term" }>Chính sách & điều khoản</Link>
                         </View>
                         <TouchableOpacity
-                            className="mt-2 bg-black rounded-full h-16 justify-center w-full"
+                            className="mt-2 bg-[#1c40f2] rounded-full h-16 justify-center w-full"
                             onPress={ handleSubmit }
                         >
-                            <Text className="text-white text-center font-bold text-lg">Đăng ký tài khoản</Text>
+                            <Text className="text-white text-center font-bold text-md">Đăng Ký</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            className="mt-4 border-[1px] border-gray-400 rounded-full h-16 justify-center w-full"
+                            onPress={ handleSignUpWithPhoneNumber }
+                        >
+                            <Text className="text-gray-500 text-center font-bold text-md">Sử Dụng Số Điện Thoại</Text>
                         </TouchableOpacity>
                     </View>
-                    <View className="p-4">
-                        <Text className="text-center mt-4">Bạn đã có tài khoản? <Link href="/login" className="text-black font-bold">Đăng nhập</Link></Text>
+                    <View className="p-4 flex-row items-center justify-center">
+                        <Text className="text-center text-base">Bạn đã có tài khoản? </Text>
+                        <Link href="/login" className="text-[#1c40f2] font-bold text-lg">Đăng nhập</Link>
                     </View>
                 </View>
         </SafeAreaView>

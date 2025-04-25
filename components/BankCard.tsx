@@ -39,7 +39,7 @@
 // }
 
 //  className="h-[150] w-[300] bg-white px-6 py-8 border border-gray-300 rounded-3xl gap-4 "
-import { Image, Text, View } from "react-native";
+import { Dimensions, Image, Text, View } from "react-native";
 import { LinearGradient } from 'expo-linear-gradient';
 
 interface IBankCard
@@ -54,10 +54,11 @@ interface IBankCard
 export default function BankingCard ( props: IBankCard )
 {
     const bankCard: IBankCard = props;
-
+    const { width } = Dimensions.get( 'window' );
     return (
         <LinearGradient
-            className="w-[320] h-[180] p-5 justify-between"
+            //className={ `w-${ width * 0.8 } h-[180] p-5 justify-between` }
+            className='h-[180] w-[320] p-5 justify-between'
             colors={ [ '#1e3a8a', '#3b82f6' ] }
             start={ { x: 0, y: 0 } }
             end={ { x: 1, y: 1 } }

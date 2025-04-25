@@ -16,4 +16,20 @@ export default {
     tabIconDefault: '#ccc',
     tabIconSelected: tintColorDark,
   },
+  orange: {
+    primary: '#FF6F20',
+    secondary: '#FF6F20',
+    background: '#fff',
+    text: '#000',
+    tint: '#FF6F20',
+    tabIconDefault: '#ccc',
+    tabIconSelected: '#FF6F20',
+  },
+  primary: {
+    text: '#1c40f2',
+    background: '#e5e7eb',
+    tint: "#000",
+    tabIconDefault: '#000',
+    tabIconSelected: tintColorDark,
+  },
 };

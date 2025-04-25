@@ -14,7 +14,7 @@ export default function QuickActionGrid ( )
                     <Text className={ textClass }>Kích hoạt AutoPAY</Text>
                 </View>
             </TouchableOpacity>
-            <TouchableOpacity className={ itemClass } onPress={ () => router.push( '/(tabs)/user/MyQR' ) }>
+            <TouchableOpacity className={ itemClass } onPress={ () => router.push( '/(tabs)/qr/QR-scanner' ) }>
                 <View className='h-24 items-center justify-center border border-gray-300 rounded-md p-2'>
                     <Ionicons name="qr-code-sharp" size={ 20 } color="black" />
                     <Text className={ textClass }>QR của tôi</Text>
@@ -44,7 +44,7 @@ export default function QuickActionGrid ( )
                     <Text className={ textClass }>Lịch sử giao dịch</Text>
                 </View>
             </TouchableOpacity>
-            <TouchableOpacity className={ itemClass }>
+            <TouchableOpacity className={ itemClass } onPress={ () => router.push( '/(tabs)/history/statistics' ) }>
                 <View className='h-24 items-center justify-center border border-gray-300 rounded-md p-2'>
                     <EvilIcons name="chart" size={ 30 } color="black" />
                     <Text className={ textClass }>Thống kê giao dịch</Text>

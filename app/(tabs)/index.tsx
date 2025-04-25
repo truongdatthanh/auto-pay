@@ -10,6 +10,8 @@ import EvilIcons from '@expo/vector-icons/EvilIcons';
 import mockBanking from '../../assets/banking.json';
 import { router } from 'expo-router';
 import QuickActionGrid from '@/components/QuickActionGrid';
+import BankCardCarousel from '../test/bankcardActive';
+import MyCard from '@/components/MyCard';
 
 interface IBanking
 {
@@ -30,11 +32,7 @@ interface IBanking
 export default function Home ()
 {
   const [ data, setData ] = useState( mockBankCard );
-  console.log( data );
-
   const [ bankData, setBankData ] = useState( mockBanking );
-
-
 
   return (
     <ScrollView
@@ -45,43 +43,14 @@ export default function Home ()
       {/* <View className='mb-2 bg-white'>
         <ImageSlider />
       </View> */}
-      
-      <ScrollView
-        horizontal={ true }
-        showsHorizontalScrollIndicator={ false }
-        contentContainerStyle={ { paddingLeft: 45 } }
-        snapToInterval={ 300 }
-        className='h-300 py-2 shadow-md'
-      >
-        { data.map( ( item ) => (
-          <View key={ item.id } style={ { marginRight: 20 } }>
-            <BankingCard
-              key={ item.id }
-              id={ item.id }
-              STK={ item.STK }
-              name={ item.name }
-              logoBanking={ item.logoBanking }
-              bankName={ item.bankName }
-            />
-          </View>
-        ) ) }
-      </ScrollView>
 
-      <View className='p-4 flex-row items-center justify-between bg-white'>
-        <Chart />
-        <View>
-          <View>
-            <Text >1000VND</Text>
-            <Text >0 Giao dich den </Text>
-          </View>
-          <View>
-            <Text >1000VND</Text>
-            <Text >0 Giao dich di </Text>
-          </View>
-        </View>
+
+      <View className='py-4'>
+        <MyCard />
       </View>
 
-      <QuickActionGrid  />
+
+      <QuickActionGrid />
 
       <View className='p-2 bg-white '>
         <Text className='text-xl font-semibold'>Ngân hàng kết nối</Text>

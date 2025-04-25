@@ -27,7 +27,21 @@ export default function AuthLayout ()
         <Stack.Screen
           name='forgot-password'
           options={ {
-            header: () => <AppHeaderInfo title="Quên mật khẩu" />,
+            headerShown: false,
+          } }
+        />
+
+        <Stack.Screen
+          name='pinInput'
+          options={ {
+            headerShown: false,
+          } }
+        />
+
+        <Stack.Screen
+          name='confirmPin'
+          options={ {
+            headerShown: false,
           } }
         />
       </Stack>
