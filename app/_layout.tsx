@@ -4,6 +4,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { StatusBar } from 'react-native';
 
+
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout ()
@@ -11,8 +12,10 @@ export default function RootLayout ()
   const router = useRouter();
   const pathname = usePathname();
   console.log( "layout tong: ", pathname );
+  
   const isLoggedIn = false;
 
+  
   useEffect( () =>
   {
     const prepare = async () =>

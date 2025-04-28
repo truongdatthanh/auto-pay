@@ -94,5 +94,53 @@
                 "description": "Transfer"
             }
         ]
+    },
+    {
+        "id": "6",
+        "STK": "2224567843",
+        "name": "Truong Thanh Dat",
+        "logoBanking": "https://cdn.haitrieu.com/wp-content/uploads/2022/02/Icon-Vietcombank.png",
+        "bankName": "Vietcombank",
+        "transactionHistory": [
+            {
+                "date": "2023-10-01",
+                "amount": 2500000,
+                "description": "Deposit"
+            },
+            {
+                "date": "2023-10-02",
+                "amount": -900000,
+                "description": "Withdrawal"
+            },
+            {
+                "date": "2023-10-03",
+                "amount": 500000,
+                "description": "Transfer"
+            }
+        ]
+    },
+    {
+        "id": "7",
+        "STK": "2224567843",
+        "name": "Truong Thanh Dat",
+        "logoBanking": "https://cdn.haitrieu.com/wp-content/uploads/2022/02/Icon-Vietcombank.png",
+        "bankName": "Vietcombank",
+        "transactionHistory": [
+            {
+                "date": "2023-10-01",
+                "amount": 2500000,
+                "description": "Deposit"
+            },
+            {
+                "date": "2023-10-02",
+                "amount": -900000,
+                "description": "Withdrawal"
+            },
+            {
+                "date": "2023-10-03",
+                "amount": 500000,
+                "description": "Transfer"
+            }
+        ]
     }
 ]

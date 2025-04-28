@@ -17,8 +17,8 @@ export default function SettingsScreen() {
   const toggleBiometric = async () => {
     if (!biometricEnabled) {
       // Kiểm tra phần cứng và xác thực
-      const hasHardware = await LocalAuthentication.hasHardwareAsync();
-      const isEnrolled = await LocalAuthentication.isEnrolledAsync();
+      const hasHardware = await LocalAuthentication.hasHardwareAsync();// Kiểm tra xem thiết bị có hỗ trợ sinh trắc học không
+      const isEnrolled = await LocalAuthentication.isEnrolledAsync();// Kiểm tra xem có sinh trắc học đã được cài đặt không
 
       if (!hasHardware || !isEnrolled) {
         Alert.alert('Thiết bị không hỗ trợ hoặc chưa cài đặt sinh trắc học');
@@ -26,7 +26,7 @@ export default function SettingsScreen() {
       }
 
       const result = await LocalAuthentication.authenticateAsync({
-        promptMessage: 'Xác thực để bật sinh trắc học',
+        promptMessage: 'Xác thực sinh trắc học',
       });
 
       if (!result.success) {
@@ -34,7 +34,8 @@ export default function SettingsScreen() {
         return;
       }
 
-      Alert.alert('Đã bật sinh trắc học');
+      Alert.alert( 'Đã bật sinh trắc học' );
+      console.log( result );
     } else {
       Alert.alert('Đã tắt sinh trắc học');
     }

@@ -1,43 +1,34 @@
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { router } from 'expo-router';
-import React, { useEffect, useRef, useState } from 'react';
-import { View, Text, TextInput, Pressable, StatusBar, TouchableOpacity } from 'react-native';
+import React, { useRef, useState } from 'react';
+import { View, Text, TextInput, Pressable, StatusBar, TouchableOpacity, Alert } from 'react-native';
 
-
-export default function ConfirmPin ()
+export default function ConfirmPinInput ()
 {
-    const [ pin, setPin ] = useState( '' );
+    const [ confirmPin, setConfirmPin ] = useState( "" );
     const inputRef = useRef<TextInput>( null );
-    const handleChange = ( text: string ) =>
+
+    const handleChange = async ( text: string ) =>
     {
-        // chỉ cho phép tối đa 4 số và chỉ nhận số
         if ( /^\d*$/.test( text ) && text.length <= 4 )
         {
-            setPin( text );
-
+            setConfirmPin( text );
             if ( text.length === 4 )
             {
-              
                 inputRef.current?.blur();
+                const pin = await AsyncStorage.getItem( "pin" );
+
+                if ( text !== pin )
+                {
+                    Alert.alert( "PIN không trùng khớp" );
+                    return;
+                }
+                router.push("/(tabs)")
             }
         }
     };
 
-    useEffect( () =>
-    {
-        const getPin = async () =>
-        {
-            const pin = await AsyncStorage.getItem( 'pin' );
-            if ( pin )
-            {
-                setPin( pin );
-            }
-        };
-        getPin();
-        console.log( 'pin', pin );
-    }, [] );
-    
     return (
         <>
             <StatusBar barStyle="dark-content" backgroundColor="white" />
@@ -47,7 +38,7 @@ export default function ConfirmPin ()
                 </TouchableOpacity>
                 {/* Title ở góc trái trên */ }
                 <View className="mt-16">
-                    <Text className="text-4xl font-bold text-[#1c40f2]">Xác Nhận Mã PIN</Text>
+                    <Text className="text-4xl font-bold text-[#1c40f2]">Xác Nhận Lại Mã PIN</Text>
                     <Text className="text-md text-gray-500 mt-1">Nhập PIN của bạn</Text>
                 </View>
 
@@ -58,7 +49,7 @@ export default function ConfirmPin ()
                             { Array.from( { length: 4 } ).map( ( _, i ) => (
                                 <View
                                     key={ i }
-                                    className={ `w-6 h-6 rounded-full ${ i < pin.length ? 'bg-[#1c40f2]' : 'bg-gray-300'
+                                    className={ `w-6 h-6 rounded-full ${ i < confirmPin.length ? 'bg-[#1c40f2]' : 'bg-gray-300'
                                         }` }
                                 />
                             ) ) }
@@ -69,16 +60,12 @@ export default function ConfirmPin ()
                             ref={ inputRef }
                             className="h-1 w-1 opacity-0"
                             keyboardType="phone-pad"
-                            value={ pin }
+                            value={ confirmPin }
                             onChangeText={ handleChange }
                             maxLength={ 4 }
                             autoFocus
                         />
                     </Pressable>
-
-                    <TouchableOpacity onPress={() => AsyncStorage.removeItem( 'pin' )} className="mt-4 bg-blue-500 p-4 rounded-full">
-                        <Text>Clear storage</Text>
-                    </TouchableOpacity>
                 </View>
             </View>
         </>

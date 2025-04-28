@@ -1,7 +1,7 @@
 
 import { Button, Image, SafeAreaView, StatusBar, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { Link, useLocalSearchParams, useNavigation, usePathname, useRouter } from 'expo-router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
@@ -11,6 +11,7 @@ export default function Login ()
     const router = useRouter();
     const [ email, setEmail ] = useState( 'truongdat@gmail.com' );
     const [ password, setPassword ] = useState( '123456' );
+
 
     const user = [
         { id: 1, email: 'truongdat@gmail.com', fullName: "Truong Thanh Dat", password: '123456' },
@@ -74,7 +75,7 @@ export default function Login ()
                         </View>
                     </View>
                 </View>
-                <View className='absolute bottom-3 w-full p-4'>
+                <View className='absolute bottom-3 w-full p-4 z-0'>
                     <TouchableOpacity
                         className="mt-2 bg-[#1c40f2] rounded-full h-16 justify-center w-full"
                         onPress={ handleLogin }

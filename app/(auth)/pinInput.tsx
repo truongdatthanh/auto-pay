@@ -9,7 +9,7 @@ export default function PinInput ()
     const [ pin, setPin ] = useState( '' );
     const inputRef = useRef<TextInput>( null );
 
-    const handleChange = ( text: string ) =>
+    const handleChange = async ( text: string ) =>
     {
         if ( /^\d*$/.test( text ) && text.length <= 4 )
         {
@@ -18,7 +18,9 @@ export default function PinInput ()
             if ( text.length === 4 )
             {
                 inputRef.current?.blur();
-
+                await AsyncStorage.setItem( "pin", text );
+                router.push( "/(auth)/confirmPin" );
+                setPin( "" );
             }
         }
     };

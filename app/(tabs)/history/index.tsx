@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, Platform, SectionList } from 'react-native';
+import { View, Text, TouchableOpacity, Platform, SectionList, Alert } from 'react-native';
 import { useCallback, useState, useEffect } from 'react';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { formatDate, groupByDate } from '@/utils/formatDate';
@@ -10,47 +10,80 @@ import NotFound from '@/app/error/404';
 
 export default function History ()
 {
-  const [ date, setDate ] = useState( new Date() );
-  const [ showPicker, setShowPicker ] = useState( false );
+  const [ endDate, setEndDate ] = useState( new Date() );//Lấy ra ngày hôm nay
+  const [ startDate, setStartDate ] = useState( new Date() );
+  const [ showStartPicker, setShowStartPicker ] = useState( false );
+  const [ showEndPicker, setShowEndPicker ] = useState( false );
   const [ sections, setSections ] = useState( groupByDate( mockBanking ) );
   const [ refreshing, setRefreshing ] = useState( false );
 
-  // Lọc theo ngày cụ thể
-  const handleFilterByDate = ( selectedDate: Date ) =>
+  // Lọc theo khoảng ngày - vd: 7 ngày gần đây, 3 tháng gần đây
+  const handleRecentDays = ( days: number ) =>
   {
-    const selectedDay = selectedDate.toDateString();
+    const now = new Date();
+    const past = new Date( now );
+    past.setDate( now.getDate() - days ); // Thay đổi ngày trực tiếp
+    const nowDate = now.setHours( 0, 0, 0, 0 );//setHours(0, 0, 0, 0) để set mặc định ngày giờ là 00:00:00
+    const passDate = past.setHours( 0, 0, 0, 0 );
+    const filtered = mockBanking.filter( item =>
+    {
+      const itemDate = new Date( item.date ).setHours( 0, 0, 0, 0 );
+      return itemDate >= passDate && itemDate <= nowDate;
+    } );
+    setSections( groupByDate( filtered ) )
+  };
+
+  // Lọc theo ngày cụ thể
+  const handleFilterByDate = () =>
+  {
+    const start = startDate.setHours( 0, 0, 0, 0 );
+    const end = endDate.setHours( 0, 0, 0, 0 );
+
+    if ( start > end )
+    {
+      Alert.alert( "Ngày của bạn không hợp lệ" );
+      setStartDate( new Date );
+    }
+
     const filtered = mockBanking.filter(
-      item => new Date( item.date ).toDateString() === selectedDay
+      item =>
+      {
+        const itemDate = new Date( item.date ).setHours( 0, 0, 0, 0 );
+        return itemDate >= start && itemDate <= end;
+      }
     );
     setSections( groupByDate( filtered ) );
   };
 
-  // Lọc theo khoảng ngày
-  const handleRecentDays = ( days: number ) =>
-  {
-    const now = new Date();
-    const past = new Date();
-    past.setDate( now.getDate() - days );
-
-
-    const filtered = mockBanking.filter( item =>
-    {
-      const itemDate = new Date( item.date );
-      return itemDate >= past && itemDate <= now;
-    } );
-    setSections( groupByDate( filtered ) );
-  };
-
-  // Hàm chọn ngày
+  // Hàm chọn ngày kết thúc
   const onChange = ( event: any, selectedDate?: Date ) =>
   {
-    setShowPicker( Platform.OS === 'ios' );
+    setShowEndPicker( Platform.OS === 'ios' );
     if ( selectedDate )
     {
-      setDate( selectedDate );
-      handleFilterByDate( selectedDate );
+      setEndDate( selectedDate );
+      handleFilterByDate();
     }
   };
+
+  //Hàm chọn ngày bắt đầu
+  const onChangeStartDate = ( event: any, selectedDate?: Date ) =>
+  {
+    setShowStartPicker( Platform.OS === 'ios' );
+    if ( selectedDate )
+    {
+      setStartDate( selectedDate );
+      handleFilterByDate();
+    }
+  }
+
+
+  // Hiển thị dữ liệu theo ngày hiện tại khi mở màn hình
+  useEffect( () =>
+  {
+    handleFilterByDate();  // Lọc dữ liệu theo ngày hiện tại
+  }, [ startDate, endDate ] );
+
 
   // Hàm refresh dữ liệu
   const onRefresh = useCallback( () =>
@@ -59,39 +92,49 @@ export default function History ()
     setTimeout( () =>
     {
       console.log( "refreshing" );
-      handleFilterByDate( date )
-
+      handleFilterByDate();
       setRefreshing( false );
     }, 1500 );
   }, [] );
-
-  // Hiển thị dữ liệu theo ngày hiện tại khi mở màn hình
-  useEffect( () =>
-  {
-    handleFilterByDate( date );  // Lọc dữ liệu theo ngày hiện tại
-  }, [ date ] );
 
   return (
     <>
       <View className='flex-1 bg-white'>
         <View className="p-4 flex-row items-center justify-between bg-white shadow-lg">
           <Text className="text-lg font-semibold">Thời gian</Text>
-          <TouchableOpacity
-            className="px-4 py-2 rounded-md flex-row items-center"
-            onPress={ () => setShowPicker( true ) }
-          >
-            <Text className="font-semibold mr-2">{ formatDate( date ) }</Text>
-            <Feather name="calendar" size={ 19 } color="black" />
-          </TouchableOpacity>
-
-          { showPicker && (
-            <DateTimePicker
-              value={ date }
-              mode="date"
-              display="default"
-              onChange={ onChange }
-            />
-          ) }
+          {/* set hộp thoại lịch ẩn/ hiện và chọn ngày */ }
+          <View className='flex-row items-center'>
+            <TouchableOpacity
+              className="py-2 rounded-md flex-row items-center border p-2"
+              onPress={ () => setShowStartPicker( true ) }
+            >
+              <Text className="font-semibold">{ formatDate( startDate ) }</Text>
+            </TouchableOpacity>
+            { showStartPicker && (
+              <DateTimePicker
+                value={ startDate }
+                mode="date"
+                display="default"
+                onChange={ onChangeStartDate }
+              />
+            ) }
+            <Text className='font-bold text-lg px-2'>-</Text>
+            <TouchableOpacity
+              className="py-2 rounded-md flex-row items-center border p-2"
+              onPress={ () => setShowEndPicker( true ) }
+            >
+              <Text className="font-semibold mr-2">{ formatDate( endDate ) }</Text>
+              <Feather name="calendar" size={ 19 } color="black" />
+            </TouchableOpacity>
+            { showEndPicker && (
+              <DateTimePicker
+                value={ endDate }
+                mode="date"
+                display="default"
+                onChange={ onChange }
+              />
+            ) }
+          </View>
         </View>
 
         {/* Nút lọc nhanh */ }
@@ -108,7 +151,7 @@ export default function History ()
         </View>
 
         { sections.length === 0 ? (
-           <NotFound contentErr="Không có giao dịch nào!!!" />
+          <NotFound contentErr="Không có giao dịch nào!!!" />
         ) : (
           <SectionList
             sections={ sections }
@@ -135,9 +178,10 @@ export default function History ()
             className="bg-white"
             contentContainerStyle={ { paddingBottom: 100 } }
           />
-        )}
+        ) }
       </View>
     </>
   );
 }
+
 

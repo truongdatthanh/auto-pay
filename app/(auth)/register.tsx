@@ -115,10 +115,10 @@ export default function Register ()
                                 onChangeText={ setConfirmPassword }
                             />
                         </View>
-                        <View className="flex-row my-4 items-center">
+                        <View className="flex-row my-2 mx-2 mb-6 items-center">
                             <Pressable
-                                onPress={ () => handleSetChecked }
-                                className={`w-6 h-6 mr-2 rounded border-2 border-gray-500 justify-center items-center ${
+                                onPress={() =>  handleSetChecked() }
+                                className={`w-6 h-6 mr-2 rounded border border-gray-500 justify-center items-center ${
                                 checked ? 'bg-blue-500' : 'bg-white'
                                 }`}
                             >

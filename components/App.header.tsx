@@ -13,9 +13,9 @@ export default function AppHeader ()
     router.push( "/(tabs)" );
   };
 
-  const handleUserProfile = () =>
+  const handleNotification = () =>
   {
-    router.push( "/user" );
+    router.push( "/notificate" );
   };
 
   return (
@@ -26,8 +26,8 @@ export default function AppHeader ()
           <TouchableOpacity onPress={ handlePress }>
             <Text className="text-white text-xl ml-1">⛛ AUTOPAY</Text>
           </TouchableOpacity>
-          
-          <TouchableOpacity onPress={ handleUserProfile } className="flex-row items-center">
+
+          <TouchableOpacity onPress={ handleNotification } className="flex-row items-center">
             <MaterialCommunityIcons name="bell" size={ 24 } color="white" />
           </TouchableOpacity>
         </View>

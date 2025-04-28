@@ -53,7 +53,7 @@ export default function InfomationLayout ()
                     name="biometric"
                     options={ {
                         headerShown: true,
-                        header: () => <AppHeaderInfo title='sinh trac hoc' onPress={ () => router.back() } />,
+                        header: () => <AppHeaderInfo title='Sinh trắc học' onPress={ () => router.back() } />,
                     } }
                 />
 
@@ -61,7 +61,7 @@ export default function InfomationLayout ()
                     name="MyQR"
                     options={ {
                         headerShown: true,
-                        header: () => <AppHeaderInfo title='sinh trac hoc' onPress={ () => router.back() } />,
+                        header: () => <AppHeaderInfo title='QR của tôi' onPress={ () => router.back() } />,
                     } }
                 />
             </Stack>

@@ -1,52 +1,56 @@
-import React from 'react';
-import { LineChart } from "react-native-gifted-charts"
-import { View, Text, ScrollView, StyleSheet } from 'react-native';
-import mockData from "../../../assets/data.json"
+import React, { useRef, useState } from 'react';
+
+import { View, Text, ScrollView, StyleSheet, TouchableOpacity, FlatList, ViewToken } from 'react-native';
+import data from "../../../assets/banking-card.json"
+import BankingCard from '@/components/BankCard';
+import LineCharts from '@/app/test/lineChart';
 export default function BankAccountDetail ()
 {
-    const data = mockData;
-    console.log( 'data', data );
-    const lineData = [
-        { value: 0, dataPointText: '0', label: 'A' },
-        { value: 10, dataPointText: '10', label: 'A' },
-        { value: 8, dataPointText: '8', label: 'A' },
-        { value: 58, dataPointText: '58', label: 'A' },
-        { value: 56, dataPointText: '56', label: 'A' },
-        { value: 78, dataPointText: '78', label: 'A' },
-        { value: 74, dataPointText: '74', label: 'A' },
-        { value: 98, dataPointText: '98', label: 'A' },
-    ];
+    const [ currentCardIndex, setCurrentCardIndex ] = useState( 0 );
+    const bankCard = data;
 
-    const lineData2 = [
-        { value: 0, dataPointText: '0', label: 'A' },
-        { value: 20, dataPointText: '20', label: 'A' },
-        { value: 18, dataPointText: '18', label: 'A' },
-        { value: 40, dataPointText: '40', label: 'A' },
-        { value: 36, dataPointText: '36', label: 'A' },
-        { value: 60, dataPointText: '60', label: 'A' },
-        { value: 54, dataPointText: '54', label: 'A' },
-        { value: 85, dataPointText: '85', label: 'A' },
-    ];
+    const viewabilityConfig = useRef( {
+        viewAreaCoveragePercentThreshold: 50,
+    } );
+
+    const onViewRef = useRef( ( { viewableItems }: { viewableItems: ViewToken[] } ) =>
+    {
+        if ( viewableItems.length > 0 && viewableItems[ 0 ].index !== null )
+        {
+            setCurrentCardIndex( viewableItems[ 0 ].index ?? 0 );
+        }
+    } );
+
     return (
-        <View>
-            <LineChart
-                data={ lineData }
-                data2={ lineData2 }
-                height={ 250 }
-                showVerticalLines
-                spacing={ 44 }
-                initialSpacing={ 0 }
-                color1="skyblue"
-                color2="orange"
-                textColor1="green"
-                dataPointsHeight={ 6 }
-                dataPointsWidth={ 6 }
-                dataPointsColor1="blue"
-                dataPointsColor2="red"
-                textShiftY={ -2 }
-                textShiftX={ -5 }
-                textFontSize={ 13 }
+        <View className='flex-1 bg-white'>
+            <FlatList
+                data={ bankCard }
+                horizontal
+                pagingEnabled
+                showsHorizontalScrollIndicator={ false }
+                keyExtractor={ ( item ) => item.id }
+                snapToInterval={ 330 } // khoảng cách giữa các item
+                snapToAlignment='center' // căn giữa item
+                renderItem={ ( { item } ) => (
+                    <View className="items-center justify-center" style={ { marginRight: 10 } }>
+                        <BankingCard
+                            key={ item.id }
+                            id={ item.id }
+                            STK={ item.STK }
+                            name={ item.name }
+                            logoBanking={ item.logoBanking }
+                            bankName={ item.bankName }
+                        />
+                    </View>
+                ) }
+                onViewableItemsChanged={ onViewRef.current }
+                viewabilityConfig={ viewabilityConfig.current }
+                contentContainerStyle={ { paddingHorizontal: 20 } }
             />
+
+            <View className='bg-blue-200 rounded-xl p-4 mb-24'>
+                <LineCharts id={ bankCard[ currentCardIndex ].id } />
+            </View>
         </View>
     );
 };

@@ -2,7 +2,7 @@ import { AntDesign, EvilIcons, FontAwesome5, Ionicons } from "@expo/vector-icons
 import { router } from "expo-router";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 
-export default function QuickActionGrid ( )
+export default function QuickActionGrid ()
 {
     const itemClass = 'w-1/4 max-h-40 p-2 bg-white ';
     const textClass = 'text-xs font-semibold text-center';
@@ -14,7 +14,7 @@ export default function QuickActionGrid ( )
                     <Text className={ textClass }>Kích hoạt AutoPAY</Text>
                 </View>
             </TouchableOpacity>
-            <TouchableOpacity className={ itemClass } onPress={ () => router.push( '/(tabs)/qr/QR-scanner' ) }>
+            <TouchableOpacity className={ itemClass } onPress={ () => alert( 'Chức năng đang phát triển' ) }>
                 <View className='h-24 items-center justify-center border border-gray-300 rounded-md p-2'>
                     <Ionicons name="qr-code-sharp" size={ 20 } color="black" />
                     <Text className={ textClass }>QR của tôi</Text>

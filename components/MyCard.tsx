@@ -1,9 +1,10 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { View, Text, FlatList, Dimensions, ViewToken, TouchableOpacity } from 'react-native';
 import data from "../assets/banking-card.json"
 import BankingCard from './BankCard';
 import Chart from '@/app/test/chart';
 import { router } from 'expo-router';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function MyCard ()
 {
@@ -14,13 +15,23 @@ export default function MyCard ()
         viewAreaCoveragePercentThreshold: 50,
     } );
 
-    const onViewRef = useRef( ( { viewableItems }: { viewableItems: ViewToken[] } ) =>
+
+    const onViewRef = useRef( async ( { viewableItems }: { viewableItems: ViewToken[] } ) =>
     {
         if ( viewableItems.length > 0 && viewableItems[ 0 ].index !== null )
         {
-            setCurrentCardIndex( viewableItems[ 0 ].index ?? 0 );
+            const newIndex = viewableItems[ 0 ].index ?? 0;
+            setCurrentCardIndex( newIndex );
+            const selectedCard = bankCard[ newIndex ];
+
+            await AsyncStorage.removeItem( "card" );
+
+            await AsyncStorage.setItem( 'selectedCard', JSON.stringify( selectedCard ) )
+                .then( () => console.log( 'Đã lưu card:', selectedCard.bankName ) )
+                .catch( ( error ) => console.error( 'Lỗi lưu AsyncStorage:', error ) );
         }
     } );
+
 
     const handleSeenAllCard = () =>
     {
@@ -63,8 +74,6 @@ export default function MyCard ()
             <View className='bg-blue-200 rounded-xl mx-2'>
                 <Chart id={ bankCard[ currentCardIndex ].id } />
             </View>
-
-
         </View>
     );
 };

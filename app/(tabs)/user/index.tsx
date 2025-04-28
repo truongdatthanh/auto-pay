@@ -7,9 +7,6 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import Octicons from '@expo/vector-icons/Octicons';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { AntDesign } from '@expo/vector-icons';
-import { generateQR } from '@/utils/generateQR';
-
-
 
 interface IUser
 {
@@ -54,9 +51,6 @@ export default function Information ()
 
             <View className='m-4'>
                 <Text className='text-xl font-bold'>Thông tin cá nhân</Text>
-                {/* <View className='bg-white border-2 border-white rounded-xl mt-2 gap-4 p-4 '>
-                    <Option title='Thông tin cá nhân' onPress={ () => void ( 0 ) } IconComponent={ FontAwesome5 } iconName='user-alt' iconSize={ 24 } iconColor='black' />
-                </View> */}
                 <View className='bg-white border-2 border-white rounded-xl mt-2 gap-4 p-4 '>
                     <TouchableOpacity className='flex-row items-center justify-between p-2' onPress={ () => router.push( '/user/information-user' ) }>
                         <Text className='text-md font-semibold'>Thông tin cá nhân</Text>

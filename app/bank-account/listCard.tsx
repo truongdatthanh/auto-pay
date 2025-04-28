@@ -2,9 +2,16 @@ import { FlatList, Text, TouchableOpacity, View } from "react-native";
 import dataBankingCard from "../../assets/banking-card.json";
 import { useState } from "react";
 import BankingCard from "@/components/BankCard";
+import { router } from "expo-router";
 export default function ListCard ()
 {
     const [ data, setData ] = useState( dataBankingCard );
+
+    const handleAddCard = () => 
+    {
+        router.push( "/bank-account/addCard" );
+
+    }
 
     return (
         <>
@@ -28,15 +35,12 @@ export default function ListCard ()
 
                     ) }
                     ListFooterComponent={ () => (
-                        <TouchableOpacity className="p-4 mt-6 items-center" onPress={ () => { } } style={ { width: 320, borderStyle: "dashed", borderColor: "black", borderWidth: 1, borderRadius: 8 } }>
+                        <TouchableOpacity className="p-4 mt-6 items-center" onPress={ handleAddCard } style={ { width: 320, borderStyle: "dashed", borderColor: "black", borderWidth: 1, borderRadius: 8 } }>
                             <Text className="text-[#1c40f2] font-semibold text-lg">+ Thêm thẻ ngân hàng</Text>
                         </TouchableOpacity>
                     ) }
                     contentContainerStyle={ { paddingBottom: 100, alignItems: "center" } }
                 />
-                {/* <TouchableOpacity className='p-4' onPress={ () => { } }>
-                    <Text className='text-blue-500 font-semibold text-sm'>Thêm thẻ ngân hàng</Text>
-                </TouchableOpacity> */}
             </View>
 
         </>

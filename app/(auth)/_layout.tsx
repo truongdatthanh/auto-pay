@@ -44,6 +44,13 @@ export default function AuthLayout ()
             headerShown: false,
           } }
         />
+
+        <Stack.Screen
+          name='withPhoneNumber'
+          options={ {
+            headerShown: false,
+          } }
+        />
       </Stack>
     </>
 

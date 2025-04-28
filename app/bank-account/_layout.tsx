@@ -22,6 +22,13 @@ export default function BankAccountLayout ()
                 } }
             />
 
+            <Stack.Screen
+                name="addCard"
+                options={ {
+                    header: () => <AppHeaderInfo title="Thêm thẻ ngân hàng" onPress={ () => router.replace( "/(tabs)" ) } />,
+                } }
+            />
+
         </Stack>
     );
 }

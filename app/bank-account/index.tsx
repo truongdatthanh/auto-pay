@@ -8,31 +8,49 @@ import { FontAwesome } from "@expo/vector-icons";
 import myBankingAccount from "../../assets/my-bank-account.json";
 import mockDataTransation from "../../assets/data.json"
 import CardInfo from "@/components/CardInfo";
-import AntDesign from '@expo/vector-icons/AntDesign';
 import { router } from "expo-router";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-
-interface IBankingTransaction
+interface ITransactionHistory
 {
-    id: string,
-    STK: string,
-    name: string,
-    date: string,
-    amount: number,
-    content: string,
-    logoBanking: string,
-    transactionId: string,
+    id: string | undefined;
+    STK: string | undefined;
+    name: string | undefined;
+    logoBanking: string | undefined;
+    bankName: string | undefined;
+    transactionHistory: {
+        date: string;
+        amount: number;
+        description: string;
+    }[];
 }
+
 export default function BankAccount ()
 {
-    const [ bankAccount ] = useState( myBankingAccount );
-    const jsonData = bankAccount.filter( ( item: any ) => item.id === "1" );
-    const jsonString = JSON.stringify( jsonData[ 0 ].bank_name );
     const [ selected, setSelected ] = useState( "income" );
     const [ dataBanking, setDataBanking ] = useState( mockDataTransation );
+    const [ currentCard, setCurrentCard ] = useState<ITransactionHistory>();
 
     const incomeItems: any[] = [];
     const outcomeItems: any[] = [];
+
+    useEffect( () =>
+    {
+        const fectCardId = async () =>
+        {
+            const getCard = await AsyncStorage.getItem( "selectedCard" );
+            if ( getCard !== null )
+            {
+                setCurrentCard( JSON.parse( getCard ) );//Chuyển đổi Json thành Obj Js
+
+            }
+
+            console.log( "getacard", getCard );
+        }
+        fectCardId();
+    }, [] );
+
+    console.log( "current card: ", currentCard )
 
     for ( const item of dataBanking )
     {
@@ -49,10 +67,9 @@ export default function BankAccount ()
     {
         router.push( {
             pathname: '/(tabs)/qr/CreateMyQR',
-            params: {
-                STK: jsonData[ 0 ].STK,
-            }
-        })
+            params: { cardSTK: currentCard?.STK, }
+
+        } )
     };
 
     return (
@@ -61,23 +78,24 @@ export default function BankAccount ()
                 <View className="justify-center items-center bg-[#FFC300]">
                     <View className="p-4">
                         <BankingCard
-                            id={ jsonData[ 0 ].id }
-                            STK={ jsonData[ 0 ].STK }
-                            name={ jsonData[ 0 ].name }
-                            logoBanking={ jsonData[ 0 ].bank_logo }
-                            bankName={ jsonData[ 0 ].bank_name }
+                            id={ currentCard?.id }
+                            STK={ currentCard?.STK }
+                            name={ currentCard?.name }
+                            logoBanking={ currentCard?.logoBanking }
+                            bankName={ currentCard?.bankName }
                         />
                     </View>
 
                     {/* QR */ }
                     <View className="justify-center items-center w-full max-w-[340px] p-4 mx-4 bg-white rounded-3xl shadow-md">
-                        <Text className="font-bold">{ jsonData[ 0 ].name.toUpperCase() }</Text>
-                        <Text className="text-lg">{ jsonData[ 0 ].STK }</Text>
-                        <Text className="text-base">{ jsonData[ 0 ].bank_name }</Text>
+                        <Text className="font-bold">{ currentCard?.name?.toUpperCase() }</Text>
+                        <Text className="text-lg">{ currentCard?.STK }</Text>
+                        <Text className="text-base">{ currentCard?.bankName }</Text>
                         <Seperate />
                         <View className="bg-white border-2 border-gray-300 p-4 rounded-lg">
+                            {/* Truoc khi tao QR code can phai chuyen obj js thanh json */ }
                             <QRCode
-                                value={ jsonString }
+                                value={ JSON.stringify( currentCard?.bankName ) }
                                 size={ 150 }
                                 logo={ require( "../../assets/images/logo-autopay-4.png" ) }
                                 logoSize={ 30 }
@@ -86,7 +104,7 @@ export default function BankAccount ()
                         <Seperate />
                         <View style={ { maxWidth: 250 } } className="flex-row w-full justify-between items-center bg-white">
                             <Text className="text-xl text-black font-bold">⛛AutoPAY</Text>
-                            <Image source={ { uri: jsonData[ 0 ].bank_logo } } className="w-20 h-16" resizeMode="contain" />
+                            <Image source={ { uri: currentCard?.logoBanking } } className="w-20 h-16" resizeMode="contain" />
                         </View>
                         <View className="flex-row justify-between items-center w-full">
                             <TouchableOpacity className="border border-gray-300 bg-gray-50 px-4 py-2 rounded-full flex-row items-center" onPress={ () => console.log( "Lưu mã QR" ) }>
@@ -108,9 +126,9 @@ export default function BankAccount ()
                             <Text className="text-lg text-black font-bold">
                                 Giao dịch gần đây
                             </Text>
-                            <Text className="text-base text-black">
-                                Xem thêm
-                            </Text>
+                            <TouchableOpacity onPress={ () => router.push( "/(tabs)/history" ) }>
+                                <Text className="text-base text-gray-500"> Xem thêm </Text>
+                            </TouchableOpacity>
                         </View>
                         <View className="flex-row items-center justify-between bg-white p-2 rounded-xl mt-4">
                             <TouchableOpacity

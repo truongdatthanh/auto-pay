@@ -17,14 +17,14 @@ export default function HistoryLayout ()
       <Stack.Screen
         name='details/[id]'
         options={ {
-          header: () => <AppHeaderInfo title='Chi tiết giao dịch' onPress={ () => router.back() } />,
+          header: () => <AppHeaderInfo title='Chi tiết giao dịch' onPress={ () => router.replace("/(tabs)/history") } />,
         } }
       />
 
       <Stack.Screen
         name='statistics'
         options={ {
-          header: () => <AppHeaderInfo title='Thống kê giao dịch' onPress={ () => router.back() } />,
+          header: () => <AppHeaderInfo title='Thống kê giao dịch' onPress={ () => router.replace("/(tabs)") } />,
         } }
       />
     </Stack>

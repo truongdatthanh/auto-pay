@@ -4,27 +4,25 @@ import { Tabs } from 'expo-router';
 import AppHeader from '@/components/App.header';
 import { useState, useEffect } from 'react';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
-export default function TabLayout ()
+
+export default function HomeLayout ()
 {
   const [ isTabBarVisible, setIsTabBarVisible ] = useState( true );
 
   useEffect( () =>
   {
-    // Listener for when the keyboard is shown
+
     const keyboardDidShowListener = Keyboard.addListener( 'keyboardDidShow', () =>
     {
-      setIsTabBarVisible( false ); // Hide the tab bar when the keyboard is shown
+      setIsTabBarVisible( false ); 
     } );
 
-    // Listener for when the keyboard is hidden
     const keyboardDidHideListener = Keyboard.addListener( 'keyboardDidHide', () =>
     {
-      setIsTabBarVisible( true ); // Show the tab bar when the keyboard is hidden
+      setIsTabBarVisible( true );
     } );
 
-    // Cleanup listeners on unmount
     return () =>
     {
       keyboardDidHideListener.remove();
@@ -37,7 +35,6 @@ export default function TabLayout ()
       <Tabs
         initialRouteName="index"
         screenOptions={ {
-          //tabBarHideOnKeyboard: true, // Hide tabbar when the keyboard is visible
           tabBarShowLabel: true, // Show label below the icon
           tabBarActiveTintColor: 'blue', // Active tab color
           tabBarInactiveTintColor: 'gray', // Inactive tab color

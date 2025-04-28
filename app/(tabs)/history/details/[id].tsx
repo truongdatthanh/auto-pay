@@ -1,7 +1,6 @@
 import { router, useLocalSearchParams, useNavigation } from "expo-router";
 import { Alert, BackHandler, Image, Modal, ScrollView, Text, TextInput, Touchable, TouchableOpacity, View } from "react-native";
 import mockDataBanking from "../../../../assets/data.json";
-import AppHeaderInfo from "@/components/App.headerInfo";
 import { formatCurrencyVND } from "@/utils/formatCurrencyVND";
 import { formatDate } from "@/utils/formatDate";
 import { Ionicons } from '@expo/vector-icons';

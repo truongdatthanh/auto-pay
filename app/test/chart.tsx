@@ -1,8 +1,9 @@
 import { BarChart } from 'react-native-gifted-charts';
-import { View, Text } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import { useState, useMemo } from 'react';
 import dataBankingCard from "../../assets/banking-card.json"
 import { formatCurrencyVND } from '@/utils/formatCurrencyVND';
+import { router } from 'expo-router';
 
 export default function Chart ( { id }: { id: String } )
 {
@@ -32,7 +33,6 @@ export default function Chart ( { id }: { id: String } )
             {
                 expense += item.amount;
             }
-
         } );
 
         const incomeInMillions = income / 1_000_000;
@@ -52,11 +52,16 @@ export default function Chart ( { id }: { id: String } )
     }, [ indexData ] );
 
     return (
-        <View className='p-4 flex-row justify-between'>
-            <View>
-                <Text className='text-sm font-bold mb-4'>
+        <View className='p-4'>
+            <View className='flex-row justify-between mb-2'>
+                <Text className='text-sm font-bold'>
                     Tổng giao dịch (đơn vị: triệu)
                 </Text>
+                <TouchableOpacity onPress={ () => router.push( "/(tabs)/history/statistics" ) }>
+                    <Text className='text-sm font-bold text-blue-500'>Xem chi tiết</Text>
+                </TouchableOpacity>
+            </View>
+            <View className='flex-row '>
                 <View className='items-start'>
                     <BarChart
                         dashGap={ 0 }
@@ -78,19 +83,17 @@ export default function Chart ( { id }: { id: String } )
                         hideAxesAndRules={ true } //Xóa các đường kẻ dọc
                     />
                 </View>
-            </View>
-
-            <View>
-                <View className='my-2'>
-                    <Text className='text-[#2ecc71] font-bold'>{ formatCurrencyVND( totalIncome * 1_000_000 ) }</Text>
-                    <Text >0 Giao dich den </Text>
+                <View className='justify-end mb-2'>
+                    <View className='mb-2'>
+                        <Text className='text-[#2ecc71] font-bold'>{ formatCurrencyVND( totalIncome * 1_000_000 ) }</Text>
+                        <Text >0 Giao dich den </Text>
+                    </View>
+                    <View>
+                        <Text className='text-[#e74c3c] font-bold'>{ formatCurrencyVND( totalExpense * 1_000_000 ) }</Text>
+                        <Text >0 Giao dich di </Text>
+                    </View>
                 </View>
-                <View>
-                    <Text className='text-[#e74c3c] font-bold'>{ formatCurrencyVND( totalExpense * 1_000_000 ) }</Text>
-                    <Text >0 Giao dich di </Text>
-                </View>
             </View>
-
         </View>
     );
 }
