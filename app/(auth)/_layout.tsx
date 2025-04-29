@@ -1,7 +1,6 @@
 import { Stack } from 'expo-router';
 import '../../global.css';
 import { StatusBar } from 'react-native';
-import AppHeaderInfo from '@/components/App.headerInfo';
 
 
 export default function AuthLayout ()

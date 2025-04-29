@@ -101,7 +101,7 @@ export default function Information ()
             </View>
 
             <View className='m-4'>
-                <TouchableOpacity onPress={ () => router.replace( "/login" ) } className='bg-red-500 px-4 py-6 rounded-full'>
+                <TouchableOpacity onPress={ () => router.replace( "/login" ) } className='mt-2 bg-[#1c40f2] rounded-full h-16 justify-center w-full'>
                     <Text className='text-center text-white font-semibold '>Đăng xuất</Text>
                 </TouchableOpacity>
             </View>

@@ -9,10 +9,10 @@ export default function AppHeaderInfo ( { title, onPress }: { title: string, onP
     return (
         <>
             <StatusBar translucent backgroundColor="transparent" barStyle="light-content" />
-            <SafeAreaView className="bg-blue-500 pt-6">
-                <View className="flex-row items-center justify-between bg-blue-500 p-4">
+            <SafeAreaView className="bg-[#1c40f2] pt-6">
+                <View className="flex-row items-center justify-between bg-[#1c40f2] p-4">
                     <TouchableOpacity onPress={ onPress }>
-                        <Ionicons name="arrow-back-circle-outline" size={ 30 } color="white" />
+                        <Ionicons name="arrow-back-outline" size={ 30 } color="white" />
                     </TouchableOpacity>
                     <View className="flex-1 items-center">
                         <Text className="text-white font-bold text-lg">{ title }</Text>

@@ -4,8 +4,6 @@ import { useLocalSearchParams } from "expo-router/build/hooks";
 import { useState } from "react";
 import { Image, Text, TextInput, TouchableOpacity, View } from "react-native";
 import mockDataBankingCard from "../../../assets/banking-card.json"
-import { formatCurrencyVND } from "@/utils/formatCurrencyVND";
-
 
 export default function CreateMyQR ()
 {

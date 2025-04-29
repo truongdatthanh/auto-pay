@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { View, Text, Alert } from "react-native";
 import { CameraView, Camera } from "expo-camera";
 
-export default function QRScreen ()
+export default function QRScanner ()
 {
     const [ hasPermission, setHasPermission ] = useState<boolean | null>( false );
     useEffect( () =>
@@ -15,15 +15,19 @@ export default function QRScreen ()
         } )();
     }, [] );
 
-    if ( hasPermission === null ) return <Text>Đang xin quyền...</Text>;
-    if ( hasPermission === false ) return <Text>Không có quyền camera</Text>;
+    if ( hasPermission === null )
+    {
+        return <Text>Đang xin quyền...</Text>;
+    }
+    if ( hasPermission === false )
+    {
+        return <Text>Không có quyền camera</Text>;
+    }
+
 
     return (
         <View className="flex-1 bg-white">
-            <Text className="text-xl font-bold text-center mt-6">Quét mã QR</Text>
-
             <CameraView
-                className="flex-1 mt-4"
                 style={ { flex: 1 } }
                 barcodeScannerSettings={ { barcodeTypes: [ "qr" ] } }
                 onBarcodeScanned={ ( res ) =>
@@ -45,5 +49,7 @@ export default function QRScreen ()
         </View>
     );
 }
+
+
 
 

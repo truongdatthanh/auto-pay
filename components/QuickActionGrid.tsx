@@ -1,3 +1,4 @@
+import DisplayQR from "@/app/(tabs)/qr/DisplayQR";
 import { AntDesign, EvilIcons, FontAwesome5, Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { Image, Text, TouchableOpacity, View } from "react-native";
@@ -6,6 +7,14 @@ export default function QuickActionGrid ()
 {
     const itemClass = 'w-1/4 max-h-40 p-2 bg-white ';
     const textClass = 'text-xs font-semibold text-center';
+    const handleGoToMyQR = () =>
+    {
+        console.log("Press")
+        router.replace( {
+            pathname: "/(tabs)/qr",
+            params: {tabIndex: 1}
+        })
+    }
     return (
         <View className="flex-row flex-wrap bg-white justify-between">
             <TouchableOpacity className={ itemClass }>
@@ -14,7 +23,7 @@ export default function QuickActionGrid ()
                     <Text className={ textClass }>Kích hoạt AutoPAY</Text>
                 </View>
             </TouchableOpacity>
-            <TouchableOpacity className={ itemClass } onPress={ () => alert( 'Chức năng đang phát triển' ) }>
+            <TouchableOpacity className={ itemClass } onPress={ handleGoToMyQR }>
                 <View className='h-24 items-center justify-center border border-gray-300 rounded-md p-2'>
                     <Ionicons name="qr-code-sharp" size={ 20 } color="black" />
                     <Text className={ textClass }>QR của tôi</Text>
@@ -56,6 +65,6 @@ export default function QuickActionGrid ()
                     <Text className={ textClass }>Gia hạn dịch vụ</Text>
                 </View>
             </TouchableOpacity>
-        </View>
+        </View >
     );
 }

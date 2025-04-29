@@ -113,7 +113,7 @@ export default function HomeLayout ()
             tabBarIcon: ( { color } ) => (
               <MaterialCommunityIcons name="history" size={ 24 } color={ color } />
             ),
-            headerShown: false,
+            headerShown: false
           } }
         />
 
