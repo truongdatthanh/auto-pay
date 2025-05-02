@@ -4,9 +4,7 @@ import { useEffect, useState } from 'react';
 import mockBanking from '../../assets/banking.json';
 import QuickActionGrid from '@/components/QuickActionGrid';
 import MyCard from '@/components/MyCard';
-import DropdownExample from '../test/dropdown';
-import QRCodeSaver from '../test/saveQR';
-import MyTabView from '../test/slidescreen';
+
 
 export default function Home ()
 {

@@ -20,7 +20,14 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/logo-autopay.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO",
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO"
+      ],
+      "package": "com.anonymous.AutoPAY"
     },
     "web": {
       "bundler": "metro",
