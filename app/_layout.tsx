@@ -12,10 +12,10 @@ export default function RootLayout ()
   const router = useRouter();
   const pathname = usePathname();
   console.log( "layout tong: ", pathname );
-  
+
   const isLoggedIn = false;
 
-  
+
   useEffect( () =>
   {
     const prepare = async () =>
@@ -41,8 +41,8 @@ export default function RootLayout ()
 
   return (
     <GestureHandlerRootView style={ { flex: 1 } }>
-      <StatusBar barStyle="dark-content" backgroundColor="#fff" translucent={ false } />
-      <Slot />
+      <StatusBar barStyle="light-content" backgroundColor="#fff" translucent={ false } />
+      <Slot  />
     </GestureHandlerRootView>
 
 

@@ -22,7 +22,7 @@ export default function BankAccountDetail ()
     } );
 
     return (
-        <View className='flex-1 bg-white'>
+        <View className='bg-white pb-44'>
             <FlatList
                 data={ bankCard }
                 horizontal
@@ -46,11 +46,12 @@ export default function BankAccountDetail ()
                 onViewableItemsChanged={ onViewRef.current }
                 viewabilityConfig={ viewabilityConfig.current }
                 contentContainerStyle={ { paddingHorizontal: 20 } }
+                className='my-2'
             />
 
-            <View className='bg-blue-200 rounded-xl p-4 mb-24'>
+            <View>
                 <LineCharts id={ bankCard[ currentCardIndex ].id } />
-            </View>
+            </View>  
         </View>
     );
 };

@@ -7,18 +7,63 @@
         "bankName": "Nam A Bank",
         "transactionHistory": [
             {
-                "date": "2023-10-01",
+                "date": "2025-05-05",
                 "amount": 1000000,
                 "description": "Deposit"
             },
             {
-                "date": "2023-10-02",
-                "amount": -500000,
+                "date": "2025-05-05",
+                "amount": -7000000,
+                "description": "Deposit"
+            },
+            {
+                "date": "2025-05-06",
+                "amount": -6000000,
                 "description": "Withdrawal"
             },
             {
-                "date": "2023-10-03",
-                "amount": 200000,
+                "date": "2025-05-06",
+                "amount": 6000000,
+                "description": "Withdrawal"
+            },
+            {
+                "date": "2025-05-07",
+                "amount": 20000000,
+                "description": "Transfer"
+            },
+            {
+                "date": "2025-05-07",
+                "amount": -20000000,
+                "description": "Transfer"
+            },
+            {
+                "date": "2025-05-08",
+                "amount": 150000,
+                "description": "Transfer"
+            },
+            {
+                "date": "2025-05-08",
+                "amount": 1500000,
+                "description": "Transfer"
+            },
+            {
+                "date": "2025-05-09",
+                "amount": -30000000,
+                "description": "Transfer"
+            },
+            {
+                "date": "2025-05-09",
+                "amount": -30000000,
+                "description": "Transfer"
+            },
+            {
+                "date": "2025-05-010",
+                "amount": 20000000,
+                "description": "Transfer"
+            },
+            {
+                "date": "2025-05-010",
+                "amount": -20000000,
                 "description": "Transfer"
             }
         ]
@@ -32,7 +77,7 @@
         "transactionHistory": [
             {
                 "date": "2023-10-01",
-                "amount": 1500000,
+                "amount": 15000000,
                 "description": "Deposit"
             },
             {

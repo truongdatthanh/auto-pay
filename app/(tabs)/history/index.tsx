@@ -1,12 +1,11 @@
 import { View, Text, TouchableOpacity, Platform, SectionList, Alert } from 'react-native';
-import { useCallback, useState, useEffect } from 'react';
+import { useCallback, useState, useEffect, useRef } from 'react';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { formatDate, groupByDate } from '@/utils/formatDate';
 import Feather from '@expo/vector-icons/Feather';
 import CardInfo from '@/components/CardInfo';
 import mockBanking from '../../../assets/data.json';
 import NotFound from '@/app/error/404';
-
 
 export default function History ()
 {
@@ -17,21 +16,25 @@ export default function History ()
   const [ sections, setSections ] = useState( groupByDate( mockBanking ) );
   const [ refreshing, setRefreshing ] = useState( false );
 
+  const [ selectedDate, setSelectedDate ] = useState();
+  console.log( selectedDate );
+
+
   // Lọc theo khoảng ngày - vd: 7 ngày gần đây, 3 tháng gần đây
-  const handleRecentDays = ( days: number ) =>
+  function handleRecentDays ( days: number )
   {
     const now = new Date();
     const past = new Date( now );
     past.setDate( now.getDate() - days ); // Thay đổi ngày trực tiếp
-    const nowDate = now.setHours( 0, 0, 0, 0 );//setHours(0, 0, 0, 0) để set mặc định ngày giờ là 00:00:00
+    const nowDate = now.setHours( 0, 0, 0, 0 ); //setHours(0, 0, 0, 0) để set mặc định ngày giờ là 00:00:00
     const passDate = past.setHours( 0, 0, 0, 0 );
     const filtered = mockBanking.filter( item =>
     {
       const itemDate = new Date( item.date ).setHours( 0, 0, 0, 0 );
       return itemDate >= passDate && itemDate <= nowDate;
     } );
-    setSections( groupByDate( filtered ) )
-  };
+    setSections( groupByDate( filtered ) );
+  }
 
   // Lọc theo ngày cụ thể
   const handleFilterByDate = () =>

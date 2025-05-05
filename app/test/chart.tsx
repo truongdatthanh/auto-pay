@@ -4,18 +4,26 @@ import { useState, useMemo } from 'react';
 import dataBankingCard from "../../assets/banking-card.json"
 import { formatCurrencyVND } from '@/utils/formatCurrencyVND';
 import { router } from 'expo-router';
+import NotFound from '../error/404';
+import { formatDate } from '@/utils/formatDate';
 
 export default function Chart ( { id }: { id: String } )
 {
     const [ data, setData ] = useState( dataBankingCard );
+    const [ currentDate, setCurrentDate ] = useState( new Date() );
+
     const indexData = data.find( ( item ) => item.id === id );
+    const todayTransactions = indexData?.transactionHistory.filter( ( item ) =>
+    {
+        return new Date( item.date ).setHours( 0, 0, 0, 0 ) === currentDate.setHours( 0, 0, 0, 0 );
+    } ) || [];
 
     const { totalIncome, totalExpense, barData, maxValue } = useMemo( () =>
     {
         let income = 0;
         let expense = 0;
 
-        if ( !indexData || !indexData.transactionHistory )
+        if ( todayTransactions.length === 0 )
         {
             return {
                 totalIncome: 0,
@@ -24,7 +32,8 @@ export default function Chart ( { id }: { id: String } )
                 maxValue: 0,
             };
         }
-        indexData.transactionHistory.forEach( item =>
+
+        todayTransactions.forEach( item =>
         {
             if ( item.amount > 0 )
             {
@@ -49,50 +58,67 @@ export default function Chart ( { id }: { id: String } )
                 { value: incomeInMillions, label: 'Đến', frontColor: '#2ecc71' },
             ],
         };
-    }, [ indexData ] );
+    }, [ todayTransactions ] );
 
     return (
         <View className='p-4'>
             <View className='flex-row justify-between mb-2'>
                 <Text className='text-sm font-bold'>
-                    Tổng giao dịch (đơn vị: triệu)
+                    {formatDate(currentDate)}
                 </Text>
                 <TouchableOpacity onPress={ () => router.push( "/(tabs)/history/statistics" ) }>
                     <Text className='text-sm font-bold text-blue-500'>Xem chi tiết</Text>
                 </TouchableOpacity>
             </View>
-            <View className='flex-row '>
-                <View className='items-start'>
-                    <BarChart
-                        dashGap={ 0 }
-                        data={ barData }
-                        barWidth={ 90 }
-                        barBorderRadius={ 4 }
-                        yAxisThickness={ 0 }
-                        xAxisThickness={ 0 }
-                        xAxisColor="#ccc"
-                        yAxisTextStyle={ { color: 'transparent', width: 0 } }
-                        yAxisLabelWidth={ 0 }
-                        noOfSections={ 5 }
-                        spacing={ 10 }
-                        maxValue={ maxValue }
-                        stepHeight={ 30 }
-                        isAnimated//Kích hoạt animation 
-                        animationDuration={ 800 } //Thời gian animation
-                        hideRules={ true }//Xóa các đường kẻ ngang
-                        hideAxesAndRules={ true } //Xóa các đường kẻ dọc
-                    />
-                </View>
-                <View className='justify-end mb-2'>
-                    <View className='mb-2'>
-                        <Text className='text-[#2ecc71] font-bold'>{ formatCurrencyVND( totalIncome * 1_000_000 ) }</Text>
-                        <Text >0 Giao dich den </Text>
+
+
+            <View style={ { height: 200 } } className="justify-center items-center">
+                { todayTransactions.length === 0 ? (
+                    <Text className='text-gray-500'>
+                        Không có giao dịch nào cho ngày hôm nay
+                    </Text>
+                ) : (
+                    <View className='flex-row'>
+                        {/* BarChart */ }
+                        <View className='items-start'>
+                            <BarChart
+                                dashGap={ 0 }
+                                data={ barData }
+                                barWidth={ 90 }
+                                barBorderRadius={ 4 }
+                                yAxisThickness={ 0 }
+                                xAxisThickness={ 0 }
+                                xAxisColor="#ccc"
+                                yAxisTextStyle={ { color: 'transparent', width: 0 } }
+                                yAxisLabelWidth={ 0 }
+                                noOfSections={ 5 }
+                                spacing={ 10 }
+                                maxValue={ maxValue }
+                                stepHeight={ 30 }
+                                isAnimated={ false }
+                                animationDuration={ 800 }
+                                hideRules={ true }
+                                hideAxesAndRules={ true }
+                            />
+                        </View>
+
+                        {/* Tổng kết thu/chi */ }
+                        <View className='justify-end mb-2'>
+                            <View className='mb-2'>
+                                <Text className='text-[#2ecc71] font-bold'>
+                                    { formatCurrencyVND( totalIncome * 1_000_000 ) }
+                                </Text>
+                                <Text>{ todayTransactions.filter( t => t.amount > 0 ).length } Giao dịch đến</Text>
+                            </View>
+                            <View>
+                                <Text className='text-[#e74c3c] font-bold'>
+                                    { formatCurrencyVND( totalExpense * 1_000_000 ) }
+                                </Text>
+                                <Text>{ todayTransactions.filter( t => t.amount < 0 ).length } Giao dịch đi</Text>
+                            </View>
+                        </View>
                     </View>
-                    <View>
-                        <Text className='text-[#e74c3c] font-bold'>{ formatCurrencyVND( totalExpense * 1_000_000 ) }</Text>
-                        <Text >0 Giao dich di </Text>
-                    </View>
-                </View>
+                ) }
             </View>
         </View>
     );

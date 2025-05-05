@@ -26,7 +26,7 @@ export default function Home ()
       <View className='p-2 bg-white '>
         <Text className='text-xl font-semibold'>Ngân hàng kết nối</Text>
       </View>
-
+      
       <View className="flex-row flex-wrap justify-between px-2">
         { bankData.map( ( item ) => (
           <TouchableOpacity

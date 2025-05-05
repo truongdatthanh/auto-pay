@@ -76,18 +76,8 @@ export default function BankAccount ()
         <>
             <ScrollView className="flex-1">
                 <View className="justify-center items-center bg-[#FFC300]">
-                    <View className="p-4">
-                        <BankingCard
-                            id={ currentCard?.id }
-                            STK={ currentCard?.STK }
-                            name={ currentCard?.name }
-                            logoBanking={ currentCard?.logoBanking }
-                            bankName={ currentCard?.bankName }
-                        />
-                    </View>
-
                     {/* QR */ }
-                    <View className="justify-center items-center w-full max-w-[340px] p-4 mx-4 bg-white rounded-3xl shadow-md">
+                    <View className="justify-center mt-4 items-center w-full max-w-[340px] p-4 mx-4 bg-white rounded-3xl shadow-md">
                         <Text className="font-bold">{ currentCard?.name?.toUpperCase() }</Text>
                         <Text className="text-lg">{ currentCard?.STK }</Text>
                         <Text className="text-base">{ currentCard?.bankName }</Text>
@@ -96,7 +86,7 @@ export default function BankAccount ()
                             {/* Truoc khi tao QR code can phai chuyen obj js thanh json */ }
                             <QRCode
                                 value={ JSON.stringify( currentCard?.bankName ) }
-                                size={ 150 }
+                                size={ 200 }
                                 logo={ require( "../../assets/images/logo-autopay-4.png" ) }
                                 logoSize={ 30 }
                             />
