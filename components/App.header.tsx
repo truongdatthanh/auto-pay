@@ -59,8 +59,13 @@ export default function AppHeader ()
             <Text className="text-white text-xl ml-1">⛛ AUTOPAY</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={ handleNotification } className="flex-row items-center">
-            <MaterialCommunityIcons name="bell" size={ 24 } color="white" />
+          <TouchableOpacity onPress={ handleNotification } className="flex-row items-center relative">
+            <View className="">
+              <MaterialCommunityIcons name="bell" size={ 26 } color="white" />
+            </View>
+            <View className="bg-red-500 h-6 w-6 rounded-full justify-center items-center absolute z-10 top-[-5] right-[-5]">
+              <Text className="text-[8px] font-bold text-white">99+</Text>
+            </View>
           </TouchableOpacity>
         </View>
       </SafeAreaView>

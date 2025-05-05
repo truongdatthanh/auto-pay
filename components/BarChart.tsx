@@ -1,13 +1,12 @@
 import { BarChart } from 'react-native-gifted-charts';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { useState, useMemo } from 'react';
-import dataBankingCard from "../../assets/banking-card.json"
+import dataBankingCard from "../assets/banking-card.json"
 import { formatCurrencyVND } from '@/utils/formatCurrencyVND';
 import { router } from 'expo-router';
-import NotFound from '../error/404';
 import { formatDate } from '@/utils/formatDate';
 
-export default function Chart ( { id }: { id: String } )
+export default function BarCharts ( { id }: { id: String } )
 {
     const [ data, setData ] = useState( dataBankingCard );
     const [ currentDate, setCurrentDate ] = useState( new Date() );
@@ -54,8 +53,8 @@ export default function Chart ( { id }: { id: String } )
             totalExpense: expenseInMillions,
             maxValue: maxVal,
             barData: [
-                { value: expenseInMillions, label: 'Đi', frontColor: '#e74c3c' },
-                { value: incomeInMillions, label: 'Đến', frontColor: '#2ecc71' },
+                { value: expenseInMillions, label: 'Chi', frontColor: '#e74c3c' },
+                { value: incomeInMillions, label: 'Thu', frontColor: '#2ecc71' },
             ],
         };
     }, [ todayTransactions ] );
@@ -66,7 +65,7 @@ export default function Chart ( { id }: { id: String } )
                 <Text className='text-sm font-bold'>
                     {formatDate(currentDate)}
                 </Text>
-                <TouchableOpacity onPress={ () => router.push( "/(tabs)/history/statistics" ) }>
+                <TouchableOpacity onPress={ () => router.replace( "/(tabs)/history/statistics" ) }>
                     <Text className='text-sm font-bold text-blue-500'>Xem chi tiết</Text>
                 </TouchableOpacity>
             </View>

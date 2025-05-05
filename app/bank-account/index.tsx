@@ -75,7 +75,7 @@ export default function BankAccount ()
     return (
         <>
             <ScrollView className="flex-1">
-                <View className="justify-center items-center bg-[#FFC300]">
+                <View className="justify-center items-center">
                     {/* QR */ }
                     <View className="justify-center mt-4 items-center w-full max-w-[340px] p-4 mx-4 bg-white rounded-3xl shadow-md">
                         <Text className="font-bold">{ currentCard?.name?.toUpperCase() }</Text>

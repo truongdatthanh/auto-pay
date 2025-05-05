@@ -7,8 +7,9 @@ import InfoText from "@/components/InfoText";
 import { router } from "expo-router";
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import Seperate from "@/components/Seperate";
 
-export default function UserInformation ()
+export default function Profile ()
 {
     const [ isVisible, setIsVisible ] = useState( false );
     const [ fullName, setFullName ] = useState( 'Truong Thanh Dat' );
@@ -40,23 +41,23 @@ export default function UserInformation ()
             <View className="flex-row items-center justify-center my-4">
                 <Image source={ require( '../../../assets/images/500.jpg' ) } className="h-28 w-28 rounded-full" />
             </View>
-            <View className="p-6 m-2 bg-gray-200 rounded-3xl">
-                <InfoText className="text-md font-semibold" label="Họ tên" value={ fullName } />
-                <InfoText className="text-md font-semibold" label="Email" value={ email } />
-                <InfoText className="text-md font-semibold" label="CCCD" value={ cccd } />
-                <InfoText className="text-md font-semibold" label="Ngày cấp" value={ dateOfIssue } />
-                <InfoText className="text-md font-semibold" label="Địa chỉ" value={ address } />
-                <InfoText className="text-md font-semibold" label="Số điện thoại" value={ phoneNumber } />
-                <InfoText className="text-md font-semibold" label="Giới tính" value={ gen } />
-                <InfoText className="text-md font-semibold" label="Ngày sinh" value={ dateOfBirth } />
+            <View className="p-6 m-2 bg-gray-200 rounded-3xl relative">
+                <TouchableOpacity onPress={ () => setIsVisible( !isVisible ) } className="absolute right-5 top-5 h-10 w-10 bg-white justify-center items-center rounded-lg">
+                    <Feather name="edit" size={ 24 } color="#1c40f2" />
+                </TouchableOpacity>
+                <View className="mt-10">
+                    <InfoText className="text-md font-semibold" label="Họ tên" value={ fullName } />
+                    <InfoText className="text-md font-semibold" label="Email" value={ email } />
+                    <InfoText className="text-md font-semibold" label="CCCD" value={ cccd } />
+                    <InfoText className="text-md font-semibold" label="Ngày cấp" value={ dateOfIssue } />
+                    <InfoText className="text-md font-semibold" label="Địa chỉ" value={ address } />
+                    <InfoText className="text-md font-semibold" label="Số điện thoại" value={ phoneNumber } />
+                    <InfoText className="text-md font-semibold" label="Giới tính" value={ gen } />
+                    <InfoText className="text-md font-semibold" label="Ngày sinh" value={ dateOfBirth } />
+                </View>
             </View>
 
-            <View className="m-2">
-                <TouchableOpacity onPress={ () => setIsVisible( !isVisible ) } className="px-6 flex-row items-center justify-between bg-white p-4 border-2 border-gray-300 rounded-full">
-                    <Text className="text-md font-semibold">Cập nhật thông tin cá nhân</Text>
-                    <Feather name="edit" size={ 24 } color="black" />
-                </TouchableOpacity>
-            </View>
+
 
             <View className="m-2">
                 <TouchableOpacity onPress={ () => router.replace( '/user/change-password' ) } className="px-6 flex-row items-center justify-between bg-white p-4 border-2 border-gray-300 rounded-full">

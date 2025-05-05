@@ -2,9 +2,10 @@ import React, { useEffect, useRef, useState } from 'react';
 import { View, Text, FlatList, Dimensions, ViewToken, TouchableOpacity } from 'react-native';
 import data from "../assets/banking-card.json"
 import BankingCard from './BankCard';
-import Chart from '@/app/test/chart';
+
 import { router } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import BarCharts from './BarChart';
 
 export default function MyCard ()
 {
@@ -65,14 +66,29 @@ export default function MyCard ()
                 contentContainerStyle={ { paddingHorizontal: 20 } } // khoảng cách giữa các item
             />
 
-            <TouchableOpacity className='p-4 flex-row justify-end' onPress={ handleSeenAllCard }>
-                <Text className='text-blue-500 font-semibold text-sm'>
-                    Xem tất cả
-                </Text>
-            </TouchableOpacity>
+            <View className='flex-row justify-between gap-4'>
+
+                <Text></Text>
+
+                <View className="flex-row justify-center items-center my-2 ml-8">
+                    { bankCard.map( ( _, index ) => (
+                        <View
+                            key={ index }
+                            className={ `mx-1 rounded-full ${ currentCardIndex === index ? 'bg-blue-500 w-4 h-2 ' : 'bg-red-500 w-2 h-2 ' }` }
+                        />
+                    ) ) }
+                </View>
+
+                <TouchableOpacity className='p-2' onPress={ handleSeenAllCard }>
+                    <Text className='bg-black rounded-full p-[5px] text-blue-500 font-semibold text-sm'>
+                        Xem tất cả
+                    </Text>
+                </TouchableOpacity>
+            </View>
+
 
             <View className='bg-blue-200 rounded-xl mx-2'>
-                <Chart id={ bankCard[ currentCardIndex ].id } />
+                <BarCharts id={ bankCard[ currentCardIndex ].id } />
             </View>
         </View>
     );

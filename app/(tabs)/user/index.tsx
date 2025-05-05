@@ -16,7 +16,7 @@ interface IUser
     password: string;
 }
 
-export default function Information ()
+export default function UserHome ()
 {
     const avatar = '../../../assets/images/500.jpg';
     const [ user, setUser ] = useState<IUser>();
@@ -52,7 +52,7 @@ export default function Information ()
             <View className='m-4'>
                 <Text className='text-xl font-bold'>Thông tin cá nhân</Text>
                 <View className='bg-white border-2 border-white rounded-xl mt-2 gap-4 p-4 '>
-                    <TouchableOpacity className='flex-row items-center justify-between p-2' onPress={ () => router.push( '/user/information-user' ) }>
+                    <TouchableOpacity className='flex-row items-center justify-between p-2' onPress={ () => router.push( '/(tabs)/user/profile' ) }>
                         <Text className='text-md font-semibold'>Thông tin cá nhân</Text>
                         <FontAwesome5 name="user-alt" size={ 24 } color="black" />
                     </TouchableOpacity>

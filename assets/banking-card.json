@@ -17,6 +17,26 @@
                 "description": "Deposit"
             },
             {
+                "date": "2025-05-05",
+                "amount": 1000000,
+                "description": "Deposit"
+            },
+            {
+                "date": "2025-05-05",
+                "amount": -7000000,
+                "description": "Deposit"
+            },
+            {
+                "date": "2025-05-05",
+                "amount": 1000000,
+                "description": "Deposit"
+            },
+            {
+                "date": "2025-05-05",
+                "amount": -7000000,
+                "description": "Deposit"
+            },
+            {
                 "date": "2025-05-06",
                 "amount": -6000000,
                 "description": "Withdrawal"

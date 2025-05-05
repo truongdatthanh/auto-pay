@@ -26,7 +26,7 @@ export default function InfomationLayout ()
                     } }
                 />
                 <Stack.Screen
-                    name='information-user'
+                    name='profile'
                     options={ {
                         headerShown: true,
                         header: () => <AppHeaderInfo title='Thông tin cá nhân' onPress={ () => router.back() } />,
@@ -54,14 +54,6 @@ export default function InfomationLayout ()
                     options={ {
                         headerShown: true,
                         header: () => <AppHeaderInfo title='Sinh trắc học' onPress={ () => router.back() } />,
-                    } }
-                />
-
-                <Stack.Screen
-                    name="MyQR"
-                    options={ {
-                        headerShown: true,
-                        header: () => <AppHeaderInfo title='QR của tôi' onPress={ () => router.back() } />,
                     } }
                 />
             </Stack>

@@ -1,6 +1,6 @@
 import { View, Keyboard, SafeAreaView } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { Tabs } from 'expo-router';
+import { router, Tabs } from 'expo-router';
 import AppHeader from '@/components/App.header';
 import { useState, useEffect } from 'react';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
@@ -15,7 +15,7 @@ export default function HomeLayout ()
 
     const keyboardDidShowListener = Keyboard.addListener( 'keyboardDidShow', () =>
     {
-      setIsTabBarVisible( false ); 
+      setIsTabBarVisible( false );
     } );
 
     const keyboardDidHideListener = Keyboard.addListener( 'keyboardDidHide', () =>
@@ -114,6 +114,13 @@ export default function HomeLayout ()
               <MaterialCommunityIcons name="history" size={ 24 } color={ color } />
             ),
             headerShown: false
+          } }
+          listeners={ {
+            tabPress: ( e ) =>
+            {
+              e.preventDefault(); // Ngăn điều hướng mặc định
+              router.replace( "/(tabs)/history" ); // Luôn về index
+            },
           } }
         />
 
