@@ -4,7 +4,8 @@ import mockBanking from '../../assets/banking.json';
 import MyCard from '@/components/MyCard';
 import { AntDesign, EvilIcons, FontAwesome5, Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
-import ImagePickerExample from '../test/imagePicker';
+import VietQRImage from '../test/linking';
+
 
 
 export default function Home ()
@@ -27,11 +28,22 @@ export default function Home ()
       className='bg-white flex-1'
     >
 
-      <ImagePickerExample />
+      <VietQRImage
+        bankCode="970428"          // Mã ngân hàng Nam A Bank
+        accountNumber="246134029400001"   // Số tài khoản người nhận
+        accountName="TRUONG THANH DAT"  // Tên người nhận
+        amount={ 10000 }             // Số tiền chuyển
+        addInfo="Thanh toan hoa don ABC123" // Nội dung chuyển khoản
+      />
+      {/* <ImagePickerExample /> */ }
+
+      {/* <LinkingExample /> */ }
 
       <View className='py-4'>
         <MyCard />
       </View>
+
+
 
       <View className="flex-row flex-wrap bg-white justify-between">
         <TouchableOpacity className='w-1/4 max-h-40 p-2 bg-white'>
