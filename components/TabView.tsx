@@ -1,8 +1,6 @@
-
-import { useFocusEffect } from '@react-navigation/native';
-import { useCallback, useState } from 'react';
-import { Text, useWindowDimensions, View } from 'react-native';
-import { TabView, TabBar, SceneRendererProps, NavigationState } from 'react-native-tab-view';
+import { useCallback, useEffect, useState } from 'react';
+import { useWindowDimensions } from 'react-native';
+import { TabView, TabBar, SceneRendererProps } from 'react-native-tab-view';
 
 type Route = {
     key: string;
@@ -20,6 +18,7 @@ interface CustomTabViewProps
     activeColor?: string;
     inActiveColor?: string;
     isScrollEnable?: boolean;
+    initialIndex?: number; // Thêm prop mới
 }
 
 export default function CustomTabView ( {
@@ -32,19 +31,18 @@ export default function CustomTabView ( {
     activeColor = "white",
     inActiveColor = "gray",
     isScrollEnable = false,
+    initialIndex = 0,
 }: CustomTabViewProps )
 {
     const layout = useWindowDimensions();
-    const [ index, setIndex ] = useState( 0 );
+    // Khởi tạo index trực tiếp từ initialIndex
+    const [ index, setIndex ] = useState( initialIndex );
 
-    useFocusEffect(
-        useCallback( () =>
-        {
-            console.log("mounted")
-            // Khi màn hình này được focus vào
-            setIndex( 0 ); // reset về tab đầu tiên
-        }, [] )
-    );
+    // Cập nhật index khi initialIndex thay đổi
+    useEffect( () =>
+    {
+        setIndex( initialIndex );
+    }, [ initialIndex ] );
 
     return (
         <TabView
@@ -56,7 +54,11 @@ export default function CustomTabView ( {
                 <TabBar
                     { ...props }
                     scrollEnabled={ isScrollEnable }
-                    indicatorStyle={ { backgroundColor: indicatorColor, height: indicatorHeight, borderRadius: indicatorBorder } }
+                    indicatorStyle={ {
+                        backgroundColor: indicatorColor,
+                        height: indicatorHeight,
+                        borderRadius: indicatorBorder
+                    } }
                     style={ { backgroundColor: tabBarColor } }
                     activeColor={ activeColor }
                     inactiveColor={ inActiveColor }
@@ -65,4 +67,5 @@ export default function CustomTabView ( {
         />
     );
 }
+
 

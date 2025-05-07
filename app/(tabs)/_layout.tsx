@@ -78,31 +78,25 @@ export default function HomeLayout ()
         <Tabs.Screen
           name="qr"
           options={ {
-            tabBarShowLabel: false, // Hide the label for this tab
+            tabBarShowLabel: false,
             title: 'Scan',
-            tabBarStyle: { display: 'none' }, // Hide the tab bar for this screen
+            tabBarStyle: { display: 'none' },
             headerShown: false,
             tabBarIcon: ( { color } ) => (
-              // <View
-              //   style={ {
-              //     position: 'absolute',
-              //     top: -35,
-              //     width: 70,
-              //     height: 70,
-              //     borderRadius: 35,
-              //     backgroundColor: 'green',
-              //     justifyContent: 'center',
-              //     alignItems: 'center',
-              //     shadowColor: '#000',
-              //     shadowOffset: { width: 0, height: 4 },
-              //     shadowOpacity: 0.3,
-              //     shadowRadius: 5,
-              //     elevation: 5,
-              //   } }
-              // >
               <MaterialCommunityIcons name="qrcode-scan" size={ 24 } color={ color } />
-              // </View>
             ),
+          } }
+          listeners={ {
+            tabPress: ( e ) =>
+            {
+              // Ngăn điều hướng mặc định
+              e.preventDefault();
+              // Luôn chuyển đến tab Scan (index 0) khi ấn vào tab QR
+              router.replace( {
+                pathname: "/(tabs)/qr",
+                params: { tabIndex: 0 }
+              } );
+            },
           } }
         />
 

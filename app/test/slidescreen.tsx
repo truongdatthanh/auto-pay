@@ -1,38 +1,34 @@
-
-import { useState } from 'react';
-import { View, Text, useWindowDimensions, StyleSheet } from 'react-native';
-import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
-import QRScanner from '../(tabs)/qr/QR-scanner';
-import DisplayQR from '../(tabs)/qr/DisplayQR';
+import { useState } from "react";
+import { View, Text, useWindowDimensions, StyleSheet } from "react-native";
+import { TabView, SceneMap, TabBar } from "react-native-tab-view";
 
 const FirstRoute = () => (
-    <View style={ [ styles.scene, { backgroundColor: '#ff4081' } ] }>
+    <View style={ [ styles.scene, { backgroundColor: "#ff4081" } ] }>
         <Text>Trang 1</Text>
     </View>
 );
-
 const SecondRoute = () => (
-    <View style={ [ styles.scene, { backgroundColor: '#673ab7' } ] }>
+    <View style={ [ styles.scene, { backgroundColor: "#673ab7" } ] }>
         <Text>Trang 2</Text>
     </View>
 );
 const ThirdRoute = () => (
-    <View style={ [ styles.scene, { backgroundColor: '#673ab7' } ] }>
+    <View style={ [ styles.scene, { backgroundColor: "#673ab7" } ] }>
         <Text>Trang 3</Text>
     </View>
 );
 const FourRoute = () => (
-    <View style={ [ styles.scene, { backgroundColor: '#673ab7' } ] }>
+    <View style={ [ styles.scene, { backgroundColor: "#673ab7" } ] }>
         <Text>Trang 4</Text>
     </View>
 );
 const FiveRoute = () => (
-    <View style={ [ styles.scene, { backgroundColor: '#673ab7' } ] }>
+    <View style={ [ styles.scene, { backgroundColor: "#673ab7" } ] }>
         <Text>Trang 5</Text>
     </View>
 );
 const SixRoute = () => (
-    <View style={ [ styles.scene, { backgroundColor: '#673ab7' } ] }>
+    <View style={ [ styles.scene, { backgroundColor: "#673ab7" } ] }>
         <Text>Trang 6</Text>
     </View>
 );
@@ -40,9 +36,7 @@ const SixRoute = () => (
 export default function MyTabView ()
 {
     const layout = useWindowDimensions();
-
     const [ index, setIndex ] = useState( 0 );
-    console.log(index)
     const [ routes ] = useState( [
         { key: 'page1', title: 'Trang 1' },
         { key: 'page2', title: 'Trang 2' },
@@ -70,7 +64,7 @@ export default function MyTabView ()
             renderTabBar={ props => (
                 <TabBar
                     { ...props }
-                    scrollEnabled={true}
+                    scrollEnabled={ true }
                     indicatorStyle={ { backgroundColor: 'white' } }
                     style={ { backgroundColor: '#6200ee' } }
                     tabStyle={ { width: 200 } }

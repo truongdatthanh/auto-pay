@@ -56,26 +56,32 @@ const VietQRImage = ( { bankCode, accountNumber, accountName, amount, addInfo }:
   const codeEMV = convertEMVCode( {
     accountNumber: "246134029400001",
     bankBin: "970428",
-    amount: 12345,
-    addInfo: "ThanhtoanhoadonABC123",
+    amount: 10000,
+    addInfo: "abc",
   } )
 
   console.log(codeEMV)
   return (
     <View style={ styles.container }>
-      <Text style={ styles.label }>Quét mã để chuyển khoản qua { bankCode }</Text>
+      {/* <Text style={ styles.label }>Quét mã để chuyển khoản qua { bankCode }</Text>
       <Link href="https://dl.vietqr.io/pay?app=bidv" >Go to BIDV</Link>
       <Link href="https://dl.vietqr.io/pay?app=bidv&ba=246134029400001@nab&amount=10000&addInfo=THANH%20TOAN%20HOA%20DON%20ABC123&accountName=NGUYEN%20VAN%20A">
         Thanh toán bằng BIDV
       </Link>
       <Link href={ `https://img.vietqr.io/image/${ bankCode }-${ accountNumber }-compact2.jpg?amount=${ amount }&addInfo=${ encodedAddInfo }&accountName=${ encodedName }` }>Thanh toán bằng VCB</Link>
-      { generateQR( codeEMV ) }
+      { generateQR( codeEMV ) } */}
       {/* <Image source={ { uri: 'https://img.vietqr.io/image/namabank-246134029400001-compact.jpg' } } className='h-[200px] w-[200px]'/> */ }
       {/* <Image
         source={ { uri: qrUrl } }
         style={ styles.qrImage }
         resizeMode="contain"
       /> */}
+
+      <Link href={"deeplinkapp://nab/softotp"}>NAB</Link>
+
+
+       {/* <Text>Quet de giao dich</Text>
+            {generateQR("https://dl.vietqr.io/pay?app=nab&ba=246134029400001@nama&am=10000&add=abc")} */}
     </View>
   );
 };

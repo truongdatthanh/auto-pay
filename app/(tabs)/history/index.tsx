@@ -8,6 +8,7 @@ import NotFound from '@/app/error/404';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from 'expo-router';
 
+
 interface ITransaction
 {
   transactionId: string;
@@ -44,6 +45,8 @@ export default function History ()
   const [ showEndPicker, setShowEndPicker ] = useState( false );
   const [ sections, setSections ] = useState<Section[]>( [] );
   const [ refreshing, setRefreshing ] = useState( false );
+
+
 
 
   //Lấy dữ liệu

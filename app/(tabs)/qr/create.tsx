@@ -26,6 +26,7 @@ export default function CreateMyQR ()
         const data = {
             STK: currentCard?.STK,
             amount: amount,
+            bin: currentCard?.bankbin,
             content: content,
         };
 

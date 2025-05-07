@@ -51,7 +51,7 @@ export default function BankAccountDetail ()
 
             <View>
                 <LineCharts id={ bankCard[ currentCardIndex ].id } />
-            </View>  
+            </View>
         </View>
     );
 };
