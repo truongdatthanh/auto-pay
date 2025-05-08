@@ -35,14 +35,14 @@ export default function RootLayout ()
     }
     else
     {
-      router.replace( '/(auth)/login' );
+      router.replace( '/(auth)/withPhoneNumber' );
     }
   }, [ isLoggedIn ] );
 
   return (
     <GestureHandlerRootView style={ { flex: 1 } }>
-      <StatusBar barStyle="light-content" backgroundColor="#fff" translucent={ false } />
-      <Slot  />
+      <StatusBar barStyle="dark-content" backgroundColor="#fff" translucent={ false } />
+      <Slot />
     </GestureHandlerRootView>
 
 

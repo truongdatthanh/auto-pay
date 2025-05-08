@@ -1,166 +1,8 @@
-
-// import { Link, usePathname, useRouter } from 'expo-router';
-// import { useState } from 'react';
-// import { Text, TextInput, TouchableOpacity, View, SafeAreaView, StatusBar, Pressable, ScrollView } from 'react-native';
-// import Ionicons from '@expo/vector-icons/Ionicons';
-
-
-
-// export default function Register ()
-// {
-//     const router = useRouter();
-//     const [ fullName, setFullName ] = useState( '' );
-//     const [ email, setEmail ] = useState( '' );
-//     const [ password, setPassword ] = useState( '' );
-//     const [ confirmPassword, setConfirmPassword ] = useState( '' );
-//     const [ checked, setChecked ] = useState( false );
-//     const [ isVisible, setIsVisible ] = useState( true );
-
-//     const handleSubmit = () =>
-//     {
-//         // if ( password !== confirmPassword )
-//         // {
-//         //     alert( 'Mat khau khong khop' );
-//         //     return;
-//         // }
-
-//         // const user = {
-//         //     fullName,
-//         //     email,
-//         //     password,
-//         // };
-
-//         // router.push( {
-//         //     pathname: '/login',
-//         //     params: user,
-//         // } );
-
-//         router.push( '/(auth)/pinInput' );
-//     }
-
-//     const handleBackToLogin = () =>
-//     {
-//         router.back();
-//     }
-
-//     const handleSetChecked = () =>
-//     {
-//         setChecked( !checked );
-//     }
-
-//     const handleSeenPassword = () =>
-//     {
-//         setIsVisible( !isVisible );
-//     }
-
-//     const handleSignUpWithPhoneNumber = () =>
-//     {
-//         router.push( '/(auth)/withPhoneNumber' );
-//     }
-
-//     return (
-//         <>
-//             <StatusBar barStyle="dark-content" backgroundColor="white" />
-//             <SafeAreaView className="flex-1">
-//                 <ScrollView
-//                     className="flex-1 bg-white px-4"
-//                     showsVerticalScrollIndicator={false}
-//                 >
-//                     <TouchableOpacity onPress={ handleBackToLogin } className="absolute top-4 left-4">
-//                         <Ionicons name="return-up-back" size={ 35 } color="#1c40f2" />
-//                     </TouchableOpacity>
-//                     <View className="mt-16">
-//                         <Text className="text-3xl text-[#1c40f2] font-bold">ĐĂNG KÝ</Text>
-//                         <Text className="pt-4 text-5xl font-bold text-[#1c40f2]">TÀI KHOẢN</Text>
-//                     </View>
-//                     <View className='mt-4'>
-//                         <View>
-//                             <Text className='mb-2 font-semibold'>Họ tên</Text>
-//                             <TextInput
-//                                 className="mb-2 h-16 pl-8 border-b border-gray-500 rounded-full bg-white"
-//                                 placeholder="Họ tên..."
-//                                 value={ fullName }
-//                                 onChangeText={ setFullName }
-//                             />
-//                         </View>
-//                         <View>
-//                             <Text className="mb-2 font-semibold">Email</Text>
-//                             <TextInput
-//                                 className="mb-2 h-16 pl-8 border border-gray-500 rounded-full bg-white"
-//                                 placeholder="Email..."
-//                                 keyboardType="email-address"
-//                                 value={ email }
-//                                 onChangeText={ setEmail }
-//                             />
-//                         </View>
-//                         <View className='mb-2'>
-//                             <Text className="mb-2 font-semibold">Mật khẩu</Text>
-//                             <View className="h-16 px-8 border border-gray-500 rounded-full bg-white flex-row items-center justify-between">
-//                                 <TextInput
-//                                     placeholder="Mật khẩu..."
-//                                     secureTextEntry={ isVisible }
-//                                     value={ password }
-//                                     onChangeText={ setPassword }
-//                                 />
-//                                 <TouchableOpacity onPress={ handleSeenPassword }>
-//                                     <Ionicons name={ isVisible ? "eye" : "eye-off" } size={ 24 } color="gray" />
-//                                 </TouchableOpacity>
-//                             </View>
-
-//                         </View>
-//                         <View>
-//                             <Text className="mb-2 font-semibold">Xác nhận mật khẩu</Text>
-//                             <TextInput
-//                                 className="mb-2 h-16 pl-8 border border-gray-500 rounded-full bg-white"
-//                                 placeholder="Xác nhận mật khẩu..."
-//                                 secureTextEntry
-//                                 value={ confirmPassword }
-//                                 onChangeText={ setConfirmPassword }
-//                             />
-//                         </View>
-//                         <View className="flex-row my-2 mx-2 mb-6 items-center">
-//                             <Pressable
-//                                 onPress={ () => handleSetChecked() }
-//                                 className={ `w-6 h-6 mr-2 rounded border border-gray-500 justify-center items-center ${ checked ? 'bg-blue-500' : 'bg-white'
-//                                     }` }
-//                             >
-//                                 { checked && <Ionicons name="checkmark" size={ 16 } color="white" /> }
-//                             </Pressable>
-//                             <Text>Tôi đồng ý với mọi </Text>
-//                             <Link className='text-[#1c40f2] underline font-medium' href={ "/term" }>Chính sách & điều khoản</Link>
-//                         </View>
-//                         <TouchableOpacity
-//                             className="mt-2 bg-[#1c40f2] rounded-full h-16 justify-center w-full"
-//                             onPress={ handleSubmit }
-//                         >
-//                             <Text className="text-white text-center font-bold text-md">Đăng Ký</Text>
-//                         </TouchableOpacity>
-//                         <TouchableOpacity
-//                             className="mt-4 border-[1px] border-gray-400 rounded-full h-16 justify-center w-full"
-//                             onPress={ handleSignUpWithPhoneNumber }
-//                         >
-//                             <Text className="text-gray-500 text-center font-bold text-md">Sử Dụng Số Điện Thoại</Text>
-//                         </TouchableOpacity>
-//                     </View>
-//                     <View className="p-4 flex-row items-center justify-center">
-//                         <Text className="text-center text-base">Bạn đã có tài khoản? </Text>
-//                         <Link href="/login" className="text-[#1c40f2] font-bold text-lg">Đăng nhập</Link>
-//                     </View>
-//                 </ScrollView>
-//             </SafeAreaView>
-//         </>
-//     );
-// }
-
-
-
-import { Link, usePathname, useRouter } from 'expo-router';
-import { useState } from 'react';
-import { Text, TextInput, TouchableOpacity, View, SafeAreaView, StatusBar, Pressable, ScrollView } from 'react-native';
-import Ionicons from '@expo/vector-icons/Ionicons';
-import FloatingInput from '@/components/FloatingInput';
-
-
+import { Ionicons } from "@expo/vector-icons";
+import { Link, useRouter } from "expo-router";
+import { useEffect, useState } from "react";
+import { Keyboard, Platform, Pressable, SafeAreaView, ScrollView, StatusBar, Text, TouchableOpacity, View } from "react-native";
+import FloatingInputs from "../test/floatinglabel";
 
 export default function Register ()
 {
@@ -170,27 +12,35 @@ export default function Register ()
     const [ password, setPassword ] = useState( '' );
     const [ confirmPassword, setConfirmPassword ] = useState( '' );
     const [ checked, setChecked ] = useState( false );
-    const [ isVisible, setIsVisible ] = useState( true );
+    const [ keyboardVisible, setKeyboardVisible ] = useState( false );
+
+    // Theo dõi trạng thái hiển thị của bàn phím
+    useEffect( () =>
+    {
+        const keyboardDidShowListener = Keyboard.addListener(
+            'keyboardDidShow',
+            () =>
+            {
+                setKeyboardVisible( true );
+            }
+        );
+        const keyboardDidHideListener = Keyboard.addListener(
+            'keyboardDidHide',
+            () =>
+            {
+                setKeyboardVisible( false );
+            }
+        );
+
+        return () =>
+        {
+            keyboardDidHideListener.remove();
+            keyboardDidShowListener.remove();
+        };
+    }, [] );
 
     const handleSubmit = () =>
     {
-        // if ( password !== confirmPassword )
-        // {
-        //     alert( 'Mat khau khong khop' );
-        //     return;
-        // }
-
-        // const user = {
-        //     fullName,
-        //     email,
-        //     password,
-        // };
-
-        // router.push( {
-        //     pathname: '/login',
-        //     params: user,
-        // } );
-
         router.push( '/(auth)/pinInput' );
     }
 
@@ -204,59 +54,80 @@ export default function Register ()
         setChecked( !checked );
     }
 
-    const handleSeenPassword = () =>
-    {
-        setIsVisible( !isVisible );
-    }
-
     const handleSignUpWithPhoneNumber = () =>
     {
         router.push( '/(auth)/withPhoneNumber' );
     }
-
     return (
         <>
-            <StatusBar barStyle="dark-content" backgroundColor="white" />
-            <SafeAreaView className="flex-1">
-                <ScrollView
-                    className="flex-1 bg-white px-4"
-                    showsVerticalScrollIndicator={ false }
-                >
-                    <TouchableOpacity onPress={ handleBackToLogin } className="absolute top-4 left-4">
+            <SafeAreaView
+                className="flex-1 bg-white"
+                style={ { paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0 } }
+            >
+
+                {/*  Header  */ }
+                <ScrollView className="flex-1 px-4" showsVerticalScrollIndicator={ false }>
+                    {/* Back button */ }
+                    <TouchableOpacity onPress={ handleBackToLogin } className="absolute top-4">
                         <Ionicons name="return-up-back" size={ 35 } color="#1c40f2" />
                     </TouchableOpacity>
+                    {/* -----------------------------------------End----------------------------------------- */ }
+
+                    {/* Title */ }
                     <View className="mt-16">
                         <Text className="text-3xl text-[#1c40f2] font-bold">ĐĂNG KÝ</Text>
                         <Text className="pt-4 text-5xl font-bold text-[#1c40f2]">TÀI KHOẢN</Text>
                     </View>
-                    <View className='mt-4'>
-                        <FloatingInput
-                            label="Họ tên"
+                    {/* -----------------------------------------End----------------------------------------- */ }
+
+                    {/* Form đăng ký */ }
+                    <View className='mt-12'>
+                        <FloatingInputs
+                            label='Họ tên'
                             value={ fullName }
                             onChangeText={ setFullName }
+                            containerClassName='mb-4'
+                            inputClassName='h-12'
+                            placeholder='Họ tên...'
+                            selectionColor={ "#1c40f2" }
                         />
-                        <FloatingInput
-                            label="Email"
+                        <FloatingInputs
+                            label='Email'
                             value={ email }
                             onChangeText={ setEmail }
+                            containerClassName='mb-4'
+                            inputClassName='h-12'
                             keyboardType="email-address"
+                            autoCapitalize="none"
+                            placeholder='Email...'
+                            selectionColor={ "#1c40f2" }
                         />
-                        <FloatingInput
+                        <FloatingInputs
                             label="Mật khẩu"
                             value={ password }
                             onChangeText={ setPassword }
-                            secureTextEntry
+                            secureTextEntry={ true }
+                            showPasswordToggle={ true }
+                            containerClassName="mb-4"
+                            inputClassName='h-12'
+                            placeholder="Mật khẩu..."
+                            selectionColor={ "#1c40f2" }
                         />
-                        <FloatingInput
+                        <FloatingInputs
                             label="Xác nhận mật khẩu"
                             value={ confirmPassword }
                             onChangeText={ setConfirmPassword }
-                            secureTextEntry
+                            secureTextEntry={ true }
+                            showPasswordToggle={ true }
+                            containerClassName="mb-4"
+                            inputClassName='h-12'
+                            placeholder="Xác nhận mật khẩu..."
+                            selectionColor={ "#1c40f2" }
                         />
-                        <View className="flex-row my-2 mx-2 mb-6 items-center">
+                        <View className="flex-row my-2 mb-6 items-center">
                             <Pressable
                                 onPress={ () => handleSetChecked() }
-                                className={ `w-6 h-6 mr-2 rounded border border-gray-500 justify-center items-center ${ checked ? 'bg-blue-500' : 'bg-white'
+                                className={ `w-6 h-6 mr-2 rounded border border-gray-500 justify-center items-center ${ checked ? 'bg-[#1c40f2]' : 'bg-white'
                                     }` }
                             >
                                 { checked && <Ionicons name="checkmark" size={ 16 } color="white" /> }
@@ -264,27 +135,36 @@ export default function Register ()
                             <Text>Tôi đồng ý với mọi </Text>
                             <Link className='text-[#1c40f2] underline font-medium' href={ "/term" }>Chính sách & điều khoản</Link>
                         </View>
+                    </View>
+                    {/* -----------------------------------------End----------------------------------------- */ }
+                </ScrollView>
+                {/* -----------------------------------------End----------------------------------------- */ }
+
+
+                {/* Footer */ }
+                { !keyboardVisible && (
+                    <View className="px-4 pb-4">
                         <TouchableOpacity
-                            className="mt-2 bg-[#1c40f2] rounded-full h-16 justify-center w-full"
+                            className="mt-2 bg-[#1c40f2] rounded-xl h-16 justify-center w-full"
                             onPress={ handleSubmit }
                         >
                             <Text className="text-white text-center font-bold text-md">Đăng Ký</Text>
                         </TouchableOpacity>
                         <TouchableOpacity
-                            className="mt-4 border-[1px] border-gray-400 rounded-full h-16 justify-center w-full"
+                            className="mt-4 border-[1px] border-gray-400 rounded-xl h-16 justify-center w-full"
                             onPress={ handleSignUpWithPhoneNumber }
                         >
                             <Text className="text-gray-500 text-center font-bold text-md">Sử Dụng Số Điện Thoại</Text>
-                        </TouchableOpacity>
+                        </TouchableOpacity >
+                        <View className="p-4 flex-row items-center justify-center">
+                            <Text className="text-center text-base">Bạn đã có tài khoản? </Text>
+                            <Link href="/login" className="text-[#1c40f2] font-bold text-lg">Đăng nhập</Link>
+                        </View>
                     </View>
-                    <View className="p-4 flex-row items-center justify-center">
-                        <Text className="text-center text-base">Bạn đã có tài khoản? </Text>
-                        <Link href="/login" className="text-[#1c40f2] font-bold text-lg">Đăng nhập</Link>
-                    </View>
-                </ScrollView>
-            </SafeAreaView>
+                ) }
+                {/* -----------------------------------------End----------------------------------------- */ }
+            </SafeAreaView >
         </>
     );
 }
-
 

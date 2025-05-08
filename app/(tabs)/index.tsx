@@ -1,12 +1,9 @@
-import { View, Text, FlatList, ScrollView, Dimensions, TouchableOpacity, Image, TextInput } from 'react-native';
+import { View, Text, FlatList, ScrollView, Dimensions, TouchableOpacity, Image, TextInput, Alert } from 'react-native';
 import { useEffect, useState } from 'react';
 import mockBanking from '../../assets/banking.json';
 import MyCard from '@/components/MyCard';
 import { AntDesign, EvilIcons, FontAwesome5, Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
-import BorderHeaderInputExample from '../test/borderheaderinput';
-import VietQRImage from '../test/linking';
-
 
 
 export default function Home ()
@@ -27,10 +24,11 @@ export default function Home ()
       showsVerticalScrollIndicator={ false }
       className='bg-white flex-1'
     >
-      
+
       <View className='py-4'>
         <MyCard />
       </View>
+
 
       {/* <VietQRImage
         accountName='Truong Thanh Dat'
