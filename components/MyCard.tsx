@@ -77,9 +77,8 @@ export default function MyCard ()
             />
 
             {/* active dot */ }
-            <View className='flex-row justify-between gap-4'>
-                <Text></Text>
-                <View className="flex-row justify-center items-center my-2 ml-8">
+            <View className='relative h-[48px] items-center justify-center'>
+                <View className="flex-row justify-center items-center">
                     { bankCard.map( ( _, index ) => (
                         <View
                             key={ index }
@@ -89,7 +88,7 @@ export default function MyCard ()
                 </View>
 
                 {/* xem tất cả các banking card */ }
-                <TouchableOpacity className='p-2' onPress={ handleSeenAllCard }>
+                <TouchableOpacity className='p-2 absolute right-0' onPress={ handleSeenAllCard }>
                     <Text className='bg-black rounded-full p-[5px] text-blue-500 font-semibold text-sm'>
                         Xem tất cả
                     </Text>

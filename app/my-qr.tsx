@@ -1,4 +1,4 @@
-import { convertEMVCode } from "@/utils/convertEMVCo";
+import { convertEMVCode } from "@/utils/encodeEMVCode";
 import { generateQR } from "@/utils/generateQR";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEffect, useState } from "react";
@@ -27,7 +27,7 @@ export default function MyQR ()
         loadCard();
     }, [] );
 
-   
+
     const qrCode = convertEMVCode( {
         accountNumber: data.STK,
         bankBin: data.bin,
@@ -36,8 +36,16 @@ export default function MyQR ()
     } );
 
     return (
-        <View className="flex-1 bg-white">
-            { generateQR( qrCode ) }
-        </View>
+        <>
+            <View className="flex-1 bg-white justify-center items-center">
+                <View className="border-[15px] p-2">
+                    { generateQR( qrCode ) }
+                </View>
+
+                <View>
+                    <Text className="text-2xl font-bold">Chia sẻ QR này để thực hiện giao dịch</Text>
+                </View>
+            </View>
+        </>
     )
 }

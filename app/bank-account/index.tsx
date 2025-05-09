@@ -1,15 +1,19 @@
-import { Image, ScrollView, Text, Touchable, TouchableOpacity, View } from "react-native";
-import { useEffect, useState } from "react";
+
+import { Image, ScrollView, Text, TouchableOpacity, View, StatusBar, SafeAreaView, Platform } from "react-native";
+import { useEffect, useState, useCallback } from "react";
 import QRCode from "react-native-qrcode-svg";
-import BankingCard from "@/components/BankCard";
 import Seperate from "@/components/Seperate";
 import Entypo from '@expo/vector-icons/Entypo';
-import { FontAwesome } from "@expo/vector-icons";
-import myBankingAccount from "../../assets/my-bank-account.json";
-import mockDataTransation from "../../assets/data.json"
+import { FontAwesome, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import mockDataTransation from "../../assets/data.json";
 import CardInfo from "@/components/CardInfo";
 import { router } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Animated, { FadeInDown, FadeIn } from "react-native-reanimated";
+import { LinearGradient } from "expo-linear-gradient";
+import { useFocusEffect } from "@react-navigation/native";
+
+
 
 interface ITransactionHistory
 {
@@ -30,28 +34,38 @@ export default function BankAccount ()
     const [ selected, setSelected ] = useState( "income" );
     const [ dataBanking, setDataBanking ] = useState( mockDataTransation );
     const [ currentCard, setCurrentCard ] = useState<ITransactionHistory>();
+    const [ isLoading, setIsLoading ] = useState( true );
 
     const incomeItems: any[] = [];
     const outcomeItems: any[] = [];
 
-    useEffect( () =>
-    {
-        const fectCardId = async () =>
+    useFocusEffect(
+        useCallback( () =>
         {
-            const getCard = await AsyncStorage.getItem( "selectedCard" );
-            if ( getCard !== null )
+            const fetchCardData = async () =>
             {
-                setCurrentCard( JSON.parse( getCard ) );//Chuyển đổi Json thành Obj Js
+                setIsLoading( true );
+                try
+                {
+                    const getCard = await AsyncStorage.getItem( "selectedCard" );
+                    if ( getCard !== null )
+                    {
+                        setCurrentCard( JSON.parse( getCard ) );
+                    }
+                } catch ( error )
+                {
+                    console.error( "Error fetching card data:", error );
+                } finally
+                {
+                    setIsLoading( false );
+                }
+            };
 
-            }
+            fetchCardData();
+        }, [] )
+    );
 
-            console.log( "getacard", getCard );
-        }
-        fectCardId();
-    }, [] );
-
-    console.log( "current card: ", currentCard )
-
+    // Filter transaction data
     for ( const item of dataBanking )
     {
         if ( item.amount > 0 )
@@ -66,242 +80,442 @@ export default function BankAccount ()
     const handleCreateQR = () =>
     {
         router.push( {
-            pathname: '/(tabs)/qr/CreateMyQR',
-            params: { cardSTK: currentCard?.STK, }
-
-        } )
+            pathname: '/(tabs)/qr/create',
+            params: { cardSTK: currentCard?.STK }
+        } );
     };
+
+    const handleSaveQR = () =>
+    {
+        console.log( "Saving QR code..." );
+    };
+
+    const handleShareQR = () =>
+    {
+
+        console.log( "Sharing QR code..." );
+    };
+
+    if ( isLoading )
+    {
+        return (
+            <View className="flex-1 justify-center items-center bg-white">
+                <StatusBar barStyle="dark-content" backgroundColor="#ffffff" />
+                <Animated.View entering={ FadeIn.duration( 800 ) }>
+                    <MaterialCommunityIcons name="bank-outline" size={ 60 } color="#3b82f6" />
+                </Animated.View>
+                <Animated.Text
+                    entering={ FadeIn.delay( 300 ).duration( 800 ) }
+                    className="text-slate-600 mt-4 text-base"
+                >
+                    Đang tải thông tin tài khoản...
+                </Animated.Text>
+            </View>
+        );
+    }
 
     return (
         <>
-            <ScrollView className="flex-1">
-                <View className="justify-center items-center">
-                    {/* QR */ }
-                    <View className="justify-center mt-4 items-center w-full max-w-[340px] p-4 mx-4 bg-white rounded-3xl shadow-md">
-                        <Text className="font-bold">{ currentCard?.name?.toUpperCase() }</Text>
-                        <Text className="text-lg">{ currentCard?.STK }</Text>
-                        <Text className="text-base">{ currentCard?.bankName }</Text>
-                        <Seperate />
-                        <View className="bg-white border-2 border-gray-300 p-4 rounded-lg">
-                            {/* Truoc khi tao QR code can phai chuyen obj js thanh json */ }
-                            <QRCode
-                                value={ JSON.stringify( currentCard?.bankName ) }
-                                size={ 200 }
-                                logo={ require( "../../assets/images/logo-autopay-4.png" ) }
-                                logoSize={ 30 }
-                            />
-                        </View>
-                        <Seperate />
-                        <View style={ { maxWidth: 250 } } className="flex-row w-full justify-between items-center bg-white">
-                            <Text className="text-xl text-black font-bold">⛛AutoPAY</Text>
-                            <Image source={ { uri: currentCard?.logoBanking } } className="w-20 h-16" resizeMode="contain" />
-                        </View>
-                        <View className="flex-row justify-between items-center w-full">
-                            <TouchableOpacity className="border border-gray-300 bg-gray-50 px-4 py-2 rounded-full flex-row items-center" onPress={ () => console.log( "Lưu mã QR" ) }>
-                                <Entypo name="download" size={ 18 } color="black" />
-                                <Text className="text-base ml-2">Lưu mã QR</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity className="px-4 py-2 rounded-full flex-row items-center bg-blue-500" onPress={ () => console.log( "Chia sẻ mã QR" ) }>
-                                <FontAwesome name="share-square-o" size={ 20 } color="white" />
-                                <Text className="text-base text-white ml-2">Chia sẻ QR</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                    {/* Ket thuc QR */ }
+            <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
+            <ScrollView className="flex-1 bg-slate-50">
+                <LinearGradient
+                    colors={ [ '#ffffff', '#f8fafc' ] }
+                    className="pt-2 pb-6"
+                >
+                    <View className="justify-center items-center">
+                        {/* QR Card */ }
+                        <Animated.View
+                            entering={ FadeInDown.duration( 600 ) }
+                            className="justify-center mt-4 items-center w-full max-w-[340px] p-5 mx-4 bg-white rounded-3xl shadow-md"
+                        >
+                            {/* Card Header */ }
+                            <View className="w-full flex-row justify-between items-center mb-3">
+                                <View className="flex-row items-center">
+                                    <Image
+                                        source={ { uri: currentCard?.logoBanking } }
+                                        className="w-8 h-8 rounded-full"
+                                        resizeMode="contain"
+                                    />
+                                    <Text className="text-slate-800 font-bold ml-2">
+                                        { currentCard?.bankName }
+                                    </Text>
+                                </View>
+                                <View className="bg-blue-50 px-2.5 py-1 rounded-full">
+                                    <Text className="text-blue-600 text-xs font-medium">Tài khoản chính</Text>
+                                </View>
+                            </View>
 
-
-                    {/* lich su giao dich gan day */ }
-                    <View className="w-full min-h-[200px] rounded-t-3xl p-4 bg-blue-50 mt-4">
-                        <View className="flex-row justify-between items-center px-4">
-                            <Text className="text-lg text-black font-bold">
-                                Giao dịch gần đây
+                            {/* Card Info */ }
+                            <Text className="font-bold text-lg text-slate-800">
+                                { currentCard?.name?.toUpperCase() }
                             </Text>
-                            <TouchableOpacity onPress={ () => router.push( "/(tabs)/history" ) }>
-                                <Text className="text-base text-gray-500"> Xem thêm </Text>
-                            </TouchableOpacity>
-                        </View>
-                        <View className="flex-row items-center justify-between bg-white p-2 rounded-xl mt-4">
-                            <TouchableOpacity
-                                className={ `flex-1 p-3 rounded-lg ${ selected === "income" ? "bg-black" : "bg-gray-100" }` }
-                                onPress={ () => setSelected( "income" ) }
-                            >
-                                <Text
-                                    className={ `text-center text-base font-medium ${ selected === "income" ? "text-white" : "text-black" }` }
-                                >
-                                    Giao dịch đến
+                            <View className="flex-row items-center mt-1">
+                                <Text className="text-lg text-slate-700 font-medium">
+                                    { currentCard?.STK }
                                 </Text>
-                            </TouchableOpacity>
+                                <TouchableOpacity className="ml-2 p-1">
+                                    <Ionicons name="copy-outline" size={ 16 } color="#3b82f6" />
+                                </TouchableOpacity>
+                            </View>
 
-                            <TouchableOpacity
-                                className={ `flex-1 p-3 rounded-lg ${ selected === "outcome" ? "bg-black" : "bg-gray-100" }` }
-                                onPress={ () => setSelected( "outcome" ) }
-                            >
-                                <Text
-                                    className={ `text-center text-base font-medium ${ selected === "outcome" ? "text-white" : "text-black" }` }
+                            <Seperate />
+
+                            {/* QR Code */ }
+                            <View className="bg-white border-2 border-slate-200 p-4 rounded-2xl">
+                                <QRCode
+                                    value={ JSON.stringify( {
+                                        bankName: currentCard?.bankName,
+                                        accountNumber: currentCard?.STK,
+                                        accountName: currentCard?.name
+                                    } ) }
+                                    size={ 200 }
+                                    logo={ require( "../../assets/images/logo-autopay-4.png" ) }
+                                    logoSize={ 40 }
+                                    logoBackgroundColor="white"
+                                    logoBorderRadius={ 10 }
+                                />
+                            </View>
+
+                            <Seperate />
+
+                            {/* Brand Info */ }
+                            <View className="flex-row w-full justify-between items-center bg-white">
+                                <View className="flex-row items-center">
+                                    <Text className="text-xl text-slate-800 font-bold">⛛</Text>
+                                    <Text className="text-lg text-slate-800 font-bold ml-1">AutoPAY</Text>
+                                </View>
+                                <Image
+                                    source={ { uri: currentCard?.logoBanking } }
+                                    className="w-20 h-16"
+                                    resizeMode="contain"
+                                />
+                            </View>
+
+                            {/* Action Buttons */ }
+                            <View className="flex-row justify-between items-center w-full mt-2">
+                                <TouchableOpacity
+                                    className="border border-slate-300 bg-slate-50 px-4 py-2.5 rounded-full flex-row items-center"
+                                    onPress={ handleSaveQR }
                                 >
-                                    Giao dịch đi
-                                </Text>
-                            </TouchableOpacity>
-                        </View>
-                        <View className="mt-4">
-                            {
-                                selected === "income"
-                                    ? incomeItems.map( ( item, index ) => (
-                                        <View key={ index } className="bg-white p-4 border rounded-lg shadow-sm mb-1">
-                                            <CardInfo
-                                                id={ item.id }
-                                                STK={ item.STK }
-                                                name={ item.name }
-                                                date={ item.date }
-                                                amount={ item.amount }
-                                                content={ item.content }
-                                                logoBanking={ item.logoBanking }
-                                                transactionId={ item.transactionId } />
-                                        </View>
-                                    ) )
-                                    : outcomeItems.map( ( item, index ) => (
-                                        <View key={ index } className="bg-white p-4 border rounded-lg shadow-sm mb-1">
-                                            <CardInfo
-                                                id={ item.id }
-                                                STK={ item.STK }
-                                                name={ item.name }
-                                                date={ item.date }
-                                                amount={ item.amount }
-                                                content={ item.content }
-                                                logoBanking={ item.logoBanking }
-                                                transactionId={ item.transactionId } />
-                                        </View>
-                                    ) )
-                            }
-                        </View>
+                                    <Entypo name="download" size={ 16 } color="#475569" />
+                                    <Text className="text-slate-600 ml-2 font-medium">Lưu mã QR</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                    className="px-4 py-2.5 rounded-full flex-row items-center bg-blue-500"
+                                    onPress={ handleShareQR }
+                                >
+                                    <FontAwesome name="share-square-o" size={ 16 } color="white" />
+                                    <Text className="text-white ml-2 font-medium">Chia sẻ QR</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </Animated.View>
                     </View>
-                    {/* Ket thuc lich su giao dich */ }
+                </LinearGradient>
+
+                {/* Transaction History Section */ }
+                <View className="min-h-[200px] rounded-t-3xl p-5 bg-white mt-2">
+                    <View className="flex-row justify-between items-center mb-4">
+                        <Text className="text-lg text-slate-800 font-bold">
+                            Giao dịch gần đây
+                        </Text>
+                        <TouchableOpacity
+                            className="flex-row items-center"
+                            onPress={ () => router.push( "/(tabs)/history" ) }
+                        >
+                            <Text className="text-blue-500 font-medium">Xem thêm</Text>
+                            <Ionicons name="chevron-forward" size={ 16 } color="#3b82f6" />
+                        </TouchableOpacity>
+                    </View>
+
+                    {/* Transaction Type Selector */ }
+                    <View className="flex-row items-center justify-between bg-slate-100 p-1 rounded-xl">
+                        <TouchableOpacity
+                            className={ `flex-1 p-3 rounded-lg ${ selected === "income" ? "bg-blue-500" : "bg-transparent" }` }
+                            onPress={ () => setSelected( "income" ) }
+                        >
+                            <Text
+                                className={ `text-center font-medium ${ selected === "income" ? "text-white" : "text-slate-600" }` }
+                            >
+                                Giao dịch đến
+                            </Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                            className={ `flex-1 p-3 rounded-lg ${ selected === "outcome" ? "bg-blue-500" : "bg-transparent" }` }
+                            onPress={ () => setSelected( "outcome" ) }
+                        >
+                            <Text
+                                className={ `text-center font-medium ${ selected === "outcome" ? "text-white" : "text-slate-600" }` }
+                            >
+                                Giao dịch đi
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
+
+                    {/* Transaction List */ }
+                    <View className="mt-4">
+                        { selected === "income" ? (
+                            incomeItems.length > 0 ? (
+                                incomeItems.map( ( item, index ) => (
+                                    <Animated.View
+                                        key={ index }
+                                        entering={ FadeInDown.delay( index * 100 ).duration( 400 ) }
+                                        className="bg-white p-4 border border-slate-200 rounded-xl shadow-sm mb-3"
+                                    >
+                                        <CardInfo
+                                            id={ item.id }
+                                            STK={ item.STK }
+                                            name={ item.name }
+                                            date={ item.date }
+                                            amount={ item.amount }
+                                            content={ item.content }
+                                            logoBanking={ item.logoBanking }
+                                            transactionId={ item.transactionId }
+                                        />
+                                    </Animated.View>
+                                ) )
+                            ) : (
+                                <View className="items-center justify-center py-10">
+                                    <Ionicons name="wallet-outline" size={ 50 } color="#cbd5e1" />
+                                    <Text className="text-slate-400 mt-3 text-center">
+                                        Không có giao dịch đến nào
+                                    </Text>
+                                </View>
+                            )
+                        ) : outcomeItems.length > 0 ? (
+                            outcomeItems.map( ( item, index ) => (
+                                <Animated.View
+                                    key={ index }
+                                    entering={ FadeInDown.delay( index * 100 ).duration( 400 ) }
+                                    className="bg-white p-4 border border-slate-200 rounded-xl shadow-sm mb-3"
+                                >
+                                    <CardInfo
+                                        id={ item.id }
+                                        STK={ item.STK }
+                                        name={ item.name }
+                                        date={ item.date }
+                                        amount={ item.amount }
+                                        content={ item.content }
+                                        logoBanking={ item.logoBanking }
+                                        transactionId={ item.transactionId }
+                                    />
+                                </Animated.View>
+                            ) )
+                        ) : (
+                            <View className="items-center justify-center py-10">
+                                <Ionicons name="wallet-outline" size={ 50 } color="#cbd5e1" />
+                                <Text className="text-slate-400 mt-3 text-center">
+                                    Không có giao dịch đi nào
+                                </Text>
+                            </View>
+                        ) }
+                    </View>
                 </View>
             </ScrollView>
-            <TouchableOpacity className="absolute bottom-5 right-2 w-16 h-16 rounded-full bg-blue-500 items-center justify-center" onPress={ handleCreateQR }>
-                <Entypo name="plus" size={ 30 } color="white" />
+
+            {/* Floating Action Button */ }
+            <TouchableOpacity
+                className="absolute bottom-5 right-5 w-14 h-14 rounded-full bg-[#1c40f2] items-center justify-center shadow-lg elevation-5"
+                onPress={ handleCreateQR }
+            >
+                <Entypo name="plus" size={ 28 } color="white" />
             </TouchableOpacity>
         </>
     );
 }
 
 
-//#region testCode
-// import { Image, Text, TouchableOpacity, View } from "react-native";
-// import { useState } from "react";
+
+
+
+
+
+// import { Image, ScrollView, Text, Touchable, TouchableOpacity, View } from "react-native";
+// import { useEffect, useState } from "react";
 // import QRCode from "react-native-qrcode-svg";
 // import BankingCard from "@/components/BankCard";
 // import Seperate from "@/components/Seperate";
 // import Entypo from '@expo/vector-icons/Entypo';
 // import { FontAwesome } from "@expo/vector-icons";
 // import myBankingAccount from "../../assets/my-bank-account.json";
-// import mockDataTransation from "../../assets/data.json";
-// import { FlatList } from "react-native-gesture-handler";
+// import mockDataTransation from "../../assets/data.json"
+// import CardInfo from "@/components/CardInfo";
+// import { router } from "expo-router";
+// import AsyncStorage from "@react-native-async-storage/async-storage";
 
-// interface IBankingTransaction {
-//   id: string,
-//   STK: string,
-//   name: string,
-//   date: string,
-//   amount: number,
-//   content: string,
-//   logoBanking: string,
-//   transactionId: string,
+// interface ITransactionHistory
+// {
+//     id: string | undefined;
+//     STK: string | undefined;
+//     name: string | undefined;
+//     logoBanking: string | undefined;
+//     bankName: string | undefined;
+//     transactionHistory: {
+//         date: string;
+//         amount: number;
+//         description: string;
+//     }[];
 // }
 
-// export default function BankAccount() {
-//   const [bankAccount] = useState(myBankingAccount);
-//   const jsonData = bankAccount.filter((item: any) => item.id === "1");
-//   const jsonString = JSON.stringify(jsonData[0].bank_name);
-//   const [selected, setSelected] = useState("income");
-//   const [dataBanking] = useState(mockDataTransation);
+// export default function BankAccount ()
+// {
+//     const [ selected, setSelected ] = useState( "income" );
+//     const [ dataBanking, setDataBanking ] = useState( mockDataTransation );
+//     const [ currentCard, setCurrentCard ] = useState<ITransactionHistory>();
 
-//   const incomeItems = dataBanking.filter((item: any) => item.amount > 0);
-//   const outcomeItems = dataBanking.filter((item: any) => item.amount <= 0);
+//     const incomeItems: any[] = [];
+//     const outcomeItems: any[] = [];
 
-//   const selectedData = selected === "income" ? incomeItems : outcomeItems;
+//     useEffect( () =>
+//     {
+//         const fectCardId = async () =>
+//         {
+//             const getCard = await AsyncStorage.getItem( "selectedCard" );
+//             if ( getCard !== null )
+//             {
+//                 setCurrentCard( JSON.parse( getCard ) );//Chuyển đổi Json thành Obj Js
 
-//   return (
-//     <FlatList
-//       data={selectedData}
-//       keyExtractor={(item) => item.id.toString()}
-//       ListHeaderComponent={
-//         <View className="justify-center items-center">
-//           <View className="p-4">
-//             <BankingCard
-//               id={jsonData[0].id}
-//               STK={jsonData[0].STK}
-//               name={jsonData[0].name}
-//               logoBanking={jsonData[0].bank_logo}
-//               bankName={jsonData[0].bank_name}
-//             />
-//           </View>
-//           <View className="justify-center items-center w-full max-w-[340px] p-4 mx-4 bg-white rounded-3xl shadow-md">
-//             <Text className="font-bold">{jsonData[0].name.toUpperCase()}</Text>
-//             <Text className="text-lg">{jsonData[0].STK}</Text>
-//             <Text className="text-base">{jsonData[0].bank_name}</Text>
-//             <Seperate />
-//             <View className="bg-white border-2 border-gray-300 p-4 rounded-lg">
-//               <QRCode
-//                 value={jsonString}
-//                 size={150}
-//                 logo={require("../../assets/images/logo-autopay-4.png")}
-//                 logoSize={30}
-//               />
-//             </View>
-//             <Seperate />
-//             <View style={{ maxWidth: 250 }} className="flex-row w-full justify-between items-center bg-white">
-//               <Text className="text-xl text-black font-bold">⛛AutoPAY</Text>
-//               <Image source={{ uri: jsonData[0].bank_logo }} className="w-20 h-16" resizeMode="contain" />
-//             </View>
-//             <View className="flex-row justify-between items-center w-full">
-//               <TouchableOpacity className="border border-gray-300 bg-gray-50 px-4 py-2 rounded-full flex-row items-center" onPress={() => console.log("Lưu mã QR")}>
-//                 <Entypo name="download" size={18} color="black" />
-//                 <Text className="text-base ml-2">Lưu mã QR</Text>
-//               </TouchableOpacity>
-//               <TouchableOpacity className="px-4 py-2 rounded-full flex-row items-center bg-blue-500" onPress={() => console.log("Chia sẻ mã QR")}>
-//                 <FontAwesome name="share-square-o" size={20} color="white" />
-//                 <Text className="text-base text-white ml-2">Chia sẻ QR</Text>
-//               </TouchableOpacity>
-//             </View>
+//             }
 
-//             <View className="w-full min-h-[200px] rounded-t-3xl p-4 bg-red-500 mt-4">
-//               <View className="flex-row justify-between items-center px-4">
-//                 <Text className="text-lg font-bold text-white">Giao dịch gần đây</Text>
-//                 <Text className="text-base text-white">Xem thêm</Text>
-//               </View>
+//             console.log( "getacard", getCard );
+//         }
+//         fectCardId();
+//     }, [] );
 
-//               <View className="flex-row items-center justify-between bg-white p-2 rounded-xl mt-4">
-//                 <TouchableOpacity
-//                   className={`flex-1 p-3 rounded-lg ${selected === "income" ? "bg-black" : "bg-gray-100"}`}
-//                   onPress={() => setSelected("income")}
-//                 >
-//                   <Text className={`text-center text-base font-medium ${selected === "income" ? "text-white" : "text-black"}`}>
-//                     Giao dịch đến
-//                   </Text>
-//                 </TouchableOpacity>
+//     console.log( "current card: ", currentCard )
 
-//                 <TouchableOpacity
-//                   className={`flex-1 p-3 rounded-lg ${selected === "outcome" ? "bg-black" : "bg-gray-100"}`}
-//                   onPress={() => setSelected("outcome")}
-//                 >
-//                   <Text className={`text-center text-base font-medium ${selected === "outcome" ? "text-white" : "text-black"}`}>
-//                     Giao dịch đi
-//                   </Text>
-//                 </TouchableOpacity>
-//               </View>
-//             </View>
-//           </View>
-//         </View>
-//       }
-//       renderItem={({ item }) => (
-//         <View className="bg-white p-4 rounded-lg shadow-sm mx-4 mt-2">
-//           <Text className={`font-semibold ${selected === "income" ? "text-green-500" : "text-red-500"}`}>{item.amount}đ</Text>
-//           <Text className="text-gray-700">{item.content}</Text>
-//           <Text className="text-sm text-gray-500">{item.date}</Text>
-//         </View>
-//       )}
-//     />
-//   );
+//     for ( const item of dataBanking )
+//     {
+//         if ( item.amount > 0 )
+//         {
+//             incomeItems.push( item );
+//         } else
+//         {
+//             outcomeItems.push( item );
+//         }
+//     }
+
+//     const handleCreateQR = () =>
+//     {
+//         router.push( {
+//             pathname: '/(tabs)/qr/create',
+//             params: { cardSTK: currentCard?.STK, }
+
+//         } )
+//     };
+
+//     return (
+//         <>
+//             <ScrollView className="flex-1">
+//                 <View className="justify-center items-center">
+//                     {/* QR */ }
+//                     <View className="justify-center mt-4 items-center w-full max-w-[340px] p-4 mx-4 bg-white rounded-3xl shadow-md">
+//                         <Text className="font-bold">{ currentCard?.name?.toUpperCase() }</Text>
+//                         <Text className="text-lg">{ currentCard?.STK }</Text>
+//                         <Text className="text-base">{ currentCard?.bankName }</Text>
+//                         <Seperate />
+//                         <View className="bg-white border-2 border-gray-300 p-4 rounded-lg">
+//                             {/* Truoc khi tao QR code can phai chuyen obj js thanh json */ }
+//                             <QRCode
+//                                 value={ JSON.stringify( currentCard?.bankName ) }
+//                                 size={ 200 }
+//                                 logo={ require( "../../assets/images/logo-autopay-4.png" ) }
+//                                 logoSize={ 30 }
+//                             />
+//                         </View>
+//                         <Seperate />
+//                         <View style={ { maxWidth: 250 } } className="flex-row w-full justify-between items-center bg-white">
+//                             <Text className="text-xl text-black font-bold">⛛AutoPAY</Text>
+//                             <Image source={ { uri: currentCard?.logoBanking } } className="w-20 h-16" resizeMode="contain" />
+//                         </View>
+//                         <View className="flex-row justify-between items-center w-full">
+//                             <TouchableOpacity className="border border-gray-300 bg-gray-50 px-4 py-2 rounded-full flex-row items-center" onPress={ () => console.log( "Lưu mã QR" ) }>
+//                                 <Entypo name="download" size={ 18 } color="black" />
+//                                 <Text className="text-base ml-2">Lưu mã QR</Text>
+//                             </TouchableOpacity>
+//                             <TouchableOpacity className="px-4 py-2 rounded-full flex-row items-center bg-blue-500" onPress={ () => console.log( "Chia sẻ mã QR" ) }>
+//                                 <FontAwesome name="share-square-o" size={ 20 } color="white" />
+//                                 <Text className="text-base text-white ml-2">Chia sẻ QR</Text>
+//                             </TouchableOpacity>
+//                         </View>
+//                     </View>
+//                     {/* Ket thuc QR */ }
+
+
+//                     {/* lich su giao dich gan day */ }
+//                     <View className="w-full min-h-[200px] rounded-t-3xl p-4 bg-blue-50 mt-4">
+//                         <View className="flex-row justify-between items-center px-4">
+//                             <Text className="text-lg text-black font-bold">
+//                                 Giao dịch gần đây
+//                             </Text>
+//                             <TouchableOpacity onPress={ () => router.push( "/(tabs)/history" ) }>
+//                                 <Text className="text-base text-gray-500"> Xem thêm </Text>
+//                             </TouchableOpacity>
+//                         </View>
+//                         <View className="flex-row items-center justify-between bg-white p-2 rounded-xl mt-4">
+//                             <TouchableOpacity
+//                                 className={ `flex-1 p-3 rounded-lg ${ selected === "income" ? "bg-black" : "bg-gray-100" }` }
+//                                 onPress={ () => setSelected( "income" ) }
+//                             >
+//                                 <Text
+//                                     className={ `text-center text-base font-medium ${ selected === "income" ? "text-white" : "text-black" }` }
+//                                 >
+//                                     Giao dịch đến
+//                                 </Text>
+//                             </TouchableOpacity>
+
+//                             <TouchableOpacity
+//                                 className={ `flex-1 p-3 rounded-lg ${ selected === "outcome" ? "bg-black" : "bg-gray-100" }` }
+//                                 onPress={ () => setSelected( "outcome" ) }
+//                             >
+//                                 <Text
+//                                     className={ `text-center text-base font-medium ${ selected === "outcome" ? "text-white" : "text-black" }` }
+//                                 >
+//                                     Giao dịch đi
+//                                 </Text>
+//                             </TouchableOpacity>
+//                         </View>
+//                         <View className="mt-4">
+//                             {
+//                                 selected === "income"
+//                                     ? incomeItems.map( ( item, index ) => (
+//                                         <View key={ index } className="bg-white p-4 border rounded-lg shadow-sm mb-1">
+//                                             <CardInfo
+//                                                 id={ item.id }
+//                                                 STK={ item.STK }
+//                                                 name={ item.name }
+//                                                 date={ item.date }
+//                                                 amount={ item.amount }
+//                                                 content={ item.content }
+//                                                 logoBanking={ item.logoBanking }
+//                                                 transactionId={ item.transactionId } />
+//                                         </View>
+//                                     ) )
+//                                     : outcomeItems.map( ( item, index ) => (
+//                                         <View key={ index } className="bg-white p-4 border rounded-lg shadow-sm mb-1">
+//                                             <CardInfo
+//                                                 id={ item.id }
+//                                                 STK={ item.STK }
+//                                                 name={ item.name }
+//                                                 date={ item.date }
+//                                                 amount={ item.amount }
+//                                                 content={ item.content }
+//                                                 logoBanking={ item.logoBanking }
+//                                                 transactionId={ item.transactionId } />
+//                                         </View>
+//                                     ) )
+//                             }
+//                         </View>
+//                     </View>
+//                     {/* Ket thuc lich su giao dich */ }
+//                 </View>
+//             </ScrollView>
+//             <TouchableOpacity className="absolute bottom-5 right-2 w-16 h-16 rounded-full bg-blue-500 items-center justify-center" onPress={ handleCreateQR }>
+//                 <Entypo name="plus" size={ 30 } color="white" />
+//             </TouchableOpacity>
+//         </>
+//     );
 // }
-//#endregion
+
+
+

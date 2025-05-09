@@ -1,30 +1,349 @@
-import { convertEMVCode } from "@/utils/convertEMVCo";
+
+
+import { convertEMVCode } from "@/utils/encodeEMVCode";
 import { generateQR } from "@/utils/generateQR";
-import { useLocalSearchParams } from "expo-router";
-import { Text, View } from "react-native";
+import { useLocalSearchParams, router } from "expo-router";
+import { useState, useEffect, useCallback, useMemo } from "react";
+import { Text, View, TouchableOpacity, Image, Share, ScrollView, StatusBar, ActivityIndicator, Alert } from "react-native";
+import { Ionicons, FontAwesome, MaterialCommunityIcons, Entypo } from '@expo/vector-icons';
+import * as FileSystem from 'expo-file-system';
+import * as MediaLibrary from 'expo-media-library';
+import * as Clipboard from 'expo-clipboard';
+import ViewShot from "react-native-view-shot";
+import { useRef } from "react";
+import AppHeaderInfo from "@/components/App.headerInfo";
 
 export default function DisplayQR ()
 {
     const params = useLocalSearchParams();
+    const [ loading, setLoading ] = useState( true );
+    const [ bankInfo, setBankInfo ] = useState<any>( null );
+    const [ permissionGranted, setPermissionGranted ] = useState( false );
+    const [ saving, setSaving ] = useState( false );
+    const viewShotRef = useRef<ViewShot>( null );
 
-    // Ép kiểu chắc chắn và parse lại từ JSON
-    const data = typeof params.data === 'string' ? JSON.parse( params.data ) : null;
+    // Ép kiểu chắc chắn và parse lại từ JSON - sử dụng useMemo để tránh parse lại mỗi lần render
+    const data = useMemo( () =>
+    {
+        if ( typeof params.data === 'string' )
+        {
+            try
+            {
+                return JSON.parse( params.data );
+            } catch ( e )
+            {
+                console.error( "Lỗi parse JSON:", e );
+                return null;
+            }
+        }
+        return null;
+    }, [ params.data ] );
 
+    // Tạo QR code một lần duy nhất khi data thay đổi
+    const qrCode = useMemo( () =>
+    {
+        if ( !data ) return "";
+        return convertEMVCode( {
+            accountNumber: data.STK,
+            bankBin: data.bin,
+            amount: data.amount,
+            addInfo: data.content,
+        } );
+    }, [ data ] );
+
+    // Yêu cầu quyền và tải thông tin ngân hàng
+    useEffect( () =>
+    {
+        // Yêu cầu quyền lưu ảnh
+        const getPermissions = async () =>
+        {
+            const { status } = await MediaLibrary.requestPermissionsAsync();
+            setPermissionGranted( status === 'granted' );
+        };
+
+        getPermissions();
+
+        // Chỉ tải thông tin ngân hàng khi data thay đổi và có giá trị
+        if ( data )
+        {
+            // Sử dụng timeout để giả lập tải dữ liệu
+            const timer = setTimeout( () =>
+            {
+                setBankInfo( {
+                    bankName: "Nam A Bank",
+                    bankLogo: "https://upload.wikimedia.org/wikipedia/vi/7/7c/Logo_NamABank.png",
+                    accountName: "NGUYEN VAN A",
+                    accountNumber: data.STK,
+                    amount: parseInt( data.amount ),
+                    content: data.content,
+                    time: new Date().toLocaleString( 'vi-VN' )
+                } );
+                setLoading( false );
+            }, 1000 );
+
+            // Cleanup function để tránh memory leak
+            return () => clearTimeout( timer );
+        }
+    }, [ data ] ); // Chỉ chạy lại khi data thay đổi
+
+    // Nếu không có data, return sớm để tránh render không cần thiết
     if ( !data ) return null;
 
-    const qrCode = convertEMVCode( {
-        accountNumber: data.STK,
-        bankBin: data.bin,
-        amount: data.amount,
-        addInfo: data.content,
-    } );
+    // Format số tiền - hàm thuần túy, không gây re-render
+    const formatAmount = ( amount: number ) =>
+    {
+        return new Intl.NumberFormat( 'vi-VN', { style: 'currency', currency: 'VND' } ).format( amount );
+    };
 
+    // Sử dụng useCallback để tránh tạo lại hàm mỗi lần render
+    const saveQRCode = useCallback( async () =>
+    {
+        if ( !permissionGranted )
+        {
+            Alert.alert(
+                "Cần quyền truy cập",
+                "Ứng dụng cần quyền truy cập vào thư viện ảnh để lưu QR code",
+                [ { text: "OK" } ]
+            );
+            return;
+        }
+
+        try
+        {
+            setSaving( true );
+            const uri = await viewShotRef.current?.capture?.();
+
+            if ( uri )
+            {
+                const asset = await MediaLibrary.createAssetAsync( uri );
+                await MediaLibrary.createAlbumAsync( "AutoPay QR", asset, false );
+
+                Alert.alert(
+                    "Thành công",
+                    "Đã lưu mã QR vào thư viện ảnh",
+                    [ { text: "OK" } ]
+                );
+            }
+        } catch ( error )
+        {
+            Alert.alert(
+                "Lỗi",
+                "Không thể lưu mã QR. Vui lòng thử lại sau.",
+                [ { text: "OK" } ]
+            );
+            console.error( "Lỗi khi lưu QR:", error );
+        } finally
+        {
+            setSaving( false );
+        }
+    }, [ permissionGranted ] ); // Chỉ phụ thuộc vào permissionGranted
+
+    // Sử dụng useCallback cho shareQRCode
+    const shareQRCode = useCallback( async () =>
+    {
+        try
+        {
+            setSaving( true );
+            const uri = await viewShotRef.current?.capture?.();
+
+            if ( uri )
+            {
+                await Share.share( {
+                    url: uri,
+                    message: `Mã QR thanh toán ${ bankInfo?.amount ? formatAmount( bankInfo.amount ) : '' } đến tài khoản ${ bankInfo?.accountNumber } - ${ bankInfo?.bankName }`
+                } );
+            }
+        } catch ( error )
+        {
+            Alert.alert(
+                "Lỗi",
+                "Không thể chia sẻ mã QR. Vui lòng thử lại sau.",
+                [ { text: "OK" } ]
+            );
+            console.error( "Lỗi khi chia sẻ QR:", error );
+        } finally
+        {
+            setSaving( false );
+        }
+    }, [ bankInfo ] ); // Chỉ phụ thuộc vào bankInfo
+
+    // Sử dụng useCallback cho copyAccountNumber
+    const copyAccountNumber = useCallback( async () =>
+    {
+        if ( bankInfo?.accountNumber )
+        {
+            await Clipboard.setStringAsync( bankInfo.accountNumber );
+            Alert.alert( "Đã sao chép", "Số tài khoản đã được sao chép vào clipboard" );
+        }
+    }, [ bankInfo?.accountNumber ] ); // Chỉ phụ thuộc vào accountNumber
+
+    // Tách QR component để tránh re-render không cần thiết
+    const QRCodeComponent = useMemo( () =>
+    {
+        if ( !qrCode ) return null;
+        return generateQR( qrCode );
+    }, [ qrCode ] );
 
     return (
-        <View className="flex-1 justify-center items-center bg-white pb-10">
-            <View className="border-[15px] p-2">
-                { generateQR( qrCode ) }
+        <>
+            <StatusBar barStyle="light-content" backgroundColor="#1c40f2" />
+            <AppHeaderInfo title="Chi Tiết" onPress={ () => router.replace( "/(tabs)" ) } />
+            <View className="flex-1 bg-[#1c40f2]">
+                {/* Main Content */ }
+                <ScrollView
+                    className="flex-1 bg-gray-50 rounded-t-[32px]"
+                    contentContainerStyle={ { paddingBottom: 40 } }
+                    showsVerticalScrollIndicator={ false }
+                >
+                    { loading ? (
+                        <View className="flex-1 justify-center items-center pt-20">
+                            <ActivityIndicator size="large" color="#1c40f2" />
+                            <Text className="mt-4 text-gray-500">Đang tạo mã QR...</Text>
+                        </View>
+                    ) : (
+                        <>
+                            {/* QR Code Card */ }
+                            <View className="mx-5 mt-8 bg-white rounded-3xl overflow-hidden shadow-md">
+                                <ViewShot ref={ viewShotRef } options={ { format: "jpg", quality: 0.9 } }>
+                                    <View className="p-6 items-center">
+                                        <View className="flex-row items-center justify-between w-full mb-4">
+                                            <Text className="text-2xl font-bold text-[#1c40f2]">⛛ AUTOPAY</Text>
+                                            { bankInfo?.bankLogo && (
+                                                <Image
+                                                    source={ { uri: bankInfo.bankLogo } }
+                                                    className="w-20 h-12"
+                                                    resizeMode="contain"
+                                                />
+                                            ) }
+                                        </View>
+
+                                        <View className="border-2 border-gray-200 rounded-2xl p-6 bg-white">
+                                            { QRCodeComponent }
+                                        </View>
+
+                                        <View className="w-full mt-6">
+                                            <View className="flex-row justify-between items-center mb-2">
+                                                <Text className="text-gray-500">Ngân hàng:</Text>
+                                                <Text className="font-bold">{ bankInfo?.bankName }</Text>
+                                            </View>
+
+                                            <View className="flex-row justify-between items-center mb-2">
+                                                <Text className="text-gray-500">Số tài khoản:</Text>
+                                                <TouchableOpacity
+                                                    onPress={ copyAccountNumber }
+                                                    className="flex-row items-center"
+                                                >
+                                                    <Text className="font-bold mr-2">{ bankInfo?.accountNumber }</Text>
+                                                    <Ionicons name="copy-outline" size={ 16 } color="#1c40f2" />
+                                                </TouchableOpacity>
+                                            </View>
+
+                                            <View className="flex-row justify-between items-center mb-2">
+                                                <Text className="text-gray-500">Chủ tài khoản:</Text>
+                                                <Text className="font-bold">{ bankInfo?.accountName }</Text>
+                                            </View>
+
+                                            <View className="flex-row justify-between items-center mb-2">
+                                                <Text className="text-gray-500">Số tiền:</Text>
+                                                <Text className="font-bold text-[#1c40f2]">
+                                                    { bankInfo?.amount ? formatAmount( bankInfo.amount ) : '0 VNĐ' }
+                                                </Text>
+                                            </View>
+
+                                            <View className="flex-row justify-between items-start mb-2">
+                                                <Text className="text-gray-500">Nội dung:</Text>
+                                                <Text className="font-bold text-right max-w-[60%]">{ bankInfo?.content }</Text>
+                                            </View>
+
+                                            <View className="flex-row justify-between items-center mt-2 pt-2 border-t border-gray-200">
+                                                <Text className="text-gray-500">Thời gian tạo:</Text>
+                                                <Text className="text-gray-500">{ bankInfo?.time }</Text>
+                                            </View>
+                                        </View>
+                                    </View>
+                                </ViewShot>
+
+                                {/* Action Buttons */ }
+                                <View className="flex-row justify-between bg-gray-50 p-4 border-t border-gray-200">
+                                    <TouchableOpacity
+                                        className="flex-1 mr-2 bg-white py-3 rounded-xl flex-row justify-center items-center border border-gray-200"
+                                        onPress={ saveQRCode }
+                                        disabled={ saving }
+                                    >
+                                        { saving ? (
+                                            <ActivityIndicator size="small" color="#1c40f2" />
+                                        ) : (
+                                            <>
+                                                <Entypo name="download" size={ 18 } color="#1c40f2" />
+                                                <Text className="ml-2 font-semibold text-[#1c40f2]">Lưu QR</Text>
+                                            </>
+                                        ) }
+                                    </TouchableOpacity>
+
+                                    <TouchableOpacity
+                                        className="flex-1 ml-2 bg-[#1c40f2] py-3 rounded-xl flex-row justify-center items-center"
+                                        onPress={ shareQRCode }
+                                        disabled={ saving }
+                                    >
+                                        { saving ? (
+                                            <ActivityIndicator size="small" color="white" />
+                                        ) : (
+                                            <>
+                                                <FontAwesome name="share-square-o" size={ 18 } color="white" />
+                                                <Text className="ml-2 font-semibold text-white">Chia sẻ</Text>
+                                            </>
+                                        ) }
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+
+                            {/* Instructions */ }
+                            <View className="mx-5 mt-6 bg-white rounded-3xl overflow-hidden shadow-md p-5">
+                                <Text className="text-lg font-bold mb-3">Hướng dẫn thanh toán</Text>
+
+                                <View className="flex-row items-start mb-3">
+                                    <View className="w-8 h-8 rounded-full bg-[#1c40f2] items-center justify-center mr-3 mt-1">
+                                        <Text className="text-white font-bold">1</Text>
+                                    </View>
+                                    <View className="flex-1">
+                                        <Text className="font-semibold">Mở ứng dụng ngân hàng</Text>
+                                        <Text className="text-gray-500">Mở ứng dụng ngân hàng của bạn và chọn chức năng quét mã QR</Text>
+                                    </View>
+                                </View>
+
+                                <View className="flex-row items-start mb-3">
+                                    <View className="w-8 h-8 rounded-full bg-[#1c40f2] items-center justify-center mr-3 mt-1">
+                                        <Text className="text-white font-bold">2</Text>
+                                    </View>
+                                    <View className="flex-1">
+                                        <Text className="font-semibold">Quét mã QR</Text>
+                                        <Text className="text-gray-500">Quét mã QR được hiển thị ở trên</Text>
+                                    </View>
+                                </View>
+
+                                <View className="flex-row items-start">
+                                    <View className="w-8 h-8 rounded-full bg-[#1c40f2] items-center justify-center mr-3 mt-1">
+                                        <Text className="text-white font-bold">3</Text>
+                                    </View>
+                                    <View className="flex-1">
+                                        <Text className="font-semibold">Xác nhận giao dịch</Text>
+                                        <Text className="text-gray-500">Kiểm tra thông tin và xác nhận để hoàn tất giao dịch</Text>
+                                    </View>
+                                </View>
+                            </View>
+
+                            {/* Create New QR Button */ }
+                            <TouchableOpacity
+                                className="mx-5 mt-6 bg-white rounded-3xl overflow-hidden shadow-md p-5 flex-row items-center justify-center"
+                                onPress={ () => router.push( "/(tabs)/qr/create" ) }
+                            >
+                                <MaterialCommunityIcons name="qrcode-plus" size={ 24 } color="#1c40f2" />
+                                <Text className="ml-2 font-bold text-[#1c40f2]">Tạo mã QR mới</Text>
+                            </TouchableOpacity>
+                        </>
+                    ) }
+                </ScrollView>
             </View>
-        </View>
+        </>
     );
 }

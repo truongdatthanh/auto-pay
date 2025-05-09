@@ -35,7 +35,7 @@ export default function RootLayout ()
     }
     else
     {
-      router.replace( '/(auth)/withPhoneNumber' );
+      router.replace( '/(auth)/login' );
     }
   }, [ isLoggedIn ] );
 

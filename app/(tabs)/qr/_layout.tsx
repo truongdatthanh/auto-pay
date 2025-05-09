@@ -5,7 +5,7 @@ import { router, Stack, useLocalSearchParams } from "expo-router";
 export default function QRLayout ()
 {
     return (
-        <Stack initialRouteName='index'>
+        <Stack initialRouteName='scanner-qr'>
             <Stack.Screen
                 name="index"
                 options={ {
@@ -13,21 +13,21 @@ export default function QRLayout ()
                 } }
             />
             <Stack.Screen
-                name='QR-scanner'
+                name='scanner-qr'
                 options={ {
                     headerShown: false
                 } }
             />
             <Stack.Screen
-                name='CreateMyQR'
+                name='create'
                 options={ {
-                    headerShown: false
+                    header: () => <AppHeaderInfo title="Tạo QR Giao Dịch" onPress={ () => router.back() } />
                 } }
             />
             <Stack.Screen
-                name='DisplayQR'
+                name='display'
                 options={ {
-                    header: () => <AppHeaderInfo title="QR của tao" onPress={ () => router.push('/(tabs)/qr') } />
+                    headerShown: false
                 } }
             />
         </Stack>

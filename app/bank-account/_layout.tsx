@@ -1,8 +1,6 @@
 
 import AppHeaderInfo from "@/components/App.headerInfo";
-import { router, Stack } from "expo-router";
-
-
+import { router, Stack, usePathname } from "expo-router";
 
 export default function BankAccountLayout ()
 {

@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, Platform, SectionList, Alert } from 'react-native';
+import { View, Text, TouchableOpacity, Platform, SectionList, Alert, StatusBar } from 'react-native';
 import { useCallback, useState, useEffect } from 'react';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { formatDate, groupByDate } from '@/utils/formatDate';
@@ -45,9 +45,6 @@ export default function History ()
   const [ showEndPicker, setShowEndPicker ] = useState( false );
   const [ sections, setSections ] = useState<Section[]>( [] );
   const [ refreshing, setRefreshing ] = useState( false );
-
-
-
 
   //Lấy dữ liệu
   useFocusEffect(
@@ -154,93 +151,96 @@ export default function History ()
   }, [ currentCard, startDate, endDate ] );
 
   return (
-    <View className="flex-1 bg-white">
-      {/* Header: Bộ lọc ngày */ }
-      <View className="p-4 flex-row items-center justify-between bg-white shadow-lg">
-        <Text className="text-lg font-semibold">Thời gian</Text>
-        <View className="flex-row items-center">
-          <TouchableOpacity
-            className="py-2 rounded-md flex-row items-center border p-2"
-            onPress={ () => setShowStartPicker( true ) }
-          >
-            <Text className="font-semibold">{ formatDate( startDate ) }</Text>
-          </TouchableOpacity>
-          { showStartPicker && (
-            <DateTimePicker
-              value={ startDate }
-              mode="date"
-              display="default"
-              onChange={ onChangeStartDate }
-            />
-          ) }
-          <Text className="font-bold text-lg px-2">-</Text>
-          <TouchableOpacity
-            className="py-2 rounded-md flex-row items-center border p-2"
-            onPress={ () => setShowEndPicker( true ) }
-          >
-            <Text className="font-semibold mr-2">{ formatDate( endDate ) }</Text>
-            <Feather name="calendar" size={ 19 } color="black" />
-          </TouchableOpacity>
-          { showEndPicker && (
-            <DateTimePicker
-              value={ endDate }
-              mode="date"
-              display="default"
-              onChange={ onChangeEndDate }
-            />
-          ) }
+    <>
+      <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
+      <View className="flex-1 bg-white">
+        {/* Header: Bộ lọc ngày */ }
+        <View className="p-4 flex-row items-center justify-between bg-white shadow-lg">
+          <Text className="text-lg font-semibold">Thời gian</Text>
+          <View className="flex-row items-center">
+            <TouchableOpacity
+              className="py-2 rounded-md flex-row items-center border p-2"
+              onPress={ () => setShowStartPicker( true ) }
+            >
+              <Text className="font-semibold">{ formatDate( startDate ) }</Text>
+            </TouchableOpacity>
+            { showStartPicker && (
+              <DateTimePicker
+                value={ startDate }
+                mode="date"
+                display="default"
+                onChange={ onChangeStartDate }
+              />
+            ) }
+            <Text className="font-bold text-lg px-2">-</Text>
+            <TouchableOpacity
+              className="py-2 rounded-md flex-row items-center border p-2"
+              onPress={ () => setShowEndPicker( true ) }
+            >
+              <Text className="font-semibold mr-2">{ formatDate( endDate ) }</Text>
+              <Feather name="calendar" size={ 19 } color="black" />
+            </TouchableOpacity>
+            { showEndPicker && (
+              <DateTimePicker
+                value={ endDate }
+                mode="date"
+                display="default"
+                onChange={ onChangeEndDate }
+              />
+            ) }
+          </View>
         </View>
-      </View>
 
-      {/* Bộ lọc nhanh */ }
-      <View className="flex-row justify-around mt-2 mb-2 px-4">
-        <TouchableOpacity onPress={ () => handleRecentDays( 7 ) }>
-          <Text className="text-sm text-blue-600 underline">7 ngày gần đây</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={ () => handleRecentDays( 90 ) }>
-          <Text className="text-sm text-blue-600 underline">3 tháng gần đây</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={ () =>
-        {
-          if ( currentCard?.transactionHistory )
+        {/* Bộ lọc nhanh */ }
+        <View className="flex-row justify-around mt-2 mb-2 px-4">
+          <TouchableOpacity onPress={ () => handleRecentDays( 7 ) }>
+            <Text className="text-sm text-blue-600 underline">7 ngày gần đây</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={ () => handleRecentDays( 90 ) }>
+            <Text className="text-sm text-blue-600 underline">3 tháng gần đây</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={ () =>
           {
-            setSections( groupByDate( currentCard.transactionHistory ) );
-          }
-        } }>
-          <Text className="text-sm text-red-500 underline">Tất cả</Text>
-        </TouchableOpacity>
-      </View>
+            if ( currentCard?.transactionHistory )
+            {
+              setSections( groupByDate( currentCard.transactionHistory ) );
+            }
+          } }>
+            <Text className="text-sm text-red-500 underline">Tất cả</Text>
+          </TouchableOpacity>
+        </View>
 
-      {/* Hiển thị danh sách hoặc thông báo lỗi */ }
-      { sections.length === 0 ? (
-        <NotFound contentErr="Không có giao dịch nào!!!" />
-      ) : (
-        <SectionList
-          sections={ sections }
-          keyExtractor={ ( item, index ) => `${ item.transactionId }-${ index }` }
-          renderItem={ ( { item } ) => (
-            <CardInfo
-              id={ currentCard?.id || '' }
-              STK={ currentCard?.STK || '' }
-              name={ currentCard?.name || '' }
-              date={ item.date }
-              amount={ item.amount }
-              content={ item.description }
-              logoBanking={ currentCard?.logoBanking || '' }
-              transactionId={ item.transactionId }
-            />
-          ) }
-          renderSectionHeader={ ( { section: { title } } ) => (
-            <Text className="px-4 py-2 bg-gray-200 text-gray-700 font-semibold">{ title }</Text>
-          ) }
-          stickySectionHeadersEnabled
-          refreshing={ refreshing }
-          onRefresh={ onRefresh }
-          showsVerticalScrollIndicator={ false }
-          className="bg-white"
-          contentContainerStyle={ { paddingBottom: 100 } }
-        />
-      ) }
-    </View>
+        {/* Hiển thị danh sách hoặc thông báo lỗi */ }
+        { sections.length === 0 ? (
+          <NotFound contentErr="Không có giao dịch nào!!!" />
+        ) : (
+          <SectionList
+            sections={ sections }
+            keyExtractor={ ( item, index ) => `${ item.transactionId }-${ index }` }
+            renderItem={ ( { item } ) => (
+              <CardInfo
+                id={ currentCard?.id || '' }
+                STK={ currentCard?.STK || '' }
+                name={ currentCard?.name || '' }
+                date={ item.date }
+                amount={ item.amount }
+                content={ item.description }
+                logoBanking={ currentCard?.logoBanking || '' }
+                transactionId={ item.transactionId }
+              />
+            ) }
+            renderSectionHeader={ ( { section: { title } } ) => (
+              <Text className="px-4 py-2 bg-gray-200 text-gray-700 font-semibold">{ title }</Text>
+            ) }
+            stickySectionHeadersEnabled
+            refreshing={ refreshing }
+            onRefresh={ onRefresh }
+            showsVerticalScrollIndicator={ false }
+            className="bg-white"
+            contentContainerStyle={ { paddingBottom: 100 } }
+          />
+        ) }
+      </View>
+    </>
   );
 }

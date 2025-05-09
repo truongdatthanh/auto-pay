@@ -10,7 +10,7 @@ export default function InfomationLayout ()
 {
     return (
         <GestureHandlerRootView className="flex-1">
-            <StatusBar translucent backgroundColor="transparent" barStyle="dark-content" />
+            <StatusBar barStyle="dark-content" backgroundColor="transparent" translucent />
             <Stack initialRouteName='index'>
                 <Stack.Screen
                     name='index'

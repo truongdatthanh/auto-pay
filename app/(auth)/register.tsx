@@ -41,7 +41,7 @@ export default function Register ()
 
     const handleSubmit = () =>
     {
-        router.push( '/(auth)/pinInput' );
+        router.push( '/(auth)/pin' );
     }
 
     const handleBackToLogin = () =>
@@ -56,7 +56,7 @@ export default function Register ()
 
     const handleSignUpWithPhoneNumber = () =>
     {
-        router.push( '/(auth)/withPhoneNumber' );
+        router.push( '/(auth)/phone-number' );
     }
     return (
         <>

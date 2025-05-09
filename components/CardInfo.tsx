@@ -23,7 +23,7 @@ export default function CardInfo ( props: ICardInfoProps )
     {
         console.log( "Card pressed", card.id );
         const id = Number(card.id)
-        router.push( { pathname: "/(tabs)/history/details/[id]", params: { id } } );
+        router.push( { pathname: "/(tabs)/history/transaction/[id]", params: { id } } );
     }
 
     return (

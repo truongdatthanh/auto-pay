@@ -27,7 +27,6 @@ export function convertEMVCode ( { accountNumber, bankBin, amount, addInfo, }: {
     const bankTransferMethod = '02' + '08' + 'QRIBFTTA';
 
     const fullMerchantInfo = guid + bankInfo + bankTransferMethod;
-    console.log( "full lenght", fullMerchantInfo.length )
 
     const merchantInfo = merchantAccountInfo + ( fullMerchantInfo.length < 10 ? '0' : '' ) + fullMerchantInfo.length + fullMerchantInfo;
 
@@ -45,7 +44,6 @@ export function convertEMVCode ( { accountNumber, bankBin, amount, addInfo, }: {
 
     // Calculate CRC-16 CCITT
     const crcValue = crc16ccitt( payload );
-    console.log( "crcValue", payload + crcValue )
     return payload + crcValue;
 }
 

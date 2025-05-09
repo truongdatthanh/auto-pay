@@ -14,10 +14,11 @@ export default function HistoryLayout ()
       />
 
       <Stack.Screen
-        name='details/[id]'
+        name='transaction/[id]'
         options={ {
-          header: () => <AppHeaderInfo title='Chi tiết giao dịch' onPress={ () => router.replace("/(tabs)/history") } />,
+          headerShown: false,
         } }
+        
       />
 
       <Stack.Screen

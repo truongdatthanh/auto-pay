@@ -35,7 +35,7 @@
 //   },
 // });
 
-import { convertEMVCode } from '@/utils/convertEMVCo';
+import { convertEMVCode } from '@/utils/encodeEMVCode';
 import { generateQR } from '@/utils/generateQR';
 import { Link } from 'expo-router';
 import React from 'react';
@@ -60,7 +60,6 @@ const VietQRImage = ( { bankCode, accountNumber, accountName, amount, addInfo }:
     addInfo: "abc",
   } )
 
-  console.log(codeEMV)
   return (
     <View style={ styles.container }>
       {/* <Text style={ styles.label }>Quét mã để chuyển khoản qua { bankCode }</Text>
@@ -77,10 +76,11 @@ const VietQRImage = ( { bankCode, accountNumber, accountName, amount, addInfo }:
         resizeMode="contain"
       /> */}
 
-      <Link href={"deeplinkapp://nab/softotp"}>NAB</Link>
+      <Link href={ "deeplinkapp://nab/softotp" }>NAB</Link>
 
+      <Link href={ "bidv.smartbanking.partner://payment" }>BIDV</Link>
 
-       {/* <Text>Quet de giao dich</Text>
+      {/* <Text>Quet de giao dich</Text>
             {generateQR("https://dl.vietqr.io/pay?app=nab&ba=246134029400001@nama&am=10000&add=abc")} */}
     </View>
   );

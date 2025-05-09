@@ -1,7 +1,7 @@
 import { SceneMap } from "react-native-tab-view"
 import QRScanner from "./scanner-qr"
 import CustomTabView from "@/components/TabView"
-import MyQR from "@/app/MyQR"
+import MyQR from "@/app/my-qr"
 import { useEffect, useState } from "react"
 import { useLocalSearchParams } from "expo-router"
 
@@ -50,3 +50,4 @@ export default function HomeQR ()
         />
     )
 }
+

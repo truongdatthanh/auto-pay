@@ -72,7 +72,7 @@ export default function PinInput ()
             await AsyncStorage.setItem( "pin", text );
             setTimeout( () =>
             {
-                router.push( "/(auth)/confirmPin" );
+                router.push( "/(auth)/confirm-pin" );
                 setPin( "" );
                 // Reset animations
                 visibilityAnimValues.forEach( anim => anim.setValue( 0 ) );

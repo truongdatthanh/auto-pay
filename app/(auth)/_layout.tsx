@@ -26,21 +26,21 @@ export default function AuthLayout ()
         />
 
         <Stack.Screen
-          name='pinInput'
+          name='pin'
           options={ {
             headerShown: false,
           } }
         />
 
         <Stack.Screen
-          name='confirmPin'
+          name='confirm-pin'
           options={ {
             headerShown: false,
           } }
         />
 
         <Stack.Screen
-          name='withPhoneNumber'
+          name='phone-number'
           options={ {
             headerShown: false,
           } }
@@ -48,6 +48,13 @@ export default function AuthLayout ()
 
         <Stack.Screen
           name='success'
+          options={ {
+            headerShown: false,
+          } }
+        />
+
+        <Stack.Screen
+          name='otp'
           options={ {
             headerShown: false,
           } }
