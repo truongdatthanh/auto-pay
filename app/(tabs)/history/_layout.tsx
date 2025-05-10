@@ -9,7 +9,7 @@ export default function HistoryLayout ()
       <Stack.Screen
         name='index'
         options={ {
-          header: () => <AppHeaderInfo title='Lịch sử giao dịch' onPress={ () => router.push( "/(tabs)" ) } />,
+          headerShown: false,
         } }
       />
 

@@ -18,8 +18,8 @@ export default function Loading ( {
     icon = 'default',
     iconColor = '#3b82f6',
     backgroundColor = '#ffffff',
-    statusBarColor = '#ffffff',
-    statusBarStyle = 'dark-content'
+    statusBarColor = 'transparent',
+    statusBarStyle = 'light-content'
 }: LoadingProps )
 {
     // Map icon type to the appropriate icon component
@@ -43,7 +43,7 @@ export default function Loading ( {
 
     return (
         <View className="flex-1 justify-center items-center" style={ { backgroundColor } }>
-            <StatusBar barStyle={ statusBarStyle } backgroundColor={ statusBarColor } />
+            <StatusBar barStyle={ statusBarStyle } backgroundColor={ statusBarColor } translucent/>
             <Animated.View entering={ FadeIn.duration( 800 ) }>
                 { renderIcon() }
             </Animated.View>

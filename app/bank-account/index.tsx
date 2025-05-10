@@ -12,6 +12,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import Animated, { FadeInDown, FadeIn } from "react-native-reanimated";
 import { LinearGradient } from "expo-linear-gradient";
 import { useFocusEffect } from "@react-navigation/native";
+import Loading from "@/components/Loading";
 
 
 
@@ -99,18 +100,7 @@ export default function BankAccount ()
     if ( isLoading )
     {
         return (
-            <View className="flex-1 justify-center items-center bg-white">
-                <StatusBar barStyle="dark-content" backgroundColor="#ffffff" />
-                <Animated.View entering={ FadeIn.duration( 800 ) }>
-                    <MaterialCommunityIcons name="bank-outline" size={ 60 } color="#3b82f6" />
-                </Animated.View>
-                <Animated.Text
-                    entering={ FadeIn.delay( 300 ).duration( 800 ) }
-                    className="text-slate-600 mt-4 text-base"
-                >
-                    Đang tải thông tin tài khoản...
-                </Animated.Text>
-            </View>
+           <Loading message="Đang tải thông tin tài khoản..." />
         );
     }
 
@@ -323,11 +313,6 @@ export default function BankAccount ()
         </>
     );
 }
-
-
-
-
-
 
 
 // import { Image, ScrollView, Text, Touchable, TouchableOpacity, View } from "react-native";

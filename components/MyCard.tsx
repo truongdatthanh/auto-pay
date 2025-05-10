@@ -77,21 +77,19 @@ export default function MyCard ()
             />
 
             {/* active dot */ }
-            <View className='relative h-[48px] items-center justify-center'>
+            <View className='relative h-[36px] items-center justify-center'>
                 <View className="flex-row justify-center items-center">
                     { bankCard.map( ( _, index ) => (
                         <View
                             key={ index }
-                            className={ `mx-1 rounded-full ${ currentCardIndex === index ? 'bg-blue-500 w-4 h-2' : 'bg-red-500 w-2 h-2' }` }
+                            className={ `mx-1 rounded-full ${ currentCardIndex === index ? 'bg-blue-500 w-6 h-2' : 'bg-gray-500  w-2 h-2' }` }
                         />
                     ) ) }
                 </View>
 
                 {/* xem tất cả các banking card */ }
-                <TouchableOpacity className='p-2 absolute right-0' onPress={ handleSeenAllCard }>
-                    <Text className='bg-black rounded-full p-[5px] text-blue-500 font-semibold text-sm'>
-                        Xem tất cả
-                    </Text>
+                <TouchableOpacity className='absolute bg-blue-50 px-2 py-1 rounded-full right-3' onPress={ handleSeenAllCard }>
+                    <Text className="text-blue-600 text-xs font-medium">Xem tất cả</Text>
                 </TouchableOpacity>
             </View>
 
