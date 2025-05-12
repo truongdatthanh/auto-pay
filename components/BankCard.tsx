@@ -112,7 +112,7 @@ export default function BankingCard ( props: IBankCard )
             return [ '#1A237E', '#3F51B5' ];
         } else if ( bankCard.bankName?.toLowerCase().includes( 'bidv' ) )
         {
-            return [ '#0D47A1', '#2196F3' ];
+            return [ '#FFD700', '#FFA500' ];
         }
 
         return colors;

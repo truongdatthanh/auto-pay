@@ -74,29 +74,28 @@ export default function MyQR ()
                 <View className="flex-1">
                     {/* QR Container */ }
                     <View className="bg-white m-4 mt-8 p-2 rounded-3xl shadow-md border border-gray-200">
-                        {/* QR Code */ }
-                        <View className="justify-center items-center relative p-4">
-                            <View className="items-center mb-4">
+                        <View className="justify-center items-center p-4 ">
+                            <View className="items-center">
                                 <View className="flex-row justify-between items-center">
-                                    <Text className="font-semibold text-lg">{ selectedCard.name }</Text>
+                                    <Text className="font-semibold text-lg">{ selectedCard.name?.toUpperCase() }</Text>
                                 </View>
                                 <View className="flex-row justify-between items-center">
                                     <Text className="font-semibold text-md">{ selectedCard.STK }</Text>
+                                    <TouchableOpacity className="p-1">
+                                        <Ionicons name="copy-outline" size={ 16 } color="#3b82f6" />
+                                    </TouchableOpacity>
                                 </View>
                             </View>
-                            <View className="p-[24px] border border-[#1c40f2] rounded-2xl">
+                            <View>
                                 { generateQR( qrData ) }
                             </View>
-                            <Text className="absolute bottom-1 text-xl font-semibold bg-white px-4 text-[#1c40f2]">⛛ AUTOPAY</Text>
-                        </View>
-
-                        {/* Logo ngân hàng + Napas */ }
-                        <View className="flex-row justify-center items-center space-x-8">
-                            <Image source={ require( "../assets/images/Napas247.png" ) } className="w-[100px] h-[50px]" resizeMode="contain" />
-                            <Image source={ { uri: selectedCard.logoBanking } } className="w-[100px] h-[50px]" resizeMode="contain" />
+                            <View className="flex-row justify-center items-center space-x-8">
+                                <Image source={ require( "../assets/images/Napas247.png" ) } className="w-[100px] h-[50px]" resizeMode="contain" />
+                                <Image source={ { uri: selectedCard.logoBanking } } className="w-[100px] h-[50px]" resizeMode="contain" />
+                            </View>
                         </View>
                     </View>
-                    {/* -----------------------------------------End----------------------------------------- */}
+                    {/* -----------------------------------------End----------------------------------------- */ }
 
                     {/* Chọn thẻ */ }
                     <TouchableOpacity className="mx-4 bg-white rounded-2xl overflow-hidden shadow-md border border-gray-100" onPress={ () => setShowCardSelector( true ) }>
@@ -113,6 +112,7 @@ export default function MyQR ()
                             </View>
                         </View>
                     </TouchableOpacity>
+                    {/* -----------------------------------------End----------------------------------------- */ }
 
                     {/* Modal chọn thẻ */ }
                     <Modal

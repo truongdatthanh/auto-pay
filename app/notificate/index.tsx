@@ -1,8 +1,51 @@
-import { Text, View } from "react-native";
-import mockNotificate from "../../assets/notificate.json"
+// import { Text, View } from "react-native";
+// import mockNotificate from "../../assets/notificate.json"
+// import { useState } from "react";
+// import { FlatList } from "react-native-gesture-handler";
+// import TabbarTop from "@/components/TabbarTop";
+
+// export default function Notification ()
+// {
+//     const [ notificate, setNotificate ] = useState( mockNotificate );
+//     const [ tabbar, setTabbar ] = useState( "All" );
+
+//     const handleTabChange = ( tab: string ) =>
+//     {
+//         setTabbar( tab );
+//     };
+
+//     const unReadList = notificate.filter( ( item ) => item.status === "unread" );
+
+//     const dataToShow = tabbar === "All" ? notificate : unReadList;
+
+//     return (
+//         <>
+//             <TabbarTop tabs={ [ "All", "Unread" ] } onTabChange={ handleTabChange } />
+//             <FlatList
+//                 data={ dataToShow }
+//                 keyExtractor={ ( item ) => item.id.toString() }
+//                 renderItem={ ( { item } ) => (
+//                     <View className="bg-white p-4 m-2 rounded-lg shadow-md flex-row items-center">
+//                         <View className="w-16 h-16 rounded-full bg-red-500"></View>
+//                         <View className="ml-4 flex-1">
+//                             <View className="flex-row">
+//                                 <Text>Bạn nhận được tiền từ <Text className="font-bold">{ item.name } { item.amount }</Text></Text>
+//                             </View>
+//                             <Text className="text-sm text-gray-400 pt-2">{ item.time }</Text>
+//                         </View>
+//                     </View>
+//                 ) }
+//                 showsVerticalScrollIndicator={ false }
+//             />
+//         </>
+//     );
+// }
+
+import { Text, View, FlatList, Image } from "react-native";
+import mockNotificate from "../../assets/notificate.json";
 import { useState } from "react";
-import { FlatList } from "react-native-gesture-handler";
 import TabbarTop from "@/components/TabbarTop";
+import { FontAwesome5 } from "@expo/vector-icons";
 
 export default function Notification ()
 {
@@ -13,30 +56,41 @@ export default function Notification ()
     {
         setTabbar( tab );
     };
-    
+
     const unReadList = notificate.filter( ( item ) => item.status === "unread" );
-    
     const dataToShow = tabbar === "All" ? notificate : unReadList;
 
+    const renderItem = ( { item }: any ) => (
+        <View
+            className={ `bg-white p-4 mx-4 my-2 rounded-xl shadow-md flex-row items-center ${ item.status === "unread" ? "border-l-4 border-blue-500" : ""
+                }` }
+        >
+            <View className="w-12 h-12 rounded-full bg-blue-100 justify-center items-center">
+                <FontAwesome5 name="money-bill-wave" size={ 20 } color="#3B82F6" />
+            </View>
+
+            <View className="ml-4 flex-1">
+                <Text className="text-gray-800 font-medium">
+                    Bạn nhận được tiền từ{ " " }
+                    <Text className="font-bold text-blue-500">{ item.name }</Text>
+                </Text>
+                <Text className="text-lg font-bold text-green-600 mt-1">
+                    +{ item.amount }₫
+                </Text>
+                <Text className="text-sm text-gray-400 mt-1">{ item.time }</Text>
+            </View>
+        </View>
+    );
+
     return (
-        <>
+        <View className="flex-1 bg-gray-50">
             <TabbarTop tabs={ [ "All", "Unread" ] } onTabChange={ handleTabChange } />
             <FlatList
                 data={ dataToShow }
                 keyExtractor={ ( item ) => item.id.toString() }
-                renderItem={ ( { item } ) => (
-                    <View className="bg-white p-4 m-2 rounded-lg shadow-md flex-row items-center">
-                        <View className="w-16 h-16 rounded-full bg-red-500"></View>
-                        <View className="ml-4 flex-1">
-                            <View className="flex-row">
-                                <Text>Bạn nhận được tiền từ <Text className="font-bold">{ item.name } { item.amount }</Text></Text>
-                            </View>
-                            <Text className="text-sm text-gray-400 pt-2">{ item.time }</Text>
-                        </View>
-                    </View>
-                ) }
+                renderItem={ renderItem }
                 showsVerticalScrollIndicator={ false }
             />
-        </>
+        </View>
     );
 }

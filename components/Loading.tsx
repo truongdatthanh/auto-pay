@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StatusBar } from 'react-native';
+import { View, Text, StatusBar, ActivityIndicator } from 'react-native';
 import Animated, { FadeIn } from 'react-native-reanimated';
 import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
 
@@ -43,7 +43,7 @@ export default function Loading ( {
 
     return (
         <View className="flex-1 justify-center items-center" style={ { backgroundColor } }>
-            <StatusBar barStyle={ statusBarStyle } backgroundColor={ statusBarColor } translucent/>
+            <StatusBar barStyle={ statusBarStyle } backgroundColor={ statusBarColor } translucent />
             <Animated.View entering={ FadeIn.duration( 800 ) }>
                 { renderIcon() }
             </Animated.View>
@@ -53,6 +53,7 @@ export default function Loading ( {
             >
                 { message }
             </Animated.Text>
+            <ActivityIndicator className='mt-4' size="large" color="#1c40f2" />
         </View>
     );
 }

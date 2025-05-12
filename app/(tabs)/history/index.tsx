@@ -313,6 +313,7 @@ export default function History ()
     }, [] )
   );
 
+
   // Xuất dữ liệu ra màn hình
   useEffect( () =>
   {
@@ -420,6 +421,7 @@ export default function History ()
     setStartDate( new Date() );
     setEndDate( new Date() );
     handleFilterByDate();
+    setShowFilterModal( false );
   };
 
   return (
@@ -437,7 +439,7 @@ export default function History ()
         <View className="flex-row items-center justify-between p-4 rounded-t-3xl bg-white">
           <Text className="text-lg font-semibold">Thời gian</Text>
           <Text className="text-gray-500 text-sm">
-            { formatDate( startDate ) } - { formatDate( endDate ) }
+            { startDate.setHours( 0, 0, 0, 0 ) !== endDate.setHours( 0, 0, 0, 0 ) ? `${ formatDate( startDate ) } - ${ formatDate( endDate ) }` : `${ formatDate( endDate ) }` }
           </Text>
         </View>
 
@@ -463,9 +465,12 @@ export default function History ()
               </Animated.View>
             ) }
             renderSectionHeader={ ( { section: { title } } ) => (
-              <Text className="px-4 py-2 bg-gray-100 text-gray-700 font-semibold">
-                { formatDate( title ) }
-              </Text>
+              <>
+                <Text className="px-4 py-2 bg-gray-100 text-gray-700 font-semibold">
+                  { formatDate( title ) }
+                </Text>
+              </>
+
             ) }
             stickySectionHeadersEnabled
             refreshing={ refreshing }
@@ -529,7 +534,7 @@ export default function History ()
               <View className='flex-row justify-between items-center mb-3'>
                 <Text className="text-gray-500 font-medium ">Tùy chỉnh khoảng thời gian:</Text>
                 <TouchableOpacity className='p-2 rounded-lg bg-[#1c40f2]' onPress={ handleResetFilterDate }>
-                  <Ionicons name="reload" size={ 20 } color="white" />
+                  <Text className='text-white text-sm font-medium'>Xóa bộ lọc</Text>
                 </TouchableOpacity>
               </View>
 

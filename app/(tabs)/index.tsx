@@ -39,6 +39,7 @@ export default function Home ()
         bankCode='nab'
       /> */}
 
+        {/* Action */}
         <View className="flex-row flex-wrap bg-white justify-between">
           <TouchableOpacity className='w-1/4 max-h-40 p-2 bg-white'>
             <View className='h-24 items-center justify-center border border-gray-300 rounded-md p-2'>
@@ -76,7 +77,7 @@ export default function Home ()
               <Text className='text-xs font-semibold text-center'>Lịch sử giao dịch</Text>
             </View>
           </TouchableOpacity>
-          <TouchableOpacity className='w-1/4 max-h-40 p-2 bg-white' onPress={ () => router.replace( '/(tabs)/history/statistics' ) }>
+          <TouchableOpacity className='w-1/4 max-h-40 p-2 bg-white' onPress={ () => router.replace( '/statistics' ) }>
             <View className='h-24 items-center justify-center border border-gray-300 rounded-md p-2'>
               <EvilIcons name="chart" size={ 30 } color="black" />
               <Text className='text-xs font-semibold text-center'>Thống kê giao dịch</Text>
@@ -89,7 +90,9 @@ export default function Home ()
             </View>
           </TouchableOpacity>
         </View >
+        {/* -----------------------------------------End----------------------------------------- */}
 
+        {/* Bank */}
         <View className='p-2 bg-white '>
           <Text className='text-xl font-semibold'>Ngân hàng kết nối</Text>
         </View>
@@ -108,6 +111,7 @@ export default function Home ()
             </TouchableOpacity>
           ) ) }
         </View>
+        {/* -----------------------------------------End----------------------------------------- */}
 
       </ScrollView >
     </>

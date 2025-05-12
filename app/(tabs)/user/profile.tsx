@@ -37,12 +37,12 @@ export default function Profile ()
 
     return (
         <>
-            <StatusBar barStyle="dark-content" backgroundColor="transparent" translucent />
-            <ScrollView className="flex-1 bg-white">
-                <View className="flex-row items-center justify-center my-4">
-                    <Image source={ require( '../../../assets/images/500.jpg' ) } className="h-28 w-28 rounded-full" />
-                </View>
-                <View className="p-6 m-2 bg-gray-200 rounded-3xl relative">
+            <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
+            <ScrollView className="flex-1 bg-[#1c40f2]">
+                <View className="p-6 m-2 bg-gray-200 rounded-3xl relative mt-20">
+                    <View className="flex-row items-center justify-center my-4 absolute -top-20 left-0 right-0">
+                        <Image source={ require( '../../../assets/images/500.jpg' ) } className="h-28 w-28 rounded-full border-4 border-white shadow-md" resizeMode="cover" />
+                    </View>
                     <TouchableOpacity onPress={ () => setIsVisible( !isVisible ) } className="absolute right-5 top-5 h-10 w-10 bg-white justify-center items-center rounded-lg">
                         <Feather name="edit" size={ 24 } color="#1c40f2" />
                     </TouchableOpacity>

@@ -20,13 +20,6 @@ export default function HistoryLayout ()
         } }
         
       />
-
-      <Stack.Screen
-        name='statistics'
-        options={ {
-          header: () => <AppHeaderInfo title='Thống kê giao dịch' onPress={ () => router.replace( "/(tabs)" ) } />,
-        } }
-      />
     </Stack>
   );
 }

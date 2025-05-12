@@ -65,7 +65,7 @@ export default function BarCharts ( { id }: { id: String } )
                 <Text className='text-sm font-bold'>
                     { formatDate( currentDate ) }
                 </Text>
-                <TouchableOpacity onPress={ () => router.replace( "/(tabs)/history/statistics" ) }>
+                <TouchableOpacity onPress={ () => router.replace( "/statistics" ) }>
                     <Text className='text-sm font-bold text-blue-500'>Xem chi tiết</Text>
                 </TouchableOpacity>
             </View>

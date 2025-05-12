@@ -148,7 +148,7 @@
 
 import React, { useMemo, useState } from 'react';
 import { CurveType, LineChart } from "react-native-gifted-charts";
-import { View, Text, Dimensions, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, Dimensions, TouchableOpacity } from 'react-native';
 import dataBankingCard from "../assets/banking-card.json";
 import { formatDate } from '@/utils/formatDate';
 import { formatCurrencyVND } from '@/utils/formatCurrencyVND';
@@ -161,21 +161,22 @@ export default function LineCharts ( { id }: { id: string } )
 {
     const [ data, setData ] = useState( dataBankingCard );
     const [ activeTab, setActiveTab ] = useState<'income' | 'expense' | 'both'>( 'both' );
+    const [ weekOffset, setWeekOffset ] = useState( 0 ); // ← Tuần trước/sau
+
     const indexData = data.find( ( item ) => item.id === id );
-    const screenWidth = Dimensions.get( 'window' ).width;
-    const dataLength = 7; // 7 ngày trong tuần
+    const dataLength = 7;
     const spacing = 45;
     const initialSpacing = 20;
     const chartWidth = initialSpacing + spacing * ( dataLength - 1 );
 
-    // Ngày hiện tại (reset về 00:00:00)
+    // Ngày hiện tại reset về 00:00
     const currentDate = new Date();
     currentDate.setHours( 0, 0, 0, 0 );
 
-    // Lấy ngày đầu tuần (Thứ 2)
+    // Lấy ngày bắt đầu tuần cần hiển thị
+    const currentDay = ( currentDate.getDay() + 6 ) % 7;
     const startOfWeek = new Date( currentDate );
-    const currentDay = ( currentDate.getDay() + 6 ) % 7; // Thứ 2 là 0, CN là 6
-    startOfWeek.setDate( currentDate.getDate() - currentDay );
+    startOfWeek.setDate( currentDate.getDate() - currentDay + weekOffset * 7 );
 
     const { incomeData, expenseData, maxValue, totalIncome, totalExpense } = useMemo( () =>
     {
@@ -194,9 +195,9 @@ export default function LineCharts ( { id }: { id: string } )
             const date = new Date( item.date );
             date.setHours( 0, 0, 0, 0 );
 
-            // Chỉ tính các giao dịch trong tuần hiện tại
             const diff = date.getTime() - startOfWeek.getTime();
             const dayIndex = Math.floor( diff / ( 1000 * 60 * 60 * 24 ) );
+
             if ( dayIndex >= 0 && dayIndex < 7 )
             {
                 if ( item.amount > 0 )
@@ -219,7 +220,7 @@ export default function LineCharts ( { id }: { id: string } )
                 label: daysOfWeek[ i ],
                 dataPointText: formattedValue > 0 ? formattedValue.toString() : '',
                 topLabelComponent: () => formattedValue > 0 ? (
-                    <Text style={ styles.dataLabel }>{ formattedValue.toFixed( 1 ) }M</Text>
+                    <Text className="text-xs text-gray-600 mb-1">{ formattedValue.toFixed( 1 ) }M</Text>
                 ) : null
             };
         } );
@@ -232,7 +233,7 @@ export default function LineCharts ( { id }: { id: string } )
                 label: daysOfWeek[ i ],
                 dataPointText: formattedValue > 0 ? formattedValue.toString() : '',
                 topLabelComponent: () => formattedValue > 0 ? (
-                    <Text style={ styles.dataLabel }>{ formattedValue.toFixed( 1 ) }M</Text>
+                    <Text className="text-xs text-gray-600 mb-1">{ formattedValue.toFixed( 1 ) }M</Text>
                 ) : null
             };
         } );
@@ -242,6 +243,7 @@ export default function LineCharts ( { id }: { id: string } )
             ...expenseData.map( d => d.value )
         );
 
+
         return {
             incomeData,
             expenseData,
@@ -249,9 +251,8 @@ export default function LineCharts ( { id }: { id: string } )
             totalIncome: totalInc,
             totalExpense: totalExp
         };
-    }, [ indexData ] );
+    }, [ indexData, startOfWeek ] );
 
-    // Xác định dữ liệu hiển thị dựa trên tab đang active
     const getChartData = () =>
     {
         switch ( activeTab )
@@ -269,57 +270,54 @@ export default function LineCharts ( { id }: { id: string } )
     const { data1, data2 } = getChartData();
 
     return (
-        <Animated.View entering={ FadeIn.duration( 500 ) } style={ styles.container }>
-            <View style={ styles.header }>
-                <Text style={ styles.title }>Biểu đồ thu chi tuần này</Text>
-                <Text style={ styles.subtitle }>
-                    { formatDate( startOfWeek ) } - { formatDate( new Date( startOfWeek.getTime() + 6 * 24 * 60 * 60 * 1000 ) ) }
-                </Text>
+        <Animated.View entering={ FadeIn.duration( 500 ) } className="bg-white rounded-2xl p-4 m-2 shadow-sm">
+            <View className="mb-4">
+                <Text className="text-lg font-bold text-gray-800">Biểu đồ thu chi theo tuần</Text>
+
+                {/* Nút chuyển tuần */ }
+                <View className="flex-row justify-between items-center mt-2">
+                    <TouchableOpacity onPress={ () => setWeekOffset( prev => prev - 1 ) }>
+                        <Ionicons name="chevron-back" size={ 20 } color="#666" />
+                    </TouchableOpacity>
+                    <Text className="text-sm text-gray-500">
+                        { formatDate( startOfWeek ) } - { formatDate( new Date( startOfWeek.getTime() + 6 * 24 * 60 * 60 * 1000 ) ) }
+                    </Text>
+                    <TouchableOpacity
+                        onPress={ () => setWeekOffset( prev => prev + 1 ) }
+                        disabled={ weekOffset >= 0 }
+                    >
+                        <Ionicons
+                            name="chevron-forward"
+                            size={ 20 }
+                            color={ `${ weekOffset >= 0 ? '#ccc' : '' }` }
+                        />
+                    </TouchableOpacity>
+                </View>
             </View>
 
-            <View style={ styles.tabContainer }>
-                <TouchableOpacity
-                    style={ [ styles.tab, activeTab === 'both' && styles.activeTab ] }
-                    onPress={ () => setActiveTab( 'both' ) }
-                >
-                    <Text style={ [ styles.tabText, activeTab === 'both' && styles.activeTabText ] }>Tất cả</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    style={ [ styles.tab, activeTab === 'income' && styles.activeTab ] }
-                    onPress={ () => setActiveTab( 'income' ) }
-                >
-                    <Text style={ [ styles.tabText, activeTab === 'income' && styles.activeTabText ] }>Thu nhập</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    style={ [ styles.tab, activeTab === 'expense' && styles.activeTab ] }
-                    onPress={ () => setActiveTab( 'expense' ) }
-                >
-                    <Text style={ [ styles.tabText, activeTab === 'expense' && styles.activeTabText ] }>Chi tiêu</Text>
-                </TouchableOpacity>
-            </View>
-
-            <View style={ styles.summaryContainer }>
-                <View style={ styles.summaryItem }>
-                    <View style={ styles.summaryIconContainer }>
+            <View className="flex-row justify-between mb-5">
+                <View className="flex-row items-center">
+                    <View className="w-8 h-8 rounded-full bg-green-500 justify-center items-center mr-3">
                         <Ionicons name="arrow-down" size={ 16 } color="#fff" />
                     </View>
                     <View>
-                        <Text style={ styles.summaryAmount }>{ formatCurrencyVND( totalIncome ) }</Text>
-                        <Text style={ styles.summaryLabel }>Thu nhập</Text>
+                        <Text className="text-base font-bold text-gray-800">{ formatCurrencyVND( totalIncome ) }</Text>
+                        <Text className="text-xs text-gray-500">Thu nhập</Text>
                     </View>
                 </View>
-                <View style={ styles.summaryItem }>
-                    <View style={ [ styles.summaryIconContainer, styles.expenseIcon ] }>
+                <View className="flex-row items-center">
+                    <View className="w-8 h-8 rounded-full bg-red-500 justify-center items-center mr-3">
                         <Ionicons name="arrow-up" size={ 16 } color="#fff" />
                     </View>
                     <View>
-                        <Text style={ styles.summaryAmount }>{ formatCurrencyVND( totalExpense ) }</Text>
-                        <Text style={ styles.summaryLabel }>Chi tiêu</Text>
+                        <Text className="text-base font-bold text-gray-800">{ formatCurrencyVND( totalExpense ) }</Text>
+                        <Text className="text-xs text-gray-500">Chi tiêu</Text>
                     </View>
                 </View>
             </View>
 
-            <View style={ styles.chartContainer }>
+            {/* <View className="items-center my-2">
+                <Text className='text-xs text-gray-500 absoblute left-0'>Đơn vị: Triệu VNĐ</Text>
                 <LineChart
                     data={ data1 }
                     data2={ data2 }
@@ -346,7 +344,46 @@ export default function LineCharts ( { id }: { id: string } )
                     noOfSections={ 5 }
                     yAxisColor="#ddd"
                     xAxisColor="#ddd"
-                    yAxisTextStyle={ styles.yAxisText }
+                    yAxisTextStyle={ { color: '#999', fontSize: 10 } }
+                    showValuesAsDataPointsText={ false }
+                    hideRules
+                    curved
+                    curvature={ 0.3 }
+                    curveType={ CurveType.QUADRATIC }
+                    hideDataPoints1={ activeTab === 'income' }
+                    hideDataPoints2={ activeTab === 'expense' }
+                    areaChart
+                />
+            </View> */}
+            <View className="items-center my-2 relative">
+                <Text className="text-xs text-gray-500 absolute -left-3 -top-6 z-10">{ `(Đơn vị: Triệu VNĐ)` }</Text>
+                <LineChart
+                    data={ data1 }
+                    data2={ data2 }
+                    height={ 220 }
+                    width={ chartWidth }
+                    spacing={ spacing }
+                    initialSpacing={ initialSpacing }
+                    color1="#e74c3c"
+                    color2="#2ecc71"
+                    dataPointsColor1="#e74c3c"
+                    dataPointsColor2="#2ecc71"
+                    startFillColor1="rgba(231, 76, 60, 0.2)"
+                    startFillColor2="rgba(46, 204, 113, 0.2)"
+                    endFillColor1="rgba(231, 76, 60, 0.0)"
+                    endFillColor2="rgba(46, 204, 113, 0.0)"
+                    textColor1="#333"
+                    textColor2="#333"
+                    thickness={ 3 }
+                    dataPointsWidth={ 6 }
+                    dataPointsHeight={ 6 }
+                    textFontSize={ 12 }
+                    showVerticalLines={ false }
+                    maxValue={ maxValue }
+                    noOfSections={ 5 }
+                    yAxisColor="#ddd"
+                    xAxisColor="#ddd"
+                    yAxisTextStyle={ { color: '#999', fontSize: 10 } }
                     showValuesAsDataPointsText={ false }
                     hideRules
                     curved
@@ -358,17 +395,17 @@ export default function LineCharts ( { id }: { id: string } )
                 />
             </View>
 
-            <View style={ styles.legendContainer }>
+            <View className="flex-row justify-center mt-4">
                 { ( activeTab === 'both' || activeTab === 'income' ) && (
-                    <View style={ styles.legendItem }>
-                        <View style={ [ styles.legendDot, styles.incomeDot ] } />
-                        <Text style={ styles.legendText }>Thu nhập</Text>
+                    <View className="flex-row items-center mx-3">
+                        <View className="w-3 h-3 rounded-full bg-green-500 mr-2" />
+                        <Text className="text-sm text-gray-600">Thu nhập</Text>
                     </View>
                 ) }
                 { ( activeTab === 'both' || activeTab === 'expense' ) && (
-                    <View style={ styles.legendItem }>
-                        <View style={ [ styles.legendDot, styles.expenseDot ] } />
-                        <Text style={ styles.legendText }>Chi tiêu</Text>
+                    <View className="flex-row items-center mx-3">
+                        <View className="w-3 h-3 rounded-full bg-red-500 mr-2" />
+                        <Text className="text-sm text-gray-600">Chi tiêu</Text>
                     </View>
                 ) }
             </View>
@@ -376,127 +413,13 @@ export default function LineCharts ( { id }: { id: string } )
     );
 }
 
-const styles = StyleSheet.create( {
-    container: {
-        backgroundColor: '#fff',
-        borderRadius: 16,
-        padding: 16,
-        margin: 8,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 8,
-        elevation: 4,
-    },
-    header: {
-        marginBottom: 16,
-    },
-    title: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        color: '#333',
-    },
-    subtitle: {
-        fontSize: 14,
-        color: '#666',
-        marginTop: 4,
-    },
-    tabContainer: {
-        flexDirection: 'row',
-        marginBottom: 16,
-        backgroundColor: '#f5f5f5',
-        borderRadius: 8,
-        padding: 4,
-    },
-    tab: {
-        flex: 1,
-        paddingVertical: 8,
-        alignItems: 'center',
-        borderRadius: 6,
-    },
-    activeTab: {
-        backgroundColor: '#fff',
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 1 },
-        shadowOpacity: 0.1,
-        shadowRadius: 2,
-        elevation: 2,
-    },
-    tabText: {
-        fontSize: 14,
-        color: '#666',
-    },
-    activeTabText: {
-        color: '#1c40f2',
-        fontWeight: '600',
-    },
-    summaryContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginBottom: 20,
-    },
-    summaryItem: {
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
-    summaryIconContainer: {
-        width: 32,
-        height: 32,
-        borderRadius: 16,
-        backgroundColor: '#2ecc71',
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginRight: 12,
-    },
-    expenseIcon: {
-        backgroundColor: '#e74c3c',
-    },
-    summaryAmount: {
-        fontSize: 16,
-        fontWeight: 'bold',
-        color: '#333',
-    },
-    summaryLabel: {
-        fontSize: 12,
-        color: '#666',
-    },
-    chartContainer: {
-        alignItems: 'center',
-        marginVertical: 10,
-    },
-    legendContainer: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-        marginTop: 16,
-    },
-    legendItem: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginHorizontal: 12,
-    },
-    legendDot: {
-        width: 12,
-        height: 12,
-        borderRadius: 6,
-        marginRight: 8,
-    },
-    incomeDot: {
-        backgroundColor: '#2ecc71',
-    },
-    expenseDot: {
-        backgroundColor: '#e74c3c',
-    },
-    legendText: {
-        fontSize: 14,
-        color: '#666',
-    },
-    dataLabel: {
-        fontSize: 10,
-        color: '#666',
-        marginBottom: 4,
-    },
-    yAxisText: {
-        color: '#999',
-        fontSize: 10,
-    },
-} );
+
+
+
+
+
+
+
+
+
+

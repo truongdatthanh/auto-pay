@@ -1,8 +1,6 @@
 
 import { Image, ScrollView, Text, TouchableOpacity, View, StatusBar, SafeAreaView, Platform } from "react-native";
 import { useEffect, useState, useCallback } from "react";
-import QRCode from "react-native-qrcode-svg";
-import Seperate from "@/components/Seperate";
 import Entypo from '@expo/vector-icons/Entypo';
 import { FontAwesome, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import mockDataTransation from "../../assets/data.json";
@@ -10,9 +8,14 @@ import CardInfo from "@/components/CardInfo";
 import { router } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Animated, { FadeInDown, FadeIn } from "react-native-reanimated";
-import { LinearGradient } from "expo-linear-gradient";
 import { useFocusEffect } from "@react-navigation/native";
 import Loading from "@/components/Loading";
+import { generateQR } from "@/utils/generateQR";
+import { convertEMVCode } from "@/utils/encodeEMVCode";
+import { LinearGradient } from "expo-linear-gradient";
+import Seperate from "@/components/Seperate";
+import QRCode from "react-native-qrcode-svg";
+
 
 
 
@@ -36,6 +39,7 @@ export default function BankAccount ()
     const [ dataBanking, setDataBanking ] = useState( mockDataTransation );
     const [ currentCard, setCurrentCard ] = useState<ITransactionHistory>();
     const [ isLoading, setIsLoading ] = useState( true );
+    const [ qrData, setQrData ] = useState( "" );
 
     const incomeItems: any[] = [];
     const outcomeItems: any[] = [];
@@ -51,7 +55,16 @@ export default function BankAccount ()
                     const getCard = await AsyncStorage.getItem( "selectedCard" );
                     if ( getCard !== null )
                     {
-                        setCurrentCard( JSON.parse( getCard ) );
+                        const parsedCard = JSON.parse( getCard );
+                        setCurrentCard( parsedCard );
+                        setQrData(
+                            convertEMVCode( {
+                                accountNumber: parsedCard.STK,
+                                bankBin: parsedCard.bankbin,
+                                amount: 0,
+                                addInfo: "",
+                            } )
+                        );
                     }
                 } catch ( error )
                 {
@@ -100,7 +113,7 @@ export default function BankAccount ()
     if ( isLoading )
     {
         return (
-           <Loading message="Đang tải thông tin tài khoản..." />
+            <Loading message="Đang tải thông tin tài khoản..." />
         );
     }
 
@@ -108,101 +121,49 @@ export default function BankAccount ()
         <>
             <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
             <ScrollView className="flex-1 bg-slate-50">
-                <LinearGradient
-                    colors={ [ '#ffffff', '#f8fafc' ] }
-                    className="pt-2 pb-6"
-                >
+                {/* QR Code */ }
+                <View className="bg-white m-4 mt-8 p-4 rounded-3xl shadow-md border border-gray-200">
                     <View className="justify-center items-center">
-                        {/* QR Card */ }
-                        <Animated.View
-                            entering={ FadeInDown.duration( 600 ) }
-                            className="justify-center mt-4 items-center w-full max-w-[340px] p-5 mx-4 bg-white rounded-3xl shadow-md"
-                        >
-                            {/* Card Header */ }
-                            <View className="w-full flex-row justify-between items-center mb-3">
-                                <View className="flex-row items-center">
-                                    <Image
-                                        source={ { uri: currentCard?.logoBanking } }
-                                        className="w-8 h-8 rounded-full"
-                                        resizeMode="contain"
-                                    />
-                                    <Text className="text-slate-800 font-bold ml-2">
-                                        { currentCard?.bankName }
-                                    </Text>
-                                </View>
-                                <View className="bg-blue-50 px-2.5 py-1 rounded-full">
-                                    <Text className="text-blue-600 text-xs font-medium">Tài khoản chính</Text>
-                                </View>
+                        <View className="items-center">
+                            <View className="flex-row justify-between items-center">
+                                <Text className="font-semibold text-lg">{ currentCard?.name?.toUpperCase() }</Text>
                             </View>
-
-                            {/* Card Info */ }
-                            <Text className="font-bold text-lg text-slate-800">
-                                { currentCard?.name?.toUpperCase() }
-                            </Text>
-                            <View className="flex-row items-center mt-1">
-                                <Text className="text-lg text-slate-700 font-medium">
-                                    { currentCard?.STK }
-                                </Text>
-                                <TouchableOpacity className="ml-2 p-1">
+                            <View className="flex-row justify-between items-center">
+                                <Text className="font-semibold text-md">{ currentCard?.STK }</Text>
+                                <TouchableOpacity className="p-1">
                                     <Ionicons name="copy-outline" size={ 16 } color="#3b82f6" />
                                 </TouchableOpacity>
                             </View>
-
-                            <Seperate />
-
-                            {/* QR Code */ }
-                            <View className="bg-white border-2 border-slate-200 p-4 rounded-2xl">
-                                <QRCode
-                                    value={ JSON.stringify( {
-                                        bankName: currentCard?.bankName,
-                                        accountNumber: currentCard?.STK,
-                                        accountName: currentCard?.name
-                                    } ) }
-                                    size={ 200 }
-                                    logo={ require( "../../assets/images/logo-autopay-4.png" ) }
-                                    logoSize={ 40 }
-                                    logoBackgroundColor="white"
-                                    logoBorderRadius={ 10 }
-                                />
-                            </View>
-
-                            <Seperate />
-
-                            {/* Brand Info */ }
-                            <View className="flex-row w-full justify-between items-center bg-white">
-                                <View className="flex-row items-center">
-                                    <Text className="text-xl text-slate-800 font-bold">⛛</Text>
-                                    <Text className="text-lg text-slate-800 font-bold ml-1">AutoPAY</Text>
-                                </View>
-                                <Image
-                                    source={ { uri: currentCard?.logoBanking } }
-                                    className="w-20 h-16"
-                                    resizeMode="contain"
-                                />
-                            </View>
-
-                            {/* Action Buttons */ }
-                            <View className="flex-row justify-between items-center w-full mt-2">
-                                <TouchableOpacity
-                                    className="border border-slate-300 bg-slate-50 px-4 py-2.5 rounded-full flex-row items-center"
-                                    onPress={ handleSaveQR }
-                                >
-                                    <Entypo name="download" size={ 16 } color="#475569" />
-                                    <Text className="text-slate-600 ml-2 font-medium">Lưu mã QR</Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity
-                                    className="px-4 py-2.5 rounded-full flex-row items-center bg-blue-500"
-                                    onPress={ handleShareQR }
-                                >
-                                    <FontAwesome name="share-square-o" size={ 16 } color="white" />
-                                    <Text className="text-white ml-2 font-medium">Chia sẻ QR</Text>
-                                </TouchableOpacity>
-                            </View>
-                        </Animated.View>
+                        </View>
+                        <View>
+                            { generateQR( qrData ) }
+                        </View>
+                        <View className="flex-row justify-center items-center space-x-8">
+                            <Image source={ require( "../../assets/images/Napas247.png" ) } className="w-[100px] h-[50px]" resizeMode="contain" />
+                            <Image source={ { uri: currentCard?.logoBanking } } className="w-[100px] h-[50px]" resizeMode="contain" />
+                        </View>
+                        <View className="border-t border-dashed border-gray-400 my-2 w-full" />
+                        <View className="flex-row justify-between items-center w-full mt-2">
+                            <TouchableOpacity
+                                className="border border-slate-300 bg-slate-50 px-4 py-2.5 rounded-xl flex-row items-center"
+                                onPress={ handleSaveQR }
+                            >
+                                <Entypo name="download" size={ 16 } color="#475569" />
+                                <Text className="text-slate-600 ml-2 font-medium">Lưu mã QR</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                className="px-4 py-2.5 rounded-xl flex-row items-center bg-[#1c40f2]"
+                                onPress={ handleShareQR }
+                            >
+                                <FontAwesome name="share-square-o" size={ 16 } color="white" />
+                                <Text className="text-white ml-2 font-medium">Chia sẻ QR</Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
-                </LinearGradient>
+                </View>
+                {/* -----------------------------------------End----------------------------------------- */ }
 
-                {/* Transaction History Section */ }
+                {/* Lịch sử giao dịch */ }
                 <View className="min-h-[200px] rounded-t-3xl p-5 bg-white mt-2">
                     <View className="flex-row justify-between items-center mb-4">
                         <Text className="text-lg text-slate-800 font-bold">
@@ -217,7 +178,6 @@ export default function BankAccount ()
                         </TouchableOpacity>
                     </View>
 
-                    {/* Transaction Type Selector */ }
                     <View className="flex-row items-center justify-between bg-slate-100 p-1 rounded-xl">
                         <TouchableOpacity
                             className={ `flex-1 p-3 rounded-lg ${ selected === "income" ? "bg-blue-500" : "bg-transparent" }` }
@@ -242,7 +202,6 @@ export default function BankAccount ()
                         </TouchableOpacity>
                     </View>
 
-                    {/* Transaction List */ }
                     <View className="mt-4">
                         { selected === "income" ? (
                             incomeItems.length > 0 ? (
@@ -301,15 +260,17 @@ export default function BankAccount ()
                         ) }
                     </View>
                 </View>
+                {/* -----------------------------------------End----------------------------------------- */ }
             </ScrollView>
 
-            {/* Floating Action Button */ }
+            {/* Button tạo QR */ }
             <TouchableOpacity
                 className="absolute bottom-5 right-5 w-14 h-14 rounded-full bg-[#1c40f2] items-center justify-center shadow-lg elevation-5"
                 onPress={ handleCreateQR }
             >
                 <Entypo name="plus" size={ 28 } color="white" />
             </TouchableOpacity>
+            {/* -----------------------------------------End----------------------------------------- */ }
         </>
     );
 }
