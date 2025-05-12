@@ -445,16 +445,16 @@ export default function CreateMyQR ()
     }, [ cardSTK, data ] );
 
     // Format số tiền khi nhập và khi hiển thị
-    useEffect( () =>
-    {
-        if ( amount )
-        {
-            setFormattedAmount( new Intl.NumberFormat( 'vi-VN' ).format( parseInt( amount ) ) + " VNĐ" );
-        } else
-        {
-            setFormattedAmount( "" );
-        }
-    }, [ amount ] );
+    // useEffect( () =>
+    // {
+    //     if ( amount )
+    //     {
+    //         setFormattedAmount( new Intl.NumberFormat( 'vi-VN' ).format( parseInt( amount ) ) + " VNĐ" );
+    //     } else
+    //     {
+    //         setFormattedAmount( "" );
+    //     }
+    // }, [ amount ] );
 
     const handleSubmit = () =>
     {
@@ -558,8 +558,8 @@ export default function CreateMyQR ()
                                         className="flex-1 text-gray-800 text-base"
                                         placeholder="Nhập số tiền thanh toán"
                                         keyboardType="numeric"
-                                        value={ formatCurrencyVND( amount ) }
-                                        onChangeText={ formatAmount }
+                                        value={  amount  }
+                                        onChangeText={ setAmount }
                                     />
                                 </View>
                             </View>
