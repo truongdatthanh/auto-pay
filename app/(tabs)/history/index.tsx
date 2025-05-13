@@ -421,7 +421,6 @@ export default function History ()
     setStartDate( new Date() );
     setEndDate( new Date() );
     handleFilterByDate();
-    setShowFilterModal( false );
   };
 
   return (

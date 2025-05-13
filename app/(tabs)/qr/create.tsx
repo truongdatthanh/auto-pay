@@ -444,17 +444,6 @@ export default function CreateMyQR ()
         loadSelectedCard();
     }, [ cardSTK, data ] );
 
-    // Format số tiền khi nhập và khi hiển thị
-    // useEffect( () =>
-    // {
-    //     if ( amount )
-    //     {
-    //         setFormattedAmount( new Intl.NumberFormat( 'vi-VN' ).format( parseInt( amount ) ) + " VNĐ" );
-    //     } else
-    //     {
-    //         setFormattedAmount( "" );
-    //     }
-    // }, [ amount ] );
 
     const handleSubmit = () =>
     {
@@ -464,7 +453,7 @@ export default function CreateMyQR ()
             return;
         }
 
-        if ( amount === "" || content === "" )
+        if ( amount === ""  )
         {
             alert( "Vui lòng nhập đầy đủ thông tin" );
             return;
@@ -589,12 +578,12 @@ export default function CreateMyQR ()
 
                         {/* Button Submit */ }
                         <TouchableOpacity
-                            className={ `rounded-2xl py-4 mb-8 ${ selectedCard && amount && content ? "bg-[#1c40f2]" : "bg-gray-300"
+                            className={ `rounded-2xl py-4 mb-8 ${ selectedCard && amount ? "bg-[#1c40f2]" : "bg-gray-300"
                                 }` }
                             onPress={ handleSubmit }
-                            disabled={ !selectedCard || !amount || !content }
+                            disabled={ !selectedCard || !amount }
                             style={ {
-                                shadowColor: selectedCard && amount && content ? '#1c40f2' : '#999',
+                                shadowColor: selectedCard && amount ? '#1c40f2' : '#999',
                                 shadowOffset: { width: 0, height: 4 },
                                 shadowOpacity: 0.3,
                                 shadowRadius: 6,

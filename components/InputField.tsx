@@ -7,7 +7,7 @@ interface InputFieldProps {
   placeholder?: string;
 }
 
-export default function InputField({ label, value, onChangeText, placeholder }: InputFieldProps) {
+export default function InputField({ label, value, onChangeText, placeholder, ...props }: InputFieldProps) {
   return (
     <View>
       <Text className="mb-1">{label}</Text>

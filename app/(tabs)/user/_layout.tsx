@@ -10,7 +10,6 @@ export default function InfomationLayout ()
 {
     return (
         <GestureHandlerRootView className="flex-1">
-            <StatusBar barStyle="dark-content" backgroundColor="transparent" translucent />
             <Stack initialRouteName='index'>
                 <Stack.Screen
                     name='index'
@@ -22,22 +21,20 @@ export default function InfomationLayout ()
                     name='change-password'
                     options={ {
                         headerShown: true,
-                        header: () => <AppHeaderInfo title='Thay đổi mật khẩu' onPress={ () => router.back() } />,
+                        header: () => <AppHeaderInfo title='Thay Đổi Mật Khẩu' onPress={ () => router.back() } />,
                     } }
                 />
                 <Stack.Screen
                     name='profile'
                     options={ {
-                        headerShown: true,
-                        header: () => <AppHeaderInfo title='Thông tin cá nhân' onPress={ () => router.back() } />,
+                        headerShown: false,
                     } }
                 />
 
                 <Stack.Screen
                     name="contact"
                     options={ {
-                        headerShown: true,
-                        header: () => <AppHeaderInfo title='Thông tin liên hệ' onPress={ () => router.back() } />,
+                        headerShown: false,
                     } }
                 />
 
@@ -45,7 +42,7 @@ export default function InfomationLayout ()
                     name="report-problem"
                     options={ {
                         headerShown: true,
-                        header: () => <AppHeaderInfo title='Vấn đề của bạn?' onPress={ () => router.back() } />,
+                        header: () => <AppHeaderInfo title='Vấn Đề Của Bạn?' onPress={ () => router.back() } />,
                     } }
                 />
 
@@ -53,7 +50,14 @@ export default function InfomationLayout ()
                     name="biometric"
                     options={ {
                         headerShown: true,
-                        header: () => <AppHeaderInfo title='Sinh trắc học' onPress={ () => router.back() } />,
+                        header: () => <AppHeaderInfo title='Sinh Trắc Học' onPress={ () => router.back() } />,
+                    } }
+                />
+                <Stack.Screen
+                    name="system-setting"
+                    options={ {
+                        headerShown: true,
+                        header: () => <AppHeaderInfo title='Cài Đặt Hệ Thống' onPress={ () => router.back() } />,
                     } }
                 />
             </Stack>

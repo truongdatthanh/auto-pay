@@ -50,7 +50,7 @@ export default function MyQR ()
                     setTimeout( () =>
                     {
                         setIsLoading( false );
-                    }, 2000 );
+                    }, 1500 );
                 }
             };
 

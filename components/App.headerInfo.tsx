@@ -4,6 +4,7 @@
 // import Ionicons from '@expo/vector-icons/Ionicons';
 
 import { Ionicons } from "@expo/vector-icons";
+import { LinearGradient } from "expo-linear-gradient";
 import { ReactNode } from "react";
 import { Platform, SafeAreaView, StatusBar, Text, TouchableOpacity, View } from "react-native";
 

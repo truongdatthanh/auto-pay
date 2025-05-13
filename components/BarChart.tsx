@@ -5,6 +5,7 @@ import dataBankingCard from "../assets/banking-card.json"
 import { formatCurrencyVND } from '@/utils/formatCurrencyVND';
 import { router } from 'expo-router';
 import { formatDate } from '@/utils/formatDate';
+import { Ionicons } from '@expo/vector-icons';
 
 export default function BarCharts ( { id }: { id: String } )
 {
@@ -59,12 +60,63 @@ export default function BarCharts ( { id }: { id: String } )
         };
     }, [ todayTransactions ] );
 
+    const goToPreviousDay = () =>
+    {
+        const prevDay = new Date( currentDate );
+        prevDay.setDate( prevDay.getDate() - 1 );
+        setCurrentDate( prevDay );
+    };
+
+    const goToNextDay = () =>
+    {
+        const nextDay = new Date( currentDate );
+        nextDay.setDate( nextDay.getDate() + 1 );
+        if ( nextDay <= new Date() )
+        {
+            setCurrentDate( nextDay );
+        }
+    };
+
+    const isToday = ( date: Date ) =>
+    {
+        const today = new Date();
+        return date.getDate() === today.getDate() &&
+            date.getMonth() === today.getMonth() &&
+            date.getFullYear() === today.getFullYear();
+    };
+
     return (
         <View className='p-4'>
             <View className='flex-row justify-between mb-2'>
-                <Text className='text-sm font-bold'>
-                    { formatDate( currentDate ) }
-                </Text>
+                <View className="flex-row items-center">
+                    <TouchableOpacity
+                        onPress={ goToPreviousDay }
+                        className="p-2 rounded-md bg-gray-100"
+                    >
+                        <Ionicons name="chevron-back" size={ 20 } color="#666" />
+                    </TouchableOpacity>
+                    <View className="flex-row items-center mx-2">
+                        <Text className="text-sm font-semibold text-neutral-800">
+                            { formatDate( currentDate ) }
+                        </Text>
+                        { isToday( currentDate ) && (
+                            <View className="ml-2 px-2 py-0.5 bg-blue-600 rounded">
+                                <Text className="text-white text-[10px] font-medium">Hôm nay</Text>
+                            </View>
+                        ) }
+                    </View>
+                    <TouchableOpacity
+                        onPress={ goToNextDay }
+                        className="p-2 rounded-md bg-gray-100"
+                        disabled={ isToday( currentDate ) }
+                    >
+                        <Ionicons
+                            name="chevron-forward"
+                            size={ 20 }
+                            color={ isToday( currentDate ) ? "#ccc" : "#666" }
+                        />
+                    </TouchableOpacity>
+                </View>
                 <TouchableOpacity onPress={ () => router.replace( "/statistics" ) }>
                     <Text className='text-sm font-bold text-blue-500'>Xem chi tiết</Text>
                 </TouchableOpacity>

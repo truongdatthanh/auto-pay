@@ -139,7 +139,7 @@
 //     );
 // }
 
-import { View, Text, TouchableOpacity, Image, ScrollView, Modal, StatusBar } from 'react-native';
+import { View, Text, TouchableOpacity, Image, ScrollView, Modal, StatusBar, SafeAreaView, Platform } from 'react-native';
 import { router } from 'expo-router';
 import { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -200,7 +200,6 @@ export default function UserHome ()
                 contentContainerStyle={ { paddingBottom: 30 } }
                 showsVerticalScrollIndicator={ false }
             >
-                {/* Header with gradient background */ }
                 <LinearGradient
                     colors={ [ '#1c40f2', '#3b5fe2' ] }
                     start={ { x: 0, y: 0 } }
@@ -226,7 +225,7 @@ export default function UserHome ()
                     </Animated.View>
                 </LinearGradient>
 
-                {/* Profile Section */ }
+                {/* Thông tin cá nhân */ }
                 <Animated.View
                     entering={ FadeInDown.duration( 600 ).delay( 200 ) }
                     className="mx-4 -mt-5 bg-white rounded-xl shadow-sm overflow-hidden"
@@ -249,8 +248,9 @@ export default function UserHome ()
                         <MaterialIcons name="keyboard-arrow-right" size={ 24 } color="#9ca3af" />
                     </TouchableOpacity>
                 </Animated.View>
+                {/* -----------------------------------------End----------------------------------------- */}
 
-                {/* Settings Section */ }
+                {/*Cài đặt */ }
                 <Animated.View
                     entering={ FadeInDown.duration( 600 ).delay( 300 ) }
                     className="mx-4 mt-5 bg-white rounded-xl shadow-sm overflow-hidden"
@@ -261,7 +261,7 @@ export default function UserHome ()
 
                     <TouchableOpacity
                         className="flex-row items-center p-4 active:bg-gray-50"
-                        onPress={ () => void ( 0 ) }
+                        onPress={ () => router.push( '/user/system-setting' ) }
                     >
                         <View className="w-10 h-10 rounded-full bg-gray-100 items-center justify-center mr-3">
                             <Ionicons name="settings" size={ 18 } color="#4b5563" />
@@ -273,7 +273,7 @@ export default function UserHome ()
                         <MaterialIcons name="keyboard-arrow-right" size={ 24 } color="#9ca3af" />
                     </TouchableOpacity>
 
-                    <View className="h-[1px] bg-gray-100 mx-4"></View>
+                    <View className="h-[1px] bg-gray-100 mx-4" />
 
                     <TouchableOpacity
                         className="flex-row items-center p-4 active:bg-gray-50"
@@ -289,7 +289,7 @@ export default function UserHome ()
                         <MaterialIcons name="keyboard-arrow-right" size={ 24 } color="#9ca3af" />
                     </TouchableOpacity>
 
-                    <View className="h-[1px] bg-gray-100 mx-4"></View>
+                    <View className="h-[1px] bg-gray-100 mx-4" />
 
                     <TouchableOpacity
                         className="flex-row items-center p-4 active:bg-gray-50"
@@ -305,8 +305,9 @@ export default function UserHome ()
                         <MaterialIcons name="keyboard-arrow-right" size={ 24 } color="#9ca3af" />
                     </TouchableOpacity>
                 </Animated.View>
+                {/* -----------------------------------------End----------------------------------------- */}
 
-                {/* Support Section */ }
+                {/* Hỗ trợ */ }
                 <Animated.View
                     entering={ FadeInDown.duration( 600 ).delay( 400 ) }
                     className="mx-4 mt-5 bg-white rounded-xl shadow-sm overflow-hidden"
@@ -345,6 +346,7 @@ export default function UserHome ()
                         <MaterialIcons name="keyboard-arrow-right" size={ 24 } color="#9ca3af" />
                     </TouchableOpacity>
                 </Animated.View>
+                {/* -----------------------------------------End----------------------------------------- */}
 
                 {/* Logout Button */ }
                 <Animated.View

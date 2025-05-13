@@ -276,7 +276,7 @@ export default function DisplayQR ()
 
                                                 <View className="flex-row justify-between items-start mb-2 bg-white">
                                                     <Text className="text-gray-500">Nội dung:</Text>
-                                                    <Text className="font-bold text-right max-w-[60%]">{ bankInfo?.content }</Text>
+                                                    <Text className="font-bold text-right max-w-[60%]">{ bankInfo?.content ? bankInfo.content : '-' }</Text>
                                                 </View>
 
                                                 <View className="flex-row justify-between items-center mt-2 pt-2 border-t border-gray-200 bg-white">
