@@ -5,11 +5,14 @@ import MyCard from '@/components/MyCard';
 import { AntDesign, EvilIcons, FontAwesome5, Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import VietQRImage from '../test/linking';
+import { registerForPushNotificationsAsync } from '../test/fibase';
+import NotificationTest from '../test/notification';
 
 export default function Home ()
 {
   const [ bankData, setBankData ] = useState( mockBanking );
-  console.log( process.env.FIREBASE_API_KEY )
+
+
   const handleGoToMyQR = () =>
   {
     router.replace( {

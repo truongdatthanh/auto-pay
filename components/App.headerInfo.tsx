@@ -60,9 +60,9 @@ export default function AppHeaderInfo ( {
                     </View>
 
                     {/* Render right component nếu có, ngược lại render View trống để giữ layout */ }
-                    <View>
-                        { rightComponent ?? <View style={ { width: 40 } } /> }
-                    </View>
+
+                    { rightComponent ?? <View style={ { width: 40 } } /> }
+
                 </View>
             </SafeAreaView>
         </>

@@ -10,6 +10,7 @@ export default function ConfirmPayment ()
     const params = useLocalSearchParams();
 
     const data = decodeEMVCo( params.data as string );
+    console.log( "data", data );
     
     const [ loading, setLoading ] = useState( false );
 
@@ -29,7 +30,6 @@ export default function ConfirmPayment ()
     return (
         <SafeAreaView style={ { flex: 1, backgroundColor: 'white' } }>
             <StatusBar barStyle="dark-content" backgroundColor="white" />
-
             <ScrollView>
                 {/* Header */ }
                 <View className="px-4 py-4 flex-row items-center">
@@ -58,7 +58,7 @@ export default function ConfirmPayment ()
 
                             <View className="flex-row justify-between py-3 border-t border-gray-100">
                                 <Text className="text-gray-500">Ngân hàng</Text>
-                                <Text className="font-medium">BIN: { data.bin }</Text>
+                                <Text className="font-medium">Nam Á Bank</Text>
                             </View>
 
                             <View className="flex-row justify-between py-3 border-t border-gray-100">
