@@ -14,7 +14,7 @@ export default function BankAccountLayout ()
             />
 
             <Stack.Screen
-                name="listCard"
+                name="list-card"
                 options={ {
                     header: () => <AppHeaderInfo title="Thẻ ngân hàng" onPress={ () => router.replace( "/(tabs)" ) } />,
                 } }

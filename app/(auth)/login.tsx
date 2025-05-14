@@ -3,6 +3,7 @@ import { useRouter } from 'expo-router';
 import { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import FloatingInputs from '../test/floatinglabel';
+import { MaterialIcons } from '@expo/vector-icons';
 
 
 export default function Login ()
@@ -114,14 +115,16 @@ export default function Login ()
                     { !keyboardVisible && (
                         <View className='w-full p-6'>
                             <TouchableOpacity
-                                className="bg-[#1c40f2] rounded-xl h-16 justify-center"
+                                className="bg-[#1c40f2] rounded-xl overflow-hidden"
                                 onPress={ handleLogin }
                             >
-                                <Text className="text-white text-center font-bold text-md">Đăng nhập</Text>
+                                <View className="flex-row items-center justify-center p-4">
+                                    <MaterialIcons name="login" size={ 24 } color="white" />
+                                    <Text className="text-white font-semibold ml-2">Đăng nhập</Text>
+                                </View>
                             </TouchableOpacity>
-
                             <View className="p-4 flex-row items-center justify-center">
-                                <Text className="text-center text-base">Bạn chưa có tài khoản? </Text>
+                                <Text className="text-center text-gray-500">Bạn chưa có tài khoản? </Text>
                                 <TouchableOpacity className="flex-row items-center justify-center" onPress={ handleRegister }>
                                     <Text className="text-[#1c40f2] font-bold text-lg">Đăng ký ngay</Text>
                                 </TouchableOpacity>
@@ -133,166 +136,3 @@ export default function Login ()
         </>
     );
 }
-
-// import { Image, SafeAreaView, StatusBar, Text, TouchableOpacity, View, Keyboard, Platform, KeyboardAvoidingView } from 'react-native';
-// import { useRouter } from 'expo-router';
-// import { useState, useEffect } from 'react';
-// import AsyncStorage from '@react-native-async-storage/async-storage';
-// import FloatingInputs from '../test/floatinglabel';
-// import { BlurView } from 'expo-blur';
-// import GradientBackground from '@/components/GradientBackground';
-// import { MaterialCommunityIcons } from '@expo/vector-icons';
-// import { TextInput } from 'react-native-gesture-handler';
-
-// export default function Login ()
-// {
-//     const logo = 'https://interdata.vn/assets/interdata-logo.png'
-//     const logo1 = '../../assets/images/1.png'
-//     const router = useRouter();
-//     const [ email, setEmail ] = useState( 'truongdat@gmail.com' );
-//     const [ password, setPassword ] = useState( '123456' );
-//     const [ keyboardVisible, setKeyboardVisible ] = useState( false );
-
-//     // Theo dõi trạng thái hiển thị của bàn phím
-//     useEffect( () =>
-//     {
-//         const keyboardDidShowListener = Keyboard.addListener(
-//             'keyboardDidShow',
-//             () =>
-//             {
-//                 setKeyboardVisible( true );
-//             }
-//         );
-//         const keyboardDidHideListener = Keyboard.addListener(
-//             'keyboardDidHide',
-//             () =>
-//             {
-//                 setKeyboardVisible( false );
-//             }
-//         );
-
-//         return () =>
-//         {
-//             keyboardDidHideListener.remove();
-//             keyboardDidShowListener.remove();
-//         };
-//     }, [] );
-
-//     const user = [
-//         { id: 1, email: 'truongdat@gmail.com', fullName: "Truong Thanh Dat", password: '123456' },
-//         { id: 2, email: '123456@gmail.com', fullName: "Truong Thanh Dat 1", password: '123456' },
-//     ]
-
-//     const handleLogin = () =>
-//     {
-//         console.log( 'email', email );
-//         console.log( 'password', password );
-//         const userFound = user.find( ( user ) => user.email === email && user.password === password );
-//         if ( userFound )
-//         {
-//             AsyncStorage.setItem( 'user', JSON.stringify( userFound ) );
-//             router.replace( '/(tabs)' );
-//         } else
-//         {
-//             alert( 'Tên đăng nhập hoặc mật khẩu không đúng' );
-//         }
-//     }
-
-//     const handleRegister = () =>
-//     {
-//         router.push( '/(auth)/register' );
-//     }
-
-//     const handleForgotPassword = () =>
-//     {
-//         router.push( '/(auth)/forgot-password' );
-//     }
-
-//     return (
-//         <>
-//             <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
-//             <GradientBackground
-//                 imageSource={ require( '../../assets/images/fix.png' ) }
-//                 gradientColors={ [ 'rgba(28, 64, 242, 0.7)', 'rgba(0, 0, 0, 0.8)' ] }
-//                 opacity={ 0.5 }
-//             >
-//                 <SafeAreaView className='flex-1'>
-//                     <View className="flex-1 items-center justify-center">
-//                         <View className="w-full justify-center">
-
-//                             {/* Logo */ }
-//                             <View className="mb-8">
-//                                 {/* <Image style={ { width: 'auto', height: 100 } } source={ { uri: logo } } />  */ }
-//                                 <Image className='h-[150px] w-full' source={ require( logo1 ) } />
-//                             </View>
-
-
-//                             {/* Form đăng nhập */ }
-//                             <View className='mx-4 mt-4'>
-//                                 <BlurView intensity={ 30 } tint='dark' style={ { borderRadius: 20, overflow: 'hidden', padding: 24 } }>
-//                                     <Text style={ { color: 'white', fontSize: 22, fontWeight: 'bold', marginBottom: 20 } }>
-//                                         Đăng nhập
-//                                     </Text>
-
-//                                     {/* scpacing unit = 4px * n */ }
-//                                     <View className='flex-row items-center bg-white/15 rounded-xl px-4 h-16 mb-4' >
-//                                         <MaterialCommunityIcons name="email-outline" size={ 22 } color="white" />
-//                                         <TextInput
-//                                             className='h-16 flex-1 ml-2 text-white'
-//                                             placeholder='Email...'
-//                                             value={ email }
-//                                             onChangeText={ setEmail }
-//                                             keyboardType="email-address"
-//                                             autoCapitalize='none'//tắt tự động viết hoa chữ cái đầu
-//                                             placeholderTextColor={ 'white' }
-//                                         />
-//                                     </View>
-
-//                                     <View className='flex-row items-center bg-white/15 rounded-xl px-4 h-16 mb-4' >
-//                                         <MaterialCommunityIcons name="lock-outline" size={ 22 } color="white" />
-//                                         <TextInput
-//                                             className='h-16 flex-1 ml-2 text-white '
-//                                             placeholder='Mật khẩu...'
-//                                             value={ password }
-//                                             onChangeText={ setPassword }
-//                                             secureTextEntry
-//                                             placeholderTextColor={ 'white' }
-//                                             selectionColor={ 'white' }
-//                                         />
-//                                     </View>
-
-
-//                                     {/* self-end căn chỉnh theo column */ }
-//                                     <View className='my-1 self-end'>
-//                                         <TouchableOpacity onPress={ handleForgotPassword } className='p-2'>
-//                                             <Text className="text-center text-sm text-white">Quên mật khẩu?</Text>
-//                                         </TouchableOpacity>
-//                                     </View>
-
-//                                     <TouchableOpacity
-//                                         className="bg-[#1c40f2] rounded-xl h-16 justify-center w-full"
-//                                         onPress={ handleLogin }
-//                                     >
-//                                         <Text className="text-white test-base text-center font-bold">Đăng nhập</Text>
-//                                     </TouchableOpacity>
-//                                 </BlurView>
-//                             </View>
-//                         </View >
-//                     </View >
-
-//                     { !keyboardVisible && (
-//                         <View className='w-full p-4'>
-//                             <View className="p-4 flex-row items-center justify-center">
-//                                 <Text className="text-center text-base text-[rgba(255,255,255,0.8)]">Bạn chưa có tài khoản? </Text>
-//                                 <TouchableOpacity className="flex-row items-center justify-center" onPress={ handleRegister }>
-//                                     <Text className="text-white font-semibold text-lg">Đăng ký ngay</Text>
-//                                 </TouchableOpacity>
-//                             </View>
-//                         </View>
-//                     )
-//                     }
-//                 </SafeAreaView>
-//             </GradientBackground >
-//         </>
-//     );
-// }

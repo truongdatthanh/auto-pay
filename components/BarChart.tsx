@@ -13,6 +13,7 @@ export default function BarCharts ( { id }: { id: String } )
     const [ currentDate, setCurrentDate ] = useState( new Date() );
 
     const indexData = data.find( ( item ) => item.id === id );
+    
     const todayTransactions = indexData?.transactionHistory.filter( ( item ) =>
     {
         return new Date( item.date ).setHours( 0, 0, 0, 0 ) === currentDate.setHours( 0, 0, 0, 0 );
@@ -99,11 +100,6 @@ export default function BarCharts ( { id }: { id: String } )
                         <Text className="text-sm font-semibold text-neutral-800">
                             { formatDate( currentDate ) }
                         </Text>
-                        { isToday( currentDate ) && (
-                            <View className="ml-2 px-2 py-0.5 bg-blue-600 rounded">
-                                <Text className="text-white text-[10px] font-medium">Hôm nay</Text>
-                            </View>
-                        ) }
                     </View>
                     <TouchableOpacity
                         onPress={ goToNextDay }
@@ -126,7 +122,7 @@ export default function BarCharts ( { id }: { id: String } )
             <View style={ { height: 200 } } className="justify-center items-center">
                 { todayTransactions.length === 0 ? (
                     <Text className='text-gray-500'>
-                        Không có giao dịch nào cho ngày hôm nay
+                        Không có giao dịch nào cho ngày { formatDate( currentDate ) }
                     </Text>
                 ) : (
                     <View className='flex-row'>

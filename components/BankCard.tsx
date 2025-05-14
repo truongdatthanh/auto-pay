@@ -1,64 +1,3 @@
-
-// import { Dimensions, Image, Text, Touchable, TouchableHighlight, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native";
-// import { LinearGradient } from 'expo-linear-gradient';
-// import { router } from "expo-router";
-
-// interface IBankCard
-// {
-//     id: string | undefined,
-//     STK: string | undefined
-//     name: string | undefined,
-//     logoBanking: string | undefined,
-//     bankName: string | undefined,
-// }
-
-// export default function BankingCard ( props: IBankCard )
-// {
-//     const bankCard: IBankCard = props;
-
-//     const handleBankCardDetail = () =>
-//     {
-//         router.push( {
-//             pathname: "/bank-account",
-//             params: { id: JSON.stringify( bankCard.STK ) }
-//         } )
-//     }
-//     return (
-//         <TouchableWithoutFeedback onPress={ handleBankCardDetail }>
-//             <LinearGradient
-//                 className='h-[180] w-[320] p-5 justify-between'
-//                 colors={ [ '#1e3a8a', '#3b82f6' ] }
-//                 start={ { x: 0, y: 0 } }
-//                 end={ { x: 1, y: 1 } }
-//                 style={ { borderRadius: 10 } }
-//             >
-//                 <View className="flex-row items-center justify-between">
-//                     <Text className="text-white text-lg font-bold">{ bankCard.bankName }</Text>
-//                     <Image
-//                         source={ { uri: bankCard.logoBanking } }
-//                         className="w-12 h-12 bg-white rounded-full"
-//                         resizeMode="contain"
-//                     />
-//                 </View>
-
-//                 <View className="mt-6 justify-between flex-row">
-//                     <View>
-//                         <Text className="text-white text-xl tracking-widest font-semibold">
-//                             { bankCard.STK }
-//                         </Text>
-//                         <Text className="text-white text-base mt-1">{ bankCard.name }</Text>
-//                     </View>
-//                     <View>
-//                         <Image source={ require( '../assets/images/master-card.png' ) } className="w-16 h-16" resizeMode="contain" />
-//                     </View>
-
-//                 </View>
-//             </LinearGradient>
-//         </TouchableWithoutFeedback>
-//     );
-// }
-
-
 import React from "react";
 import { Image, Text, TouchableWithoutFeedback, View } from "react-native";
 import { LinearGradient } from 'expo-linear-gradient';
@@ -120,27 +59,19 @@ export default function BankingCard ( props: IBankCard )
 
     return (
         <TouchableWithoutFeedback onPress={ handleBankCardDetail }>
-            <View className="w-[320] h-[200]" style={ {
-                shadowColor: "#000",
-                shadowOffset: { width: 0, height: 4 },
-                shadowOpacity: 0.2,
-                shadowRadius: 8,
-                elevation: 5
-            } }>
+            <View className="w-[320] h-[200]">
                 <LinearGradient
                     className='h-full w-full rounded-2xl p-5 justify-between overflow-hidden'
                     colors={ getCardGradient() }
                     start={ { x: 0, y: 0 } }
                     end={ { x: 1, y: 1 } }
                 >
-                    {/* Card chip and bank logo */ }
                     <View className="flex-row items-center justify-between">
                         <View className="flex-row items-center">
                             <View className="w-12 h-9 bg-yellow-300/80 rounded-md mr-3" style={ {
                                 borderWidth: 0.5,
                                 borderColor: 'rgba(255,255,255,0.3)'
                             } }>
-                                {/* Card chip design */ }
                                 <View className="w-full h-full justify-center items-center">
                                     <View className="w-8 h-5 border-[0.5px] border-yellow-800/50 rounded-sm" />
                                 </View>
@@ -154,7 +85,6 @@ export default function BankingCard ( props: IBankCard )
                         />
                     </View>
 
-                    {/* Card number */ }
                     <View className="mt-4">
                         <Text className="text-white/80 text-xs mb-1">Số tài khoản</Text>
                         <Text className="text-white text-xl tracking-widest font-semibold">
@@ -162,7 +92,6 @@ export default function BankingCard ( props: IBankCard )
                         </Text>
                     </View>
 
-                    {/* Card holder and card type */ }
                     <View className="mt-4 justify-between flex-row items-end">
                         <View>
                             <Text className="text-white/80 text-xs mb-1">Chủ tài khoản</Text>
@@ -178,7 +107,6 @@ export default function BankingCard ( props: IBankCard )
                         </View>
                     </View>
 
-                    {/* Decorative elements */ }
                     <View className="absolute top-12 right-0 w-40 h-40 rounded-full bg-white/10" style={ { transform: [ { translateX: 20 }, { translateY: -20 } ] } } />
                     <View className="absolute bottom-0 left-0 w-60 h-60 rounded-full bg-black/5" style={ { transform: [ { translateX: -30 }, { translateY: 30 } ] } } />
                 </LinearGradient>

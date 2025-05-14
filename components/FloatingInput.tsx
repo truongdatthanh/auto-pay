@@ -19,9 +19,7 @@ export default function FloatingInput ( {
 }: FloatingInputProps )
 {
     const [ isFocused, setIsFocused ] = useState( false );
-
     const showLabelAbove = isFocused || value !== '';
-
     return (
         <View className="mb-4 relative">
             { showLabelAbove && (
@@ -29,10 +27,7 @@ export default function FloatingInput ( {
                     { label }
                 </Text>
             ) }
-            <View
-                className={ `border rounded-lg px-3 pt-4 pb-1 bg-white ${ isFocused ? 'border-[#1c40f2]' : 'border-gray-400'
-                    }` }
-            >
+            <View className={ `border rounded-lg px-3 pt-4 pb-1 bg-white ${ isFocused ? 'border-[#1c40f2]' : 'border-gray-400'}` }>
                 <TextInput
                     className="text-base text-black h-10 p-0"
                     value={ value }

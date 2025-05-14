@@ -1,17 +1,17 @@
 
-import { Image, ScrollView, Text, TouchableOpacity, View, StatusBar, SafeAreaView, Platform, Modal } from "react-native";
-import { useEffect, useState, useCallback } from "react";
+import { Image, ScrollView, Text, TouchableOpacity, View, StatusBar, SafeAreaView, Platform, Modal, Alert } from "react-native";
+import { useEffect, useState, useCallback, useRef } from "react";
 import Entypo from '@expo/vector-icons/Entypo';
 import { FontAwesome, FontAwesome6, Ionicons, MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
-import mockDataTransation from "../../assets/data.json";
-import CardInfo from "@/components/CardInfo";
 import { router } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import Animated, { FadeInDown, FadeIn } from "react-native-reanimated";
 import { useFocusEffect } from "@react-navigation/native";
 import Loading from "@/components/Loading";
 import { generateQR } from "@/utils/generateQR";
 import { convertEMVCode } from "@/utils/encodeEMVCode";
+import ViewShot from "react-native-view-shot";
+import * as MediaLibrary from 'expo-media-library';
+import * as Sharing from 'expo-sharing';
 
 interface ITransactionHistory
 {
@@ -33,6 +33,9 @@ export default function BankAccount ()
     const [ isLoading, setIsLoading ] = useState( true );
     const [ qrData, setQrData ] = useState( "" );
     const [ isModalVisible, setIsModalVisible ] = useState( false );
+    const [ permissionGranted, setPermissionGranted ] = useState( false );
+    const [ saving, setSaving ] = useState( false );
+    const viewShotRef = useRef<ViewShot>( null );
 
     useFocusEffect(
         useCallback( () =>
@@ -78,6 +81,20 @@ export default function BankAccount ()
         }, [] )
     );
 
+    // Yêu cầu quyền và tải thông tin ngân hàng
+    useEffect( () =>
+    {
+        // Yêu cầu quyền lưu ảnh
+        const getPermissions = async () =>
+        {
+            const { status } = await MediaLibrary.requestPermissionsAsync();
+            setPermissionGranted( status === 'granted' );
+        };
+
+        getPermissions();
+
+    }, [ currentCard ] ); // Chỉ chạy lại khi data thay đổi
+
 
     const handleCreateQR = () =>
     {
@@ -87,15 +104,72 @@ export default function BankAccount ()
         } );
     };
 
-    const handleSaveQR = () =>
+    const handleSaveQR = useCallback( async () =>
     {
-        console.log( "Saving QR code..." );
-    };
+        if ( !permissionGranted )
+        {
+            Alert.alert(
+                "Cần quyền truy cập",
+                "Ứng dụng cần quyền truy cập vào thư viện ảnh để lưu QR code",
+                [ { text: "OK" } ]
+            );
+            return;
+        }
 
-    const handleShareQR = () =>
+        try
+        {
+            setSaving( true );
+            const uri = await viewShotRef.current?.capture?.();
+
+            if ( uri )
+            {
+                const asset = await MediaLibrary.createAssetAsync( uri );
+                await MediaLibrary.createAlbumAsync( "AutoPay QR", asset, false );
+
+                Alert.alert(
+                    "Thành công",
+                    "Đã lưu mã QR vào thư viện ảnh",
+                    [ { text: "OK" } ]
+                );
+            }
+        } catch ( error )
+        {
+            Alert.alert(
+                "Lỗi",
+                "Không thể lưu mã QR. Vui lòng thử lại sau.",
+                [ { text: "OK" } ]
+            );
+            console.error( "Lỗi khi lưu QR:", error );
+        } finally
+        {
+            setSaving( false );
+        }
+    }, [ permissionGranted ] );
+
+    const handleShareQR = async () =>
     {
+        try
+        {
+            const uri = await viewShotRef.current?.capture?.();
+            if ( !uri )
+            {
+                Alert.alert( 'Lỗi', 'Không thể chụp mã QR' );
+                return;
+            }
 
-        console.log( "Sharing QR code..." );
+            const canShare = await Sharing.isAvailableAsync();
+            if ( !canShare )
+            {
+                Alert.alert( 'Thiết bị không hỗ trợ chia sẻ' );
+                return;
+            }
+
+            await Sharing.shareAsync( uri );
+        } catch ( error )
+        {
+            console.error( error );
+            Alert.alert( 'Lỗi', 'Không thể chia sẻ mã QR' );
+        }
     };
 
     const handleDeleteBankingAccount = () =>
@@ -117,20 +191,22 @@ export default function BankAccount ()
                 {/* QR Code */ }
                 <View className="bg-white m-4 mt-8 p-4 rounded-3xl shadow-md border border-gray-200">
                     <View className="justify-center items-center">
-                        <View className="items-center">
-                            <View className="flex-row justify-between items-center">
-                                <Text className="font-semibold text-lg">{ currentCard?.name?.toUpperCase() }</Text>
+                        <ViewShot ref={ viewShotRef } options={ { format: "jpg", quality: 0.9 } }>
+                            <View className="items-center bg-white">
+                                <View className="flex-row justify-between items-center bg-white">
+                                    <Text className="font-semibold text-lg">{ currentCard?.name?.toUpperCase() }</Text>
+                                </View>
+                                <View className="flex-row justify-between items-center bg-white">
+                                    <Text className="font-semibold text-md">{ currentCard?.STK }</Text>
+                                    <TouchableOpacity className="p-1">
+                                        <Ionicons name="copy-outline" size={ 16 } color="#3b82f6" />
+                                    </TouchableOpacity>
+                                </View>
                             </View>
-                            <View className="flex-row justify-between items-center">
-                                <Text className="font-semibold text-md">{ currentCard?.STK }</Text>
-                                <TouchableOpacity className="p-1">
-                                    <Ionicons name="copy-outline" size={ 16 } color="#3b82f6" />
-                                </TouchableOpacity>
+                            <View className="bg-white">
+                                { generateQR( qrData ) }
                             </View>
-                        </View>
-                        <View>
-                            { generateQR( qrData ) }
-                        </View>
+                        </ViewShot>
                         <View className="flex-row justify-center items-center space-x-8">
                             <Image source={ require( "../../assets/images/Napas247.png" ) } className="w-[100px] h-[50px]" resizeMode="contain" />
                             <Image source={ { uri: currentCard?.logoBanking } } className="w-[100px] h-[50px]" resizeMode="contain" />
@@ -156,6 +232,7 @@ export default function BankAccount ()
                 </View>
                 {/* -----------------------------------------End----------------------------------------- */ }
 
+                {/* Thông tin tài khoản ngân hàng */ }
                 <View className="bg-white mx-4 mb-2 p-4 rounded-3xl shadow-md border border-gray-200 gap-4">
                     <Text className="text-lg font-bold">Thông tin tài khoản ngân hàng</Text>
                     <View className="border-t border-dashed border-gray-400 w-full" />
@@ -180,7 +257,9 @@ export default function BankAccount ()
                         <Text className="font-semibold">0123456789</Text>
                     </View>
                 </View>
+                {/* -----------------------------------------End----------------------------------------- */}
 
+                {/* Tùy chọn */ }
                 <View className="bg-white mx-4 mt-2 p-4 rounded-3xl shadow-md border border-gray-200 gap-4">
                     <Text className="text-lg font-bold">Tùy chọn</Text>
                     <View className="border-t border-dashed border-gray-400 w-full" />
@@ -203,8 +282,8 @@ export default function BankAccount ()
                         </View>
                         <MaterialIcons name="keyboard-arrow-right" size={ 24 } color="#9ca3af" />
                     </TouchableOpacity>
-
                 </View>
+                {/* -----------------------------------------End----------------------------------------- */}
             </ScrollView>
 
             <Modal visible={ isModalVisible } transparent={ true } animationType="fade">

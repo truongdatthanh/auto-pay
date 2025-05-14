@@ -1,7 +1,8 @@
 import React from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, ImageSourcePropType } from 'react-native';
 
-interface ActionCardProps {
+interface ActionCardProps
+{
   logo: ImageSourcePropType;
   title: string;
   description?: string;
@@ -13,7 +14,7 @@ interface ActionCardProps {
   buttonTextColor?: string;
 }
 
-export default function ActionCard({
+export default function ActionCard ( {
   logo,
   title,
   description,
@@ -23,48 +24,49 @@ export default function ActionCard({
   textColor = '#000000',
   buttonColor = '#1c40f2',
   buttonTextColor = '#ffffff'
-}: ActionCardProps) {
+}: ActionCardProps )
+{
   return (
-    <View 
+    <View
       className="rounded-xl p-6 my-2 mx-4 shadow-md"
-      style={{ backgroundColor }}
+      style={ { backgroundColor } }
     >
-      {/* Logo và Tiêu đề */}
+      {/* Logo và Tiêu đề */ }
       <View className="flex-row items-center mb-4">
-        <Image 
-          source={logo} 
+        <Image
+          source={ logo }
           className="w-12 h-12 rounded-full mr-4"
           resizeMode="contain"
         />
         <View className="flex-1">
-          <Text 
+          <Text
             className="text-lg font-bold"
-            style={{ color: textColor }}
+            style={ { color: textColor } }
           >
-            {title}
+            { title }
           </Text>
-          {description && (
-            <Text 
+          { description && (
+            <Text
               className="text-sm mt-1"
-              style={{ color: textColor + '99' }} // Thêm độ trong suốt
+              style={ { color: textColor + '99' } } // Thêm độ trong suốt
             >
-              {description}
+              { description }
             </Text>
-          )}
+          ) }
         </View>
       </View>
-      
-      {/* Nút hành động */}
+
+      {/* Nút hành động */ }
       <TouchableOpacity
         className="rounded-full py-3 px-6 mt-2"
-        style={{ backgroundColor: buttonColor }}
-        onPress={onPress}
+        style={ { backgroundColor: buttonColor } }
+        onPress={ onPress }
       >
-        <Text 
+        <Text
           className="text-center font-semibold"
-          style={{ color: buttonTextColor }}
+          style={ { color: buttonTextColor } }
         >
-          {buttonText}
+          { buttonText }
         </Text>
       </TouchableOpacity>
     </View>

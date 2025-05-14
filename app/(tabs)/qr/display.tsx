@@ -138,36 +138,6 @@ export default function DisplayQR ()
         }
     }, [ permissionGranted ] ); // Chỉ phụ thuộc vào permissionGranted
 
-    //Sử dụng useCallback cho shareQRCode
-    // const shareQRCode = useCallback( async () =>
-    // {
-    //     try
-    //     {
-    //         setSaving( true );
-    //         const uri = await viewShotRef.current?.capture?.();
-    //         console.log( "uri", uri );
-
-    //         if ( uri )
-    //         {
-    //             await Share.share( {
-    //                 url: uri,
-    //                 message: uri
-    //             } );
-    //         }
-    //     } catch ( error )
-    //     {
-    //         Alert.alert(
-    //             "Lỗi",
-    //             "Không thể chia sẻ mã QR. Vui lòng thử lại sau.",
-    //             [ { text: "OK" } ]
-    //         );
-    //         console.error( "Lỗi khi chia sẻ QR:", error );
-    //     } finally
-    //     {
-    //         setSaving( false );
-    //     }
-    // }, [ bankInfo ] ); // Chỉ phụ thuộc vào bankInfo
-
     const shareQRCode = async () =>
     {
         try
@@ -193,9 +163,6 @@ export default function DisplayQR ()
             Alert.alert( 'Lỗi', 'Không thể chia sẻ mã QR' );
         }
     };
-
-
-
 
     // Sử dụng useCallback cho copyAccountNumber
     const copyAccountNumber = useCallback( async () =>

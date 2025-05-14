@@ -7,6 +7,7 @@ import { router } from 'expo-router';
 import VietQRImage from '../test/linking';
 import { registerForPushNotificationsAsync } from '../test/fibase';
 import NotificationTest from '../test/notification';
+import ActionCardExample from '../test/actionCard';
 
 export default function Home ()
 {
@@ -33,14 +34,6 @@ export default function Home ()
         <View className='py-4'>
           <MyCard />
         </View>
-
-        {/* <VietQRImage
-        accountName='Truong Thanh Dat'
-        accountNumber='246134029400001'
-        amount={ 10000 }
-        addInfo='abc'
-        bankCode='nab'
-      /> */}
 
         {/* Action */ }
         <View className="flex-row flex-wrap bg-white justify-between">

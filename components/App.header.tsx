@@ -19,37 +19,6 @@ export default function AppHeader ()
     router.push( "/notificate" );
   };
 
-  const shakeAnim = useRef( new Animated.Value( 0 ) ).current;
-  const startShake = () =>
-  {
-    Animated.sequence( [
-      Animated.timing( shakeAnim, {
-        toValue: 1,
-        duration: 100,
-        useNativeDriver: true,
-      } ),
-      Animated.timing( shakeAnim, {
-        toValue: -1,
-        duration: 100,
-        useNativeDriver: true,
-      } ),
-      Animated.timing( shakeAnim, {
-        toValue: 1,
-        duration: 100,
-        useNativeDriver: true,
-      } ),
-      Animated.timing( shakeAnim, {
-        toValue: 0,
-        duration: 100,
-        useNativeDriver: true,
-      } ),
-    ] ).start();
-  };
-  const rotate = shakeAnim.interpolate( {
-    inputRange: [ -1, 1 ],
-    outputRange: [ '-15deg', '15deg' ],
-  } );
-
   return (
     <>
       <StatusBar translucent backgroundColor="transparent" barStyle="light-content" />
@@ -61,10 +30,10 @@ export default function AppHeader ()
 
           <TouchableOpacity onPress={ handleNotification } className="flex-row items-center relative">
             <View className="">
-              <MaterialCommunityIcons name="bell" size={ 26 } color="white" />
+              <MaterialCommunityIcons name="bell" size={ 20 } color="white" />
             </View>
-            <View className="bg-red-500 h-6 w-6 rounded-full justify-center items-center absolute z-10 top-[-5] right-[-5]">
-              <Text className="text-[8px] font-bold text-white">99+</Text>
+            <View className="bg-red-500 h-4 w-4 rounded-full justify-center items-center absolute z-10 top-[-4] right-[-4]">
+              <Text className="text-[6px] font-bold text-white">99+</Text>
             </View>
           </TouchableOpacity>
         </View>

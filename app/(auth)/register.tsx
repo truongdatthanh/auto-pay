@@ -145,19 +145,21 @@ export default function Register ()
                 { !keyboardVisible && (
                     <View className="px-4 pb-4">
                         <TouchableOpacity
-                            className="mt-2 bg-[#1c40f2] rounded-xl h-16 justify-center w-full"
+                            className="mt-2 bg-[#1c40f2] rounded-xl justify-center w-full"
                             onPress={ handleSubmit }
                         >
-                            <Text className="text-white text-center font-bold text-md">Đăng Ký</Text>
+                            <View className="flex-row items-center justify-center p-4">
+                                <Text className="text-white font-semibold ml-2">Đăng Ký</Text>
+                            </View>
                         </TouchableOpacity>
                         <TouchableOpacity
-                            className="mt-4 border-[1px] border-gray-400 rounded-xl h-16 justify-center w-full"
+                            className="mt-2 justify-center "
                             onPress={ handleSignUpWithPhoneNumber }
                         >
                             <Text className="text-gray-500 text-center font-bold text-md">Sử Dụng Số Điện Thoại</Text>
                         </TouchableOpacity >
                         <View className="p-4 flex-row items-center justify-center">
-                            <Text className="text-center text-base">Bạn đã có tài khoản? </Text>
+                            <Text className="text-center text-gray-500">Bạn đã có tài khoản? </Text>
                             <Link href="/login" className="text-[#1c40f2] font-bold text-lg">Đăng nhập</Link>
                         </View>
                     </View>
