@@ -1,4 +1,4 @@
-//#region code chuẩn com mẹ nấu
+//#region code chuẩn cơm mẹ nấu
 import React, { useCallback, useEffect, useState, useRef } from 'react';
 import { View, Text, FlatList, TouchableOpacity, Animated, NativeSyntheticEvent, NativeScrollEvent } from 'react-native';
 import data from "../assets/banking-card.json";
@@ -19,7 +19,7 @@ export default function MyCard ()
     const cardWidth = 330; //Chiều rộng của card để snap
     const isScrollingRef = useRef( false );//Kiểm tra xem có đang cuộn không
     const extraPadding = 60; //Khoảng trống sau thẻ cuối cùng
-    const buttonThreshold = 20; // Ngưỡng vuốt để hiện nút (giảm xuống để dễ hiện nút hơn)
+    const buttonThreshold = 30; // Ngưỡng vuốt để hiện nút (giảm xuống để dễ hiện nút hơn)
 
 
     //sử dụng useCallback để chắc chắn onViewRef không bị thay đổi giữa các render
@@ -131,7 +131,7 @@ export default function MyCard ()
                 } ),
                 Animated.timing( fadeAnim, {
                     toValue: 1,
-                    duration: 200,
+                    duration: 500,
                     useNativeDriver: true,
                 } )
             ] ).start();
@@ -204,13 +204,15 @@ export default function MyCard ()
                         paddingRight: isAtLastCard ? 20 + extraPadding : 20,
                     } }
                 />
+                {/* -----------------------------------------End----------------------------------------- */ }
 
                 {/* Animated Arrow */ }
                 <Animated.View
+
                     style={ {
                         position: 'absolute',
                         right: 40,
-                        top: 100,
+                        top: 90,
                         bottom: 0,
                         opacity: arrowAnim,
                         transform: [
@@ -223,7 +225,9 @@ export default function MyCard ()
                         ],
                     } }
                 >
-                    <Ionicons name="arrow-forward" size={ 24 } color="#1c40f2" />
+                    <View className='bg-white/20 rounded-full p-4 ml-4'>
+                        <Ionicons name="arrow-forward" size={ 24 } color="white" />
+                    </View>
                 </Animated.View>
 
                 {/* Button "Xem tất cả" */ }
@@ -256,6 +260,7 @@ export default function MyCard ()
                     </TouchableOpacity>
                 </Animated.View>
             </View>
+            {/* -----------------------------------------End----------------------------------------- */ }
 
             {/* Active dot */ }
             <View className='h-[24px] items-center justify-center'>
@@ -268,10 +273,13 @@ export default function MyCard ()
                     ) ) }
                 </View>
             </View>
+            {/* -----------------------------------------End----------------------------------------- */ }
+
+
             {/* Bar Chart */ }
-            <View className='mx-5 bg-white rounded-2xl shadow-xl mt-2'>
+            {/* <View className='mx-5 bg-white rounded-2xl shadow-xl mt-2'>
                 <BarCharts id={ bankCard[ currentCardIndex ].id } />
-            </View>
+            </View> */}
         </View>
     );
 }

@@ -62,8 +62,7 @@ export default function Notification ()
 
     const renderItem = ( { item }: any ) => (
         <View
-            className={ `bg-white p-4 mx-4 my-2 rounded-xl shadow-md flex-row items-center ${ item.status === "unread" ? "border-l-4 border-blue-500" : ""
-                }` }
+            className="bg-white p-4 mx-4 my-2 rounded-xl shadow-md flex-row items-center "
         >
             <View className="w-12 h-12 rounded-full bg-blue-100 justify-center items-center">
                 <FontAwesome5 name="money-bill-wave" size={ 20 } color="#3B82F6" />
@@ -79,7 +78,7 @@ export default function Notification ()
                 </Text>
                 <Text className="text-sm text-gray-400 mt-1">{ item.time }</Text>
             </View>
-        </View>
+        </View> 
     );
 
     return (

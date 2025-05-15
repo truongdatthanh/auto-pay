@@ -1,50 +1,3 @@
-// import AppHeaderInfo from "@/components/App.headerInfo";
-// import { Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
-// import { router, Stack } from "expo-router";
-// import { TouchableOpacity } from "react-native";
-
-
-// export default function QRLayout ()
-// {
-//     return (
-//         <Stack initialRouteName='scanner-qr'>
-//             <Stack.Screen
-//                 name="index"
-//                 options={ {
-//                     header: () => <AppHeaderInfo title="Thanh Toán Với QR" onPress={ () => router.replace( "/(tabs)" ) }
-//                         rightComponent={
-//                             <TouchableOpacity
-//                                 onPress={ () => router.push( "/(tabs)/qr/create" ) }
-//                                 className="p-2"
-//                             >
-//                                 <Entypo name="dots-three-vertical" size={ 18 } color="white" />
-//                             </TouchableOpacity>
-//                         }
-//                     />
-//                 } }
-//             />
-//             <Stack.Screen
-//                 name='scanner-qr'
-//                 options={ {
-//                     headerShown: false
-//                 } }
-//             />
-//             <Stack.Screen
-//                 name='create'
-//                 options={ {
-//                     header: () => <AppHeaderInfo title="Tạo Mã QR Giao Dịch" onPress={ () => router.replace( "/(tabs)" ) } />
-//                 } }
-//             />
-//             <Stack.Screen
-//                 name='display'
-//                 options={ {
-//                     headerShown: false
-//                 } }
-//             />
-//         </Stack>
-//     );
-// }
-
 import AppHeaderInfo from "@/components/App.headerInfo";
 import { Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
 import { router, Stack } from "expo-router";
@@ -115,7 +68,7 @@ export default function QRLayout ()
                 <Stack.Screen
                     name='create'
                     options={ {
-                        header: () => <AppHeaderInfo title="Tạo Mã QR Giao Dịch" onPress={ () => router.replace( "/(tabs)/qr" ) } />
+                        header: () => <AppHeaderInfo title="Tạo Mã QR Giao Dịch" onPress={ () => router.replace( "/(tabs)" ) } />
                     } }
                 />
                 <Stack.Screen

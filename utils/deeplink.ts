@@ -11,31 +11,31 @@ export const bankDeepLinks = [
         code: "vcb",
         name: "Vietcombank",
         url: "vcbdigibank://",
-        logo: "https://play-lh.googleusercontent.com/RWPd1WdrkKP53RyHHRdmV35eOhxoCHmlujBUIizNf8Gy1pHN4-6HNOiJ1L4g9V6XyQ"
+        logo: "https://payoo.vn/img/content/2023/03/logo_namabank.png"
     },
     {
         code: "mb",
         name: "MB Bank",
         url: "mbbank://",
-        logo: "https://play-lh.googleusercontent.com/sHcbMrh5EE_RmlIk9D2wY7-KEjB9vOzgZzUVuZUjzS3zCgvwG-sVUhP-rRJCxZzbTw"
+        logo: "https://payoo.vn/img/content/2023/03/logo_namabank.png"
     },
     {
         code: "tcb",
         name: "Techcombank",
         url: "techcombank://",
-        logo: "https://play-lh.googleusercontent.com/mGqHPtOFzxR9Z-aQiGWZsKJJRF0YQcaFrYPP0KyYJ7jf-oyp5HA9j9JzYpCN8i7bkg"
+        logo: "https://payoo.vn/img/content/2023/03/logo_namabank.png"
     },
     {
         code: "bidv",
         name: "BIDV",
         url: "bidv.smartbanking.partner://payment",
-        logo: "https://play-lh.googleusercontent.com/soAQdNvPPcODl9RzfZvxgJzk2oBzy9JvZhbwLXXYl57Wmf7YM_9p1tvQxEZVTYXXQg"
+        logo: "https://payoo.vn/img/content/2023/03/logo_namabank.png"
     },
     {
         code: "nab",
         name: "Nam Á Bank",
         url: "deeplinkapp://nab/softotp",
-        logo: "https://play-lh.googleusercontent.com/OfLXdiT4MmXzQhfWmZYrEaQFkzl9LCmJQjQpapOqiQIrJJAWUvxDTnptiST7kA6YbqY"
+        logo: "https://payoo.vn/img/content/2023/03/logo_namabank.png"
     },
     // Thêm ngân hàng khác
 ];

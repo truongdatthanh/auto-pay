@@ -35,7 +35,7 @@ export default function RootLayout ()
     }
     else
     {
-      router.replace( '/(auth)/login' );
+      router.replace( '/transfer' );
     }
   }, [ isLoggedIn ] );
 
