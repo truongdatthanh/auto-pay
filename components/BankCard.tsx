@@ -1,8 +1,10 @@
-import React from "react";
+import { useState } from "react";
 import { Image, Text, TouchableWithoutFeedback, View } from "react-native";
 import { LinearGradient } from 'expo-linear-gradient';
 import { router } from "expo-router";
 import { Ionicons, FontAwesome } from '@expo/vector-icons';
+import { TouchableOpacity } from "react-native";
+import { formatCardNumber, formatHiddenCardNumber } from "@/utils/formatCardNumber";
 
 interface IBankCard
 {
@@ -15,14 +17,9 @@ interface IBankCard
 
 export default function BankingCard ( props: IBankCard )
 {
+    const [ isVisible, setIsVisible ] = useState( false );
     const bankCard: IBankCard = props;
 
-    // Format card number with spaces for better readability
-    const formatCardNumber = ( cardNumber: string | undefined ) =>
-    {
-        if ( !cardNumber ) return "";
-        return cardNumber.replace( /(\d{4})/g, "$1 " ).trim();
-    };
 
     const handleBankCardDetail = () =>
     {
@@ -87,9 +84,12 @@ export default function BankingCard ( props: IBankCard )
 
                     <View className="mt-4">
                         <Text className="text-white/80 text-xs mb-1">Số tài khoản</Text>
-                        <Text className="text-white text-xl tracking-widest font-semibold">
-                            { formatCardNumber( bankCard.STK ) }
-                        </Text>
+                        <View className="flex-row justify-between items-center">
+                            <Text className="text-white text-xl tracking-widest font-semibold">
+                                { formatCardNumber( bankCard.STK ) }
+                            </Text>
+                        </View>
+
                     </View>
 
                     <View className="mt-4 justify-between flex-row items-end">

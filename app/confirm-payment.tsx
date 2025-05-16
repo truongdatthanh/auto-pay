@@ -6,6 +6,7 @@ import { useCallback, useState } from "react";
 import { formatCurrencyVND } from "@/utils/formatCurrencyVND";
 import { bankDeepLinks } from "@/utils/deeplink";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import mockMyBankCard from "../assets/banking-card.json"
 
 export default function ConfirmPayment ()
 {
@@ -15,8 +16,7 @@ export default function ConfirmPayment ()
     const [ isVisible, setIsVisible ] = useState( false );
     const [ loading, setLoading ] = useState( false );
     const [ selectedCard, setSelectedCard ] = useState<any>( null );
-
-    const [ bankingCard, setBankingCard ] = useState( bankDeepLinks[ 0 ] );
+    const listBankingCard = mockMyBankCard;
 
     useFocusEffect(
         useCallback( () =>
@@ -47,10 +47,10 @@ export default function ConfirmPayment ()
         setIsVisible( !isVisible );
     };
 
-    const handleSelectBank = ( bank: typeof bankDeepLinks[ 0 ] ) =>
+    const handleSelectBank = ( bank: any ) =>
     {
         setIsVisible( false );
-        setBankingCard( bank );
+        setSelectedCard( bank );
     };
 
     const handleContinue = () =>
@@ -64,7 +64,7 @@ export default function ConfirmPayment ()
             // } );
             router.push( {
                 pathname: "/open-bank",
-                params: { url: bankingCard.url, data: JSON.stringify( data ) },
+                params: { url: selectedCard.deeplink, data: JSON.stringify( data ) },
             } );
         }, 300 );
     };
@@ -96,7 +96,7 @@ export default function ConfirmPayment ()
 
                         <View className="pt-4">
                             <View className="flex-row justify-between py-3">
-                                <Text className="text-gray-500">Tài khoản nguồn</Text>
+                                <Text className="text-gray-500">Tài khoản thụ hưởng</Text>
                                 <Text className="font-medium">{ data.STK }</Text>
                             </View>
 
@@ -112,12 +112,11 @@ export default function ConfirmPayment ()
                                 </Text>
                             </View>
 
-                            { data.content && (
-                                <View className="flex-row justify-between py-3 border-t border-gray-100">
-                                    <Text className="text-gray-500">Nội dung</Text>
-                                    <Text className="font-medium">{ data.content }</Text>
-                                </View>
-                            ) }
+                            <View className="flex-row justify-between pt-3 border-t border-gray-100">
+                                <Text className="text-gray-500">Nội dung</Text>
+                                <Text className={ `${ data.content ? 'font-medium' : 'text-gray-500' }` }>{ data.content ? data.content : '-' }</Text>
+                            </View>
+
                         </View>
                     </View>
 
@@ -142,18 +141,18 @@ export default function ConfirmPayment ()
                     className="bg-white rounded-2xl overflow-hidden shadow-md border border-gray-100"
                     onPress={ handleShowSelectedBank }
                 >
-                    { bankingCard ? (
+                    { selectedCard ? (
                         <View className="p-4">
                             <View className="flex-row justify-between items-center">
                                 <View className="flex-row items-center">
                                     <Image
-                                        source={ { uri: bankingCard.logo } }
+                                        source={ { uri: selectedCard.logoBanking } }
                                         className="w-12 h-12 rounded-lg mr-3"
                                         resizeMode="contain"
                                     />
                                     <View>
-                                        <Text className="font-bold text-gray-800">{ bankingCard.name }</Text>
-                                        <Text className="text-gray-500 text-sm">{ selectedCard?.STK }</Text>
+                                        <Text className="font-bold text-gray-800">{ selectedCard.bankName }</Text>
+                                        <Text className="text-gray-500 text-sm">{ selectedCard.STK }</Text>
                                     </View>
                                 </View>
                                 <MaterialIcons name="keyboard-arrow-down" size={ 24 } color="#1c40f2" />
@@ -193,9 +192,9 @@ export default function ConfirmPayment ()
                             </TouchableOpacity>
                         </View>
                         <ScrollView className="max-h-[500px]">
-                            { bankDeepLinks.map( ( bank ) => (
+                            { listBankingCard.map( ( bank ) => (
                                 <TouchableOpacity
-                                    key={ bank.code }
+                                    key={ bank.bankbin }
                                     className="flex-row items-center bg-white p-4 mb-3 rounded-xl border border-gray-100"
                                     style={ {
                                         shadowColor: '#000',
@@ -207,14 +206,14 @@ export default function ConfirmPayment ()
                                     onPress={ () => handleSelectBank( bank ) }
                                 >
                                     <Image
-                                        source={ { uri: bank.logo } }
+                                        source={ { uri: bank.logoBanking } }
                                         className="w-12 h-12 rounded-lg"
                                         resizeMode="contain"
                                     />
                                     <View className="ml-4 flex-1">
                                         <Text className="text-base font-medium">{ bank.name }</Text>
                                         <Text className="text-gray-500 text-sm mt-1">
-                                            Mã ngân hàng: { bank.code.toUpperCase() }
+                                            { bank.bankName }
                                         </Text>
                                     </View>
                                     <Ionicons name="chevron-forward" size={ 20 } color="#1c40f2" />

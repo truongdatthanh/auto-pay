@@ -25,6 +25,7 @@ interface IBankingTransaction
 {
   id: string;
   STK: string;
+  deeplink: string;
   name: string;
   logoBanking: string;
   bankName: string;
@@ -181,7 +182,7 @@ export default function History ()
       <AppHeaderInfo title="Lịch Sử Giao Dịch" onPress={ () => router.replace( "/(tabs)" ) }
         rightComponent={
           <TouchableOpacity className="p-2 rounded-full" onPress={ () => setShowFilterModal( true ) } >
-            <Feather name="filter" size={ 24 } color="white" />
+            <Feather name="filter" size={ 20 } color="white" />
           </TouchableOpacity>
         }
       />

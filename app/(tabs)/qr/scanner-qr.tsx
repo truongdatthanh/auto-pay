@@ -35,6 +35,7 @@ export default function QRScanner ()
             Haptics.notificationAsync( Haptics.NotificationFeedbackType.Success );
             setScanning( false );
             const jsonData = result?.data || "";
+            console.log( "jsonData", jsonData );
             setTimeout( () =>
             {
                 router.push( {
@@ -90,8 +91,6 @@ export default function QRScanner ()
             if ( !result.canceled && result.assets && result.assets.length > 0 )
             {
                 const selectedImage = result.assets[ 0 ];
-                console.log("uri: " , selectedImage.uri)
-
                 // Scan hình ảnh QR bằng Camera.scanFromURLAsync bằng cách lấy ra uri path của ảnh
                 try
                 {

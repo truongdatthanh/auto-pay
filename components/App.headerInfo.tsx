@@ -10,15 +10,20 @@ export default function AppHeaderInfo ( { title, onPress, rightComponent, }: { t
             <StatusBar translucent backgroundColor="transparent" barStyle="light-content" />
             <SafeAreaView className="bg-[#1c40f2] pt-6" style={ Platform.OS === 'android' ? { paddingTop: StatusBar.currentHeight } : {} }>
                 <View className="flex-row items-center justify-between p-4">
-                    <TouchableOpacity onPress={ onPress } className="p-2 bg-white/20 rounded-full">
-                        <Ionicons name="arrow-back-outline" size={ 18 } color="white" />
-                    </TouchableOpacity>
+                    <View className="w-[25%]">
+                        <TouchableOpacity onPress={ onPress } className="p-2 bg-white/20 rounded-full h-10 w-10 items-center justify-center">
+                            <Ionicons name="arrow-back-outline" size={ 18 } color="white" />
+                        </TouchableOpacity>
+                    </View>
 
                     <View className="flex-1 items-center ">
                         <Text className="text-white font-bold text-lg">{ title }</Text>
                     </View>
 
-                    { rightComponent ?? <View style={ { width: 40 } } /> }
+                    <View className="w-[25%] items-end">
+                        { rightComponent ?? <View style={ { width: "25%" } } /> }
+                    </View>
+
 
                 </View>
             </SafeAreaView>

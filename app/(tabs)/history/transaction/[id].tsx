@@ -9,6 +9,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { BlurView } from 'expo-blur';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
+import Loading from "@/components/Loading";
 
 
 interface ITransaction
@@ -26,6 +27,7 @@ interface IBankingTransaction
 {
     id: string;
     STK: string;
+    deeplink: string;
     name: string;
     logoBanking: string;
     bankName: string;
@@ -147,13 +149,7 @@ export default function Transaction ()
     // Hiển thị màn hình loading
     if ( isLoading )
     {
-        return (
-            <View className="flex-1 items-center justify-center bg-white">
-                <ActivityIndicator size="large" color="#1c40f2" />
-                <Text className="mt-4 text-slate-700 font-medium text-base">Đang tải thông tin giao dịch</Text>
-                <Text className="mt-1 text-slate-500 text-sm">Vui lòng đợi trong giây lát...</Text>
-            </View>
-        );
+        return <Loading message="Đang tải thông tin giao dịch...." />;
     }
 
     if ( !data )
