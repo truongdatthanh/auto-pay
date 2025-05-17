@@ -68,7 +68,7 @@ export default function QRLayout ()
                 <Stack.Screen
                     name='create'
                     options={ {
-                        header: () => <AppHeaderInfo title="Tạo Mã QR Giao Dịch" onPress={ () => router.replace( "/(tabs)" ) } />
+                        header: () => <AppHeaderInfo title="Tạo mã QR" onPress={ () => router.replace( "/(tabs)" ) } />
                     } }
                 />
                 <Stack.Screen

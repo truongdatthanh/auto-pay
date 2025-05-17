@@ -131,7 +131,7 @@ export default function MyCard ()
                 } ),
                 Animated.timing( fadeAnim, {
                     toValue: 1,
-                    duration: 500,
+                    duration: 200,
                     useNativeDriver: true,
                 } )
             ] ).start();
@@ -200,7 +200,7 @@ export default function MyCard ()
                     onViewableItemsChanged={ onViewRef }
                     viewabilityConfig={ viewabilityConfig }
                     contentContainerStyle={ {
-                        paddingHorizontal: 20,
+                        paddingHorizontal: 16,
                         paddingRight: isAtLastCard ? 20 + extraPadding : 20,
                     } }
                 />
@@ -208,11 +208,10 @@ export default function MyCard ()
 
                 {/* Animated Arrow */ }
                 <Animated.View
-
                     style={ {
                         position: 'absolute',
-                        right: 40,
-                        top: 90,
+                        right: 20,
+                        top: 0,
                         bottom: 0,
                         opacity: arrowAnim,
                         transform: [

@@ -101,14 +101,6 @@ export default function CreateMyQR ()
             .catch( err => console.error( "Lỗi khi lưu thẻ:", err ) );
     };
 
-    // Format số tiền khi nhập
-    const formatAmount = ( text: string ) =>
-    {
-        // Chỉ giữ lại số
-        const numericValue = text.replace( /[^0-9]/g, '' );
-        setAmount( numericValue );
-    };
-
     return (
         <KeyboardAvoidingView
             behavior={ Platform.OS === "ios" ? "padding" : "height" }
@@ -118,11 +110,13 @@ export default function CreateMyQR ()
             <View className="flex-1 bg-[#1c40f2]">
                 <View className="flex-1 bg-[#f8f8f8] rounded-t-[32px] px-5 pt-6">
                     <ScrollView showsVerticalScrollIndicator={ false } className="flex-1">
-                        {/* Tài khoản ngân hàng */ }
+                        <View className="items-center my-4">
+                            <Text className="text-4xl font-bold text-[#1c40f2] italic">⛛ AUTOPAY </Text>
+                        </View>
                         <View className="mb-6">
-                            <Text className="text-gray-700 font-medium mb-2 ml-1">Tài khoản nguồn</Text>
+                            <Text className="text-gray-700 font-medium mb-2 ml-1">Số tài khoản</Text>
                             <TouchableOpacity
-                                className="bg-white rounded-2xl overflow-hidden shadow-md border border-gray-100"
+                                className="bg-white rounded-xl overflow-hidden border border-gray-300"
                                 onPress={ () => setShowCardSelector( true ) }
                             >
                                 { selectedCard ? (
@@ -130,14 +124,10 @@ export default function CreateMyQR ()
                                         <View className="flex-row justify-between items-center">
                                             <View className="flex-row items-center">
                                                 <Image
-                                                    source={ { uri: selectedCard.logoBanking } }
-                                                    className="w-12 h-12 rounded-lg mr-3"
-                                                    resizeMode="contain"
+                                                    source={ require( "@/assets/images/dots.png" ) }
+                                                    className="w-5 h-5 mr-8"
                                                 />
-                                                <View>
-                                                    <Text className="font-bold text-gray-800">{ selectedCard.bankName }</Text>
-                                                    <Text className="text-gray-500 text-sm mt-1">{ selectedCard.STK }</Text>
-                                                </View>
+                                                <Text className="font-semibold text-md">{ selectedCard.STK }</Text>
                                             </View>
                                             <MaterialIcons name="keyboard-arrow-down" size={ 24 } color="#1c40f2" />
                                         </View>
@@ -153,18 +143,31 @@ export default function CreateMyQR ()
                         {/* -----------------------------------------End----------------------------------------- */ }
 
                         {/* Số tiền */ }
+                        <View className="mb-6 ">
+                            <Text className="text-gray-700 font-medium mb-2 ml-1">Tên chủ tài khoản</Text>
+                            <View className="bg-gray-300 rounded-xl overflow-hidden  border border-gray-500">
+                                <View className="flex-row items-center px-4 py-4">
+                                    <Image source={ require( "@/assets/images/user.png" ) } className="w-7 h-7 mr-4" />
+                                    <Text className="text-gray-500 font-semibold text-md"> { selectedCard?.name?.toUpperCase() }</Text>
+                                </View>
+                            </View>
+                        </View>
+                        {/* -----------------------------------------End----------------------------------------- */ }
+
+                        {/* Số tiền */ }
                         <View className="mb-6">
                             <Text className="text-gray-700 font-medium mb-2 ml-1">Số tiền</Text>
-                            <View className="bg-white rounded-2xl overflow-hidden shadow-md border border-gray-100">
-                                <View className="flex-row items-center p-4">
-                                    <FontAwesome5 name="money-bill-wave" size={ 18 } color="#1c40f2" className="mr-3" />
+                            <View className="bg-white rounded-xl overflow-hidden border border-gray-300">
+                                <View className="flex-row items-center px-4 py-2">
+                                    <Image source={ require( "@/assets/images/coin.png" ) } className="w-7 h-7 mr-4" />
                                     <TextInput
-                                        className="flex-1 text-gray-800 text-base"
+                                        className="flex-1 font-semibold text-md"
                                         placeholder="Nhập số tiền thanh toán"
                                         keyboardType="numeric"
                                         value={ amount }
                                         onChangeText={ setAmount }
                                     />
+                                    <Text>VNĐ</Text>
                                 </View>
                             </View>
                         </View>
@@ -173,7 +176,7 @@ export default function CreateMyQR ()
                         {/* Nội dung */ }
                         <View className="mb-8">
                             <Text className="text-gray-700 font-medium mb-2 ml-1">Nội dung chuyển khoản</Text>
-                            <View className="bg-white rounded-2xl overflow-hidden shadow-lg border border-gray-100">
+                            <View className="bg-white rounded-xl overflow-hidden  border border-gray-300">
                                 <TextInput
                                     className="p-4 text-gray-800 text-base"
                                     placeholder="Nhập nội dung chuyển khoản"
@@ -193,17 +196,10 @@ export default function CreateMyQR ()
 
                         {/* Button Submit */ }
                         <TouchableOpacity
-                            className={ `rounded-2xl py-4 mb-8 ${ selectedCard && amount ? "bg-[#1c40f2]" : "bg-gray-300"
+                            className={ `rounded-xl py-4 mb-8 ${ selectedCard && amount ? "bg-[#1c40f2]" : "bg-gray-300"
                                 }` }
                             onPress={ handleSubmit }
                             disabled={ !selectedCard || !amount }
-                            style={ {
-                                shadowColor: selectedCard && amount ? '#1c40f2' : '#999',
-                                shadowOffset: { width: 0, height: 4 },
-                                shadowOpacity: 0.3,
-                                shadowRadius: 6,
-                                elevation: 5
-                            } }
                         >
                             <View className="flex-row justify-center items-center">
                                 <Ionicons name="qr-code" size={ 20 } color="white" className="mr-2" />
@@ -222,8 +218,9 @@ export default function CreateMyQR ()
                     animationType="slide"
                     onRequestClose={ () => setShowCardSelector( false ) }
                 >
-                    <View className="flex-1 bg-black/50 justify-end">
+                    <View className="flex-1 bg-black/70 justify-end">
                         <View className="bg-white rounded-t-3xl p-5 max-h-[70%]">
+                            <View className="self-center w-24 h-1.5 bg-gray-300 rounded-full mb-4" />
                             <View className="flex-row justify-between items-center mb-4">
                                 <Text className="text-xl font-bold">Chọn tài khoản</Text>
                                 <TouchableOpacity
@@ -238,7 +235,7 @@ export default function CreateMyQR ()
                                 { data.map( ( card, index ) => (
                                     <TouchableOpacity
                                         key={ index }
-                                        className={ `border-b border-gray-200 p-4 rounded-xl mb-2 ${ selectedCard?.STK === card.STK ? "bg-blue-50 border border-blue-200" : ""
+                                        className={ `border-b border-gray-200 p-4 rounded-xl ${ selectedCard?.STK === card.STK ? "bg-blue-50 border border-blue-200" : ""
                                             }` }
                                         onPress={ () => handleSelectCard( card ) }
                                     >

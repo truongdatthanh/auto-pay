@@ -1,7 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Link, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
-import { Keyboard, Platform, Pressable, SafeAreaView, ScrollView, StatusBar, Text, TouchableOpacity, View } from "react-native";
+import { Keyboard, KeyboardAvoidingView, Platform, Pressable, SafeAreaView, ScrollView, StatusBar, Text, TouchableOpacity, View } from "react-native";
 import FloatingInputs from "../test/floatinglabel";
 
 export default function Register ()
@@ -60,7 +60,7 @@ export default function Register ()
     }
     return (
         <>
-            <SafeAreaView
+            <KeyboardAvoidingView
                 className="flex-1 bg-white"
                 style={ { paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0 } }
             >
@@ -140,10 +140,9 @@ export default function Register ()
                 </ScrollView>
                 {/* -----------------------------------------End----------------------------------------- */ }
 
-
                 {/* Footer */ }
                 { !keyboardVisible && (
-                    <View className="px-4 pb-4">
+                    <View className="px-4 pb-4 align-bottom">
                         <TouchableOpacity
                             className="mt-2 bg-[#1c40f2] rounded-xl justify-center w-full"
                             onPress={ handleSubmit }
@@ -165,7 +164,7 @@ export default function Register ()
                     </View>
                 ) }
                 {/* -----------------------------------------End----------------------------------------- */ }
-            </SafeAreaView >
+            </KeyboardAvoidingView >
         </>
     );
 }

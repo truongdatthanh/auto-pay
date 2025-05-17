@@ -36,6 +36,7 @@ export default function BankAccount ()
     const [ permissionGranted, setPermissionGranted ] = useState( false );
     const [ saving, setSaving ] = useState( false );
     const viewShotRef = useRef<ViewShot>( null );
+    
 
     useFocusEffect(
         useCallback( () =>
@@ -188,8 +189,9 @@ export default function BankAccount ()
         <>
             <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
             <ScrollView className="flex-1 bg-slate-50" showsVerticalScrollIndicator={ false } contentContainerStyle={ { paddingBottom: 50 } }>
+
                 {/* QR Code */ }
-                <View className="bg-white m-4 mt-8 p-4 rounded-3xl shadow-md border border-gray-200">
+                <View className="bg-white m-4 p-4 rounded-3xl shadow-md border border-gray-200">
                     <View className="justify-center items-center">
                         <ViewShot ref={ viewShotRef } options={ { format: "jpg", quality: 0.9 } }>
                             <View className="items-center bg-white">
@@ -318,7 +320,4 @@ export default function BankAccount ()
         </>
     );
 }
-
-
-
 

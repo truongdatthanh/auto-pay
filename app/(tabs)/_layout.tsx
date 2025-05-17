@@ -1,16 +1,27 @@
-// import { View, Keyboard, SafeAreaView } from 'react-native';
+// import { View, Keyboard, SafeAreaView, Animated } from 'react-native';
 // import { MaterialCommunityIcons } from '@expo/vector-icons';
 // import { router, Tabs, usePathname } from 'expo-router';
-// import { useState, useEffect } from 'react';
+// import { useState, useEffect, useRef } from 'react';
 // import FontAwesome from '@expo/vector-icons/FontAwesome';
 // import { useTabBarStore } from '@/store/useTabbarStore';
 
 // export default function HomeLayout ()
 // {
-
 //   const pathname = usePathname();
 //   const isTabbarVisibleZustand = useTabBarStore( ( state ) => state.isTabBarVisible );
 //   const setIsTabBarVisibleZustand = useTabBarStore( ( state ) => state.setTabBarVisible );
+
+//   const translateY = useRef( new Animated.Value( 0 ) ).current;
+
+//   // Ẩn/hiện tabbar bằng animation
+//   useEffect( () =>
+//   {
+//     Animated.timing( translateY, {
+//       toValue: isTabbarVisibleZustand ? 0 : 100, // Trượt xuống 100 khi ẩn
+//       duration: 150,
+//       useNativeDriver: true,
+//     } ).start();
+//   }, [ isTabbarVisibleZustand ] );
 
 //   useEffect( () =>
 //   {
@@ -33,10 +44,10 @@
 //           tabBarInactiveTintColor: 'gray',
 //           tabBarStyle: {
 //             position: 'absolute',
-//             bottom: 20,
+//             bottom: 10,
 //             left: 20,
 //             right: 20,
-//             height: 70,
+//             height: 50,
 //             borderRadius: 50,
 //             marginHorizontal: 20,
 //             elevation: 10,
@@ -44,16 +55,20 @@
 //             shadowOpacity: 0.1,
 //             shadowOffset: { width: 0, height: 5 },
 //             shadowRadius: 10,
-//             display: isTabbarVisibleZustand ? 'flex' : 'none'
+//             transform: [ { translateY } ],
 //           },
 //           headerPressColor: '#3377f2',
 //           tabBarItemStyle: {
-//             marginTop: 8,
-//             position: 'relative',
+//             flexDirection: 'row',
+//             justifyContent: 'center',
+//             alignItems: 'center',
+//             flex: 1,
+//           },
+//           tabBarLabelStyle: {
+//             display: "none"
 //           },
 //         } }
 //       >
-//         {/* Các tab screens giữ nguyên */ }
 //         <Tabs.Screen
 //           name="index"
 //           options={ {
@@ -70,7 +85,7 @@
 //           options={ {
 //             tabBarShowLabel: false,
 //             title: 'Scan',
-//             tabBarStyle: { display: 'none' },
+//             tabBarStyle: { display: 'none' }, // Tab này không hiển thị tabbar
 //             headerShown: false,
 //             tabBarIcon: ( { color } ) => (
 //               <MaterialCommunityIcons name="qrcode-scan" size={ 24 } color={ color } />
@@ -82,7 +97,7 @@
 //               e.preventDefault();
 //               router.replace( {
 //                 pathname: "/(tabs)/qr",
-//                 params: { tabIndex: 0 }
+//                 params: { tabIndex: 0 },
 //               } );
 //             },
 //           } }
@@ -93,9 +108,9 @@
 //           options={ {
 //             title: 'History',
 //             tabBarIcon: ( { color } ) => (
-//               <MaterialCommunityIcons name="history" size={ 24 } color={ color } />
+//               <MaterialCommunityIcons name="history" size={ 30 } color={ color } />
 //             ),
-//             headerShown: false
+//             headerShown: false,
 //           } }
 //           listeners={ {
 //             tabPress: ( e ) =>
@@ -114,34 +129,33 @@
 //               <FontAwesome name="user-o" size={ 24 } color={ color } />
 //             ),
 //             headerShown: false,
-//             tabBarStyle: { display: 'none' },
+//             tabBarStyle: { display: 'none' }, // Profile không hiển thị tabbar
 //           } }
 //         />
 //       </Tabs>
-//     </SafeAreaView>
+//     </SafeAreaView >
 //   );
 // }
 
-import { View, Keyboard, SafeAreaView, Animated } from 'react-native';
+import { View, SafeAreaView, Animated } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { router, Tabs, usePathname } from 'expo-router';
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { useTabBarStore } from '@/store/useTabbarStore';
+import { LinearGradient } from 'expo-linear-gradient';
 
 export default function HomeLayout ()
 {
   const pathname = usePathname();
   const isTabbarVisibleZustand = useTabBarStore( ( state ) => state.isTabBarVisible );
   const setIsTabBarVisibleZustand = useTabBarStore( ( state ) => state.setTabBarVisible );
-
   const translateY = useRef( new Animated.Value( 0 ) ).current;
 
-  // Ẩn/hiện tabbar bằng animation
   useEffect( () =>
   {
     Animated.timing( translateY, {
-      toValue: isTabbarVisibleZustand ? 0 : 100, // Trượt xuống 100 khi ẩn
+      toValue: isTabbarVisibleZustand ? 0 : 100,
       duration: 150,
       useNativeDriver: true,
     } ).start();
@@ -164,27 +178,37 @@ export default function HomeLayout ()
         initialRouteName="index"
         screenOptions={ {
           tabBarShowLabel: true,
-          tabBarActiveTintColor: 'blue',
-          tabBarInactiveTintColor: 'gray',
+          tabBarActiveTintColor: 'white',
+          tabBarInactiveTintColor: '#ccc',
           tabBarStyle: {
             position: 'absolute',
-            bottom: 20,
+            bottom: 10,
             left: 20,
             right: 20,
-            height: 70,
+            height: 60,
             borderRadius: 50,
             marginHorizontal: 20,
             elevation: 10,
-            shadowColor: '#000',
-            shadowOpacity: 0.1,
-            shadowOffset: { width: 0, height: 5 },
-            shadowRadius: 10,
             transform: [ { translateY } ],
           },
-          headerPressColor: '#3377f2',
+          tabBarBackground: () => (
+            <LinearGradient
+              colors={ [ '#3b82f6', '#6366f1' ] } // blue to indigo
+              start={ { x: 0, y: 0 } }
+              end={ { x: 1, y: 1 } }
+              style={ {
+                flex: 1,
+                borderRadius: 50,
+              } }
+            />
+          ),
           tabBarItemStyle: {
-            marginTop: 8,
-            position: 'relative',
+            justifyContent: 'center',
+            alignItems: 'center',
+            flexDirection: 'row',
+          },
+          tabBarLabelStyle: {
+            display: 'none',
           },
         } }
       >
@@ -192,42 +216,64 @@ export default function HomeLayout ()
           name="index"
           options={ {
             title: 'Home',
-            tabBarIcon: ( { color } ) => (
-              <MaterialCommunityIcons name="home" size={ 30 } color={ color } />
+            tabBarIcon: ( { color, focused } ) => (
+              <View
+                style={
+                  focused && {
+                    shadowColor: 'white',               // Đảm bảo có màu shadow
+                    shadowOffset: { width: 0, height: 6 }, // Đẩy bóng xa hơn xuống dưới
+                    shadowOpacity: 0.8,               // Đậm hơn (từ 0 → 1)
+                    shadowRadius: 10,                 // Mượt hơn, tán rộng hơn
+                    elevation: 10,                    // Android: cao hơn = bóng đậm hơn
+                  }
+                }
+                className={ `${ focused ? 'h-14 w-14 bg-black items-center justify-center absolute bottom-2 rounded-full p-2' : 'flex-1' }` }>
+                <MaterialCommunityIcons name="home" size={ focused ? 34 : 28 } color={ color } />
+              </View>
             ),
             headerShown: false,
           } }
         />
-
         <Tabs.Screen
           name="qr"
           options={ {
             tabBarShowLabel: false,
             title: 'Scan',
-            tabBarStyle: { display: 'none' }, // Tab này không hiển thị tabbar
+            tabBarStyle: { display: 'none' },
             headerShown: false,
             tabBarIcon: ( { color } ) => (
-              <MaterialCommunityIcons name="qrcode-scan" size={ 24 } color={ color } />
+              <View style={ { flex: 1, justifyContent: 'center', alignItems: 'center' } }>
+                <MaterialCommunityIcons name="qrcode-scan" size={ 24 } color={ color } />
+              </View>
             ),
           } }
           listeners={ {
             tabPress: ( e ) =>
             {
               e.preventDefault();
-              router.replace( {
-                pathname: "/(tabs)/qr",
-                params: { tabIndex: 0 },
-              } );
+              router.replace( { pathname: "/(tabs)/qr", params: { tabIndex: 0 } } );
             },
           } }
         />
-
         <Tabs.Screen
           name="history"
           options={ {
             title: 'History',
-            tabBarIcon: ( { color } ) => (
-              <MaterialCommunityIcons name="history" size={ 24 } color={ color } />
+            tabBarIcon: ( { color, focused } ) => (
+              <View
+                className={ `${ focused ? 'h-14 w-14 bg-black items-center justify-center absolute bottom-2 rounded-full p-2' : 'flex-1' }` }
+                style={
+                  focused && {
+                    shadowColor: 'white',           
+                    shadowOffset: { width: 0, height: 6 }, 
+                    shadowOpacity: 0.8,               
+                    shadowRadius: 10,               
+                    elevation: 15,                   
+                  }
+                }
+              >
+                <MaterialCommunityIcons name="history" size={ focused ? 34 : 28 } color={ color } />
+              </View>
             ),
             headerShown: false,
           } }
@@ -239,16 +285,17 @@ export default function HomeLayout ()
             },
           } }
         />
-
         <Tabs.Screen
           name="user"
           options={ {
             title: 'Profile',
             tabBarIcon: ( { color } ) => (
-              <FontAwesome name="user-o" size={ 24 } color={ color } />
+              <View style={ { flex: 1, justifyContent: 'center', alignItems: 'center' } }>
+                <FontAwesome name="user-o" size={ 24 } color={ color } />
+              </View>
             ),
             headerShown: false,
-            tabBarStyle: { display: 'none' }, // Profile không hiển thị tabbar
+            tabBarStyle: { display: 'none' },
           } }
         />
       </Tabs>
