@@ -6,7 +6,7 @@ import { formatCurrencyVND } from "@/utils/formatCurrencyVND";
 
 interface ICardInfoProps
 {
-    id: number;
+    id: string;
     STK: string;
     name: string;
     date: string;
@@ -18,19 +18,18 @@ interface ICardInfoProps
 
 export default function CardInfo ( props: ICardInfoProps )
 {
-    const { id, STK, name, date, amount, content, logoBanking, transactionId } = props;
-    const card = { id, STK, name, date, amount, content, logoBanking, transactionId };
+    const card = props;
     const handlePressCard = () =>
     {
-        console.log( "Card pressed", id );
-        router.push( { pathname: "/(tabs)/history/details/[id]", params: { id } } );
+        const id = card.transactionId
+        router.push( { pathname: "/(tabs)/history/transaction/[id]", params: { id } } );
     }
 
     return (
         <TouchableOpacity onPress={ handlePressCard } className="min-h-[50px] flex-row items-center justify-between bg-white px-4 py-2">
             <AntDesign name="creditcard" size={ 24 } color="black" />
             <View className="flex-1 ml-4">
-                <Text className={ `font-semibold ${ amount < 0 ? 'text-red-500' : 'text-green-500' }` }>
+                <Text className={ `font-semibold ${ card.amount < 0 ? 'text-red-500' : 'text-green-500' }` }>
                     { formatCurrencyVND( card.amount ) }
                 </Text>
                 <Text className="text-sm text-gray-500">{ card.transactionId }</Text>

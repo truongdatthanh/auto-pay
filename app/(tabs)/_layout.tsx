@@ -1,66 +1,75 @@
-import { View, Keyboard, SafeAreaView } from 'react-native';
+import { View, SafeAreaView, Animated } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { Tabs } from 'expo-router';
-import AppHeader from '@/components/App.header';
-import { useState, useEffect } from 'react';
+import { router, Tabs, usePathname } from 'expo-router';
+import { useEffect, useRef } from 'react';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-
+import { useTabBarStore } from '@/store/useTabbarStore';
+import { LinearGradient } from 'expo-linear-gradient';
 
 export default function HomeLayout ()
 {
-  const [ isTabBarVisible, setIsTabBarVisible ] = useState( true );
+  const pathname = usePathname();
+  const isTabbarVisibleZustand = useTabBarStore( ( state ) => state.isTabBarVisible );
+  const setIsTabBarVisibleZustand = useTabBarStore( ( state ) => state.setTabBarVisible );
+  const translateY = useRef( new Animated.Value( 0 ) ).current;
 
   useEffect( () =>
   {
+    Animated.timing( translateY, {
+      toValue: isTabbarVisibleZustand ? 0 : 100,
+      duration: 150,
+      useNativeDriver: true,
+    } ).start();
+  }, [ isTabbarVisibleZustand ] );
 
-    const keyboardDidShowListener = Keyboard.addListener( 'keyboardDidShow', () =>
+  useEffect( () =>
+  {
+    if ( pathname.includes( '/transaction/' ) )
     {
-      setIsTabBarVisible( false ); 
-    } );
-
-    const keyboardDidHideListener = Keyboard.addListener( 'keyboardDidHide', () =>
+      setIsTabBarVisibleZustand( false );
+    } else
     {
-      setIsTabBarVisible( true );
-    } );
-
-    return () =>
-    {
-      keyboardDidHideListener.remove();
-      keyboardDidShowListener.remove();
-    };
-  }, [] );
+      setIsTabBarVisibleZustand( true );
+    }
+  }, [ pathname ] );
 
   return (
     <SafeAreaView style={ { flex: 1 } }>
       <Tabs
         initialRouteName="index"
         screenOptions={ {
-          tabBarShowLabel: true, // Show label below the icon
-          tabBarActiveTintColor: 'blue', // Active tab color
-          tabBarInactiveTintColor: 'gray', // Inactive tab color
+          tabBarShowLabel: true,
+          tabBarActiveTintColor: 'white',
+          tabBarInactiveTintColor: '#ccc',
           tabBarStyle: {
             position: 'absolute',
-            bottom: isTabBarVisible ? 20 : -70, // Hide or show based on isTabBarVisible
+            bottom: 10,
             left: 20,
             right: 20,
-            height: 70,
+            height: 60,
             borderRadius: 50,
             marginHorizontal: 20,
             elevation: 10,
-            shadowColor: '#000',
-            shadowOpacity: 0.1,
-            shadowOffset: { width: 0, height: 5 },
-            shadowRadius: 10,
+            transform: [ { translateY } ],
           },
-          headerPressColor: '#3377f2',
-          // tabBarLabelStyle: {
-          //   fontSize: 12,
-          //   fontWeight: 'bold',
-          //   // marginBottom: 5,
-          // },
+          tabBarBackground: () => (
+            <LinearGradient
+              colors={ [ '#3b82f6', '#6366f1' ] } // blue to indigo
+              start={ { x: 0, y: 0 } }
+              end={ { x: 1, y: 1 } }
+              style={ {
+                flex: 1,
+                borderRadius: 50,
+              } }
+            />
+          ),
           tabBarItemStyle: {
-            marginTop: 8,
-            position: 'relative',
+            justifyContent: 'center',
+            alignItems: 'center',
+            flexDirection: 'row',
+          },
+          tabBarLabelStyle: {
+            display: 'none',
           },
         } }
       >
@@ -68,64 +77,86 @@ export default function HomeLayout ()
           name="index"
           options={ {
             title: 'Home',
-            tabBarIcon: ( { color } ) => (
-              <MaterialCommunityIcons name="home" size={ 30 } color={ color } />
+            tabBarIcon: ( { color, focused } ) => (
+              <View
+                style={
+                  focused && {
+                    shadowColor: 'white',               // Đảm bảo có màu shadow
+                    shadowOffset: { width: 0, height: 6 }, // Đẩy bóng xa hơn xuống dưới
+                    shadowOpacity: 0.8,               // Đậm hơn (từ 0 → 1)
+                    shadowRadius: 10,                 // Mượt hơn, tán rộng hơn
+                    elevation: 10,                    // Android: cao hơn = bóng đậm hơn
+                  }
+                }
+                className={ `${ focused ? 'h-14 w-14 bg-black items-center justify-center absolute bottom-2 rounded-full p-2' : 'flex-1' }` }>
+                <MaterialCommunityIcons name="home" size={ focused ? 34 : 28 } color={ color } />
+              </View>
             ),
-            header: () => <AppHeader />,
+            headerShown: false,
           } }
         />
-
         <Tabs.Screen
           name="qr"
           options={ {
-            tabBarShowLabel: false, // Hide the label for this tab
+            tabBarShowLabel: false,
             title: 'Scan',
-            tabBarStyle: { display: 'none' }, // Hide the tab bar for this screen
+            tabBarStyle: { display: 'none' },
             headerShown: false,
             tabBarIcon: ( { color } ) => (
-              // <View
-              //   style={ {
-              //     position: 'absolute',
-              //     top: -35,
-              //     width: 70,
-              //     height: 70,
-              //     borderRadius: 35,
-              //     backgroundColor: 'green',
-              //     justifyContent: 'center',
-              //     alignItems: 'center',
-              //     shadowColor: '#000',
-              //     shadowOffset: { width: 0, height: 4 },
-              //     shadowOpacity: 0.3,
-              //     shadowRadius: 5,
-              //     elevation: 5,
-              //   } }
-              // >
-              <MaterialCommunityIcons name="qrcode-scan" size={ 24 } color={ color } />
-              // </View>
+              <View style={ { flex: 1, justifyContent: 'center', alignItems: 'center' } }>
+                <MaterialCommunityIcons name="qrcode-scan" size={ 24 } color={ color } />
+              </View>
             ),
           } }
+          listeners={ {
+            tabPress: ( e ) =>
+            {
+              e.preventDefault();
+              router.replace( { pathname: "/(tabs)/qr", params: { tabIndex: 0 } } );
+            },
+          } }
         />
-
         <Tabs.Screen
           name="history"
           options={ {
             title: 'History',
-            tabBarIcon: ( { color } ) => (
-              <MaterialCommunityIcons name="history" size={ 24 } color={ color } />
+            tabBarIcon: ( { color, focused } ) => (
+              <View
+                className={ `${ focused ? 'h-14 w-14 bg-black items-center justify-center absolute bottom-2 rounded-full p-2' : 'flex-1' }` }
+                style={
+                  focused && {
+                    shadowColor: 'white',
+                    shadowOffset: { width: 0, height: 6 },
+                    shadowOpacity: 0.8,
+                    shadowRadius: 10,
+                    elevation: 15,
+                  }
+                }
+              >
+                <MaterialCommunityIcons name="history" size={ focused ? 34 : 28 } color={ color } />
+              </View>
             ),
-            headerShown: false
+            headerShown: false,
+          } }
+          listeners={ {
+            tabPress: ( e ) =>
+            {
+              e.preventDefault();
+              router.replace( "/(tabs)/history" );
+            },
           } }
         />
-
         <Tabs.Screen
           name="user"
           options={ {
             title: 'Profile',
             tabBarIcon: ( { color } ) => (
-              <FontAwesome name="user-o" size={ 24 } color={ color } />
+              <View style={ { flex: 1, justifyContent: 'center', alignItems: 'center' } }>
+                <FontAwesome name="user-o" size={ 24 } color={ color } />
+              </View>
             ),
             headerShown: false,
-            tabBarStyle: { display: 'none' }, // Hide the tab bar for this screen
+            tabBarStyle: { display: 'none' },
           } }
         />
       </Tabs>

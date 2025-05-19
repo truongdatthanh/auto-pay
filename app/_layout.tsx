@@ -1,5 +1,5 @@
-import { Redirect, Slot, usePathname, useRouter } from 'expo-router';
-import { useEffect } from 'react';
+import { Slot, useRouter, usePathname } from 'expo-router';
+import { useEffect, useState } from 'react';
 import * as SplashScreen from 'expo-splash-screen';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { StatusBar } from 'react-native';
@@ -11,40 +11,47 @@ export default function RootLayout ()
 {
   const router = useRouter();
   const pathname = usePathname();
-  console.log( "layout tong: ", pathname );
-  
-  const isLoggedIn = false;
+  const [ isReady, setIsReady ] = useState( false );
+  const isLoggedIn = false; // sau này thay bằng kiểm tra AsyncStorage
 
-  
   useEffect( () =>
   {
     const prepare = async () =>
     {
-      // Ví dụ: chờ 2 giây hoặc load dữ liệu trước
-      await new Promise( resolve => setTimeout( resolve, 2000 ) );
-      await SplashScreen.hideAsync(); // Ẩn splash khi sẵn sàng
+      await new Promise( resolve => setTimeout( resolve, 2000 ) ); // mô phỏng loading
+      await SplashScreen.hideAsync();
+      setIsReady( true ); // chỉ sau khi splash ẩn, layout mới sẵn sàng
     };
+
     prepare();
   }, [] );
 
+
   useEffect( () =>
   {
-    if ( isLoggedIn )
+    if ( !isReady ) return;
+
+    if ( isLoggedIn && pathname !== '/(tabs)' )
     {
       router.replace( '/(tabs)' );
-    }
-    else
+    } else if ( !isLoggedIn && pathname !== '/(auth)/login' )
     {
       router.replace( '/(auth)/login' );
     }
-  }, [ isLoggedIn ] );
+  }, [ isReady, isLoggedIn ] );
+
+  if ( !isReady )
+  {
+    // Tránh render Slot hoặc navigate khi chưa sẵn sàng
+    return null;
+  }
+
+  console.log( "pathname", pathname );
 
   return (
     <GestureHandlerRootView style={ { flex: 1 } }>
-      <StatusBar barStyle="dark-content" backgroundColor="#fff" translucent={ false } />
+      <StatusBar barStyle="dark-content" backgroundColor="#fff" />
       <Slot />
     </GestureHandlerRootView>
-
-
   );
 }

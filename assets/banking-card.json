@@ -1,146 +1,140 @@
 [
-    {
-        "id": "1",
-        "STK": "123456789",
-        "name": "Truong Thanh Dat",
-        "logoBanking": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Logo_Nam_A_Bank.svg/2560px-Logo_Nam_A_Bank.svg.png",
-        "bankName": "Nam A Bank",
-        "transactionHistory": [
-            {
-                "date": "2023-10-01",
-                "amount": 1000000,
-                "description": "Deposit"
-            },
-            {
-                "date": "2023-10-02",
-                "amount": -500000,
-                "description": "Withdrawal"
-            },
-            {
-                "date": "2023-10-03",
-                "amount": 200000,
-                "description": "Transfer"
-            }
-        ]
-    },
-    {
-        "id": "2",
-        "STK": "4531234534345",
-        "name": "Truong Thanh Dat",
-        "logoBanking": "https://cdn.haitrieu.com/wp-content/uploads/2022/01/Icon-BIDV-.png",
-        "bankName": "BIDV",
-        "transactionHistory": [
-            {
-                "date": "2023-10-01",
-                "amount": 1500000,
-                "description": "Deposit"
-            },
-            {
-                "date": "2023-10-02",
-                "amount": -700000,
-                "description": "Withdrawal"
-            },
-            {
-                "date": "2023-10-03",
-                "amount": 300000,
-                "description": "Transfer"
-            }
-        ]
-    },
-    {
-        "id": "3",
-        "STK": "453453453378",
-        "name": "Truong Thanh Dat",
-        "logoBanking": "https://cdn.haitrieu.com/wp-content/uploads/2022/02/Icon-Vietcombank.png",
-        "bankName": "Vietcombank",
-        "transactionHistory": [
-            {
-                "date": "2023-10-01",
-                "amount": 2000000,
-                "description": "Deposit"
-            },
-            {
-                "date": "2023-10-02",
-                "amount": -800000,
-                "description": "Withdrawal"
-            },
-            {
-                "date": "2023-10-03",
-                "amount": 400000,
-                "description": "Transfer"
-            }
-        ]
-    },
-    {
-        "id": "4",
-        "STK": "2224567843",
-        "name": "Truong Thanh Dat",
-        "logoBanking": "https://cdn.haitrieu.com/wp-content/uploads/2022/02/Icon-Vietcombank.png",
-        "bankName": "Vietcombank",
-        "transactionHistory": [
-            {
-                "date": "2023-10-01",
-                "amount": 2500000,
-                "description": "Deposit"
-            },
-            {
-                "date": "2023-10-02",
-                "amount": -900000,
-                "description": "Withdrawal"
-            },
-            {
-                "date": "2023-10-03",
-                "amount": 500000,
-                "description": "Transfer"
-            }
-        ]
-    },
-    {
-        "id": "6",
-        "STK": "2224567843",
-        "name": "Truong Thanh Dat",
-        "logoBanking": "https://cdn.haitrieu.com/wp-content/uploads/2022/02/Icon-Vietcombank.png",
-        "bankName": "Vietcombank",
-        "transactionHistory": [
-            {
-                "date": "2023-10-01",
-                "amount": 2500000,
-                "description": "Deposit"
-            },
-            {
-                "date": "2023-10-02",
-                "amount": -900000,
-                "description": "Withdrawal"
-            },
-            {
-                "date": "2023-10-03",
-                "amount": 500000,
-                "description": "Transfer"
-            }
-        ]
-    },
-    {
-        "id": "7",
-        "STK": "2224567843",
-        "name": "Truong Thanh Dat",
-        "logoBanking": "https://cdn.haitrieu.com/wp-content/uploads/2022/02/Icon-Vietcombank.png",
-        "bankName": "Vietcombank",
-        "transactionHistory": [
-            {
-                "date": "2023-10-01",
-                "amount": 2500000,
-                "description": "Deposit"
-            },
-            {
-                "date": "2023-10-02",
-                "amount": -900000,
-                "description": "Withdrawal"
-            },
-            {
-                "date": "2023-10-03",
-                "amount": 500000,
-                "description": "Transfer"
-            }
-        ]
-    }
+  {
+    "id": "1",
+    "STK": "246134029400001",
+    "deeplink" : "deeplinkapp://nab/softotp",
+    "name": "Truong Thanh Dat",
+    "bankbin": "970428",
+    "logoBanking": "https://payoo.vn/img/content/2023/03/logo_namabank.png",
+    "bankName": "Nam A Bank",
+    "balance": 18515000,
+    "transactionHistory": [
+      {
+        "transactionId": "tx001",
+        "date": "2025-05-15",
+        "amount": 1000000,
+        "description": "Deposit"
+      },
+      {
+        "transactionId": "tx002",
+        "date": "2025-05-15",
+        "amount": -7000000,
+        "description": "Withdrawal"
+      },
+      {
+        "transactionId": "tx003",
+        "date": "2025-05-15",
+        "amount": 6000000,
+        "description": "Deposit"
+      },
+      {
+        "transactionId": "tx004",
+        "date": "2025-05-15",
+        "amount": -3000000,
+        "description": "Withdrawal"
+      },
+      {
+        "transactionId": "tx005",
+        "date": "2025-05-07",
+        "amount": 20000000,
+        "description": "Transfer In",
+        "senderName": "Truong Thanh Dat (Vietcombank)",
+        "senderSTK": "453453453378",
+        "receiverSTK": "123456789"
+      },
+      {
+        "transactionId": "tx006",
+        "date": "2025-05-07",
+        "amount": -15000000,
+        "description": "Transfer Out",
+        "receiverName": "Truong Thanh Dat (BIDV)",
+        "senderSTK": "123456789",
+        "receiverSTK": "4531234534345"
+      },
+      {
+        "transactionId": "tx007",
+        "date": "2025-05-08",
+        "amount": 150000,
+        "description": "Deposit"
+      },
+      {
+        "transactionId": "tx008",
+        "date": "2025-05-15",
+        "amount": 1500000,
+        "description": "Transfer In",
+        "senderName": "Truong Thanh Dat (Vietcombank)",
+        "senderSTK": "453453453378",
+        "receiverSTK": "123456789"
+      },
+      {
+        "transactionId": "tx009",
+        "date": "2025-05-09",
+        "amount": -3000000,
+        "description": "Transfer Out",
+        "receiverName": "Truong Thanh Dat (Vietcombank)",
+        "senderSTK": "123456789",
+        "receiverSTK": "453453453378"
+      },
+      {
+        "transactionId": "tx010",
+        "date": "2025-05-10",
+        "amount": 2000000,
+        "description": "Transfer In",
+        "senderName": "Truong Thanh Dat (BIDV)",
+        "senderSTK": "4531234534345",
+        "receiverSTK": "123456789"
+      },
+      {
+        "transactionId": "tx011",
+        "date": "2025-05-10",
+        "amount": -2000000,
+        "description": "Transfer Out",
+        "receiverName": "Truong Thanh Dat (Vietcombank)",
+        "senderSTK": "123456789",
+        "receiverSTK": "453453453378"
+      }
+    ]
+  },
+  {
+    "id": "2",
+    "STK": "8875067628",
+    "name": "Truong Thanh Dat",
+    "deeplink" : "bidv.smartbanking.partner://payment",
+    "logoBanking": "https://payoo.vn/img/content/2023/03/logo_bidv.png",
+    "bankName": "BIDV",
+    "bankbin": "970418",
+    "balance": 15800000,
+    "transactionHistory": [
+      {
+        "transactionId": "tx012",
+        "date": "2025-05-15",
+        "amount": 15000000,
+        "description": "Deposit"
+      },
+      {
+        "transactionId": "tx013",
+        "date": "2025-05-15",
+        "amount": -700000,
+        "description": "Withdrawal"
+      },
+      {
+        "transactionId": "tx014",
+        "date": "2025-05-15",
+        "amount": -2000000,
+        "description": "Transfer Out",
+        "receiverName": "Truong Thanh Dat (Nam A Bank)",
+        "senderSTK": "4531234534345",
+        "receiverSTK": "123456789"
+      },
+      {
+        "transactionId": "tx015",
+        "date": "2025-05-15",
+        "amount": 2000000,
+        "description": "Transfer In",
+        "senderName": "Truong Thanh Dat (Vietcombank)",
+        "senderSTK": "453453453378",
+        "receiverSTK": "4531234534345"
+      }
+    ]
+  }
 ]

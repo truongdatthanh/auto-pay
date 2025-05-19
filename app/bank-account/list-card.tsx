@@ -32,7 +32,6 @@ export default function ListCard ()
                                 bankName={ item.bankName }
                             />
                         </View>
-
                     ) }
                     ListFooterComponent={ () => (
                         <TouchableOpacity className="p-4 mt-6 items-center" onPress={ handleAddCard } style={ { width: 320, borderStyle: "dashed", borderColor: "black", borderWidth: 1, borderRadius: 8 } }>
@@ -42,7 +41,6 @@ export default function ListCard ()
                     contentContainerStyle={ { paddingBottom: 100, alignItems: "center" } }
                 />
             </View>
-
         </>
     );
 }

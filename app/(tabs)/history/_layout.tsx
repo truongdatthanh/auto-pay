@@ -1,7 +1,5 @@
 import { router, Stack } from "expo-router";
 import '../../../global.css';
-import AppHeaderInfo from "@/components/App.headerInfo";
-import { useHideTabBarOnScroll } from "@/hooks/useHideTabbarOnScroll";
 
 export default function HistoryLayout ()
 {
@@ -10,22 +8,16 @@ export default function HistoryLayout ()
       <Stack.Screen
         name='index'
         options={ {
-          header: () => <AppHeaderInfo title='Lịch sử giao dịch' onPress={ () => router.push( "/(tabs)" ) } />,
+          headerShown: false,
         } }
       />
 
       <Stack.Screen
-        name='details/[id]'
+        name='transaction/[id]'
         options={ {
-          header: () => <AppHeaderInfo title='Chi tiết giao dịch' onPress={ () => router.replace("/(tabs)/history") } />,
+          headerShown: false,
         } }
-      />
-
-      <Stack.Screen
-        name='statistics'
-        options={ {
-          header: () => <AppHeaderInfo title='Thống kê giao dịch' onPress={ () => router.replace("/(tabs)") } />,
-        } }
+        
       />
     </Stack>
   );

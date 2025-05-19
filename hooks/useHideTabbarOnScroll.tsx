@@ -1,24 +1,36 @@
-import { useSharedValue, useAnimatedStyle, useAnimatedScrollHandler } from 'react-native-reanimated';
+import { useTabBarStore } from '@/store/useTabbarStore';
+import { useRef, useCallback } from 'react';
+import { NativeSyntheticEvent, NativeScrollEvent, Dimensions } from 'react-native';
 
-export function useHideTabBarOnScroll() {
-  const offsetY = useSharedValue(0);
 
-  const scrollHandler = useAnimatedScrollHandler({
-    onScroll: (event) => {
-      const currentOffset = event.contentOffset.y;
-      offsetY.value = currentOffset;
-    },
-  });
+export default function useHideTabBarOnScroll ()
+{
+  const lastOffsetY = useRef( 0 );
+  const isHidden = useRef( false );
+  const screenHeight = Dimensions.get( 'window' ).height;
+  const { setTabBarVisible } = useTabBarStore.getState();
 
-  const animatedStyle = useAnimatedStyle(() => {
-    return {
-      transform: [
-        {
-          translateY: offsetY.value > 50 ? 100 : 0, // Ẩn nếu cuộn > 50
-        },
-      ],
-    };
-  });
+  const handleScroll = useCallback( ( event: NativeSyntheticEvent<NativeScrollEvent> ) =>
+  {
+    const currentOffsetY = event.nativeEvent.contentOffset.y;
+    const diff = currentOffsetY - lastOffsetY.current;
 
-  return { scrollHandler, animatedStyle };
+    // Nếu che hơn 25% màn hình thì ẩn
+    if ( !isHidden.current && currentOffsetY > screenHeight * 0.25 )
+    {
+      setTabBarVisible( false );
+      isHidden.current = true;
+    }
+
+    // Chỉ cần cuộn lên là hiện
+    if ( isHidden.current && diff < 0 )
+    {
+      setTabBarVisible( true );
+      isHidden.current = false;
+    }
+
+    lastOffsetY.current = currentOffsetY;
+  }, [] );
+
+  return { handleScroll };
 }

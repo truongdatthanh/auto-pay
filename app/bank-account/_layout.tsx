@@ -1,8 +1,6 @@
 
 import AppHeaderInfo from "@/components/App.headerInfo";
-import { router, Stack } from "expo-router";
-
-
+import { router, Stack, usePathname } from "expo-router";
 
 export default function BankAccountLayout ()
 {
@@ -16,7 +14,7 @@ export default function BankAccountLayout ()
             />
 
             <Stack.Screen
-                name="listCard"
+                name="list-card"
                 options={ {
                     header: () => <AppHeaderInfo title="Thẻ ngân hàng" onPress={ () => router.replace( "/(tabs)" ) } />,
                 } }

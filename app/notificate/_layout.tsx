@@ -1,5 +1,5 @@
 import AppHeaderInfo from "@/components/App.headerInfo";
-import { Stack } from "expo-router";
+import { router, Stack } from "expo-router";
 
 export default function NotificationLayout ()
 {
@@ -8,7 +8,7 @@ export default function NotificationLayout ()
             <Stack.Screen
                 name='index'
                 options={ {
-                    header: () => <AppHeaderInfo title="Notification" />,
+                    header: () => <AppHeaderInfo title="Notification" onPress={ () => router.replace( "/(tabs)" ) }/>,
                 } }
             />
         </Stack>

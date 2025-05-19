@@ -1,3 +1,5 @@
+
+import FloatingInputs from "@/components/FloatingInput";
 import InputField from "@/components/InputField";
 import { router } from "expo-router";
 import { useState } from "react";
@@ -21,14 +23,60 @@ export default function ChangePassword ()
     }
     return (
         <View className="bg-white p-8 flex-1">
-            <View className="mb-6">
-                <InputField label="Mật khẩu cũ" value={ oldPassword } onChangeText={ setOldPassword } placeholder="Nhập mật khẩu cũ" />
-                <InputField label="Mật khẩu mới" value={ newPassword } onChangeText={ setNewPassword } placeholder="Nhập mật khẩu mới" />
-                <InputField label="Xác nhận mật khẩu" value={ confirmPassword } onChangeText={ setConfirmPassword } placeholder="Xác nhận mật khẩu" />
+            <View className="mb-6 gap-6">
+                <FloatingInputs label="Mật khẩu cũ" value={ oldPassword } onChangeText={ setOldPassword } placeholder="Nhập mật khẩu cũ" />
+                <FloatingInputs label="Mật khẩu mới" value={ newPassword } onChangeText={ setNewPassword } placeholder="Nhập mật khẩu mới" />
+                <FloatingInputs label="Xác nhận mật khẩu" value={ confirmPassword } onChangeText={ setConfirmPassword } placeholder="Xác nhận mật khẩu mới" />
             </View>
-            <TouchableOpacity className="bg-blue-500 p-4 rounded-lg shadow-md" onPress={ handleSubmit }>
+            <TouchableOpacity className="bg-[#1c40f2] p-4 rounded-lg" onPress={ handleSubmit }>
                 <Text className="text-white text-lg text-center">Đổi mật khẩu</Text>
             </TouchableOpacity>
         </View>
     );
 }
+
+
+
+// // Kiểm tra độ mạnh của mật khẩu
+// const checkPasswordStrength = ( password: string ) =>
+// {
+//     let strength = 0;
+//     let feedback = '';
+
+//     if ( password.length === 0 )
+//     {
+//         setPasswordStrength( 0 );
+//         setPasswordFeedback( '' );
+//         return;
+//     }
+
+//     // Kiểm tra độ dài
+//     if ( password.length >= 8 ) strength += 1;
+
+//     // Kiểm tra chữ hoa
+//     if ( /[A-Z]/.test( password ) ) strength += 1;
+
+//     // Kiểm tra chữ thường
+//     if ( /[a-z]/.test( password ) ) strength += 1;
+
+//     // Kiểm tra số
+//     if ( /[0-9]/.test( password ) ) strength += 1;
+
+//     // Kiểm tra ký tự đặc biệt
+//     if ( /[^A-Za-z0-9]/.test( password ) ) strength += 1;
+
+//     // Phản hồi dựa trên độ mạnh
+//     if ( strength <= 2 )
+//     {
+//         feedback = 'Yếu';
+//     } else if ( strength <= 4 )
+//     {
+//         feedback = 'Trung bình';
+//     } else
+//     {
+//         feedback = 'Mạnh';
+//     }
+
+//     setPasswordStrength( strength );
+//     setPasswordFeedback( feedback );
+// };

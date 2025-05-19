@@ -3,7 +3,6 @@ import { Text, View, TextInput, TouchableOpacity, Alert } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import mockBanking from '../../assets/banking.json';
 
-
 export default function AddCard ()
 {
     const [ banks, setBanks ] = useState( mockBanking );

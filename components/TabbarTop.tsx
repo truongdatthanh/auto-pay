@@ -13,7 +13,7 @@ export default function TabbarTop ( props: any )
   {
     setActiveIndex( index );
     onTabChange( tab );//Đây là callback của component cha
-    
+
     Animated.spring( animatedValue, {
       toValue: index * tabWidth,
       useNativeDriver: true,
@@ -21,35 +21,32 @@ export default function TabbarTop ( props: any )
   };
 
   return (
-    <View className="bg-gray-50">
-      <View className="relative">
-        {/* Tab Bar */ }
-        <View className="flex-row justify-around border-b border-gray-300 mt-10">
-          { tabs.map( ( tab: string, index: number ) => (
-            <Pressable
-              key={ tab }
-              className="flex-1 items-center pb-3"
-              onPress={ () => handleTabPress( index, tab ) }
+    <View className="bg-white relative">
+      {/* Tab Bar */ }
+      <View className="flex-row justify-around border-b border-gray-300 p-4">
+        { tabs.map( ( tab: string, index: number ) => (
+          <Pressable
+            key={ tab }
+            className="flex-1 items-center"
+            onPress={ () => handleTabPress( index, tab ) }
+          >
+            <Text
+              className={ `text-base ${ activeIndex === index ? 'text-blue-500 font-bold' : 'text-gray-500' }` }
             >
-              <Text
-                className={ `text-base ${ activeIndex === index ? 'text-blue-500 font-bold' : 'text-gray-500' }` }
-              >
-                { tab }
-              </Text>
-            </Pressable>
-          ) ) }
-        </View>
-
-        {/* Đường line trượt bên dưới */ }
-        <Animated.View
-          className="absolute bottom-0 h-1 bg-blue-500 rounded-full"
-          style={ {
-            width: tabWidth,
-            transform: [ { translateX: animatedValue } ],
-          } }
-        />
+              { tab }
+            </Text>
+          </Pressable>
+        ) ) }
       </View>
+
+      {/* Đường line trượt bên dưới */ }
+      <Animated.View
+        className="absolute -bottom-0.5 h-1 bg-blue-500 rounded-full"
+        style={ {
+          width: tabWidth,
+          transform: [ { translateX: animatedValue } ],
+        } }
+      />
     </View>
   );
 }
-

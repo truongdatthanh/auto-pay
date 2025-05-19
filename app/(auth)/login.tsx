@@ -1,17 +1,45 @@
-
-import { Button, Image, SafeAreaView, StatusBar, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import { Link, useLocalSearchParams, useNavigation, usePathname, useRouter } from 'expo-router';
-import { useEffect, useState } from 'react';
+import { Image, SafeAreaView, StatusBar, Text, TouchableOpacity, View, Keyboard, Platform, KeyboardAvoidingView, Dimensions, TouchableWithoutFeedback } from 'react-native';
+import { useRouter } from 'expo-router';
+import { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
+import { MaterialIcons } from '@expo/vector-icons';
+import FloatingInputs from '@/components/FloatingInput';
 
 
 export default function Login ()
 {
     const logo = 'https://interdata.vn/assets/interdata-logo.png'
+    const logo1 = '../../assets/images/Logo-login-autopay-1.jpg'
     const router = useRouter();
     const [ email, setEmail ] = useState( 'truongdat@gmail.com' );
     const [ password, setPassword ] = useState( '123456' );
+    const [ keyboardVisible, setKeyboardVisible ] = useState( false );
 
+    // Theo dõi trạng thái hiển thị của bàn phím
+    useEffect( () =>
+    {
+        const keyboardDidShowListener = Keyboard.addListener(
+            'keyboardDidShow',
+            () =>
+            {
+                setKeyboardVisible( true );
+            }
+        );
+        const keyboardDidHideListener = Keyboard.addListener(
+            'keyboardDidHide',
+            () =>
+            {
+                setKeyboardVisible( false );
+            }
+        );
+
+        return () =>
+        {
+            keyboardDidHideListener.remove();
+            keyboardDidShowListener.remove();
+        };
+    }, [] );
 
     const user = [
         { id: 1, email: 'truongdat@gmail.com', fullName: "Truong Thanh Dat", password: '123456' },
@@ -27,10 +55,9 @@ export default function Login ()
         {
             AsyncStorage.setItem( 'user', JSON.stringify( userFound ) );
             router.replace( '/(tabs)' );
-        }
-        else
+        } else
         {
-            alert( 'Ten dang nhap hoac mat khau bi sai roi' );
+            alert( 'Tên đăng nhập hoặc mật khẩu không đúng' );
         }
     }
 
@@ -39,59 +66,74 @@ export default function Login ()
         router.push( '/(auth)/register' );
     }
 
-    const handleForgotPassword = () => 
+    const handleForgotPassword = () =>
     {
         router.push( '/(auth)/forgot-password' );
     }
 
     return (
         <>
-            <StatusBar barStyle="dark-content" backgroundColor="white" />
-            <SafeAreaView className='flex-1'>
-                <View className="flex-1 bg-white p-8 items-center justify-center">
-                    <View className="flex w-full max-w-sm justify-center">
-                        <View className="mb-8">
-                            <Image style={ { width: 'auto', height: 100 } } source={ { uri: logo } } />
-                        </View>
-                        <TextInput
-                            className="mb-4 h-16 pl-8 border border-gray-500 rounded-full"
-                            placeholder="Email"
-                            keyboardType="email-address"
-                            value={ email }
-                            onChangeText={ setEmail }
-                        />
-                        <TextInput
-                            className="mb-4 h-16 pl-8 border border-gray-500 rounded-full"
-                            placeholder="Password"
-                            value={ password }
-                            onChangeText={ setPassword }
-                            secureTextEntry
-                        />
+            <StatusBar barStyle="dark-content" backgroundColor="transparent" translucent />
+            <TouchableWithoutFeedback onPress={ Keyboard.dismiss }>
+                <SafeAreaView className='flex-1 bg-white' >
+                    <View className="items-center justify-center flex-1 mt-20" >
+                        <View className="w-full max-w-sm justify-center">
+                            <View className="mb-8">
+                                <Image style={ { width: 'auto', height: 100 } } source={ { uri: logo } } />
+                                {/* <Image className='h-[150px] w-full' source={ require( logo1 ) } /> */ }
+                            </View>
+                            <View className='gap-2'>
+                                <FloatingInputs
+                                    label='Email'
+                                    value={ email }
+                                    onChangeText={ setEmail }
+                                    containerClassName='mb-4'
+                                    inputClassName='h-12'
+                                    keyboardType="email-address"
+                                    autoCapitalize="none"//Không viết hoa chữ cái đầu tiên
+                                    placeholder='Email...'
+                                    selectionColor={ "#1c40f2" }
+                                />
+                                <FloatingInputs
+                                    label='Mật khẩu'
+                                    value={ password }
+                                    onChangeText={ setPassword }
+                                    secureTextEntry
+                                    containerClassName='mb-4'
+                                    inputClassName='h-12'
+                                    placeholder='Mật khẩu...'
+                                    selectionColor={ "#1c40f2" }
+                                />
+                            </View>
 
-                        <View className='mb-4 flex-row justify-end items-center'>
-                            <TouchableOpacity onPress={ handleForgotPassword }>
-                                <Text className="text-center text-sm text-[#1c40f2] font-semibold underline">Quên mật khẩu?</Text>
+                            <View className='flex-row justify-end items-center'>
+                                <TouchableOpacity onPress={ handleForgotPassword }>
+                                    <Text className="text-center text-md text-[#1c40f2] font-semibold">Quên mật khẩu?</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </View>
+                    { !keyboardVisible && (
+                        <View className='w-full p-6'>
+                            <TouchableOpacity
+                                className="bg-[#1c40f2] rounded-xl overflow-hidden"
+                                onPress={ handleLogin }
+                            >
+                                <View className="flex-row items-center justify-center p-4">
+                                    <MaterialIcons name="login" size={ 24 } color="white" />
+                                    <Text className="text-white font-semibold ml-2">Đăng nhập</Text>
+                                </View>
                             </TouchableOpacity>
+                            <View className="p-4 flex-row items-center justify-center">
+                                <Text className="text-center text-gray-500">Bạn chưa có tài khoản? </Text>
+                                <TouchableOpacity className="flex-row items-center justify-center" onPress={ handleRegister }>
+                                    <Text className="text-[#1c40f2] font-bold text-lg">Đăng ký ngay</Text>
+                                </TouchableOpacity>
+                            </View>
                         </View>
-                    </View>
-                </View>
-                <View className='absolute bottom-3 w-full p-4 z-0'>
-                    <TouchableOpacity
-                        className="mt-2 bg-[#1c40f2] rounded-full h-16 justify-center w-full"
-                        onPress={ handleLogin }
-                    >
-                        <Text className="text-white text-center font-bold text-md">Đăng nhập</Text>
-                    </TouchableOpacity>
-
-                    <View className="p-4 flex-row items-center justify-center mt-2">
-                        <Text className="text-center text-base">Bạn chưa có tài khoản? </Text>
-                        <TouchableOpacity className="flex-row items-center justify-center" onPress={ handleRegister }>
-                            <Text className="text-[#1c40f2] font-bold text-lg">Đăng ký ngay</Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-            </SafeAreaView>
+                    ) }
+                </SafeAreaView>
+            </TouchableWithoutFeedback>
         </>
     );
 }
-
