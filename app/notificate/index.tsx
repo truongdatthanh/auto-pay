@@ -1,5 +1,5 @@
 import { Text, View, FlatList, Image } from "react-native";
-import mockNotificate from "../../assets/notificate.json";
+import mockNotificate from "@/assets/notificate.json";
 import { useState } from "react";
 import TabbarTop from "@/components/TabbarTop";
 import { FontAwesome5 } from "@expo/vector-icons";

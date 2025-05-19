@@ -10,30 +10,7 @@ import { BlurView } from 'expo-blur';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
 import Loading from "@/components/Loading";
-
-
-interface ITransaction
-{
-    transactionId: string;
-    date: string;
-    amount: number;
-    description: string;
-    senderName: string;
-    senderSTK: string;
-    receiverSTK: string;
-}
-
-interface IBankingTransaction
-{
-    id: string;
-    STK: string;
-    deeplink: string;
-    name: string;
-    logoBanking: string;
-    bankName: string;
-    transactionHistory: ITransaction[];
-}
-
+import { IBankingTransaction } from "@/interface/IBankingTransaction";
 
 export default function Transaction ()
 {

@@ -1,13 +1,10 @@
-import { Ionicons, MaterialIcons, FontAwesome5, MaterialCommunityIcons } from "@expo/vector-icons";
+import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { useLocalSearchParams } from "expo-router/build/hooks";
 import { useEffect, useState } from "react";
-import { Image, Modal, ScrollView, Text, TextInput, TouchableOpacity, View, KeyboardAvoidingView, Platform, StatusBar, Animated, Dimensions } from "react-native";
-import mockDataBankingCard from "../../../assets/banking-card.json";
+import { Image, Modal, ScrollView, Text, TextInput, TouchableOpacity, View, KeyboardAvoidingView, Platform, StatusBar } from "react-native";
+import mockDataBankingCard from "@/assets/banking-card.json";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
-
-const { width } = Dimensions.get( 'window' );
 
 export default function CreateMyQR ()
 {
@@ -15,10 +12,9 @@ export default function CreateMyQR ()
     const { cardSTK } = params;
     const [ amount, setAmount ] = useState( "10000" );
     const [ content, setContent ] = useState( "abc" );
-    const [ data, setData ] = useState( mockDataBankingCard );
+    const  data =  mockDataBankingCard ;
     const [ selectedCard, setSelectedCard ] = useState<any>( null );
     const [ showCardSelector, setShowCardSelector ] = useState( false );
-    const [ formattedAmount, setFormattedAmount ] = useState( "" );
 
     // Lấy thẻ được chọn từ params hoặc từ AsyncStorage
     useEffect( () =>
@@ -81,8 +77,6 @@ export default function CreateMyQR ()
             content: content,
         };
 
-        console.log( "data", qrData );
-
         router.push( {
             pathname: "/qr/display",
             params: {
@@ -142,7 +136,7 @@ export default function CreateMyQR ()
                         </View>
                         {/* -----------------------------------------End----------------------------------------- */ }
 
-                        {/* Số tiền */ }
+                        {/* Tên chủ tài khoản */ }
                         <View className="mb-6 ">
                             <Text className="text-gray-700 font-medium mb-2 ml-1">Tên chủ tài khoản</Text>
                             <View className="bg-gray-300 rounded-xl overflow-hidden  border border-gray-500">

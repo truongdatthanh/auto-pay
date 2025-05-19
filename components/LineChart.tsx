@@ -167,46 +167,6 @@ export default function LineCharts ( { id }: { id: string } )
                     </View>
                 </View>
             </View>
-
-            {/* <View className="items-center my-2">
-                <Text className='text-xs text-gray-500 absoblute left-0'>Đơn vị: Triệu VNĐ</Text>
-                <LineChart
-                    data={ data1 }
-                    data2={ data2 }
-                    height={ 220 }
-                    width={ chartWidth }
-                    spacing={ spacing }
-                    initialSpacing={ initialSpacing }
-                    color1="#e74c3c"
-                    color2="#2ecc71"
-                    dataPointsColor1="#e74c3c"
-                    dataPointsColor2="#2ecc71"
-                    startFillColor1="rgba(231, 76, 60, 0.2)"
-                    startFillColor2="rgba(46, 204, 113, 0.2)"
-                    endFillColor1="rgba(231, 76, 60, 0.0)"
-                    endFillColor2="rgba(46, 204, 113, 0.0)"
-                    textColor1="#333"
-                    textColor2="#333"
-                    thickness={ 3 }
-                    dataPointsWidth={ 6 }
-                    dataPointsHeight={ 6 }
-                    textFontSize={ 12 }
-                    showVerticalLines={ false }
-                    maxValue={ maxValue }
-                    noOfSections={ 5 }
-                    yAxisColor="#ddd"
-                    xAxisColor="#ddd"
-                    yAxisTextStyle={ { color: '#999', fontSize: 10 } }
-                    showValuesAsDataPointsText={ false }
-                    hideRules
-                    curved
-                    curvature={ 0.3 }
-                    curveType={ CurveType.QUADRATIC }
-                    hideDataPoints1={ activeTab === 'income' }
-                    hideDataPoints2={ activeTab === 'expense' }
-                    areaChart
-                />
-            </View> */}
             <View className="items-center my-2 relative">
                 <Text className="text-xs text-gray-500 absolute -left-3 -top-6 z-10">{ `(Đơn vị: Triệu VNĐ)` }</Text>
                 <LineChart

@@ -6,22 +6,7 @@ import mockBanking from "../assets/banking.json"
 import mockMyBankCard from "../assets/banking-card.json"
 import Loading from "@/components/Loading";
 import { convertEMVCode } from "@/utils/encodeEMVCode";
-
-interface IBanking
-{
-    id: number;
-    name: string;
-    code: string;
-    bin: string;
-    shortName: string;
-    logo: string;
-    transferSupported: number;
-    lookupSupported: number;
-    short_name: string;
-    support: number;
-    isTransfer: number;
-    swift_code: string;
-}
+import { IBanking } from "@/interface/IBankingTransaction";
 
 
 
@@ -195,7 +180,7 @@ export default function Transfer ()
                     <Text className="text-center text-sm text-gray-500 mb-1">
                         Nhập số tiền
                     </Text>
-              
+
                     <TextInput
                         placeholder="0"
                         keyboardType="number-pad"

@@ -9,34 +9,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { router, useFocusEffect } from 'expo-router';
 import Animated, { FadeIn, FadeInDown } from 'react-native-reanimated';
 import AppHeaderInfo from '@/components/App.headerInfo';
-
-interface ITransaction
-{
-  transactionId: string;
-  date: string;
-  amount: number;
-  description: string;
-  senderName: string;
-  senderSTK: string;
-  receiverSTK: string;
-}
-
-interface IBankingTransaction
-{
-  id: string;
-  STK: string;
-  deeplink: string;
-  name: string;
-  logoBanking: string;
-  bankName: string;
-  transactionHistory: ITransaction[];
-}
-
-interface Section
-{
-  title: string;
-  data: ITransaction[]; // hoặc `any[]` nếu chưa có interface cho dữ liệu
-}
+import { IBankingTransaction } from '@/interface/IBankingTransaction';
+import { ISection } from '@/interface/ISection';
 
 export default function History ()
 {
@@ -45,7 +19,7 @@ export default function History ()
   const [ endDate, setEndDate ] = useState( new Date() );
   const [ showStartPicker, setShowStartPicker ] = useState( false );
   const [ showEndPicker, setShowEndPicker ] = useState( false );
-  const [ sections, setSections ] = useState<Section[]>( [] );
+  const [ sections, setSections ] = useState<ISection[]>( [] );
   const [ refreshing, setRefreshing ] = useState( false );
   const [ showFilterModal, setShowFilterModal ] = useState( false );
 

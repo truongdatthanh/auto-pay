@@ -29,5 +29,4 @@ export const bankDeepLinks = [
         url: "deeplinkapp://nab/softotp",
         logo: "https://payoo.vn/img/content/2023/03/logo_namabank.png"
     },
-    // Thêm ngân hàng khác
 ];

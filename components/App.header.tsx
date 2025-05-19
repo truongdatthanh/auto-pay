@@ -1,10 +1,7 @@
-import { Animated, Image, StatusBar, Text, TouchableOpacity, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import { Animated, Image, SafeAreaView, StatusBar, Text, TouchableOpacity, View } from "react-native";
+
 import { router } from "expo-router";
 import { FontAwesome, MaterialCommunityIcons } from "@expo/vector-icons";
-import { useRef } from "react";
-
 
 export default function AppHeader ()
 {

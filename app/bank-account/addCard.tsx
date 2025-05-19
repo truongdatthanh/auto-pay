@@ -1,17 +1,164 @@
-import React, { useState } from 'react';
-import { Text, View, TextInput, TouchableOpacity, Alert } from 'react-native';
+// import React, { useState } from 'react';
+// import { Text, View, TextInput, TouchableOpacity, Alert } from 'react-native';
+// import { Picker } from '@react-native-picker/picker';
+// import mockBanking from '../../assets/banking.json';
+
+// export default function AddCard ()
+// {
+//     const [ banks, setBanks ] = useState( mockBanking );
+//     const [ selectedBank, setSelectedBank ] = useState( banks[ 0 ] );
+//     console.log( selectedBank );
+//     const [ accountNumber, setAccountNumber ] = useState( '' );
+//     const [ accountHolder, setAccountHolder ] = useState( '' );
+
+//     const handleSubmit = () =>
+//     {
+//         if ( !accountNumber || !accountHolder )
+//         {
+//             Alert.alert( 'Lỗi', 'Vui lòng nhập đầy đủ thông tin.' );
+//             return;
+//         }
+
+//         Alert.alert( 'Thành công', `Đã thêm thẻ ngân hàng:\n- Ngân hàng: ${ selectedBank }\n- Số TK: ${ accountNumber }\n- Chủ TK: ${ accountHolder }` );
+//     };
+
+//     return (
+//         <View className="flex-1 px-4 py-6">
+//             <Text className="text-2xl font-bold text-center mb-6">Thêm thẻ ngân hàng</Text>
+//             <Text className="mb-1">Chọn ngân hàng</Text>
+//             <View className="border rounded mb-4 bg-white">
+//                 <Picker
+//                     selectedValue={ selectedBank }
+//                     onValueChange={ ( itemValue ) => setSelectedBank( itemValue ) }
+//                 >
+//                     { banks.map( ( bank ) => (
+//                         <Picker.Item key={ bank.id } label={ bank.name } value={ bank.logo } />
+//                     ) ) }
+//                 </Picker>
+//             </View>
+
+//             <Text className="mb-1">Số tài khoản</Text>
+//             <TextInput
+//                 className="border rounded px-3 py-2 mb-4 bg-white"
+//                 keyboardType="numeric"
+//                 placeholder="Nhập số tài khoản"
+//                 value={ accountNumber }
+//                 onChangeText={ setAccountNumber }
+//             />
+
+//             <Text className="mb-1">Tên chủ tài khoản</Text>
+//             <TextInput
+//                 className="border rounded px-3 py-2 mb-6 bg-white"
+//                 placeholder="Nhập tên chủ tài khoản"
+//                 value={ accountHolder }
+//                 onChangeText={ setAccountHolder }
+//             />
+
+//             <TouchableOpacity
+//                 className="bg-blue-500 py-3 rounded items-center"
+//                 onPress={ handleSubmit }
+//             >
+//                 <Text className="text-white font-semibold">Thêm thẻ</Text>
+//             </TouchableOpacity>
+//         </View>
+//     );
+// }
+
+import React, { useState, useEffect } from 'react';
+import
+    {
+        Text,
+        View,
+        TextInput,
+        TouchableOpacity,
+        Alert,
+        Image,
+        ScrollView,
+        KeyboardAvoidingView,
+        Platform,
+        ActivityIndicator
+    } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import mockBanking from '../../assets/banking.json';
+import { Ionicons, MaterialIcons } from '@expo/vector-icons';
+import { router } from 'expo-router';
+import Animated, { FadeInUp, FadeInDown } from 'react-native-reanimated';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { StatusBar } from 'expo-status-bar';
 
 export default function AddCard ()
 {
     const [ banks, setBanks ] = useState( mockBanking );
     const [ selectedBank, setSelectedBank ] = useState( banks[ 0 ] );
-    console.log( selectedBank );
     const [ accountNumber, setAccountNumber ] = useState( '' );
     const [ accountHolder, setAccountHolder ] = useState( '' );
+    const [ isLoading, setIsLoading ] = useState( false );
+    const [ step, setStep ] = useState( 1 );
+    const [ isValid, setIsValid ] = useState( false );
 
-    const handleSubmit = () =>
+    // Validate form
+    useEffect( () =>
+    {
+        if ( step === 1 )
+        {
+            setIsValid( selectedBank !== null );
+        } else if ( step === 2 )
+        {
+            setIsValid( accountNumber.length >= 10 );
+        } else if ( step === 3 )
+        {
+            setIsValid( accountHolder.length >= 3 );
+        }
+    }, [ selectedBank, accountNumber, accountHolder, step ] );
+
+    const formatAccountNumber = ( text: any ) =>
+    {
+        // Remove all non-numeric characters
+        const cleaned = text.replace( /[^0-9]/g, '' );
+
+        // Format with spaces every 4 digits
+        let formatted = '';
+        for ( let i = 0; i < cleaned.length; i++ )
+        {
+            if ( i > 0 && i % 4 === 0 )
+            {
+                formatted += ' ';
+            }
+            formatted += cleaned[ i ];
+        }
+
+        return formatted;
+    };
+
+    const handleAccountNumberChange = ( text: any ) =>
+    {
+        const formatted = formatAccountNumber( text );
+        setAccountNumber( formatted );
+    };
+
+    const goToNextStep = () =>
+    {
+        if ( step < 3 && isValid )
+        {
+            setStep( step + 1 );
+        } else if ( step === 3 && isValid )
+        {
+            handleSubmit();
+        }
+    };
+
+    const goToPreviousStep = () =>
+    {
+        if ( step > 1 )
+        {
+            setStep( step - 1 );
+        } else
+        {
+            router.back();
+        }
+    };
+
+    const handleSubmit = async () =>
     {
         if ( !accountNumber || !accountHolder )
         {
@@ -19,47 +166,244 @@ export default function AddCard ()
             return;
         }
 
-        Alert.alert( 'Thành công', `Đã thêm thẻ ngân hàng:\n- Ngân hàng: ${ selectedBank }\n- Số TK: ${ accountNumber }\n- Chủ TK: ${ accountHolder }` );
+        setIsLoading( true );
+
+        try
+        {
+            // Simulate API call
+            await new Promise( resolve => setTimeout( resolve, 1500 ) );
+
+            // Create new card object
+            const newCard = {
+                id: Date.now().toString(),
+                STK: accountNumber.replace( /\s/g, '' ),
+                name: accountHolder,
+                logoBanking: selectedBank.logo,
+                bankName: selectedBank.name,
+                balance: 0,
+                transactionHistory: []
+            };
+
+            // Get existing cards from AsyncStorage
+            const existingCardsJson = await AsyncStorage.getItem( 'bankingCards' );
+            const existingCards = existingCardsJson ? JSON.parse( existingCardsJson ) : [];
+
+            // Add new card and save back to AsyncStorage
+            const updatedCards = [ ...existingCards, newCard ];
+            await AsyncStorage.setItem( 'bankingCards', JSON.stringify( updatedCards ) );
+
+            // Set as selected card
+            await AsyncStorage.setItem( 'selectedCard', JSON.stringify( newCard ) );
+
+            Alert.alert(
+                'Thành công',
+                'Đã thêm thẻ ngân hàng thành công!',
+                [ { text: 'OK', onPress: () => router.back() } ]
+            );
+        } catch ( error )
+        {
+            console.error( 'Error adding card:', error );
+            Alert.alert( 'Lỗi', 'Có lỗi xảy ra khi thêm thẻ. Vui lòng thử lại sau.' );
+        } finally
+        {
+            setIsLoading( false );
+        }
+    };
+
+    const renderStepIndicator = () => (
+        <View className="flex-row justify-center items-center my-6">
+            { [ 1, 2, 3 ].map( ( i ) => (
+                <View key={ i } className="flex-row items-center">
+                    <View
+                        className={ `w-8 h-8 rounded-full justify-center items-center ${ i === step ? 'bg-blue-500' : i < step ? 'bg-green-500' : 'bg-gray-300'
+                            }` }
+                    >
+                        { i < step ? (
+                            <Ionicons name="checkmark" size={ 18 } color="white" />
+                        ) : (
+                            <Text className="text-white font-bold">{ i }</Text>
+                        ) }
+                    </View>
+                    { i < 3 && (
+                        <View
+                            className={ `w-16 h-1 ${ i < step ? 'bg-green-500' : 'bg-gray-300'
+                                }` }
+                        />
+                    ) }
+                </View>
+            ) ) }
+        </View>
+    );
+
+    const renderStepContent = () =>
+    {
+        switch ( step )
+        {
+            case 1:
+                return (
+                    <Animated.View
+                        entering={ FadeInUp.duration( 400 ) }
+                        className="flex-1 px-4"
+                    >
+                        <Text className="text-xl font-bold mb-6">Chọn ngân hàng của bạn</Text>
+
+                        <ScrollView className="flex-1 mb-4">
+                            { banks.map( ( bank ) => (
+                                <TouchableOpacity
+                                    key={ bank.id }
+                                    className={ `flex-row items-center p-4 mb-3 border rounded-xl ${ selectedBank.id === bank.id
+                                            ? 'border-blue-500 bg-blue-50'
+                                            : 'border-gray-200 bg-white'
+                                        }` }
+                                    onPress={ () => setSelectedBank( bank ) }
+                                >
+                                    <Image
+                                        source={ { uri: bank.logo } }
+                                        className="w-12 h-12 rounded-lg mr-4"
+                                        resizeMode="contain"
+                                    />
+                                    <View className="flex-1">
+                                        <Text className="font-bold text-gray-800">{ bank.name }</Text>
+                                        { selectedBank.id === bank.id && (
+                                            <Text className="text-blue-500 text-sm mt-1">Đã chọn</Text>
+                                        ) }
+                                    </View>
+                                    { selectedBank.id === bank.id && (
+                                        <Ionicons name="checkmark-circle" size={ 24 } color="#3b82f6" />
+                                    ) }
+                                </TouchableOpacity>
+                            ) ) }
+                        </ScrollView>
+                    </Animated.View>
+                );
+
+            case 2:
+                return (
+                    <Animated.View
+                        entering={ FadeInUp.duration( 400 ) }
+                        className="flex-1 px-4"
+                    >
+                        <Text className="text-xl font-bold mb-2">Nhập số tài khoản</Text>
+                        <Text className="text-gray-500 mb-6">Vui lòng nhập số tài khoản của ngân hàng { selectedBank.name }</Text>
+
+                        <View className="flex-row items-center mb-2">
+                            <Image
+                                source={ { uri: selectedBank.logo } }
+                                className="w-10 h-10 rounded-lg mr-3"
+                                resizeMode="contain"
+                            />
+                            <Text className="font-bold">{ selectedBank.name }</Text>
+                        </View>
+
+                        <View className="bg-white rounded-xl border border-gray-200 p-4 mb-4">
+                            <Text className="text-gray-500 text-sm mb-2">Số tài khoản</Text>
+                            <TextInput
+                                className="text-lg font-medium"
+                                keyboardType="numeric"
+                                placeholder="Nhập số tài khoản"
+                                value={ accountNumber }
+                                onChangeText={ handleAccountNumberChange }
+                                maxLength={ 19 } // 16 digits + 3 spaces
+                                autoFocus
+                            />
+                        </View>
+
+                        <Text className="text-gray-500 text-sm">
+                            Số tài khoản thường có 10-16 chữ số và không chứa ký tự đặc biệt
+                        </Text>
+                    </Animated.View>
+                );
+
+            case 3:
+                return (
+                    <Animated.View
+                        entering={ FadeInUp.duration( 400 ) }
+                        className="flex-1 px-4"
+                    >
+                        <Text className="text-xl font-bold mb-2">Tên chủ tài khoản</Text>
+                        <Text className="text-gray-500 mb-6">Vui lòng nhập đúng tên chủ tài khoản</Text>
+
+                        <View className="flex-row items-center mb-4">
+                            <Image
+                                source={ { uri: selectedBank.logo } }
+                                className="w-10 h-10 rounded-lg mr-3"
+                                resizeMode="contain"
+                            />
+                            <View>
+                                <Text className="font-bold">{ selectedBank.name }</Text>
+                                <Text className="text-gray-500">{ accountNumber }</Text>
+                            </View>
+                        </View>
+
+                        <View className="bg-white rounded-xl border border-gray-200 p-4 mb-4">
+                            <Text className="text-gray-500 text-sm mb-2">Tên chủ tài khoản</Text>
+                            <TextInput
+                                className="text-lg font-medium"
+                                placeholder="Nhập tên chủ tài khoản"
+                                value={ accountHolder }
+                                onChangeText={ setAccountHolder }
+                                autoCapitalize="words"
+                                autoFocus
+                            />
+                        </View>
+
+                        <Text className="text-gray-500 text-sm">
+                            Tên chủ tài khoản phải trùng khớp với thông tin đăng ký tại ngân hàng
+                        </Text>
+                    </Animated.View>
+                );
+
+            default:
+                return null;
+        }
     };
 
     return (
-        <View className="flex-1 px-4 py-6">
-            <Text className="text-2xl font-bold text-center mb-6">Thêm thẻ ngân hàng</Text>
-            <Text className="mb-1">Chọn ngân hàng</Text>
-            <View className="border rounded mb-4 bg-white">
-                <Picker
-                    selectedValue={ selectedBank }
-                    onValueChange={ ( itemValue ) => setSelectedBank( itemValue ) }
-                >
-                    { banks.map( ( bank ) => (
-                        <Picker.Item key={ bank.id } label={ bank.name } value={ bank.logo } />
-                    ) ) }
-                </Picker>
-            </View>
+        <KeyboardAvoidingView
+            behavior={ Platform.OS === 'ios' ? 'padding' : 'height' }
+            className="flex-1 bg-gray-50"
+        >
+            <StatusBar style="dark" />
 
-            <Text className="mb-1">Số tài khoản</Text>
-            <TextInput
-                className="border rounded px-3 py-2 mb-4 bg-white"
-                keyboardType="numeric"
-                placeholder="Nhập số tài khoản"
-                value={ accountNumber }
-                onChangeText={ setAccountNumber }
-            />
-
-            <Text className="mb-1">Tên chủ tài khoản</Text>
-            <TextInput
-                className="border rounded px-3 py-2 mb-6 bg-white"
-                placeholder="Nhập tên chủ tài khoản"
-                value={ accountHolder }
-                onChangeText={ setAccountHolder }
-            />
-
-            <TouchableOpacity
-                className="bg-blue-500 py-3 rounded items-center"
-                onPress={ handleSubmit }
+            {/* Header */ }
+            <Animated.View
+                entering={ FadeInDown.duration( 400 ) }
+                className="pt-12 pb-2 px-4 bg-white border-b border-gray-200"
             >
-                <Text className="text-white font-semibold">Thêm thẻ</Text>
-            </TouchableOpacity>
-        </View>
+                <View className="flex-row items-center">
+                    <TouchableOpacity onPress={ goToPreviousStep } className="p-2">
+                        <Ionicons name="arrow-back" size={ 24 } color="#333" />
+                    </TouchableOpacity>
+                    <Text className="text-xl font-bold ml-2">Thêm thẻ ngân hàng</Text>
+                </View>
+                { renderStepIndicator() }
+            </Animated.View>
+
+            {/* Content */ }
+            <ScrollView className="flex-1">
+                { renderStepContent() }
+            </ScrollView>
+
+            {/* Footer */ }
+            <Animated.View
+                entering={ FadeInUp.duration( 400 ) }
+                className="p-4 bg-white border-t border-gray-200"
+            >
+                <TouchableOpacity
+                    className={ `py-4 rounded-xl items-center ${ isValid ? 'bg-blue-500' : 'bg-gray-300'
+                        }` }
+                    onPress={ goToNextStep }
+                    disabled={ !isValid || isLoading }
+                >
+                    { isLoading ? (
+                        <ActivityIndicator color="white" />
+                    ) : (
+                        <Text className="text-white font-bold text-lg">
+                            { step < 3 ? 'Tiếp tục' : 'Hoàn tất' }
+                        </Text>
+                    ) }
+                </TouchableOpacity>
+            </Animated.View>
+        </KeyboardAvoidingView>
     );
 }

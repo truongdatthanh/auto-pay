@@ -40,8 +40,8 @@
       [
         "expo-camera",
         {
-          "cameraPermission": "Allow AutoPAY to access your camera",
-          "cameraPermissionText": "AutoPAY needs access to your camera to scan QR codes.",
+          "cameraPermission": "Cho phép AutoPAY mở camera của bạn",
+          "cameraPermissionText": "AutoPAY cần quyền truy cập vào camera của bạn để quét mã QR.",
           "recordAudioAndroid": true
         }
       ]

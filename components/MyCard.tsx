@@ -1,11 +1,11 @@
-//#region code chuẩn cơm mẹ nấu
 import React, { useCallback, useEffect, useState, useRef } from 'react';
-import { View, Text, FlatList, TouchableOpacity, Animated, NativeSyntheticEvent, NativeScrollEvent } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, Animated, NativeSyntheticEvent, NativeScrollEvent, Image } from 'react-native';
 import data from "../assets/banking-card.json";
 import BankingCard from './BankCard';
 import { router } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons } from '@expo/vector-icons';
+import TransactionList from './TransactionList';
 
 export default function MyCard ()
 {
@@ -80,7 +80,6 @@ export default function MyCard ()
     // xử lý khi cuộn
     const handleScroll = ( event: NativeSyntheticEvent<NativeScrollEvent> ) =>
     {
-
         isScrollingRef.current = true;
 
         //kiểm tra xem có phải thẻ cuối cùng và đã dừng ở thẻ cuối cùng trước đó không
@@ -278,7 +277,37 @@ export default function MyCard ()
             {/* <View className='mx-5 bg-white rounded-2xl shadow-xl mt-2'>
                 <BarCharts id={ bankCard[ currentCardIndex ].id } />
             </View> */}
+
+            <View className="flex-row mx-4 bg-white p-4 rounded-xl shadow-md border border-gray-200 justify-between">
+                {/* Chuyển tiền cho mầy nè */ }
+                <TouchableOpacity className="items-center w-24" onPress={ () => router.push( '/transfer' ) }>
+                    <View className="p-1 bg-blue-100 border border-blue-300 rounded-xl shadow-sm">
+                        <Image source={ require( '@/assets/images/dollar.png' ) } className="w-10 h-10" />
+                    </View>
+                    <Text className="mt-2 text-[11px] font-semibold text-center text-blue-700">Chuyển tiền</Text>
+                </TouchableOpacity>
+                <View className='w-1 border border-gray-300 rounded-md' />
+                {/* QR của tao */ }
+                <TouchableOpacity className="items-center w-24" onPress={ () => router.push( '/my-qr' ) }>
+                    <View className="p-1 bg-green-100 border border-green-300 rounded-xl shadow-sm">
+                        <Image source={ require( '@/assets/images/qr-code.png' ) } className="w-10 h-10" />
+                    </View>
+                    <Text className="mt-2 text-[11px] font-semibold text-center text-green-700">QR của tao</Text>
+                </TouchableOpacity>
+                <View className='w-1 border border-gray-300 rounded-md' />
+                {/* Chuyển tiền cho tao */ }
+                <TouchableOpacity className="items-center w-24" onPress={ () => void ( 0 ) }>
+                    <View className="p-1 bg-red-100 border border-red-300 rounded-xl shadow-sm">
+                        <Image source={ require( '@/assets/images/money.png' ) } className="w-10 h-10" />
+                    </View>
+                    <Text className="mt-2 text-[11px] font-semibold text-center text-red-700">Nhận tiền</Text>
+                </TouchableOpacity>
+            </View>
+
+            <View className='mt-2 mx-4'>
+                <TransactionList id={ bankCard[ currentCardIndex ].id } />
+            </View>
         </View>
     );
 }
-//#endregion
+
