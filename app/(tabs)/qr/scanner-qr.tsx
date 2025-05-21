@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
-import { View, Text, Alert, StyleSheet, TouchableOpacity, SafeAreaView, StatusBar, ActivityIndicator } from "react-native";
+import React, { useEffect, useState, useRef } from "react";
+import { View, Text, Alert, StyleSheet, TouchableOpacity, SafeAreaView, StatusBar, ActivityIndicator, Animated } from "react-native";
 import { CameraView, Camera } from "expo-camera";
 import { router } from "expo-router";
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import * as ImagePicker from 'expo-image-picker';
-import * as FileSystem from 'expo-file-system';
+
 
 export default function QRScanner ()
 {
@@ -13,6 +13,9 @@ export default function QRScanner ()
     const [ flashEnabled, setFlashEnabled ] = useState( false );
     const [ scanning, setScanning ] = useState( true );
     const [ processingImage, setProcessingImage ] = useState( false );
+
+    // Animation for scanning line
+    const scanLineAnimation = useRef(new Animated.Value(0)).current;
 
     useEffect( () =>
     {
@@ -24,11 +27,40 @@ export default function QRScanner ()
         } )();
     }, [] );
 
+    // Start scanning line animation
+    useEffect(() => {
+        if (scanning) {
+            // Create animation sequence
+            const startAnimation = () => {
+                Animated.sequence([
+                    // Move down
+                    Animated.timing(scanLineAnimation, {
+                        toValue: 1,
+                        duration: 1500,
+                        useNativeDriver: true
+                    }),
+                    // Move up
+                    Animated.timing(scanLineAnimation, {
+                        toValue: 0,
+                        duration: 1500,
+                        useNativeDriver: true
+                    })
+                ]).start(() => {
+                    // Repeat animation if still scanning
+                    if (scanning) {
+                        startAnimation();
+                    }
+                });
+            };
+
+            startAnimation();
+        }
+    }, [scanning]);
+
     // Xử lý quét mã QR
     const handleBarcodeScanned = ( result: any ) =>
     {
         if ( !scanning ) return;
-
         try
         {
             // Rung điện thoại khi quét thành công
@@ -49,7 +81,6 @@ export default function QRScanner ()
         {
             // Vibrate on error
             Haptics.notificationAsync( Haptics.NotificationFeedbackType.Error );
-
             Alert.alert(
                 "QR không hợp lệ",
                 "Mã QR không đúng định dạng hoặc không chứa thông tin thanh toán hợp lệ",
@@ -168,11 +199,14 @@ export default function QRScanner ()
     return (
         <View className="flex-1 bg-black">
             <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
-
             {/* Camera View */ }
+
             <CameraView
+                enableTorch={ flashEnabled }
                 style={ { flex: 1 } }
-                barcodeScannerSettings={ { barcodeTypes: [ "qr" ] } }
+                barcodeScannerSettings={ { 
+                    barcodeTypes: [ "qr" ],
+                } }
                 onBarcodeScanned={ scanning ? handleBarcodeScanned : undefined }
                 onCameraReady={ () => console.log( "Camera is ready" ) }
                 autofocus="on"
@@ -245,45 +279,76 @@ const styles = StyleSheet.create( {
         position: 'absolute',
         top: 0,
         left: 0,
-        width: 30,
-        height: 30,
-        borderTopWidth: 4,
-        borderLeftWidth: 4,
-        borderColor: 'white',
-        borderTopLeftRadius: 12
+        width: 40,
+        height: 40,
+        borderTopWidth: 5,
+        borderLeftWidth: 5,
+        borderColor: '#ffffff',
+        borderTopLeftRadius: 12,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
     },
     cornerTopRight: {
         position: 'absolute',
         top: 0,
         right: 0,
-        width: 30,
-        height: 30,
-        borderTopWidth: 4,
-        borderRightWidth: 4,
-        borderColor: 'white',
-        borderTopRightRadius: 12
+        width: 40,
+        height: 40,
+        borderTopWidth: 5,
+        borderRightWidth: 5,
+        borderColor: '#ffffff',
+        borderTopRightRadius: 12,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
     },
     cornerBottomLeft: {
         position: 'absolute',
         bottom: 0,
         left: 0,
-        width: 30,
-        height: 30,
-        borderBottomWidth: 4,
-        borderLeftWidth: 4,
-        borderColor: 'white',
-        borderBottomLeftRadius: 12
+        width: 40,
+        height: 40,
+        borderBottomWidth: 5,
+        borderLeftWidth: 5,
+        borderColor: '#ffffff',
+        borderBottomLeftRadius: 12,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
     },
     cornerBottomRight: {
         position: 'absolute',
         bottom: 0,
         right: 0,
-        width: 30,
-        height: 30,
-        borderBottomWidth: 4,
-        borderRightWidth: 4,
-        borderColor: 'white',
-        borderBottomRightRadius: 12
+        width: 40,
+        height: 40,
+        borderBottomWidth: 5,
+        borderRightWidth: 5,
+        borderColor: '#ffffff',
+        borderBottomRightRadius: 12,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
     },
 } );
-

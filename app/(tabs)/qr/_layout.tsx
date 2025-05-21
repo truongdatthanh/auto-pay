@@ -1,11 +1,22 @@
 import AppHeaderInfo from "@/components/App.headerInfo";
+import { useTabBarStore } from "@/store/useTabbarStore";
 import { Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
+import { useFocusEffect } from "@react-navigation/native";
 import { router, Stack } from "expo-router";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { TouchableOpacity, View, Text, Modal, Animated, StyleSheet, Dimensions } from "react-native";
 
 export default function QRLayout ()
 {
+    const setTabBarVisible = useTabBarStore( state => state.setTabBarVisible );
+
+    useFocusEffect(
+        useCallback( () =>
+        {
+            setTabBarVisible( false ); // ẩn tab bar khi vào màn hình
+            return () => setTabBarVisible( true ); // hiện lại khi rời màn hình
+        }, [ setTabBarVisible ] )
+    );
     const [ menuVisible, setMenuVisible ] = useState( false );
     const menuAnimation = useRef( new Animated.Value( 0 ) ).current;
 

@@ -280,27 +280,27 @@ export default function MyCard ()
 
             <View className="flex-row mx-4 bg-white p-4 rounded-xl shadow-md border border-gray-200 justify-between">
                 {/* Chuyển tiền cho mầy nè */ }
-                <TouchableOpacity className="items-center w-24" onPress={ () => router.push( '/transfer' ) }>
-                    <View className="p-1 bg-blue-100 border border-blue-300 rounded-xl shadow-sm">
+                <TouchableOpacity className="items-center w-24 " onPress={ () => router.push( '/transfer' ) }>
+                    <View className="p-1 border rounded-xl shadow-sm bg-white">
                         <Image source={ require( '@/assets/images/dollar.png' ) } className="w-10 h-10" />
                     </View>
-                    <Text className="mt-2 text-[11px] font-semibold text-center text-blue-700">Chuyển tiền</Text>
+                    <Text className="mt-2 text-[11px] font-semibold text-center">Chuyển tiền</Text>
                 </TouchableOpacity>
-                <View className='w-1 border border-gray-300 rounded-md' />
+                <View className='w-1 border border-black rounded-md' />
                 {/* QR của tao */ }
-                <TouchableOpacity className="items-center w-24" onPress={ () => router.push( '/my-qr' ) }>
-                    <View className="p-1 bg-green-100 border border-green-300 rounded-xl shadow-sm">
+                <TouchableOpacity className="items-center w-24" onPress={ () => router.push( { pathname: '/(tabs)/qr', params: { tabIndex: 1 } } ) }>
+                    <View className="p-1 border bg-white rounded-xl shadow-sm">
                         <Image source={ require( '@/assets/images/qr-code.png' ) } className="w-10 h-10" />
                     </View>
-                    <Text className="mt-2 text-[11px] font-semibold text-center text-green-700">QR của tao</Text>
+                    <Text className="mt-2 text-[11px] font-semibold text-center ">QR của tôi</Text>
                 </TouchableOpacity>
-                <View className='w-1 border border-gray-300 rounded-md' />
+                <View className='w-1 border border-black rounded-md' />
                 {/* Chuyển tiền cho tao */ }
                 <TouchableOpacity className="items-center w-24" onPress={ () => void ( 0 ) }>
-                    <View className="p-1 bg-red-100 border border-red-300 rounded-xl shadow-sm">
+                    <View className="p-1 bg-white border rounded-xl shadow-sm">
                         <Image source={ require( '@/assets/images/money.png' ) } className="w-10 h-10" />
                     </View>
-                    <Text className="mt-2 text-[11px] font-semibold text-center text-red-700">Nhận tiền</Text>
+                    <Text className="mt-2 text-[11px] font-semibold text-center ">Nhận tiền</Text>
                 </TouchableOpacity>
             </View>
 

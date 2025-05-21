@@ -1,165 +1,254 @@
-import { View, SafeAreaView, Animated } from 'react-native';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { router, Tabs, usePathname } from 'expo-router';
-import { useEffect, useRef } from 'react';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
+// import useTabPressHandler from '@/hooks/useTabPressHandle';
+// import { useTabBarStore } from '@/store/useTabbarStore';
+// import { router, Tabs, usePathname } from 'expo-router';
+// import { Image, Text, TouchableOpacity } from 'react-native';
+// import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
+
+// export default function TabsLayout ()
+// {
+//   const insets = useSafeAreaInsets(); // lấy insets động theo device
+//   const isTabBarVisible = useTabBarStore( state => state.isTabBarVisible );
+//   const pathname = usePathname(); // lấy pathname hiện tại
+
+//   return (
+//     <Tabs
+//       initialRouteName="index"
+//       screenOptions={ {
+//         headerShown: false,
+//         tabBarActiveTintColor: '#1c40f2',
+//         tabBarInactiveTintColor: 'black',
+
+
+//         tabBarLabelStyle: {
+//           fontSize: 10,
+//           width: 100,
+//         },
+
+//         tabBarItemStyle: {
+//           paddingHorizontal: 12,
+//           paddingVertical: 6,
+//           marginHorizontal: 6,
+//           justifyContent: 'center',
+//           alignItems: 'center',
+//           //flexDirection: 'row', // để icon và label nằm ngang nếu cần
+//           minWidth: 70, // tăng kích thước tối thiểu để bao phủ icon + label
+//         },
+
+//         //CSS cho thanh Tabbar
+//         tabBarStyle: {
+//           display: isTabBarVisible ? "flex" : "none", // ẩn
+//           position: 'absolute',
+//           backgroundColor: "white",
+//           alignItems: 'center',
+//           marginBottom: insets.bottom,
+//           height: 60,
+//           //zIndex: 1000,
+//           paddingBottom: 10, // thêm padding để icon không bị đè
+//         },
+//       } }
+//     >
+//       <Tabs.Screen
+//         name="index"
+//         options={ {
+//           title: 'Trang chủ',
+//           tabBarIcon: ( { focused } ) =>
+//             <Image source={ focused ? require( "@/assets/images/home_blue.png" ) : require( "@/assets/images/home_black.png" ) }
+//               className={ focused ? "w-10 h-10" : "w-6 h-6" }
+//               resizeMode='contain'
+//             />,
+//         } }
+//       />
+//       <Tabs.Screen
+//         name="qr"
+//         options={ {
+//           title: 'QR',
+//           tabBarIcon: ( { focused } ) =>
+//             <Image source={ focused ? require( "@/assets/images/scan_blue.png" ) : require( "@/assets/images/scan_black.png" ) }
+//               className={ focused ? "w-10 h-10" : "w-7 h-7" }
+//             />,
+//         } }
+//         listeners={ {
+//           tabPress: e =>
+//           {
+//             e.preventDefault();
+//             router.replace( { pathname: '/(tabs)/qr', params: { tabIndex: 0 } } );
+//           },
+//         } }
+//       />
+//       <Tabs.Screen
+//         name="history"
+//         options={ {
+//           title: 'Lịch sử',
+//           tabBarIcon: ( { focused } ) =>
+//             <Image source={ focused ? require( "@/assets/images/history_blue.png" ) : require( "@/assets/images/history.png" ) }
+//               className={ focused ? "w-8 h-8" : "w-6 h-6" }
+//               resizeMode='contain'
+//             />,
+//         } }
+//         listeners={ {
+//           tabPress: e =>
+//           {
+//             if ( pathname === '/history' )
+//             {
+//               e.preventDefault();
+//               return;
+//             }
+//           },
+//         } }
+//       />
+//       <Tabs.Screen
+//         name="user"
+//         options={ {
+//           title: 'Tài khoản',
+//           tabBarIcon: ( { focused } ) =>
+//             <Image source={ focused ? require( "@/assets/images/user_blue.png" ) : require( "@/assets/images/user_black.png" ) }
+//               className={ focused ? "w-8 h-8" : "w-7 h-7" } />,
+//         } }
+//       />
+//     </Tabs>
+//   );
+// }
+
+import useTabPressHandler from '@/hooks/useTabPressHandle';
 import { useTabBarStore } from '@/store/useTabbarStore';
-import { LinearGradient } from 'expo-linear-gradient';
+import { router, Tabs, usePathname } from 'expo-router';
+import { Image, Text, TouchableOpacity, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-export default function HomeLayout ()
+export default function TabsLayout ()
 {
+  const insets = useSafeAreaInsets();
+  const isTabBarVisible = useTabBarStore( state => state.isTabBarVisible );
   const pathname = usePathname();
-  const isTabbarVisibleZustand = useTabBarStore( ( state ) => state.isTabBarVisible );
-  const setIsTabBarVisibleZustand = useTabBarStore( ( state ) => state.setTabBarVisible );
-  const translateY = useRef( new Animated.Value( 0 ) ).current;
-
-  useEffect( () =>
-  {
-    Animated.timing( translateY, {
-      toValue: isTabbarVisibleZustand ? 0 : 100,
-      duration: 150,
-      useNativeDriver: true,
-    } ).start();
-  }, [ isTabbarVisibleZustand ] );
-
-  useEffect( () =>
-  {
-    if ( pathname.includes( '/transaction/' ) )
-    {
-      setIsTabBarVisibleZustand( false );
-    } else
-    {
-      setIsTabBarVisibleZustand( true );
-    }
-  }, [ pathname ] );
 
   return (
-    <SafeAreaView style={ { flex: 1 } }>
-      <Tabs
-        initialRouteName="index"
-        screenOptions={ {
-          tabBarShowLabel: true,
-          tabBarActiveTintColor: 'white',
-          tabBarInactiveTintColor: '#ccc',
-          tabBarStyle: {
-            position: 'absolute',
-            bottom: 10,
-            left: 20,
-            right: 20,
-            height: 60,
-            borderRadius: 50,
-            marginHorizontal: 20,
-            elevation: 10,
-            transform: [ { translateY } ],
-          },
-          tabBarBackground: () => (
-            <LinearGradient
-              colors={ [ '#3b82f6', '#6366f1' ] } // blue to indigo
-              start={ { x: 0, y: 0 } }
-              end={ { x: 1, y: 1 } }
-              style={ {
-                flex: 1,
-                borderRadius: 50,
-              } }
-            />
+    <Tabs
+      initialRouteName="index"
+      screenOptions={ {
+        headerShown: false,
+        tabBarStyle: {
+          display: isTabBarVisible ? "flex" : "none",
+          position: 'absolute',
+          backgroundColor: "white",
+          alignItems: 'center',
+          marginBottom: insets.bottom,
+          height: 60,
+          paddingBottom: 10,
+        },
+      } }
+    >
+      <Tabs.Screen
+        name="index"
+        options={ {
+          title: 'Trang chủ',
+          tabBarButton: ( props ) => (
+
+
+            <TouchableOpacity
+              onPress={ props.onPress }
+              accessibilityState={ props.accessibilityState }
+              style={ { flex: 1, alignItems: 'center', justifyContent: 'center' } }
+            >
+              <Image
+                source={
+                  props.accessibilityState?.selected
+                    ? require( '@/assets/images/home_blue.png' )
+                    : require( '@/assets/images/home_black.png' )
+                }
+                style={ { width: props.accessibilityState?.selected ? 40 : 24, height: props.accessibilityState?.selected ? 40 : 24 } }
+                resizeMode='contain'
+              />
+              <Text style={ { fontSize: 10, color: props.accessibilityState?.selected ? '#1c40f2' : 'black' } }>
+                Trang chủ
+              </Text>
+            </TouchableOpacity>
           ),
-          tabBarItemStyle: {
-            justifyContent: 'center',
-            alignItems: 'center',
-            flexDirection: 'row',
-          },
-          tabBarLabelStyle: {
-            display: 'none',
-          },
         } }
-      >
-        <Tabs.Screen
-          name="index"
-          options={ {
-            title: 'Home',
-            tabBarIcon: ( { color, focused } ) => (
-              <View
-                style={
-                  focused && {
-                    shadowColor: 'white',               // Đảm bảo có màu shadow
-                    shadowOffset: { width: 0, height: 6 }, // Đẩy bóng xa hơn xuống dưới
-                    shadowOpacity: 0.8,               // Đậm hơn (từ 0 → 1)
-                    shadowRadius: 10,                 // Mượt hơn, tán rộng hơn
-                    elevation: 10,                    // Android: cao hơn = bóng đậm hơn
-                  }
+      />
+      <Tabs.Screen
+        name="qr"
+        options={ {
+          title: 'QR',
+          tabBarButton: ( props ) => (
+            <TouchableOpacity
+              onPress={ () => router.replace( { pathname: '/(tabs)/qr', params: { tabIndex: 0 } } ) }
+              style={ { flex: 1, alignItems: 'center', justifyContent: 'center' } }
+            >
+              <Image
+                source={
+                  props.accessibilityState?.selected
+                    ? require( '@/assets/images/scan_blue.png' )
+                    : require( '@/assets/images/scan_black.png' )
                 }
-                className={ `${ focused ? 'h-14 w-14 bg-black items-center justify-center absolute bottom-2 rounded-full p-2' : 'flex-1' }` }>
-                <MaterialCommunityIcons name="home" size={ focused ? 34 : 28 } color={ color } />
-              </View>
-            ),
-            headerShown: false,
-          } }
-        />
-        <Tabs.Screen
-          name="qr"
-          options={ {
-            tabBarShowLabel: false,
-            title: 'Scan',
-            tabBarStyle: { display: 'none' },
-            headerShown: false,
-            tabBarIcon: ( { color } ) => (
-              <View style={ { flex: 1, justifyContent: 'center', alignItems: 'center' } }>
-                <MaterialCommunityIcons name="qrcode-scan" size={ 24 } color={ color } />
-              </View>
-            ),
-          } }
-          listeners={ {
-            tabPress: ( e ) =>
-            {
-              e.preventDefault();
-              router.replace( { pathname: "/(tabs)/qr", params: { tabIndex: 0 } } );
-            },
-          } }
-        />
-        <Tabs.Screen
-          name="history"
-          options={ {
-            title: 'History',
-            tabBarIcon: ( { color, focused } ) => (
-              <View
-                className={ `${ focused ? 'h-14 w-14 bg-black items-center justify-center absolute bottom-2 rounded-full p-2' : 'flex-1' }` }
-                style={
-                  focused && {
-                    shadowColor: 'white',
-                    shadowOffset: { width: 0, height: 6 },
-                    shadowOpacity: 0.8,
-                    shadowRadius: 10,
-                    elevation: 15,
-                  }
+                style={ { width: props.accessibilityState?.selected ? 36 : 28, height: props.accessibilityState?.selected ? 36 : 28 } }
+              />
+              <Text style={ { fontSize: 10, color: props.accessibilityState?.selected ? '#1c40f2' : 'black' } }>
+                QR
+              </Text>
+            </TouchableOpacity>
+          ),
+        } }
+      />
+      <Tabs.Screen
+        name="history"
+        options={ {
+          title: 'Lịch sử',
+          tabBarButton: ( props ) => (
+            <TouchableOpacity
+              accessibilityState={ props.accessibilityState }
+              onPress={ ( e ) =>
+              {
+                if ( pathname === '/history' )
+                {
+                  e.preventDefault();
+                  return;
                 }
-              >
-                <MaterialCommunityIcons name="history" size={ focused ? 34 : 28 } color={ color } />
-              </View>
-            ),
-            headerShown: false,
-          } }
-          listeners={ {
-            tabPress: ( e ) =>
-            {
-              e.preventDefault();
-              router.replace( "/(tabs)/history" );
-            },
-          } }
-        />
-        <Tabs.Screen
-          name="user"
-          options={ {
-            title: 'Profile',
-            tabBarIcon: ( { color } ) => (
-              <View style={ { flex: 1, justifyContent: 'center', alignItems: 'center' } }>
-                <FontAwesome name="user-o" size={ 24 } color={ color } />
-              </View>
-            ),
-            headerShown: false,
-            tabBarStyle: { display: 'none' },
-          } }
-        />
-      </Tabs>
-    </SafeAreaView>
+                props.onPress?.( e );
+              } }
+              style={ { flex: 1, alignItems: 'center', justifyContent: 'center' } }
+            >
+              <Image
+                source={
+                  props.accessibilityState?.selected
+                    ? require( '@/assets/images/history_blue.png' )
+                    : require( '@/assets/images/history.png' )
+                }
+                style={ { width: props.accessibilityState?.selected ? 32 : 24, height: props.accessibilityState?.selected ? 32 : 24 } }
+                resizeMode='contain'
+              />
+              <Text style={ { fontSize: 10, color: props.accessibilityState?.selected ? '#1c40f2' : 'black' } }>
+                Lịch sử
+              </Text>
+            </TouchableOpacity>
+          ),
+        } }
+      />
+      <Tabs.Screen
+        name="user"
+        options={ {
+          title: 'Tài khoản',
+          tabBarButton: ( props ) => (
+            <TouchableOpacity
+              onPress={ props.onPress }
+              accessibilityState={ props.accessibilityState }
+              style={ { flex: 1, alignItems: 'center', justifyContent: 'center' } }
+            >
+              <Image
+                source={
+                  props.accessibilityState?.selected
+                    ? require( '@/assets/images/user_blue.png' )
+                    : require( '@/assets/images/user_black.png' )
+                }
+                style={ { width: props.accessibilityState?.selected ? 32 : 28, height: props.accessibilityState?.selected ? 32 : 28 } }
+              />
+              <Text style={ { fontSize: 10, color: props.accessibilityState?.selected ? '#1c40f2' : 'black' } }>
+                Tài khoản
+              </Text>
+            </TouchableOpacity>
+          ),
+        } }
+      />
+    </Tabs>
   );
 }

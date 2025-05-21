@@ -23,6 +23,7 @@ export default function History ()
   const [ refreshing, setRefreshing ] = useState( false );
   const [ showFilterModal, setShowFilterModal ] = useState( false );
 
+  console.log( "History mounted" );
 
   // Lấy dữ liệu
   useFocusEffect(

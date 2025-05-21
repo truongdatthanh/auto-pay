@@ -4,10 +4,23 @@ import '../../../global.css';
 import AppHeaderInfo from '@/components/App.headerInfo';
 import { StatusBar } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { useTabBarStore } from '@/store/useTabbarStore';
+import { useFocusEffect } from '@react-navigation/native';
+import { useCallback } from 'react';
 
 
 export default function InfomationLayout ()
 {
+    const setTabBarVisible = useTabBarStore( state => state.setTabBarVisible );
+
+    useFocusEffect(
+        useCallback( () =>
+        {
+            setTabBarVisible( false ); // ẩn tab bar khi vào màn hình
+            return () => setTabBarVisible( true ); // hiện lại khi rời màn hình
+        }, [ setTabBarVisible ] )
+    );
+
     return (
         <GestureHandlerRootView className="flex-1">
             <Stack initialRouteName='index'>

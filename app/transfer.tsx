@@ -109,7 +109,7 @@ export default function Transfer ()
 
     if ( loading )
     {
-        return <Loading message="Đợi bố mầy tí..." />;
+        return <Loading message="Vui lòng chờ..." />;
     }
 
     const handleSubmit = () =>
