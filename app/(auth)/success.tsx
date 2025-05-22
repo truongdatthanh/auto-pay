@@ -1,5 +1,6 @@
 import { router } from "expo-router";
-import { Image, Platform, SafeAreaView, StatusBar, Text, Touchable, TouchableOpacity, View } from "react-native";
+import { Image, StatusBar, Text, TouchableOpacity, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function RegisterSuccess ()
 {
@@ -11,8 +12,8 @@ export default function RegisterSuccess ()
 
     return (
         <>
-            <StatusBar barStyle="dark-content" backgroundColor="transparent" translucent />
-            <SafeAreaView className="flex-1 bg-white" style={ { paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0 } }>
+            <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
+            <SafeAreaView className="flex-1 bg-black">
                 <View className="flex-1 justify-center items-center">
                     <View className="w-[200px] h-[200px]">
                         <Image source={ require( '../../assets/images/success.png' ) } className="w-full h-full rounded-lg" resizeMode="contain" />

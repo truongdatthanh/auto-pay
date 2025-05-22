@@ -2,9 +2,10 @@ import { Slot, useRouter, usePathname } from 'expo-router';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import * as SplashScreen from 'expo-splash-screen';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { AppState, Platform } from 'react-native';
+import { AppState, Platform, Text } from 'react-native';
 import * as NavigationBar from 'expo-navigation-bar';
 import { useFocusEffect } from '@react-navigation/native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 
 SplashScreen.preventAutoHideAsync();
@@ -82,14 +83,11 @@ export default function RootLayout ()
   console.log( "pathname", pathname );
 
   return (
-    <GestureHandlerRootView className="flex-1">
-      <Slot />
-    </GestureHandlerRootView>
-    // <>
-    //
-    //     <Slot />
-    //   </ThemeProvider>
-    // </>
+    // <GestureHandlerRootView className="flex-1">
+      <SafeAreaProvider className='flex-1'>
+        <Slot />
+      </SafeAreaProvider>
+    // </GestureHandlerRootView>
   );
 }
 

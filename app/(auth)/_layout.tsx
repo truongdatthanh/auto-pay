@@ -1,15 +1,14 @@
 import { Stack } from 'expo-router';
 import '@/global.css';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Dimensions, Platform } from 'react-native';
-import { useEffect } from 'react';
-import * as NavigationBar from 'expo-navigation-bar';
+
 
 
 export default function AuthLayout ()
 {
   return (
-    <SafeAreaView style={ { flex: 1, backgroundColor: "blue" } }>
+    <>
+
       <Stack initialRouteName='login'>
         <Stack.Screen name='login' options={ { headerShown: false, } } />
         <Stack.Screen name='register' options={ { headerShown: false, } } />
@@ -20,7 +19,9 @@ export default function AuthLayout ()
         <Stack.Screen name='success' options={ { headerShown: false, } } />
         <Stack.Screen name='verify-otp' options={ { headerShown: false, } } />
       </Stack>
-    </SafeAreaView>
+
+    </>
+
   )
 }
 

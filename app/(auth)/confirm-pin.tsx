@@ -2,7 +2,8 @@ import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { router } from 'expo-router';
 import React, { useRef, useState } from 'react';
-import { View, Text, TextInput, Pressable, StatusBar, TouchableOpacity, SafeAreaView, Platform, Animated, Alert } from 'react-native';
+import { View, Text, TextInput, Pressable, StatusBar, TouchableOpacity, Platform, Animated, Alert } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function ConfirmPinInput ()
 {
@@ -102,19 +103,19 @@ export default function ConfirmPinInput ()
 
     return (
         <>
-            <StatusBar barStyle="dark-content" backgroundColor="white" />
-            <SafeAreaView className="flex-1 bg-white" style={ { paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0 } }>
-                <View className="flex-1 bg-white px-4">
+            <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
+            <SafeAreaView className="flex-1 bg-black">
+                <View className="flex-1 px-4">
                     {/* Back button */ }
                     <TouchableOpacity onPress={ () => router.back() } className="absolute top-4 left-4">
-                        <Ionicons name="return-up-back" size={ 35 } color="#1c40f2" />
+                        <Ionicons name="return-up-back" size={ 40 } color="#1c40f2" />
                     </TouchableOpacity>
                     {/* -----------------------------------------End----------------------------------------- */ }
 
                     {/* Title */ }
                     <View className="mt-16">
-                        <Text className="text-4xl font-bold text-[#1c40f2]">Xác nhận Mã PIN</Text>
-                        <Text className="text-md text-gray-500 mt-1">Nhập mã PIN của bạn gồm 6 số </Text>
+                        <Text className="text-4xl font-bold text-[#1c40f2]">Xác nhận mã PIN</Text>
+                        <Text className="text-md text-gray-400 mt-1">Nhập mã PIN của bạn gồm 6 số </Text>
                     </View>
                     {/* -----------------------------------------End----------------------------------------- */ }
 

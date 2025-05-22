@@ -17,9 +17,10 @@
       "supportsTablet": true
     },
     "android": {
+      "softwareKeyboardLayoutMode": "pan",
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/logo-autopay.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#144c3d"
       },
       "permissions": [
         "android.permission.CAMERA",
