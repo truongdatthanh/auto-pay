@@ -1,8 +1,10 @@
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
-import { Platform, SafeAreaView, StatusBar, Text, TouchableOpacity, View } from "react-native";
+import { Platform, Text, TouchableOpacity, View } from "react-native";
 import { useState } from "react";
 import FloatingInputs from "@/components/FloatingInput";
+import { StatusBar } from "expo-status-bar";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function RegisterWithPhoneNumber ()
 {
@@ -15,24 +17,29 @@ export default function RegisterWithPhoneNumber ()
 
     const handleSubmit = () =>
     {
-        router.push( { pathname: '/(auth)/verify-otp', params: { phoneNumber } } );
+        if ( phoneNumber.length < 10 )
+        {
+            alert( 'Số điện thoại không hợp lệ' );
+            return;
+        }
+        router.replace( { pathname: '/(auth)/verify-otp', params: { phoneNumber } } );
     }
 
     return (
         <>
-            <StatusBar barStyle="dark-content" backgroundColor="transparent" translucent />
-            <SafeAreaView className="flex-1 bg-white" style={ { paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0, } }>
+            <StatusBar style="light" />
+            <SafeAreaView className="flex-1 bg-black">
                 <View className="flex-1 px-4">
                     {/* Back button */ }
                     <TouchableOpacity onPress={ handleBackToRegister } className="absolute top-4 left-4">
-                        <Ionicons name="return-up-back" size={ 35 } color="#1c40f2" />
+                        <Ionicons name="return-up-back" size={ 40 } color="white" />
                     </TouchableOpacity>
                     {/* -----------------------------------------End----------------------------------------- */ }
 
                     {/* Title */ }
                     <View className="mt-16">
-                        <Text className="text-4xl font-bold text-[#1c40f2]">Số Điện Thoại</Text>
-                        <Text className="text-md text-gray-500 mt-1">Nhập số điện thoại để đăng ký tài khoản</Text>
+                        <Text className="text-4xl font-bold text-white">Số Điện Thoại</Text>
+                        <Text className="text-md text-gray-400 mt-1">Nhập số điện thoại để đăng ký tài khoản</Text>
                     </View>
                     {/* -----------------------------------------End----------------------------------------- */ }
 
@@ -46,7 +53,7 @@ export default function RegisterWithPhoneNumber ()
                             inputClassName="h-12"
                             keyboardType="phone-pad"
                             placeholder="Nhập số điện thoại tại đây..."
-                            selectionColor={ "#1c40f2" }
+                            selectionColor={ "white" }
                         />
                     </View>
                     {/* -----------------------------------------End----------------------------------------- */ }
@@ -54,9 +61,9 @@ export default function RegisterWithPhoneNumber ()
                     {/* Submit Button */ }
                     <TouchableOpacity
                         onPress={ handleSubmit }
-                        className="mt-6 bg-blue-600 py-3 rounded-xl items-center"
+                        className="mt-14 px-4 border-2 border-white justify-center h-16 self-center w-[300px] rounded-xl"
                     >
-                        <Text className="text-white text-base font-semibold">
+                        <Text className="text-center text-white text-lg font-bold">
                             Gửi mã OTP
                         </Text>
                     </TouchableOpacity>

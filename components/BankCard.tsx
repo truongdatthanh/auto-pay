@@ -34,7 +34,7 @@ export default function BankingCard ( props: IBankCard )
     const getCardGradient = (): [ string, string ] =>
     {
         // Default blue gradient
-        let colors: [ string, string ] = [ '#1e3a8a', '#3b82f6' ];
+        let colors: [ string, string ] = [ '#020617', '#1e293b' ];
 
         // Custom gradients for specific banks
         if ( bankCard.bankName?.toLowerCase().includes( 'vietcombank' ) )
@@ -65,13 +65,8 @@ export default function BankingCard ( props: IBankCard )
                 >
                     <View className="flex-row items-center justify-between">
                         <View className="flex-row items-center">
-                            <View className="w-12 h-9 bg-yellow-300/80 rounded-md mr-3" style={ {
-                                borderWidth: 0.5,
-                                borderColor: 'rgba(255,255,255,0.3)'
-                            } }>
-                                <View className="w-full h-full justify-center items-center">
-                                    <View className="w-8 h-5 border-[0.5px] border-yellow-800/50 rounded-sm" />
-                                </View>
+                            <View className="w-12 h-9 mr-3">
+                                <Image source={ require( '../assets/images/chip.png' ) } className="w-full h-12" resizeMode="contain" />
                             </View>
                             <Text className="text-white text-lg font-bold">{ bankCard.bankName }</Text>
                         </View>
@@ -107,8 +102,8 @@ export default function BankingCard ( props: IBankCard )
                         </View>
                     </View>
 
-                    <View className="absolute top-12 right-0 w-40 h-40 rounded-full bg-white/10" style={ { transform: [ { translateX: 20 }, { translateY: -20 } ] } } />
-                    <View className="absolute bottom-0 left-0 w-60 h-60 rounded-full bg-black/5" style={ { transform: [ { translateX: -30 }, { translateY: 30 } ] } } />
+                    <View className="absolute top-12 right-0 w-40 h-40 rounded-full bg-[#cbd5e1]/10" style={ { transform: [ { translateX: 20 }, { translateY: -20 } ] } } />
+                    <View className="absolute bottom-0 left-0 w-60 h-60 rounded-full bg-[#cbd5e1]/5" style={ { transform: [ { translateX: -30 }, { translateY: 30 } ] } } />
                 </LinearGradient>
             </View>
         </TouchableWithoutFeedback>

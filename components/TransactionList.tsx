@@ -9,11 +9,9 @@ import { AntDesign } from "@expo/vector-icons";
 
 export default function TransactionList ( { id }: { id: string } )
 {
-    const [ data, setData ] = useState( mockBankingCard );
+    const data = mockBankingCard;
     const [ currentDate, setCurrentDate ] = useState( new Date() );
-
     const indexData = data.find( ( item ) => item.id === id );
-
     const todayTransactions = indexData?.transactionHistory.filter( ( item ) =>
     {
         return new Date( item.date ).setHours( 0, 0, 0, 0 ) === currentDate.setHours( 0, 0, 0, 0 );
@@ -21,12 +19,12 @@ export default function TransactionList ( { id }: { id: string } )
 
 
     return (
-        <View className="flex-1 bg-white rounded-xl shadow-md border border-gray-200">
+        <View className="bg-black rounded-xl h-[300px]">
             <View className="flex-row justify-between items-center px-4 py-2" >
-                <Text className="text-xl font-bold">Giao dịch gần đây</Text>
+                <Text className="text-md font-bold text-white">Giao dịch gần đây</Text>
                 <TouchableOpacity className="flex-row items-center" onPress={ () => router.push( '/(tabs)/history' ) }>
-                    <Text className="text-[#1c40f2] font-semibold  text-sm">Xem thêm</Text>
-                    <AntDesign name="arrowright" size={ 12 } color="#1c40f2" />
+                    <Text className="text-white font-semibold  text-sm">Xem thêm</Text>
+                    <AntDesign name="arrowright" size={ 12 } color="white" />
                 </TouchableOpacity>
             </View>
 
@@ -36,7 +34,7 @@ export default function TransactionList ( { id }: { id: string } )
                         <TouchableOpacity onPress={ () => router.push( { pathname: "/(tabs)/history/transaction/[id]", params: { id: item.transactionId } } ) }>
                             <View className="flex-row justify-between items-center">
                                 <Text className={ `text-md font-semibold ${ item.amount < 0 ? 'text-red-500' : 'text-green-500' }` }>{ formatCurrencyVND( item.amount ) }</Text>
-                                <Text className="text-sm text-gray-500">{ formatDate( item.date ) }</Text>
+                                <Text className="text-sm text-gray-400">{ formatDate( item.date ) }</Text>
                             </View>
                         </TouchableOpacity>
                         <View className="border-b border-gray-200" />

@@ -108,13 +108,13 @@ export default function ConfirmPinInput ()
                 <View className="flex-1 px-4">
                     {/* Back button */ }
                     <TouchableOpacity onPress={ () => router.back() } className="absolute top-4 left-4">
-                        <Ionicons name="return-up-back" size={ 40 } color="#1c40f2" />
+                        <Ionicons name="return-up-back" size={ 40 } color="white" />
                     </TouchableOpacity>
                     {/* -----------------------------------------End----------------------------------------- */ }
 
                     {/* Title */ }
                     <View className="mt-16">
-                        <Text className="text-4xl font-bold text-[#1c40f2]">Xác nhận mã PIN</Text>
+                        <Text className="text-4xl font-bold text-white">Xác nhận mã PIN</Text>
                         <Text className="text-md text-gray-400 mt-1">Nhập mã PIN của bạn gồm 6 số </Text>
                     </View>
                     {/* -----------------------------------------End----------------------------------------- */ }
@@ -131,7 +131,7 @@ export default function ConfirmPinInput ()
                                                 width: 12,
                                                 height: 12,
                                                 borderRadius: 6,
-                                                backgroundColor: '#1c40f2',
+                                                backgroundColor: 'white',
                                                 marginBottom: 8,
                                                 opacity: visibilityAnimValues[ i ],
                                                 transform: [
@@ -146,7 +146,7 @@ export default function ConfirmPinInput ()
                                         />
                                         {/* Dấu gạch ngang - đổi màu khi đã nhập */ }
                                         <View
-                                            className={ `w-8 h-1 rounded-full ${ i < confirmPin.length ? 'bg-[#1c40f2]' : 'bg-gray-300' }` }
+                                            className={ `w-8 h-1 rounded-full ${ i < confirmPin.length ? 'bg-white' : 'bg-gray-600' }` }
                                         />
                                     </View>
                                 ) ) }
@@ -167,7 +167,7 @@ export default function ConfirmPinInput ()
                         {/* submit */ }
                         <TouchableOpacity
                             onPress={ () => handleSubmit( confirmPin ) }
-                            className="mt-14 px-4 bg-[#1c40f2] h-16 justify-center w-72 rounded-xl">
+                            className="mt-14 px-4 border-2 border-white h-16 justify-center w-[300px] rounded-xl">
                             <Text className="text-center text-white text-lg font-bold">
                                 Xác nhận
                             </Text>

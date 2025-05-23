@@ -6,6 +6,7 @@ import { router } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons } from '@expo/vector-icons';
 import TransactionList from './TransactionList';
+import { LinearGradient } from 'expo-linear-gradient';
 
 export default function MyCard ()
 {
@@ -222,7 +223,7 @@ export default function MyCard ()
                         ],
                     } }
                 >
-                    <View className='bg-white/20 rounded-full p-4 ml-4'>
+                    <View className='bg-black/20 rounded-full p-4 ml-4'>
                         <Ionicons name="arrow-forward" size={ 24 } color="white" />
                     </View>
                 </Animated.View>
@@ -246,13 +247,13 @@ export default function MyCard ()
                 >
                     <TouchableOpacity
                         onPress={ handleSeenAllCard }
-                        className="items-center justify-center bg-blue-50 rounded-2xl h-[180px] w-[120px]"
+                        className="items-center justify-center bg-black rounded-xl h-[180px] w-[120px]"
                     >
                         <View className="items-center">
-                            <View className="bg-blue-100 rounded-full p-3 mb-3">
-                                <Ionicons name="card-outline" size={ 24 } color="#1c40f2" />
+                            <View className="bg-white/20 rounded-full p-3 mb-3">
+                                <Ionicons name="card-outline" size={ 24 } color="white" />
                             </View>
-                            <Text className="text-blue-600 font-medium text-sm text-center">Xem tất cả thẻ</Text>
+                            <Text className="text-white font-medium text-sm text-center">Xem tất cả thẻ</Text>
                         </View>
                     </TouchableOpacity>
                 </Animated.View>
@@ -265,7 +266,7 @@ export default function MyCard ()
                     { bankCard.map( ( _, index ) => (
                         <View
                             key={ index }
-                            className={ `mx-1 rounded-full ${ currentCardIndex === index ? 'bg-blue-500 w-6 h-2' : 'bg-gray-500 w-2 h-2' }` }
+                            className={ `mx-1 rounded-full ${ currentCardIndex === index ? 'bg-black w-6 h-2' : 'border-2 w-2 h-2' }` }
                         />
                     ) ) }
                 </View>
@@ -278,31 +279,31 @@ export default function MyCard ()
                 <BarCharts id={ bankCard[ currentCardIndex ].id } />
             </View> */}
 
-            <View className="flex-row mx-4 bg-white p-4 rounded-xl shadow-md border border-gray-200 justify-between">
+            {/* Quick Action */ }
+            <View className="flex-row mx-4 py-4 bg-black rounded-xl justify-around ">
                 {/* Chuyển tiền cho mầy nè */ }
-                <TouchableOpacity className="items-center w-24 " onPress={ () => router.push( '/transfer' ) }>
-                    <View className="p-1 border rounded-xl shadow-sm bg-white">
-                        <Image source={ require( '@/assets/images/dollar.png' ) } className="w-10 h-10" />
+                <TouchableOpacity className="items-center self-center w-24" onPress={ () => router.push( '/transfer' ) }>
+                    <View className="bg-black rounded-xl">
+                        <Image source={ require( '@/assets/images/cash_white.png' ) } className="w-10 h-10" resizeMode='contain' />
                     </View>
-                    <Text className="mt-2 text-[11px] font-semibold text-center">Chuyển tiền</Text>
+                    <Text className="text-white text-[11px] font-semibold text-center">Chuyển tiền</Text>
                 </TouchableOpacity>
-                <View className='w-1 border border-black rounded-md' />
                 {/* QR của tao */ }
-                <TouchableOpacity className="items-center w-24" onPress={ () => router.push( { pathname: '/(tabs)/qr', params: { tabIndex: 1 } } ) }>
-                    <View className="p-1 border bg-white rounded-xl shadow-sm">
-                        <Image source={ require( '@/assets/images/qr-code.png' ) } className="w-10 h-10" />
+                <TouchableOpacity className="items-center self-center w-24" onPress={ () => router.push( { pathname: '/(tabs)/qr', params: { tabIndex: 1 } } ) }>
+                    <View className="bg-black rounded-xl">
+                        <Image source={ require( '@/assets/images/qr-code-white.png' ) } className="w-10 h-10" resizeMode='contain' />
                     </View>
-                    <Text className="mt-2 text-[11px] font-semibold text-center ">QR của tôi</Text>
+                    <Text className="text-white text-[11px] font-semibold text-center ">QR của tôi</Text>
                 </TouchableOpacity>
-                <View className='w-1 border border-black rounded-md' />
                 {/* Chuyển tiền cho tao */ }
-                <TouchableOpacity className="items-center w-24" onPress={ () => void ( 0 ) }>
-                    <View className="p-1 bg-white border rounded-xl shadow-sm">
-                        <Image source={ require( '@/assets/images/money.png' ) } className="w-10 h-10" />
+                <TouchableOpacity className="items-center self-center w-24" onPress={ () => void ( 0 ) }>
+                    <View className="bg-black rounded-xl">
+                        <Image source={ require( '@/assets/images/save-white.png' ) } className="w-10 h-10" resizeMode='contain' />
                     </View>
-                    <Text className="mt-2 text-[11px] font-semibold text-center ">Nhận tiền</Text>
+                    <Text className="text-white text-[11px] font-semibold text-center ">Nhận tiền</Text>
                 </TouchableOpacity>
             </View>
+            {/* -----------------------------------------End----------------------------------------- */ }
 
             <View className='mt-2 mx-4'>
                 <TransactionList id={ bankCard[ currentCardIndex ].id } />

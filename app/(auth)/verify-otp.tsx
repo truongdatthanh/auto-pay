@@ -1,7 +1,9 @@
 import { Ionicons } from "@expo/vector-icons";
 import { router, useLocalSearchParams } from "expo-router";
+import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useRef, useState } from "react";
-import { Alert, Animated, Keyboard, Platform, Pressable, SafeAreaView, StatusBar, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, Alert, Animated, Keyboard, Platform, Pressable, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function VerifyOTP ()
 {
@@ -87,7 +89,7 @@ export default function VerifyOTP ()
         if ( code === '1234' )
         { // Mã OTP mẫu
             Alert.alert( "Thành công", "Xác thực OTP thành công!", [
-                { text: "OK", onPress: () => router.push( "/(auth)/success" ) }
+                { text: "OK", onPress: () => router.replace( "/(auth)/success" ) }
             ] );
         } else
         {
@@ -105,20 +107,21 @@ export default function VerifyOTP ()
 
     const handleResendOtp = () =>
     {
-        if ( timeLeft === 0 || isResending )
+        console.log( 'Gửi lại mã OTP 1', isResending );
+        if ( timeLeft === 0 || !isResending )
         {
+            console.log( 'Gửi lại mã OTP' );
             setIsResending( true );
 
-            // Giả lập gửi lại OTP - trong thực tế sẽ gọi API
             setTimeout( () =>
             {
-                setTimeLeft( 90 ); // Reset thời gian đếm ngược
+                setTimeLeft( 90 );
                 setIsResending( false );
+                console.log( 'Gửi lại mã OTP', isResending );
                 Alert.alert( "Đã gửi lại", "Mã OTP mới đã được gửi đến số điện thoại của bạn." );
             }, 500 );
         }
     };
-
     const handleBackToRegister = () =>
     {
         router.replace( '/(auth)/register' );
@@ -126,22 +129,22 @@ export default function VerifyOTP ()
 
     return (
         <>
-            <StatusBar barStyle="dark-content" backgroundColor="transparent" translucent />
-            <SafeAreaView className="flex-1 bg-white" style={ { paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0 } }>
+            <StatusBar style="light" />
+            <SafeAreaView className="flex-1 bg-black">
                 <View className="flex-1 px-4">
                     {/* Back button */ }
                     <TouchableOpacity onPress={ handleBackToRegister } className="absolute top-4 left-4">
-                        <Ionicons name="return-up-back" size={ 35 } color="#1c40f2" />
+                        <Ionicons name="return-up-back" size={ 40 } color="white" />
                     </TouchableOpacity>
                     {/* -----------------------------------------End----------------------------------------- */ }
 
                     {/* Title */ }
                     <View className="mt-16">
-                        <Text className="text-4xl font-bold text-[#1c40f2]">Xác thực OTP</Text>
-                        <Text className="text-md text-gray-500 mt-1">
+                        <Text className="text-4xl font-bold text-white">Xác thực OTP</Text>
+                        <Text className="text-md text-gray-400 mt-1">
                             Nhập mã OTP 4 số đã được gửi đến số điện thoại
                         </Text>
-                        <Text className="text-[#1c40f2] italic text-lg font-semibold">{ phone }</Text>
+                        <Text className="text-white italic text-lg font-semibold">*{ phone }</Text>
                     </View>
                     {/* -----------------------------------------End----------------------------------------- */ }
 
@@ -156,7 +159,7 @@ export default function VerifyOTP ()
                                             style={ {
                                                 fontSize: 28,
                                                 fontWeight: 'bold',
-                                                color: '#1c40f2',
+                                                color: 'white',
                                                 height: 40,
                                                 marginBottom: 4,
                                                 transform: [
@@ -173,7 +176,7 @@ export default function VerifyOTP ()
                                         </Animated.Text>
                                         {/* Dấu gạch ngang - đổi màu khi đã nhập */ }
                                         <View
-                                            className={ `w-12 h-1 rounded-full ${ i < otp.length ? 'bg-[#1c40f2]' : 'bg-gray-300' }` }
+                                            className={ `w-12 h-1 rounded-full ${ i < otp.length ? 'bg-white' : 'bg-gray-600' }` }
                                         />
                                     </View>
                                 ) ) }
@@ -192,21 +195,28 @@ export default function VerifyOTP ()
 
                         {/* Thời gian đếm ngược */ }
                         <View className="flex-row items-center justify-center">
-                            <Text className="text-gray-500">Mã OTP sẽ hết hạn sau </Text>
-                            <Text className={ `font-bold ${ timeLeft > 60 ? 'text-[#1c40f2]' : 'text-red-500' }` }>
+                            <Text className="text-gray-400">Mã OTP sẽ hết hạn sau </Text>
+                            <Text className={ `font-bold ${ timeLeft > 60 ? 'text-white' : 'text-red-500' }` }>
                                 { formatTime( timeLeft ) }
                             </Text>
                         </View>
 
                         {/* Gửi lại mã */ }
                         <View className="flex-row items-center justify-center mt-4">
-                            <Text className="text-gray-500">Không nhận được mã? </Text>
+                            <Text className="text-gray-400">Không nhận được mã? </Text>
                             <TouchableOpacity
                                 onPress={ handleResendOtp }
+                                disabled={ isResending }
                             >
-                                <Text className="underline text-[#1c40f2] font-semibold text-md">
-                                    Gửi lại mã OTP
-                                </Text>
+                                {
+                                    isResending ? (
+                                        <ActivityIndicator size="small" color="#1c40f2" />
+                                    ) : (
+                                        <Text className="underline text-white font-semibold text-md">
+                                            Gửi lại mã OTP
+                                        </Text>
+                                    )
+                                }
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -216,10 +226,9 @@ export default function VerifyOTP ()
                     <TouchableOpacity
                         onPress={ () => verifyOtp( otp ) }
                         disabled={ otp.length !== 4 }
-                        className={ `mt-12 py-4 rounded-xl items-center ${ otp.length === 4 ? 'bg-[#1c40f2]' : 'bg-gray-300'
-                            }` }
+                        className={ `mt-12 py-4 rounded-xl w-[300px] self-center ${ otp.length === 4 ? 'border-2 border-white' : 'border-2 border-gray-600' }` }
                     >
-                        <Text className="text-white text-base font-semibold">
+                        <Text className={ `${ otp.length === 4 ? 'text-white' : 'text-gray-600' } text-base font-semibold text-center` }>
                             Xác nhận
                         </Text>
                     </TouchableOpacity>

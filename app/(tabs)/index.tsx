@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, Dimensions, TouchableOpacity, Image, TextInput, Alert, Platform, Button, StatusBar } from 'react-native';
+import { View, Text, ScrollView, Dimensions, TouchableOpacity, Image, TextInput, Alert, Platform, Button } from 'react-native';
 import mockBanking from '../../assets/banking.json';
 import MyCard from '@/components/MyCard';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -6,6 +6,8 @@ import { Link, Route, router } from 'expo-router';
 
 import { Actions } from '@/utils/action';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { StatusBar } from 'expo-status-bar';
+import SpeedDialFAB from '../test/fab';
 
 
 
@@ -15,11 +17,12 @@ export default function Home ()
   console.log( "Home mouted" );
   return (
     <>
-      <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
-      <SafeAreaView className="flex-1 bg-black">
-        <View className="flex-row p-4 items-center justify-between ">
-          <TouchableOpacity onPress={ () => void ( 0 ) } className='ml-2'>
-            <Text className="text-white text-2xl font-bold">⛛ AUTOPAY</Text>
+      <StatusBar style='light' />
+      {/* Container */ }
+      <View className='flex-1 bg-black'>
+        <View className="flex-row p-4 pt-8 items-center justify-between">
+          <TouchableOpacity onPress={ () => void ( 0 ) } className='ml-1'>
+            <Text className="text-white text-2xl font-bold ">⛛ AUTOPAY</Text>
           </TouchableOpacity>
 
           <TouchableOpacity onPress={ () => router.push( '/notificate' ) } className="flex-row items-center relative">
@@ -93,7 +96,8 @@ export default function Home ()
           </View>
           {/* -----------------------------------------End----------------------------------------- */ }
         </ScrollView >
-      </SafeAreaView >
+
+      </View>
     </>
   );
 }

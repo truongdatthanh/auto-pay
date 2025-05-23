@@ -6,6 +6,7 @@ import { AppState, Platform, Text } from 'react-native';
 import * as NavigationBar from 'expo-navigation-bar';
 import { useFocusEffect } from '@react-navigation/native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { PaperProvider } from 'react-native-paper';
 
 
 SplashScreen.preventAutoHideAsync();
@@ -84,9 +85,11 @@ export default function RootLayout ()
 
   return (
     // <GestureHandlerRootView className="flex-1">
+    <PaperProvider>
       <SafeAreaProvider className='flex-1'>
         <Slot />
       </SafeAreaProvider>
+    </PaperProvider>
     // </GestureHandlerRootView>
   );
 }

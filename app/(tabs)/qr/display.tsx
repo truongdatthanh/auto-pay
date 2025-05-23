@@ -191,154 +191,150 @@ export default function DisplayQR ()
 
     return (
         <>
-            <StatusBar barStyle="light-content" backgroundColor="#1c40f2" translucent />
-            <SafeAreaView className="flex-1" style={ { paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0 } }>
-                { loading ? (
-                    <>
-                        <Loading message="Đang tạo QR..." />
-                    </>
-                ) :
-                    (
-
-                        <ScrollView
-                            className="flex-1 "
-                            contentContainerStyle={ { paddingBottom: 40 } }
-                            showsVerticalScrollIndicator={ false }
-                        >
-                            {/* QR Container */ }
-                            <View className="mx-5 mt-8 bg-white rounded-3xl overflow-hidden shadow-md">
-                                <ViewShot ref={ viewShotRef } options={ { format: "jpg", quality: 0.9 } }>
-                                    <View className="p-4 items-center bg-white">
-                                        <View className="mt-2 pt-2">
-                                            { QRCodeComponent }
-                                            <View>
-                                                <View className="flex-row justify-between items-center mb-2">
-                                                    <Text className="text-gray-500">Ngân hàng:</Text>
-                                                    <View className="flex-row items-center">
-                                                        <Text className="font-bold">{ bankInfo?.bankName }</Text>
-                                                    </View>
+            <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
+            { loading ? (
+                <>
+                    <Loading message="Đang tạo QR..." />
+                </>
+            ) :
+                (
+                    <ScrollView
+                        className="flex-1 bg-black"
+                        contentContainerStyle={ { paddingBottom: 40 } }
+                        showsVerticalScrollIndicator={ false }
+                    >
+                        {/* QR Container */ }
+                        <View className="mx-5 mt-8 bg-white rounded-xl overflow-hidden shadow-md">
+                            <ViewShot ref={ viewShotRef } options={ { format: "jpg", quality: 0.9 } }>
+                                <View className="p-4 items-center bg-white">
+                                    <View className="mt-2 pt-2">
+                                        { QRCodeComponent }
+                                        <View>
+                                            <View className="flex-row justify-between items-center mb-2">
+                                                <Text className="text-gray-500">Ngân hàng:</Text>
+                                                <View className="flex-row items-center">
+                                                    <Text className="font-bold">{ bankInfo?.bankName }</Text>
                                                 </View>
+                                            </View>
 
-                                                <View className="flex-row justify-between items-center mb-2 bg-white">
-                                                    <Text className="text-gray-500">Số tài khoản:</Text>
-                                                    <TouchableOpacity
-                                                        onPress={ copyAccountNumber }
-                                                        className="flex-row items-center"
-                                                    >
-                                                        <Text className="font-bold">{ bankInfo?.accountNumber }</Text>
-                                                    </TouchableOpacity>
-                                                </View>
+                                            <View className="flex-row justify-between items-center mb-2 bg-white">
+                                                <Text className="text-gray-500">Số tài khoản:</Text>
+                                                <TouchableOpacity
+                                                    onPress={ copyAccountNumber }
+                                                    className="flex-row items-center"
+                                                >
+                                                    <Text className="font-bold">{ bankInfo?.accountNumber }</Text>
+                                                </TouchableOpacity>
+                                            </View>
 
-                                                <View className="flex-row justify-between items-center mb-2 bg-white">
-                                                    <Text className="text-gray-500">Chủ tài khoản:</Text>
-                                                    <Text className="font-bold">{ bankInfo?.accountName }</Text>
-                                                </View>
+                                            <View className="flex-row justify-between items-center mb-2 bg-white">
+                                                <Text className="text-gray-500">Chủ tài khoản:</Text>
+                                                <Text className="font-bold">{ bankInfo?.accountName }</Text>
+                                            </View>
 
-                                                <View className="flex-row justify-between items-center mb-2 bg-white">
-                                                    <Text className="text-gray-500">Số tiền:</Text>
-                                                    <Text className="font-bold text-[#1c40f2]">
-                                                        { bankInfo?.amount ? formatAmount( bankInfo.amount ) : '0 VNĐ' }
-                                                    </Text>
-                                                </View>
+                                            <View className="flex-row justify-between items-center mb-2 bg-white">
+                                                <Text className="text-gray-500">Số tiền:</Text>
+                                                <Text className="font-bold text-[#1c40f2]">
+                                                    { bankInfo?.amount ? formatAmount( bankInfo.amount ) : '0 VNĐ' }
+                                                </Text>
+                                            </View>
 
-                                                <View className="flex-row justify-between items-start mb-2 bg-white">
-                                                    <Text className="text-gray-500">Nội dung:</Text>
-                                                    <Text className="font-bold text-right max-w-[60%]">{ bankInfo?.content ? bankInfo.content : '-' }</Text>
-                                                </View>
+                                            <View className="flex-row justify-between items-start mb-2 bg-white">
+                                                <Text className="text-gray-500">Nội dung:</Text>
+                                                <Text className="font-bold text-right max-w-[60%]">{ bankInfo?.content ? bankInfo.content : '-' }</Text>
+                                            </View>
 
-                                                <View className="flex-row justify-between items-center mt-2 pt-2 border-t border-gray-200 bg-white">
-                                                    <Text className="text-gray-500">Thời gian tạo:</Text>
-                                                    <Text className="text-gray-500">{ bankInfo?.time }</Text>
-                                                </View>
+                                            <View className="flex-row justify-between items-center mt-2 pt-2 border-t border-gray-200 bg-white">
+                                                <Text className="text-gray-500">Thời gian tạo:</Text>
+                                                <Text className="text-gray-500">{ bankInfo?.time }</Text>
                                             </View>
                                         </View>
                                     </View>
-                                </ViewShot>
+                                </View>
+                            </ViewShot>
 
-                                <View className="flex-row justify-between bg-gray-50 p-4 border-t border-gray-200">
-                                    <TouchableOpacity
-                                        className="flex-1 mr-2 bg-white py-3 rounded-xl flex-row justify-center items-center border border-gray-200"
-                                        onPress={ saveQRCode }
-                                        disabled={ saving }
-                                    >
-                                        { saving ? (
-                                            <ActivityIndicator size="small" color="#1c40f2" />
-                                        ) : (
-                                            <>
-                                                <Entypo name="download" size={ 18 } color="#1c40f2" />
-                                                <Text className="ml-2 font-semibold text-[#1c40f2]">Lưu QR</Text>
-                                            </>
-                                        ) }
-                                    </TouchableOpacity>
+                            <View className="flex-row justify-between bg-gray-50 p-4 border-t border-gray-200">
+                                <TouchableOpacity
+                                    className="flex-1 mr-2 bg-white py-3 rounded-xl flex-row justify-center items-center border border-gray-200"
+                                    onPress={ saveQRCode }
+                                    disabled={ saving }
+                                >
+                                    { saving ? (
+                                        <ActivityIndicator size="small" color="#1c40f2" />
+                                    ) : (
+                                        <>
+                                            <Entypo name="download" size={ 18 } color="#1c40f2" />
+                                            <Text className="ml-2 font-semibold text-[#1c40f2]">Lưu QR</Text>
+                                        </>
+                                    ) }
+                                </TouchableOpacity>
 
-                                    <TouchableOpacity
-                                        className="flex-1 ml-2 bg-[#1c40f2] py-3 rounded-xl flex-row justify-center items-center"
-                                        onPress={ shareQRCode }
-                                        disabled={ saving }
-                                    >
-                                        { saving ? (
-                                            <ActivityIndicator size="small" color="white" />
-                                        ) : (
-                                            <>
-                                                <FontAwesome name="share-square-o" size={ 18 } color="white" />
-                                                <Text className="ml-2 font-semibold text-white">Chia sẻ</Text>
-                                            </>
-                                        ) }
-                                    </TouchableOpacity>
+                                <TouchableOpacity
+                                    className="flex-1 ml-2 bg-[#1c40f2] py-3 rounded-xl flex-row justify-center items-center"
+                                    onPress={ shareQRCode }
+                                    disabled={ saving }
+                                >
+                                    { saving ? (
+                                        <ActivityIndicator size="small" color="white" />
+                                    ) : (
+                                        <>
+                                            <FontAwesome name="share-square-o" size={ 18 } color="white" />
+                                            <Text className="ml-2 font-semibold text-white">Chia sẻ</Text>
+                                        </>
+                                    ) }
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                        {/* -----------------------------------------End----------------------------------------- */ }
+
+                        {/* Hướng dẫn thanh toán */ }
+                        <View className="mx-5 mt-6 bg-white rounded-xl overflow-hidden shadow-md p-5">
+                            <Text className="text-lg font-bold mb-3">Hướng dẫn thanh toán</Text>
+
+                            <View className="flex-row items-start mb-3">
+                                <View className="w-8 h-8 rounded-full bg-[#1c40f2] items-center justify-center mr-3 mt-1">
+                                    <Text className="text-white font-bold">1</Text>
+                                </View>
+                                <View className="flex-1">
+                                    <Text className="font-semibold">Mở ứng dụng ngân hàng</Text>
+                                    <Text className="text-gray-500">Mở ứng dụng ngân hàng của bạn và chọn chức năng quét mã QR</Text>
                                 </View>
                             </View>
-                            {/* -----------------------------------------End----------------------------------------- */}
 
-                            {/* Hướng dẫn thanh toán */ }
-                            <View className="mx-5 mt-6 bg-white rounded-3xl overflow-hidden shadow-md p-5">
-                                <Text className="text-lg font-bold mb-3">Hướng dẫn thanh toán</Text>
-
-                                <View className="flex-row items-start mb-3">
-                                    <View className="w-8 h-8 rounded-full bg-[#1c40f2] items-center justify-center mr-3 mt-1">
-                                        <Text className="text-white font-bold">1</Text>
-                                    </View>
-                                    <View className="flex-1">
-                                        <Text className="font-semibold">Mở ứng dụng ngân hàng</Text>
-                                        <Text className="text-gray-500">Mở ứng dụng ngân hàng của bạn và chọn chức năng quét mã QR</Text>
-                                    </View>
+                            <View className="flex-row items-start mb-3">
+                                <View className="w-8 h-8 rounded-full bg-[#1c40f2] items-center justify-center mr-3 mt-1">
+                                    <Text className="text-white font-bold">2</Text>
                                 </View>
-
-                                <View className="flex-row items-start mb-3">
-                                    <View className="w-8 h-8 rounded-full bg-[#1c40f2] items-center justify-center mr-3 mt-1">
-                                        <Text className="text-white font-bold">2</Text>
-                                    </View>
-                                    <View className="flex-1">
-                                        <Text className="font-semibold">Quét mã QR</Text>
-                                        <Text className="text-gray-500">Quét mã QR được hiển thị ở trên</Text>
-                                    </View>
-                                </View>
-
-                                <View className="flex-row items-start">
-                                    <View className="w-8 h-8 rounded-full bg-[#1c40f2] items-center justify-center mr-3 mt-1">
-                                        <Text className="text-white font-bold">3</Text>
-                                    </View>
-                                    <View className="flex-1">
-                                        <Text className="font-semibold">Xác nhận giao dịch</Text>
-                                        <Text className="text-gray-500">Kiểm tra thông tin và xác nhận để hoàn tất giao dịch</Text>
-                                    </View>
+                                <View className="flex-1">
+                                    <Text className="font-semibold">Quét mã QR</Text>
+                                    <Text className="text-gray-500">Quét mã QR được hiển thị ở trên</Text>
                                 </View>
                             </View>
-                            {/* -----------------------------------------End----------------------------------------- */}
 
-                            {/* Button tạo QR */ }
-                            <TouchableOpacity
-                                className="mx-5 mt-6 bg-white rounded-3xl overflow-hidden shadow-md p-5 flex-row items-center justify-center"
-                                onPress={ () => router.push( "/(tabs)/qr/create" ) }
-                            >
-                                <MaterialCommunityIcons name="qrcode-plus" size={ 24 } color="#1c40f2" />
-                                <Text className="ml-2 font-bold text-[#1c40f2]">Tạo mã QR mới</Text>
-                            </TouchableOpacity>
-                            {/* -----------------------------------------End----------------------------------------- */ }
-                            
-                        </ScrollView>
-                    )
-                }
-            </SafeAreaView >
+                            <View className="flex-row items-start">
+                                <View className="w-8 h-8 rounded-full bg-[#1c40f2] items-center justify-center mr-3 mt-1">
+                                    <Text className="text-white font-bold">3</Text>
+                                </View>
+                                <View className="flex-1">
+                                    <Text className="font-semibold">Xác nhận giao dịch</Text>
+                                    <Text className="text-gray-500">Kiểm tra thông tin và xác nhận để hoàn tất giao dịch</Text>
+                                </View>
+                            </View>
+                        </View>
+                        {/* -----------------------------------------End----------------------------------------- */ }
+
+                        {/* Button tạo QR */ }
+                        <TouchableOpacity
+                            className="mx-5 mt-6 bg-white rounded-xl overflow-hidden shadow-md p-5 flex-row items-center justify-center"
+                            onPress={ () => router.push( "/(tabs)/qr/create" ) }
+                        >
+                            <MaterialCommunityIcons name="qrcode-plus" size={ 24 } color="#1c40f2" />
+                            <Text className="ml-2 font-bold text-[#1c40f2]">Tạo mã QR mới</Text>
+                        </TouchableOpacity>
+                        {/* -----------------------------------------End----------------------------------------- */ }
+                    </ScrollView>
+                )
+            }
         </>
     );
 }

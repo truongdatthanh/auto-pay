@@ -2,7 +2,7 @@ import useTabPressHandler from '@/hooks/useTabPressHandle';
 import { useTabBarStore } from '@/store/useTabbarStore';
 import { router, Tabs, usePathname } from 'expo-router';
 import { Image, Text, TouchableOpacity } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 
 export default function TabsLayout ()
@@ -11,104 +11,104 @@ export default function TabsLayout ()
   const isTabBarVisible = useTabBarStore( state => state.isTabBarVisible );
   const pathname = usePathname(); // lấy pathname hiện tại
 
-  
-
   return (
-    <Tabs
-      initialRouteName="index"
-      screenOptions={ {
-        headerShown: false,
-        tabBarActiveTintColor: '#1c40f2',
-        tabBarInactiveTintColor: 'black',
+    <SafeAreaView className="flex-1 bg-black">
+      <Tabs
+        initialRouteName="index"
+        screenOptions={ {
+          headerShown: false,
+          tabBarActiveTintColor: '#1c40f2',
+          tabBarInactiveTintColor: 'black',
 
 
-        tabBarLabelStyle: {
-          fontSize: 10,
-          width: 100,
-        },
+          tabBarLabelStyle: {
+            fontSize: 10,
+            width: 100,
+          },
 
-        tabBarItemStyle: {
-          paddingHorizontal: 12,
-          paddingVertical: 6,
-          marginHorizontal: 6,
-          justifyContent: 'center',
-          alignItems: 'center',
-          //flexDirection: 'row', // để icon và label nằm ngang nếu cần
-          minWidth: 70, // tăng kích thước tối thiểu để bao phủ icon + label
-        },
+          tabBarItemStyle: {
+            paddingHorizontal: 12,
+            paddingVertical: 6,
+            marginHorizontal: 6,
+            justifyContent: 'center',
+            alignItems: 'center',
+            //flexDirection: 'row', // để icon và label nằm ngang nếu cần
+            minWidth: 70, // tăng kích thước tối thiểu để bao phủ icon + label
+          },
 
-        //CSS cho thanh Tabbar
-        tabBarStyle: {
-          display: isTabBarVisible ? "flex" : "none", // ẩn
-          position: 'absolute',
-          backgroundColor: "white",
-          alignItems: 'center',
-          marginBottom: insets.bottom,
-          height: 60,
-          //zIndex: 1000,
-          paddingBottom: 10, // thêm padding để icon không bị đè
-        },
-      } }
-    >
-      <Tabs.Screen
-        name="index"
-        options={ {
-          title: 'Trang chủ',
-          tabBarIcon: ( { focused } ) =>
-            <Image source={ focused ? require( "@/assets/images/home_blue.png" ) : require( "@/assets/images/home_black.png" ) }
-              className={ focused ? "w-10 h-10" : "w-6 h-6" }
-              resizeMode='contain'
-            />,
-        } }
-      />
-      <Tabs.Screen
-        name="qr"
-        options={ {
-          title: 'QR',
-          tabBarIcon: ( { focused } ) =>
-            <Image source={ focused ? require( "@/assets/images/scan_blue.png" ) : require( "@/assets/images/scan_black.png" ) }
-              className={ focused ? "w-10 h-10" : "w-7 h-7" }
-            />,
-        } }
-        listeners={ {
-          tabPress: e =>
-          {
-            e.preventDefault();
-            router.replace( { pathname: '/(tabs)/qr', params: { tabIndex: 0 } } );
+          //CSS cho thanh Tabbar
+          tabBarStyle: {
+            display: isTabBarVisible ? "flex" : "none", // ẩn
+            position: 'absolute',
+            backgroundColor: "white",
+            alignItems: 'center',
+            // marginBottom: insets.bottom,
+            height: 60,
+            //zIndex: 1000,
+            paddingBottom: 10, // thêm padding để icon không bị đè
           },
         } }
-      />
-      <Tabs.Screen
-        name="history"
-        options={ {
-          title: 'Lịch sử',
-          tabBarIcon: ( { focused } ) =>
-            <Image source={ focused ? require( "@/assets/images/history_blue.png" ) : require( "@/assets/images/history.png" ) }
-              className={ focused ? "w-8 h-8" : "w-6 h-6" }
-              resizeMode='contain'
-            />,
-        } }
-        listeners={ {
-          tabPress: e =>
-          {
-            if ( pathname === '/history' )
+      >
+        <Tabs.Screen
+          name="index"
+          options={ {
+            title: 'Trang chủ',
+            tabBarIcon: ( { focused } ) =>
+              <Image source={ focused ? require( "@/assets/images/home_blue.png" ) : require( "@/assets/images/home_black.png" ) }
+                className={ focused ? "w-10 h-10" : "w-6 h-6" }
+                resizeMode='contain'
+              />,
+          } }
+        />
+        <Tabs.Screen
+          name="qr"
+          options={ {
+            title: 'QR',
+            tabBarIcon: ( { focused } ) =>
+              <Image source={ focused ? require( "@/assets/images/scan_blue.png" ) : require( "@/assets/images/scan_black.png" ) }
+                className={ focused ? "w-10 h-10" : "w-7 h-7" }
+              />,
+          } }
+          listeners={ {
+            tabPress: e =>
             {
               e.preventDefault();
-              return;
-            }
-          },
-        } }
-      />
-      <Tabs.Screen
-        name="user"
-        options={ {
-          title: 'Tài khoản',
-          tabBarIcon: ( { focused } ) =>
-            <Image source={ focused ? require( "@/assets/images/user_blue.png" ) : require( "@/assets/images/user_black.png" ) }
-              className={ focused ? "w-8 h-8" : "w-7 h-7" } />,
-        } }
-      />
-    </Tabs>
+              router.replace( { pathname: '/(tabs)/qr', params: { tabIndex: 0 } } );
+            },
+          } }
+        />
+        <Tabs.Screen
+          name="history"
+          options={ {
+            title: 'Lịch sử',
+            tabBarIcon: ( { focused } ) =>
+              <Image source={ focused ? require( "@/assets/images/history_blue.png" ) : require( "@/assets/images/history.png" ) }
+                className={ focused ? "w-8 h-8" : "w-6 h-6" }
+                resizeMode='contain'
+              />,
+          } }
+          listeners={ {
+            tabPress: e =>
+            {
+              if ( pathname === '/history' )
+              {
+                e.preventDefault();
+                return;
+              }
+            },
+          } }
+        />
+        <Tabs.Screen
+          name="user"
+          options={ {
+            title: 'Tài khoản',
+            tabBarIcon: ( { focused } ) =>
+              <Image source={ focused ? require( "@/assets/images/user_blue.png" ) : require( "@/assets/images/user_black.png" ) }
+                className={ focused ? "w-8 h-8" : "w-7 h-7" } />,
+          } }
+        />
+      </Tabs>
+    </SafeAreaView>
   );
 }
 

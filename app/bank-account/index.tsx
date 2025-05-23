@@ -1,5 +1,5 @@
 
-import { Image, ScrollView, Text, TouchableOpacity, View, StatusBar, SafeAreaView, Platform, Modal, Alert } from "react-native";
+import { Image, ScrollView, Text, TouchableOpacity, View, StatusBar, Platform, Modal, Alert } from "react-native";
 import { useEffect, useState, useCallback, useRef } from "react";
 import Entypo from '@expo/vector-icons/Entypo';
 import { FontAwesome, FontAwesome6, Ionicons, MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
@@ -12,6 +12,7 @@ import { convertEMVCode } from "@/utils/encodeEMVCode";
 import ViewShot from "react-native-view-shot";
 import * as MediaLibrary from 'expo-media-library';
 import * as Sharing from 'expo-sharing';
+import { SafeAreaView } from "react-native-safe-area-context";
 
 interface ITransactionHistory
 {
@@ -188,9 +189,7 @@ export default function BankAccount ()
 
     return (
         <>
-            <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
-            <ScrollView className="flex-1 bg-slate-50" showsVerticalScrollIndicator={ false } contentContainerStyle={ { paddingBottom: 50 } }>
-
+            <ScrollView className="flex-1" showsVerticalScrollIndicator={ false } contentContainerStyle={ { paddingBottom: 50 } }>
                 {/* QR Code */ }
                 <View className="bg-white m-4 p-4 rounded-3xl shadow-md border border-gray-200">
                     <View className="justify-center items-center">

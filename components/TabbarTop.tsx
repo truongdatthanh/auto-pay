@@ -21,7 +21,7 @@ export default function TabbarTop ( props: any )
   };
 
   return (
-    <View className="bg-white relative">
+    <View className="bg-black relative">
       {/* Tab Bar */ }
       <View className="flex-row justify-around border-b border-gray-300 p-4">
         { tabs.map( ( tab: string, index: number ) => (

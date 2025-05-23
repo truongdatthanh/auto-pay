@@ -1,8 +1,7 @@
-import { Image, StatusBar, Text, TouchableOpacity, View, Keyboard, Platform, TouchableWithoutFeedback } from 'react-native';
+import { Image, StatusBar, Text, TouchableOpacity, View, Keyboard, Platform, TouchableWithoutFeedback, Alert, BackHandler } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
 import { MaterialIcons } from '@expo/vector-icons';
 import FloatingInputs from '@/components/FloatingInput';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -54,8 +53,38 @@ export default function Login ()
 
     const handleForgotPassword = () =>
     {
-        router.push( '/(auth)/forgot-password' );
+        router.replace( '/(auth)/forgot-password' );
     };
+
+    useEffect( () =>
+    {
+        const backAction = () =>
+        {
+            Alert.alert(
+                'Xác nhận',
+                'Bạn có chắc chắn muốn thoát ứng dụng?',
+                [
+                    {
+                        text: 'Hủy',
+                        onPress: () => null,
+                        style: 'cancel',
+                    },
+                    {
+                        text: 'Thoát',
+                        onPress: () => BackHandler.exitApp(),
+                    },
+                ]
+            );
+            return true; // Ngăn back mặc định
+        };
+
+        const backHandler = BackHandler.addEventListener(
+            'hardwareBackPress',
+            backAction
+        );
+
+        return () => backHandler.remove();
+    }, [] );
 
     return (
         <>
@@ -100,16 +129,16 @@ export default function Login ()
 
                                 <View className="flex-row justify-end items-center">
                                     <TouchableOpacity onPress={ handleForgotPassword }>
-                                        <Text className="text-[#1c40f2] font-semibold text-md">Quên mật khẩu?</Text>
+                                        <Text className="text-white font-semibold text-md">Quên mật khẩu?</Text>
                                     </TouchableOpacity>
                                 </View>
                             </View>
                         </View>
-                        
+
                         { !keyboardVisible && (
                             <View className="p-6 align-bottom items-center">
                                 <TouchableOpacity
-                                    className="bg-[#1c40f2] rounded-xl w-[300px] overflow-hidden"
+                                    className="border-2 border-white rounded-xl w-[300px] overflow-hidden"
                                     onPress={ handleLogin }
                                 >
                                     <View className="flex-row items-center justify-center p-4">
@@ -119,9 +148,9 @@ export default function Login ()
                                 </TouchableOpacity>
 
                                 <View className="p-4 flex-row items-center justify-center">
-                                    <Text className="text-gray-500">Bạn chưa có tài khoản? </Text>
+                                    <Text className="text-gray-400">Bạn chưa có tài khoản? </Text>
                                     <TouchableOpacity onPress={ handleRegister }>
-                                        <Text className="text-[#1c40f2] font-bold text-lg">Đăng ký ngay</Text>
+                                        <Text className="text-white font-bold text-lg">Đăng ký ngay</Text>
                                     </TouchableOpacity>
                                 </View>
                             </View>

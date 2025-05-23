@@ -58,16 +58,19 @@ export default function QRLayout ()
                 <Stack.Screen
                     name="index"
                     options={ {
-                        header: () => <AppHeaderInfo title="Thanh Toán Với QR" onPress={ () => router.replace( "/(tabs)" ) }
-                            rightComponent={
-                                <TouchableOpacity
-                                    onPress={ handleToggleMenu }
-                                    className="p-2"
-                                >
-                                    <Entypo name="dots-three-vertical" size={ 18 } color="white" />
-                                </TouchableOpacity>
-                            }
-                        />
+                        header: () =>
+                            <AppHeaderInfo
+                                title="Thanh Toán Với QR"
+                                onPress={ () => router.replace( "/(tabs)" ) }
+                                rightComponent={
+                                    <TouchableOpacity
+                                        onPress={ handleToggleMenu }
+                                        className="p-2"
+                                    >
+                                        <Entypo name="dots-three-vertical" size={ 18 } color="white" />
+                                    </TouchableOpacity>
+                                }
+                            />
                     } }
                 />
                 <Stack.Screen

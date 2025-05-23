@@ -80,13 +80,13 @@ export default function Register ()
                                 onPress={ handleBackToLogin }
                                 className="absolute top-4 left-3 z-10"
                             >
-                                <Ionicons name="return-up-back" size={ 40 } color="#1c40f2" />
+                                <Ionicons name="return-up-back" size={ 40 } color="white" />
                             </TouchableOpacity>
 
                             {/* Title */ }
                             <View className="mt-20">
-                                <Text className="text-3xl text-[#1c40f2] font-bold">ĐĂNG KÝ</Text>
-                                <Text className="pt-4 text-5xl font-bold text-[#1c40f2]">TÀI KHOẢN</Text>
+                                <Text className="text-3xl text-white font-bold">ĐĂNG KÝ</Text>
+                                <Text className="pt-4 text-5xl font-bold text-white">TÀI KHOẢN</Text>
                             </View>
 
                             {/* Form đăng ký */ }
@@ -98,7 +98,7 @@ export default function Register ()
                                     containerClassName="mb-4"
                                     inputClassName="h-12"
                                     placeholder="Họ tên..."
-                                    selectionColor="#1c40f2"
+                                    selectionColor="white"
                                 />
                                 <FloatingInputs
                                     label="Email"
@@ -109,7 +109,7 @@ export default function Register ()
                                     keyboardType="email-address"
                                     autoCapitalize="none"
                                     placeholder="Email..."
-                                    selectionColor="#1c40f2"
+                                    selectionColor="white"
                                 />
                                 <FloatingInputs
                                     label="Mật khẩu"
@@ -120,7 +120,7 @@ export default function Register ()
                                     containerClassName="mb-4"
                                     inputClassName="h-12"
                                     placeholder="Mật khẩu..."
-                                    selectionColor="#1c40f2"
+                                    selectionColor="white"
                                 />
                                 <FloatingInputs
                                     label="Xác nhận mật khẩu"
@@ -131,7 +131,7 @@ export default function Register ()
                                     containerClassName="mb-4"
                                     inputClassName="h-12"
                                     placeholder="Xác nhận mật khẩu..."
-                                    selectionColor="#1c40f2"
+                                    selectionColor="white"
                                 />
                                 <View className="flex-row my-2 mb-6 items-center">
                                     <Pressable
@@ -144,7 +144,7 @@ export default function Register ()
                                     <Text className="text-gray-400">Tôi đồng ý với mọi </Text>
                                     <Link
                                         href="/term"
-                                        className="text-[#1c40f2] underline font-medium"
+                                        className="text-white underline font-medium"
                                     >
                                         Chính sách & điều khoản
                                     </Link>
@@ -155,7 +155,7 @@ export default function Register ()
                         { !keyboardVisible && (
                             <View className="px-4 pb-4 align-bottom">
                                 <TouchableOpacity
-                                    className="mt-2 bg-[#1c40f2] rounded-xl justify-center items-center w-full py-4"
+                                    className="mt-2 border-2 border-white rounded-xl justify-center items-center self-center w-[300px] py-4"
                                     onPress={ handleSubmit }
                                 >
                                     <Text className="text-white font-semibold text-base">Đăng Ký</Text>
@@ -164,17 +164,17 @@ export default function Register ()
                                     className="mt-3 justify-center"
                                     onPress={ handleSignUpWithPhoneNumber }
                                 >
-                                    <Text className="text-gray-500 text-center font-bold text-base">
+                                    <Text className="text-gray-400 text-center font-bold text-base">
                                         Sử Dụng Số Điện Thoại
                                     </Text>
                                 </TouchableOpacity>
                                 <View className="p-4 flex-row items-center justify-center">
-                                    <Text className="text-center text-gray-500">
+                                    <Text className="text-center text-gray-400">
                                         Bạn đã có tài khoản?{ " " }
                                     </Text>
                                     <Link
                                         href="/login"
-                                        className="text-[#1c40f2] font-bold text-lg"
+                                        className="text-white font-bold text-lg"
                                     >
                                         Đăng nhập
                                     </Link>
