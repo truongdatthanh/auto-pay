@@ -3,7 +3,7 @@ import { useRouter } from 'expo-router';
 import { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { MaterialIcons } from '@expo/vector-icons';
-import FloatingInputs from '@/components/FloatingInput';
+import FloatingInputs from '@/components/input/FloatingInput';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 // Import KeyboardAwareScrollView

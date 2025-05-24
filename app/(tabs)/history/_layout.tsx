@@ -4,7 +4,12 @@ import '@/global.css';
 export default function HistoryLayout ()
 {
   return (
-    <Stack initialRouteName='index'>
+    <Stack
+      initialRouteName='index'
+      screenOptions={ {
+        animation: 'fade_from_bottom', // hoặc 'fade'
+        presentation: 'card',
+      } }>
       <Stack.Screen
         name='index'
         options={ {
@@ -17,7 +22,7 @@ export default function HistoryLayout ()
         options={ {
           headerShown: false,
         } }
-        
+
       />
     </Stack>
   );

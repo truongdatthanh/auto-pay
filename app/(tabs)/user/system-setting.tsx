@@ -1,5 +1,5 @@
-import { View, Text, Switch, Alert } from 'react-native';
-import { useEffect, useState } from 'react';
+import { View, Text, Switch } from 'react-native';
+import { useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function SystemSetting ()

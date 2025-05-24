@@ -57,7 +57,7 @@ export default function Chart ( { id }: { id: String } )
                 <Text className='text-sm font-bold'>
                     Tổng giao dịch (đơn vị: triệu)
                 </Text>
-                <TouchableOpacity onPress={ () => router.push( "/(tabs)/history/statistics" ) }>
+                <TouchableOpacity onPress={ () => router.push( "/statistics" ) }>
                     <Text className='text-sm font-bold text-blue-500'>Xem chi tiết</Text>
                 </TouchableOpacity>
             </View>

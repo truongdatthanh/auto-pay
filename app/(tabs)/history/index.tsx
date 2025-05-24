@@ -1,16 +1,17 @@
-import { View, Text, TouchableOpacity, Platform, SectionList, Alert, StatusBar, Modal } from 'react-native';
+import { View, Text, TouchableOpacity, SectionList, Alert, StatusBar, Modal, Image } from 'react-native';
 import { useCallback, useState, useEffect } from 'react';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { formatDate, groupByDate } from '@/utils/formatDate';
 import { Feather, Ionicons, MaterialIcons } from '@expo/vector-icons';
-import CardInfo from '@/components/CardInfo';
+import CardInfo from '@/components/card/CardInfo';
 import NotFound from '@/app/error/404';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { router, useFocusEffect } from 'expo-router';
-import Animated, { FadeIn, FadeInDown } from 'react-native-reanimated';
-import AppHeaderInfo from '@/components/App.headerInfo';
-import { IBankingTransaction } from '@/interface/IBankingTransaction';
+import Animated, { FadeInDown } from 'react-native-reanimated';
+import AppHeaderInfo from '@/components/header/App.headerInfo';
+import { IBankingTransaction } from '@/interface/IBanking';
 import { ISection } from '@/interface/ISection';
+import Loading from '@/components/loading/Loading';
 
 export default function History ()
 {
@@ -22,31 +23,37 @@ export default function History ()
   const [ sections, setSections ] = useState<ISection[]>( [] );
   const [ refreshing, setRefreshing ] = useState( false );
   const [ showFilterModal, setShowFilterModal ] = useState( false );
+  const [ isLoading, setIsLoading ] = useState( true );
 
-  console.log( "History mounted" );
-
-  // Lấy dữ liệu
+  // Fetch selected card
   useFocusEffect(
     useCallback( () =>
     {
       const fetchSelectedCard = async () =>
       {
-        const card = await AsyncStorage.getItem( 'selectedCard' );
-        if ( card )
+        try
         {
-          setCurrentCard( JSON.parse( card ) );
+          const card = await AsyncStorage.getItem( 'selectedCard' );
+          if ( card ) setCurrentCard( JSON.parse( card ) );
+        } catch ( error )
+        {
+          console.error( "Error fetching selected card:", error );
+        } finally
+        {
+          setIsLoading( false );
         }
       };
       fetchSelectedCard();
     }, [] )
   );
+  // -------------------------------------- END ------------------------------------- //
 
-
-  // Xuất dữ liệu ra màn hình
+  // Filter on card change
   useEffect( () =>
   {
-    handleFilterByDate();
+    if ( currentCard ) handleFilterByDate();
   }, [ currentCard ] );
+  // -------------------------------------- END ------------------------------------- //
 
   // Hàm lọc dữ liệu theo ngày đã chọn
   const handleFilterByDate = () =>
@@ -59,7 +66,6 @@ export default function History ()
     if ( start > end )
     {
       Alert.alert( "Ngày không hợp lệ", "Ngày bắt đầu phải nhỏ hơn hoặc bằng ngày kết thúc." );
-      setStartDate( new Date() );
       return;
     }
 
@@ -71,6 +77,7 @@ export default function History ()
 
     setSections( groupByDate( filtered ) );
   };
+  // ------------------------------------- END ------------------------------------- //
 
   // Hàm lọc dữ liệu theo khoảng ngày
   const handleRecentDays = ( days: number ) =>
@@ -81,40 +88,37 @@ export default function History ()
     const past = new Date();
     past.setDate( now.getDate() - days );
 
-    const start = past.setHours( 0, 0, 0, 0 );
-    const end = now.setHours( 0, 0, 0, 0 );
+    setStartDate( past );
+    setEndDate( now );
 
     const filtered = currentCard.transactionHistory.filter( item =>
     {
       const itemDate = new Date( item.date ).setHours( 0, 0, 0, 0 );
-      return itemDate >= start && itemDate <= end;
+      return itemDate >= past.setHours( 0, 0, 0, 0 ) && itemDate <= now.setHours( 0, 0, 0, 0 );
     } );
 
-    setStartDate( past );
-    setEndDate( now );
     setSections( groupByDate( filtered ) );
     setShowFilterModal( false );
   };
+  // ------------------------------------- END ------------------------------------- //
 
-  // Hàm chọn ngày bắt đầu
-  const onChangeStartDate = ( _: any, selectedDate?: Date ) =>
+  // Hàm áp dụng bộ lọc tùy chỉnh
+  const applyCustomFilter = () =>
   {
-    setShowStartPicker( false );
-    if ( selectedDate )
-    {
-      setStartDate( selectedDate );
-    }
+    handleFilterByDate();
+    setShowFilterModal( false );
   };
+  // ------------------------------------- END ------------------------------------- //
 
-  // Hàm chọn ngày kết thúc
-  const onChangeEndDate = ( _: any, selectedDate?: Date ) =>
+  // Hàm reset
+  const handleResetFilterDate = () =>
   {
-    setShowEndPicker( false );
-    if ( selectedDate )
-    {
-      setEndDate( selectedDate );
-    }
+    const today = new Date();
+    setStartDate( today );
+    setEndDate( today );
+    handleFilterByDate();
   };
+  // ------------------------------------- END ------------------------------------- //
 
   // Hàm refresh dữ liệu
   const onRefresh = useCallback( () =>
@@ -124,58 +128,43 @@ export default function History ()
     {
       handleFilterByDate();
       setRefreshing( false );
-    }, 1000 );
+    }, 800 );
   }, [ currentCard, startDate, endDate ] );
+  // ------------------------------------- END ------------------------------------- //
 
-  // Hàm áp dụng bộ lọc tùy chỉnh
-  const applyCustomFilter = () =>
-  {
-    handleFilterByDate();
-    setShowFilterModal( false );
-  };
-
-  // Hàm hiển thị tất cả giao dịch
-  const showAllTransactions = () =>
-  {
-    if ( currentCard?.transactionHistory )
-    {
-      setSections( groupByDate( currentCard.transactionHistory ) );
-      setShowFilterModal( false );
-    }
-  };
-
-  const handleResetFilterDate = () =>
-  {
-    setStartDate( new Date() );
-    setEndDate( new Date() );
-    handleFilterByDate();
-  };
+  if ( isLoading ) return <Loading message="Đang tải dữ liệu..." />;
 
   return (
     <>
       <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
-      <AppHeaderInfo title="Lịch Sử Giao Dịch" onPress={ () => router.replace( "/(tabs)" ) }
+      {/* Header */ }
+      <AppHeaderInfo
+        title="Lịch Sử Giao Dịch"
+        onPress={ () => router.replace( "/(tabs)" ) }
         rightComponent={
-          <TouchableOpacity className="p-2 rounded-full" onPress={ () => setShowFilterModal( true ) } >
+          <TouchableOpacity className="p-2 rounded-full" onPress={ () => setShowFilterModal( true ) }>
             <Feather name="filter" size={ 20 } color="white" />
           </TouchableOpacity>
         }
       />
+      {/* -----------------------------------------End----------------------------------------- */ }
 
-      <View className="flex-1 bg-[#1c40f2]">
+      {/* Container */ }
+      <View className="flex-1 bg-black">
+        {/* Header */ }
         <View className="flex-row items-center justify-between p-4 rounded-t-3xl bg-white">
           <Text className="text-lg font-semibold">Thời gian</Text>
           <Text className="text-gray-500 text-sm">
-            { startDate.setHours( 0, 0, 0, 0 ) !== endDate.setHours( 0, 0, 0, 0 ) ? `${ formatDate( startDate ) } - ${ formatDate( endDate ) }` : `${ formatDate( endDate ) }` }
+            { formatDate( startDate ) }{ startDate.getTime() !== endDate.getTime() ? ` - ${ formatDate( endDate ) }` : "" }
           </Text>
         </View>
+        {/* -----------------------------------------End----------------------------------------- */ }
 
-        {/* Hiển thị danh sách hoặc thông báo lỗi */ }
+        {/* List */ }
         { sections.length === 0 ? (
           <View className="flex-1 items-center justify-center bg-white p-4">
             <NotFound contentErr="Không có giao dịch nào!!!" />
           </View>
-
         ) : (
           <SectionList
             scrollEventThrottle={ 16 }
@@ -196,11 +185,9 @@ export default function History ()
               </Animated.View>
             ) }
             renderSectionHeader={ ( { section: { title } } ) => (
-              <>
-                <Text className="px-4 py-2 bg-gray-100 text-gray-700 font-semibold">
-                  { formatDate( title ) }
-                </Text>
-              </>
+              <Text className="px-4 py-2 bg-gray-100 text-gray-700 font-semibold">
+                { formatDate( title ) }
+              </Text>
             ) }
             stickySectionHeadersEnabled
             refreshing={ refreshing }
@@ -210,20 +197,18 @@ export default function History ()
             contentContainerStyle={ { paddingBottom: 100, paddingTop: 10 } }
           />
         ) }
+        {/* -----------------------------------------End----------------------------------------- */ }
 
 
-        {/* Modal bộ lọc */ }
+        {/* Filter Modal */ }
         <Modal
           visible={ showFilterModal }
-          transparent={ true }
+          transparent
           animationType="slide"
           onRequestClose={ () => setShowFilterModal( false ) }
         >
           <View className="flex-1 justify-end bg-black/50">
-            <Animated.View
-              entering={ FadeInDown.duration( 300 ) }
-              className="bg-white rounded-t-3xl p-5"
-            >
+            <Animated.View entering={ FadeInDown.duration( 300 ) } className="bg-white rounded-t-3xl p-5">
               <View className="flex-row justify-between items-center mb-6">
                 <Text className="text-xl font-bold text-gray-800">Tùy chọn</Text>
                 <TouchableOpacity onPress={ () => setShowFilterModal( false ) }>
@@ -231,85 +216,60 @@ export default function History ()
                 </TouchableOpacity>
               </View>
 
-              {/* Bộ lọc nhanh */ }
+              {/* Quick filter buttons */ }
               <Text className="text-gray-500 mb-3 font-medium">Lọc nhanh:</Text>
               <View className="flex-row flex-wrap gap-2 mb-6">
-                <TouchableOpacity
-                  className="py-2 px-4 bg-blue-50 rounded-full border border-blue-200"
-                  onPress={ () => handleRecentDays( 7 ) }
-                >
-                  <Text className="text-blue-600">7 ngày gần đây</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  className="py-2 px-4 bg-blue-50 rounded-full border border-blue-200"
-                  onPress={ () => handleRecentDays( 30 ) }
-                >
-                  <Text className="text-blue-600">30 ngày gần đây</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  className="py-2 px-4 bg-blue-50 rounded-full border border-blue-200"
-                  onPress={ () => handleRecentDays( 90 ) }
-                >
-                  <Text className="text-blue-600">3 tháng gần đây</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  className="py-2 px-4 bg-red-50 rounded-full border border-red-200"
-                  onPress={ showAllTransactions }
-                >
-                  <Text className="text-red-500">Tất cả</Text>
-                </TouchableOpacity>
+                { [ 7, 30, 90 ].map( day => (
+                  <TouchableOpacity
+                    key={ day }
+                    className="py-2 px-4 bg-blue-50 rounded-full border border-blue-200"
+                    onPress={ () => handleRecentDays( day ) }
+                  >
+                    <Text className="text-blue-600">{ day === 90 ? "3 tháng" : `${ day } ngày` } gần đây</Text>
+                  </TouchableOpacity>
+                ) ) }
               </View>
 
-              {/* Bộ lọc tùy chỉnh */ }
+              {/* Custom date range */ }
               <View className='flex-row justify-between items-center mb-3'>
-                <Text className="text-gray-500 font-medium ">Tùy chỉnh khoảng thời gian:</Text>
-                <TouchableOpacity className='p-2 rounded-lg bg-[#1c40f2]' onPress={ handleResetFilterDate }>
-                  <Text className='text-white text-sm font-medium'>Xóa bộ lọc</Text>
+                <Text className="text-gray-500 font-medium">Tùy chỉnh khoảng thời gian:</Text>
+                <TouchableOpacity className='p-2 rounded-lg bg-black' onPress={ handleResetFilterDate }>
+                  <Image source={ require( '@/assets/images/clean.png' ) } className="w-5 h-5" resizeMode='contain' />
                 </TouchableOpacity>
               </View>
 
               <View className="mb-6">
-                <View className="flex-row items-center justify-between mb-4">
-                  <Text className="text-gray-700">Từ ngày:</Text>
-                  <TouchableOpacity
-                    className="flex-row items-center bg-gray-100 py-2 px-4 rounded-lg"
-                    onPress={ () => setShowStartPicker( true ) }
-                  >
-                    <MaterialIcons name="date-range" size={ 18 } color="#64748b" />
-                    <Text className="ml-2 text-gray-700">{ formatDate( startDate ) }</Text>
-                  </TouchableOpacity>
-                  { showStartPicker && (
-                    <DateTimePicker
-                      value={ startDate }
-                      mode="date"
-                      display="default"
-                      onChange={ onChangeStartDate }
-                    />
-                  ) }
-                </View>
-                <View className="flex-row items-center justify-between">
-                  <Text className="text-gray-700">Đến ngày:</Text>
-                  <TouchableOpacity
-                    className="flex-row items-center bg-gray-100 py-2 px-4 rounded-lg"
-                    onPress={ () => setShowEndPicker( true ) }
-                  >
-                    <MaterialIcons name="date-range" size={ 18 } color="#64748b" />
-                    <Text className="ml-2 text-gray-700">{ formatDate( endDate ) }</Text>
-                  </TouchableOpacity>
-                  { showEndPicker && (
-                    <DateTimePicker
-                      value={ endDate }
-                      mode="date"
-                      display="default"
-                      onChange={ onChangeEndDate }
-                    />
-                  ) }
-                </View>
+                { [
+                  { label: "Từ ngày", date: startDate, setShow: setShowStartPicker, show: showStartPicker, onChange: setStartDate },
+                  { label: "Đến ngày", date: endDate, setShow: setShowEndPicker, show: showEndPicker, onChange: setEndDate },
+                ].map( ( { label, date, setShow, show, onChange }, idx ) => (
+                  <View key={ idx } className="flex-row items-center justify-between mb-4">
+                    <Text className="text-gray-700">{ label }:</Text>
+                    <TouchableOpacity
+                      className="flex-row items-center bg-gray-100 py-2 px-4 rounded-lg"
+                      onPress={ () => setShow( true ) }
+                    >
+                      <MaterialIcons name="date-range" size={ 18 } color="#64748b" />
+                      <Text className="ml-2 text-gray-700">{ formatDate( date ) }</Text>
+                    </TouchableOpacity>
+                    { show && (
+                      <DateTimePicker
+                        value={ date }
+                        mode="date"
+                        display="default"
+                        onChange={ ( _, selectedDate ) =>
+                        {
+                          setShow( false );
+                          if ( selectedDate ) onChange( selectedDate );
+                        } }
+                      />
+                    ) }
+                  </View>
+                ) ) }
               </View>
 
-              {/* Nút áp dụng */ }
               <TouchableOpacity
-                className="bg-[#1c40f2] py-3 rounded-xl items-center"
+                className="bg-black w-[300px] self-center py-3 rounded-xl items-center"
                 onPress={ applyCustomFilter }
               >
                 <Text className="text-white font-bold text-lg">Áp dụng</Text>
@@ -317,7 +277,9 @@ export default function History ()
             </Animated.View>
           </View>
         </Modal>
+        {/* -----------------------------------------End----------------------------------------- */ }
       </View>
+      {/* -----------------------------------------End----------------------------------------- */ }
     </>
   );
 }

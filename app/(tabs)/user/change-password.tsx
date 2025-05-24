@@ -1,9 +1,8 @@
 
-import FloatingInputs from "@/components/FloatingInput";
-import InputField from "@/components/InputField";
+import FloatingInputs from "@/components/input/FloatingInput";
 import { router } from "expo-router";
 import { useState } from "react";
-import { Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 
 export default function ChangePassword ()
 {

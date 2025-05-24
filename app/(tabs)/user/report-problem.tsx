@@ -1,9 +1,9 @@
 import { View, Text, TouchableOpacity, ScrollView, TextInput, Alert } from 'react-native';
 import { useState } from 'react';
 import { AntDesign, MaterialIcons, Ionicons } from '@expo/vector-icons';
-import mockFaqs from '../../../assets/faqs.json';
+import mockFaqs from '@/assets/faqs.json';
 import Animated, { FadeInDown } from 'react-native-reanimated';
-import TabbarTop from '@/components/TabbarTop';
+import TabbarTop from '@/components/tabbar/TabbarTop';
 
 export default function ReportProblem ()
 {

@@ -2,11 +2,9 @@ import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { useLocalSearchParams } from "expo-router/build/hooks";
 import { useEffect, useRef, useState } from "react";
-import { Image, Modal, ScrollView, Text, TextInput, TouchableOpacity, View, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard, StatusBar } from "react-native";
+import { Image, Modal, ScrollView, Text, TextInput, TouchableOpacity, View, TouchableWithoutFeedback, Keyboard, StatusBar } from "react-native";
 import mockDataBankingCard from "@/assets/banking-card.json";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { SafeAreaView } from "react-native-safe-area-context";
-
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 export default function CreateMyQR ()
@@ -20,10 +18,12 @@ export default function CreateMyQR ()
     const [ showCardSelector, setShowCardSelector ] = useState( false );
     const scrollViewRef = useRef<KeyboardAwareScrollView | null>( null );
 
+    // Hàm để cuộn lên đầu trang
     const scrollToTop = () =>
     {
         scrollViewRef.current?.scrollToPosition( 0, 0, true );
     };
+    // ---------------------------------- END ------------------------------------- //
 
     // Lấy thẻ được chọn từ params hoặc từ AsyncStorage
     useEffect( () =>
@@ -63,8 +63,10 @@ export default function CreateMyQR ()
 
         loadSelectedCard();
     }, [ cardSTK, data ] );
+    // ---------------------------------- END ------------------------------------- //
 
 
+    // Hàm submit để tạo mã QR thanh toán
     const handleSubmit = () =>
     {
         if ( !selectedCard )
@@ -93,7 +95,9 @@ export default function CreateMyQR ()
             },
         } );
     };
+    // ---------------------------------- END ------------------------------------- //
 
+    // Hàm chọn thẻ ngân hàng
     const handleSelectCard = ( card: any ) =>
     {
         setSelectedCard( card );
@@ -103,6 +107,7 @@ export default function CreateMyQR ()
         AsyncStorage.setItem( "selectedCard", JSON.stringify( card ) )
             .catch( err => console.error( "Lỗi khi lưu thẻ:", err ) );
     };
+    // ---------------------------------- END ------------------------------------- //
 
     return (
         <>
@@ -122,6 +127,8 @@ export default function CreateMyQR ()
                             <View className="items-center my-4">
                                 <Text className="text-4xl font-bold text-black italic">⛛ AUTOPAY </Text>
                             </View>
+
+                            {/* Số tài khoản */}
                             <View className="mb-6">
                                 <Text className="text-gray-700 font-medium mb-2 ml-1">Số tài khoản</Text>
                                 <TouchableOpacity

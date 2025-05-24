@@ -1,6 +1,5 @@
 import { Text, View, TouchableOpacity, ScrollView, Linking, SafeAreaView, Platform, StatusBar } from "react-native";
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
-import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { MaterialIcons, Ionicons } from '@expo/vector-icons';
 import { router } from "expo-router";
 

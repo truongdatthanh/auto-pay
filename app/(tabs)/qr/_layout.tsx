@@ -1,4 +1,5 @@
-import AppHeaderInfo from "@/components/App.headerInfo";
+import AppHeaderInfo from "@/components/header/App.headerInfo";
+import { useFabStore } from "@/store/useFABStore";
 import { useTabBarStore } from "@/store/useTabbarStore";
 import { Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useFocusEffect } from "@react-navigation/native";
@@ -9,18 +10,28 @@ import { TouchableOpacity, View, Text, Modal, Animated, StyleSheet, Dimensions }
 export default function QRLayout ()
 {
     const setTabBarVisible = useTabBarStore( state => state.setTabBarVisible );
+    const [ menuVisible, setMenuVisible ] = useState( false );
+    const menuAnimation = useRef( new Animated.Value( 0 ) ).current;
+    const setVisible = useFabStore( ( state ) => state.setVisible );
 
+    // Ẩn tabbarBottom, FAB khi vào QR 
     useFocusEffect(
         useCallback( () =>
         {
-            setTabBarVisible( false ); // ẩn tab bar khi vào màn hình
-            return () => setTabBarVisible( true ); // hiện lại khi rời màn hình
-        }, [ setTabBarVisible ] )
+            // ẩn khi vào màn hình
+            setVisible( false );
+            setTabBarVisible( false ); 
+            return () =>
+            {
+                setTabBarVisible( true );
+                setVisible( true );
+            }// hiện lại khi rời màn hình
+        }, [ setTabBarVisible,  setVisible] )
     );
-    const [ menuVisible, setMenuVisible ] = useState( false );
-    const menuAnimation = useRef( new Animated.Value( 0 ) ).current;
+    // ------------------------------------- END ------------------------------------- //
 
-    // Animate menu when visibility changes
+
+    // Animate menu when visibility changes 
     useEffect( () =>
     {
         Animated.timing( menuAnimation, {
@@ -29,17 +40,22 @@ export default function QRLayout ()
             useNativeDriver: true,
         } ).start();
     }, [ menuVisible ] );
+    // -------------------------------------- END ------------------------------------- //
 
+    // Hàm xử lý sự kiện menu
     const handleToggleMenu = () =>
     {
         setMenuVisible( !menuVisible );
     };
+    // ---------------------------------- END ------------------------------------- //
 
+    // Hàm đến screen tạo mã QR
     const handleCreateQR = () =>
     {
         setMenuVisible( false );
         router.push( "/(tabs)/qr/create" );
     };
+    // ---------------------------------- END ------------------------------------- //
 
     // Menu animation styles
     const menuOpacity = menuAnimation.interpolate( {
@@ -51,6 +67,7 @@ export default function QRLayout ()
         inputRange: [ 0, 1 ],
         outputRange: [ -20, 0 ],
     } );
+    // ---------------------------------- END ------------------------------------- //
 
     return (
         <>
@@ -87,6 +104,13 @@ export default function QRLayout ()
                 />
                 <Stack.Screen
                     name='display'
+                    options={ {
+                        headerShown: false
+                    } }
+                />
+
+                <Stack.Screen
+                    name='my-qr'
                     options={ {
                         headerShown: false
                     } }

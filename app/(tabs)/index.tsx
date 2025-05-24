@@ -1,15 +1,10 @@
-import { View, Text, ScrollView, Dimensions, TouchableOpacity, Image, TextInput, Alert, Platform, Button } from 'react-native';
-import mockBanking from '../../assets/banking.json';
-import MyCard from '@/components/MyCard';
+import { View, Text, ScrollView, TouchableOpacity, Image } from 'react-native';
+import mockBanking from '@/assets/banking.json';
+import MyCard from '@/components/card/MyCard';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { Link, Route, router } from 'expo-router';
-
-import { Actions } from '@/utils/action';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { router } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import SpeedDialFAB from '../test/fab';
-
-
+import { Actions } from '@/utils/action';
 
 export default function Home ()
 {
@@ -19,12 +14,12 @@ export default function Home ()
     <>
       <StatusBar style='light' />
       {/* Container */ }
-      <View className='flex-1 bg-black'>
+      <View className='flex-1 bg-black overflow-hidden'>
+        {/* Header */ }
         <View className="flex-row p-4 pt-8 items-center justify-between">
           <TouchableOpacity onPress={ () => void ( 0 ) } className='ml-1'>
             <Text className="text-white text-2xl font-bold ">⛛ AUTOPAY</Text>
           </TouchableOpacity>
-
           <TouchableOpacity onPress={ () => router.push( '/notificate' ) } className="flex-row items-center relative">
             <View className="">
               <MaterialCommunityIcons name="bell" size={ 20 } color="white" />
@@ -34,20 +29,23 @@ export default function Home ()
             </View>
           </TouchableOpacity>
         </View>
+        {/* -----------------------------------------End----------------------------------------- */ }
 
         <ScrollView
           contentContainerStyle={ { paddingBottom: 100 } }
           showsVerticalScrollIndicator={ false }
-          className='bg-slate-50 flex-1'
+          className='bg-white flex-1'
           scrollEventThrottle={ 16 }
         >
 
+          {/* Header Card Section */ }
           <View className='py-2'>
             <MyCard />
           </View>
+          {/* -----------------------------------------End----------------------------------------- */ }
 
           {/* Action */ }
-          <View className='m-4 bg-white rounded-xl shadow-md border border-gray-200'>
+          {/* <View className='m-4 bg-white rounded-xl shadow-md border border-gray-200'>
             <Text className="text-xl font-bold px-4 py-2">Chức năng</Text>
             <View className="flex-row flex-wrap gap-y-4 pt-2 pb-4">
               { Actions
@@ -69,10 +67,10 @@ export default function Home ()
                   <Image source={ require( '@/assets/images/all.png' ) } className="w-10 h-10" />
                 </View>
                 <Text className="mt-2 text-[11px] font-semibold text-center text-slate-600">Tất cả</Text>
-              </TouchableOpacity>
-              {/* -----------------------------------------End----------------------------------------- */ }
-            </View>
-          </View>
+              </TouchableOpacity> */}
+          {/* -----------------------------------------End----------------------------------------- */ }
+          {/* </View>
+          </View> */}
           {/* -----------------------------------------End----------------------------------------- */ }
 
           {/* Bank */ }
@@ -96,7 +94,6 @@ export default function Home ()
           </View>
           {/* -----------------------------------------End----------------------------------------- */ }
         </ScrollView >
-
       </View>
     </>
   );

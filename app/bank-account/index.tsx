@@ -1,32 +1,18 @@
-
-import { Image, ScrollView, Text, TouchableOpacity, View, StatusBar, Platform, Modal, Alert } from "react-native";
+import { Image, ScrollView, Text, TouchableOpacity, View, Modal, Alert } from "react-native";
 import { useEffect, useState, useCallback, useRef } from "react";
 import Entypo from '@expo/vector-icons/Entypo';
 import { FontAwesome, FontAwesome6, Ionicons, MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
-import Loading from "@/components/Loading";
+import Loading from "@/components/loading/Loading";
 import { generateQR } from "@/utils/generateQR";
 import { convertEMVCode } from "@/utils/encodeEMVCode";
 import ViewShot from "react-native-view-shot";
 import * as MediaLibrary from 'expo-media-library';
 import * as Sharing from 'expo-sharing';
-import { SafeAreaView } from "react-native-safe-area-context";
+import { ITransactionHistory } from "@/interface/ITransaction";
 
-interface ITransactionHistory
-{
-    id: string | undefined;
-    STK: string | undefined;
-    name: string | undefined;
-    logoBanking: string | undefined;
-    bankName: string | undefined;
-    transactionHistory: {
-        date: string;
-        amount: number;
-        description: string;
-    }[];
-}
 
 export default function BankAccount ()
 {
@@ -210,7 +196,7 @@ export default function BankAccount ()
                             </View>
                         </ViewShot>
                         <View className="flex-row justify-center items-center space-x-8">
-                            <Image source={ require( "../../assets/images/Napas247.png" ) } className="w-[100px] h-[50px]" resizeMode="contain" />
+                            <Image source={ require( "@/assets/images/Napas247.png" ) } className="w-[100px] h-[50px]" resizeMode="contain" />
                             <Image source={ { uri: currentCard?.logoBanking } } className="w-[100px] h-[50px]" resizeMode="contain" />
                         </View>
                         <View className="border-t border-dashed border-gray-400 my-2 w-full" />

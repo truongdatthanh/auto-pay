@@ -1,4 +1,4 @@
-import FloatingInputs from "@/components/FloatingInput";
+import FloatingInputs from "@/components/input/FloatingInput";
 import { Ionicons } from "@expo/vector-icons";
 import { Link, useRouter } from "expo-router";
 import { useEffect, useRef, useState } from "react";
@@ -143,7 +143,7 @@ export default function Register ()
                                     </Pressable>
                                     <Text className="text-gray-400">Tôi đồng ý với mọi </Text>
                                     <Link
-                                        href="/term"
+                                        href="/(auth)/term"
                                         className="text-white underline font-medium"
                                     >
                                         Chính sách & điều khoản

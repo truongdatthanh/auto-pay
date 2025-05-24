@@ -400,7 +400,7 @@ export default function QRScanner ()
             setTimeout( () =>
             {
                 router.push( {
-                    pathname: "/confirm-payment",
+                    pathname: "/payment/confirm-payment",
                     params: { data: jsonData },
                 } );
             }, 500 );

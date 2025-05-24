@@ -9,18 +9,12 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { AntDesign, MaterialIcons, Feather } from '@expo/vector-icons';
 import Animated, { FadeInDown, FadeIn } from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
+import { IUser } from '@/interface/IUser';
 
-interface IUser
-{
-    id: number;
-    fullName: string;
-    email: string;
-    password: string;
-}
 
 export default function UserHome ()
 {
-    const avatar = '../../../assets/images/500.jpg';
+    const avatar = '@/assets/images/500.jpg';
     const [ user, setUser ] = useState<IUser>();
     const [ isVisible, setIsVisible ] = useState( false );
     const appVersion = 'v1.0.0';

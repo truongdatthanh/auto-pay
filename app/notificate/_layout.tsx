@@ -1,4 +1,4 @@
-import AppHeaderInfo from "@/components/App.headerInfo";
+import AppHeaderInfo from "@/components/header/App.headerInfo";
 import { router, Stack } from "expo-router";
 
 export default function NotificationLayout ()

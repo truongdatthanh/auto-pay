@@ -1,16 +1,13 @@
 import { useState } from "react";
 import { Image, Keyboard, Modal, ScrollView, StatusBar, Text, TouchableOpacity, View, Platform, SafeAreaView } from "react-native";
 import Feather from '@expo/vector-icons/Feather';
-import InputField from "@/components/InputField";
-import InfoText from "@/components/InfoText";
 import { router } from "expo-router";
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
-import Animated, { FadeIn, FadeInDown } from 'react-native-reanimated';
-import { LinearGradient } from 'expo-linear-gradient';
-import AppHeaderInfo from "@/components/App.headerInfo";
-import FloatingInputs from "@/components/FloatingInput";
+import Animated, { FadeInDown } from 'react-native-reanimated';
+import AppHeaderInfo from "@/components/header/App.headerInfo";
+import FloatingInputs from "@/components/input/FloatingInput";
 
 export default function Profile ()
 {

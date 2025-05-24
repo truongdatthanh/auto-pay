@@ -1,24 +1,30 @@
 
 import { router, Stack } from 'expo-router';
-import '../../../global.css';
-import AppHeaderInfo from '@/components/App.headerInfo';
-import { StatusBar } from 'react-native';
+import '@/global.css';
+import AppHeaderInfo from '@/components/header/App.headerInfo';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useTabBarStore } from '@/store/useTabbarStore';
 import { useFocusEffect } from '@react-navigation/native';
 import { useCallback } from 'react';
+import { useFabStore } from '@/store/useFABStore';
 
 
 export default function InfomationLayout ()
 {
     const setTabBarVisible = useTabBarStore( state => state.setTabBarVisible );
-
+    const setVisible = useFabStore( state => state.setVisible );
     useFocusEffect(
         useCallback( () =>
         {
-            setTabBarVisible( false ); // ẩn tab bar khi vào màn hình
-            return () => setTabBarVisible( true ); // hiện lại khi rời màn hình
-        }, [ setTabBarVisible ] )
+            // ẩn khi vào màn hình
+            setVisible( false );
+            setTabBarVisible( false );
+            return () =>
+            {
+                setTabBarVisible( true );
+                setVisible( true );
+            }// hiện lại khi rời màn hình
+        }, [ setTabBarVisible, setVisible ] )
     );
 
     return (

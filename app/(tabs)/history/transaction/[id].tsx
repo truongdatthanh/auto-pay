@@ -9,8 +9,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { BlurView } from 'expo-blur';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
-import Loading from "@/components/Loading";
-import { IBankingTransaction } from "@/interface/IBankingTransaction";
+import Loading from "@/components/loading/Loading";
+import { IBankingTransaction } from "@/interface/IBanking";
 
 export default function Transaction ()
 {

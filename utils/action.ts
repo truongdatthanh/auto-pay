@@ -5,7 +5,7 @@ export const Actions = [
         id: 1,
         name: "Chuyển tiền",
         icon: require( "@/assets/images/dollar.png" ),
-        navigate: () => router.push( "/transfer" ),
+        navigate: () => router.push( "/payment/transfer" ),
     },
     {
         id: 2,
@@ -39,7 +39,7 @@ export const Actions = [
         id: 6,
         name: "Biến động số dư",
         icon: require( "@/assets/images/share.png" ),
-        navigate: () => router.push( "/share-balance-fluctuation" ),
+        navigate: () => router.push( "/balance/fluctuation" ),
     },
     {
         id: 7,

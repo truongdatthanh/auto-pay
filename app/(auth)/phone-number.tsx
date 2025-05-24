@@ -2,7 +2,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { Platform, Text, TouchableOpacity, View } from "react-native";
 import { useState } from "react";
-import FloatingInputs from "@/components/FloatingInput";
+import FloatingInputs from "@/components/input/FloatingInput";
 import { StatusBar } from "expo-status-bar";
 import { SafeAreaView } from "react-native-safe-area-context";
 

@@ -1,7 +1,7 @@
 import { Text, View, FlatList, Image } from "react-native";
 import mockNotificate from "@/assets/notificate.json";
 import { useState } from "react";
-import TabbarTop from "@/components/TabbarTop";
+import TabbarTop from "@/components/tabbar/TabbarTop";
 import { FontAwesome5 } from "@expo/vector-icons";
 
 export default function Notification ()

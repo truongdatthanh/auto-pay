@@ -1,13 +1,10 @@
 import { Slot, useRouter, usePathname } from 'expo-router';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import * as SplashScreen from 'expo-splash-screen';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { AppState, Platform, Text } from 'react-native';
+import { AppState, Platform } from 'react-native';
 import * as NavigationBar from 'expo-navigation-bar';
-import { useFocusEffect } from '@react-navigation/native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { PaperProvider } from 'react-native-paper';
-
 
 SplashScreen.preventAutoHideAsync();
 
@@ -19,6 +16,7 @@ export default function RootLayout ()
   const [ isReady, setIsReady ] = useState( false );
   const isLoggedIn = false; // sau này thay bằng kiểm tra AsyncStorage
 
+  // Chuẩn bị
   useEffect( () =>
   {
     const prepare = async () =>
@@ -30,6 +28,7 @@ export default function RootLayout ()
 
     prepare();
   }, [] );
+  // ------------------------------------- END ------------------------------------- //
 
   // Gọi đổi màu ngay khi mount
   useEffect( () =>
@@ -41,17 +40,16 @@ export default function RootLayout ()
       console.log( 'mounted' );
     }
   }, [] );
+  // ------------------------------------- END ------------------------------------- //
 
   // Gọi đổi màu khi app từ background trở lại
   useEffect( () =>
   {
     const subscription = AppState.addEventListener( 'change', nextAppState =>
     {
-      if (
-        appState.current.match( /inactive|background/ ) &&
-        nextAppState === 'active' &&
-        Platform.OS === 'android'
-      )
+      console.log( 'AppState changed:', appState.current );
+      console.log( 'nextAppState:', nextAppState );
+      if ( appState.current.match( /inactive|background/ ) && nextAppState === 'active' && Platform.OS === 'android' )
       {
         NavigationBar.setBackgroundColorAsync( 'black' );
         NavigationBar.setButtonStyleAsync( 'light' );
@@ -61,7 +59,9 @@ export default function RootLayout ()
 
     return () => subscription.remove();
   }, [] );
+  // ------------------------------------- END ------------------------------------- //
 
+  // Chuyển hướng dựa trên trạng thái đăng nhập
   useEffect( () =>
   {
     if ( !isReady ) return;
@@ -74,23 +74,17 @@ export default function RootLayout ()
       router.replace( '/(auth)/login' );
     }
   }, [ isReady, isLoggedIn ] );
+  // ------------------------------------- END ------------------------------------- //
+  if ( !isReady ) return null
 
-  if ( !isReady )
-  {
-    // Tránh render Slot hoặc navigate khi chưa sẵn sàng
-    return null;
-  }
-
-  console.log( "pathname", pathname );
+  console.log( "-----pathname app:", pathname );
 
   return (
-    // <GestureHandlerRootView className="flex-1">
     <PaperProvider>
       <SafeAreaProvider className='flex-1'>
         <Slot />
       </SafeAreaProvider>
     </PaperProvider>
-    // </GestureHandlerRootView>
   );
 }
 

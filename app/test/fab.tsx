@@ -1,29 +1,75 @@
+import React, { useState } from 'react';
+import { StyleSheet } from 'react-native';
+import { FAB, Portal } from 'react-native-paper';
+import { useRouter } from 'expo-router';
 
-import { useState } from 'react';
-import { Portal, FAB } from 'react-native-paper';
-
-const SpeedDialFAB = () =>
+export default function SpeedDialFAB ()
 {
     const [ open, setOpen ] = useState( false );
+    const router = useRouter();
 
     return (
         <Portal>
             <FAB.Group
                 open={ open }
-                visible
                 icon={ open ? 'close' : 'plus' }
                 actions={ [
-                    { icon: 'pencil', label: 'Chỉnh sửa', onPress: () => console.log( 'Edit' ) },
-                    { icon: 'delete', label: 'Xóa', onPress: () => console.log( 'Delete' ) },
-                    { icon: 'share-variant', label: 'Chia sẻ', onPress: () => console.log( 'Share' ) },
+                    {
+                        icon: 'chart-bar',
+                        label: 'Thống kê',
+                        onPress: () => router.push( '/statistics' ),
+                    },
+                    {
+                        icon: 'history',
+                        label: 'Lịch sử',
+                        onPress: () => router.push( '/history' ),
+                    },
                 ] }
                 onStateChange={ ( { open } ) => setOpen( open ) }
+                visible
+                style={ styles.fabGroup }
             />
         </Portal>
     );
-};
+}
 
-export default SpeedDialFAB;
+const styles = StyleSheet.create( {
+    fabGroup: {
+      marginBottom: 50,
+    },
+} );
+
+
+
+
+
+
+// import { useState } from 'react';
+// import { Portal, FAB } from 'react-native-paper';
+
+// const SpeedDialFAB = () =>
+// {
+//     const [ open, setOpen ] = useState( false );
+
+//     return (
+//         <Portal>
+//             <FAB.Group
+//                 open={ open }
+//                 visible
+//                 icon={ open ? 'close' : 'plus' }
+//                 actions={ [
+//                     { icon: 'pencil', label: 'Chỉnh sửa', onPress: () => console.log( 'Edit' ) },
+//                     { icon: 'delete', label: 'Xóa', onPress: () => console.log( 'Delete' ) },
+//                     { icon: 'share-variant', label: 'Chia sẻ', onPress: () => console.log( 'Share' ) },
+//                 ] }
+//                 onStateChange={ ( { open } ) => setOpen( open ) }
+//             />
+//         </Portal>
+//     );
+// };
+
+// export default SpeedDialFAB;
+
 
 // import { useState } from 'react';
 // import { Portal, FAB } from 'react-native-paper';

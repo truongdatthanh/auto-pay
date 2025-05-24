@@ -1,102 +1,42 @@
-// import { SceneMap } from "react-native-tab-view"
-// import QRScanner from "./scanner-qr"
-// import CustomTabView from "@/components/TabView"
-// import MyQR from "@/app/my-qr"
-// import { useEffect, useState } from "react"
-// import { useLocalSearchParams } from "expo-router"
-// import { SafeAreaView } from "react-native-safe-area-context"
-
-// export default function HomeQR ()
-// {
-//     const { tabIndex } = useLocalSearchParams();
-//     // Khởi tạo initialIndex trực tiếp từ tabIndex nếu có
-//     const initialTabIndex = typeof tabIndex === 'string' && !isNaN( Number( tabIndex ) )
-//         ? Number( tabIndex )
-//         : 0;
-
-//     const [ index, setIndex ] = useState( initialTabIndex ); 0
-
-//     // Cập nhật index khi tabIndex thay đổi
-//     useEffect( () =>
-//     {
-//         if ( !tabIndex )
-//         {
-//             setIndex( 0 );
-//         } else if ( typeof tabIndex === 'string' && !isNaN( Number( tabIndex ) ) )
-//         {
-//             setIndex( Number( tabIndex ) );
-//         }
-//     }, [ tabIndex ] );
-
-//     const routes = [
-//         { key: 'first', title: "Quét QR" },
-//         { key: 'second', title: "QR của tôi" }
-//     ]
-
-//     const renderScene = SceneMap( {
-//         first: QRScanner,
-//         second: MyQR
-//     } )
-
-//     return (
-//         <CustomTabView
-//             routes={ routes }
-//             renderScene={ renderScene }
-//             tabBarColor="black"
-//             indicatorColor="#FFFFFF"
-//             indicatorHeight={ 5 }
-//             indicatorBorder={ 8 }
-//             inActiveColor="#FF6F20"
-//             initialIndex={ index }
-//         />
-//     )
-// }
-
-
-
-
-import React, { useState, useEffect, useMemo, useCallback } from "react";
-import { useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import { useState, useCallback } from "react";
 import QRScanner from "./scanner-qr";
-import CustomTabView from "@/components/TabView";
-import MyQR from "@/app/my-qr";
-import { SceneMap } from "react-native-tab-view";
+import MyQR from "./my-qr";
+import CustomTabView from "@/components/tabbar/TabView";
 import { useFocusEffect } from "@react-navigation/native";
 
 export default function HomeQR ()
 {
     const { tabIndex } = useLocalSearchParams();
-    console.log( "tabIndex", tabIndex );
-    const initialTabIndex = typeof tabIndex === "string" && !isNaN( Number( tabIndex ) ) ? Number( tabIndex ) : 0;
+    const [ index, setIndex ] = useState( 0 );
 
-    const [ index, setIndex ] = useState( initialTabIndex );
-
-
-    useEffect( () =>
-    {
-        if ( !tabIndex )
+    // Cập nhật lại index mỗi khi screen được focus
+    useFocusEffect(
+        useCallback( () =>
         {
-            setIndex( 0 );
-        }
-        if ( typeof tabIndex === "string" && !isNaN( Number( tabIndex ) ) )
-        {
-            setIndex( Number( tabIndex ) );
-        }
-    }, [ tabIndex ] );
+            const i = Number( tabIndex );
+            if ( !isNaN( i ) )
+            {
+                setIndex( i );
+            } else
+            {
+                setIndex( 0 );
+            }
+        }, [ tabIndex ] )
+    );
 
     const routes = [
-        { key: "first", title: "Quét QR" },
-        { key: "second", title: "QR của tôi" },
+        { key: "scan", title: "Quét QR" },
+        { key: "myqr", title: "QR của tôi" },
     ];
 
     const renderScene = ( { route }: any ) =>
     {
         switch ( route.key )
         {
-            case "first":
-                // Chỉ render QRScanner khi tab active (để tránh camera chạy ngầm)
-                return index === 0 ? <QRScanner /> : null;
-            case "second":
+            case "scan":
+                return index === 0 ? <QRScanner /> : null; // để tránh camera chạy ngầm
+            case "myqr":
                 return <MyQR />;
             default:
                 return null;

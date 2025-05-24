@@ -1,7 +1,6 @@
 
-import AppHeaderInfo from "@/components/App.headerInfo";
+import AppHeaderInfo from "@/components/header/App.headerInfo";
 import { router, Stack, usePathname } from "expo-router";
-import { Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function BankAccountLayout ()
@@ -17,14 +16,14 @@ export default function BankAccountLayout ()
                 />
 
                 <Stack.Screen
-                    name="list-card"
+                    name="list"
                     options={ {
                         header: () => <AppHeaderInfo title="Thẻ ngân hàng" onPress={ () => router.replace( "/(tabs)" ) } />,
                     } }
                 />
 
                 <Stack.Screen
-                    name="addCard"
+                    name="add"
                     options={ {
                         header: () => <AppHeaderInfo title="Thêm thẻ ngân hàng" onPress={ () => router.replace( "/(tabs)" ) } />,
                     } }
