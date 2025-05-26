@@ -22,7 +22,7 @@ export default function RegisterWithPhoneNumber ()
             alert( 'Số điện thoại không hợp lệ' );
             return;
         }
-        router.replace( { pathname: '/(auth)/verify-otp', params: { phoneNumber } } );
+        router.replace( { pathname: '/auth/verify-otp', params: { phoneNumber } } );
     }
 
     return (

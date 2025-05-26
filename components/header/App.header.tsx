@@ -7,7 +7,7 @@ export default function AppHeader ()
   const avatar = "@/assets/images/500.jpg";
   const handlePress = () =>
   {
-    router.push( "/(tabs)" );
+    router.push( "/(tabs)/home" );
   };
 
   const handleNotification = () =>

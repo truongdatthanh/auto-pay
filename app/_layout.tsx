@@ -68,10 +68,10 @@ export default function RootLayout ()
 
     if ( isLoggedIn && pathname !== '/(tabs)' )
     {
-      router.replace( '/(tabs)' );
-    } else if ( !isLoggedIn && pathname !== '/(auth)/login' )
+      router.replace( '/(tabs)/home' );
+    } else if ( !isLoggedIn && pathname !== '/auth/login' )
     {
-      router.replace( '/(auth)/login' );
+      router.replace( '/auth/login' );
     }
   }, [ isReady, isLoggedIn ] );
   // ------------------------------------- END ------------------------------------- //

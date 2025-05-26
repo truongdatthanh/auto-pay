@@ -78,7 +78,7 @@ export default function QRLayout ()
                         header: () =>
                             <AppHeaderInfo
                                 title="Thanh Toán Với QR"
-                                onPress={ () => router.replace( "/(tabs)" ) }
+                                onPress={ () => router.replace( "/(tabs)/home" ) }
                                 rightComponent={
                                     <TouchableOpacity
                                         onPress={ handleToggleMenu }
@@ -99,7 +99,7 @@ export default function QRLayout ()
                 <Stack.Screen
                     name='create'
                     options={ {
-                        header: () => <AppHeaderInfo title="Tạo mã QR" onPress={ () => router.replace( "/(tabs)" ) } />
+                        header: () => <AppHeaderInfo title="Tạo mã QR" onPress={ () => router.replace( "/(tabs)/home" ) } />
                     } }
                 />
                 <Stack.Screen

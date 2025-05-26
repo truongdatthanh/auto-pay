@@ -42,7 +42,7 @@ export default function Register ()
 
     const handleSubmit = () =>
     {
-        router.push( "/(auth)/pin" );
+        router.push( "/auth/pin" );
     };
 
     const handleBackToLogin = () =>
@@ -57,7 +57,7 @@ export default function Register ()
 
     const handleSignUpWithPhoneNumber = () =>
     {
-        router.push( "/(auth)/phone-number" );
+        router.push( "/auth/phone-number" );
     };
 
     return (
@@ -143,7 +143,7 @@ export default function Register ()
                                     </Pressable>
                                     <Text className="text-gray-400">Tôi đồng ý với mọi </Text>
                                     <Link
-                                        href="/(auth)/term"
+                                        href="/auth/term"
                                         className="text-white underline font-medium"
                                     >
                                         Chính sách & điều khoản
@@ -173,7 +173,7 @@ export default function Register ()
                                         Bạn đã có tài khoản?{ " " }
                                     </Text>
                                     <Link
-                                        href="/login"
+                                        href="/auth/login"
                                         className="text-white font-bold text-lg"
                                     >
                                         Đăng nhập

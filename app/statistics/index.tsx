@@ -5,11 +5,12 @@ import { Ionicons } from '@expo/vector-icons';
 import Animated, { FadeInDown, FadeIn } from 'react-native-reanimated';
 import data from "../../assets/banking-card.json";
 import BankingCard from '@/components/card/BankCard';
-
-import { formatCurrencyVND } from '@/utils/formatCurrencyVND';
 import AppHeaderInfo from '@/components/header/App.headerInfo';
 import { router } from 'expo-router';
 import LineCharts from '@/components/chart/LineChart';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import StackedBarChartComponent from '@/components/chart/StackedChart';
+import { formatCurrencyVND } from '@/utils/format';
 
 export default function BankAccountStatistics ()
 {
@@ -53,115 +54,117 @@ export default function BankAccountStatistics ()
     return (
         <>
             <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
-            <AppHeaderInfo title="Thống Kê Giao Dịch" onPress={ () => router.replace( "/(tabs)" ) } />
-            <ScrollView
-                className="flex-1 bg-gray-50"
-                showsVerticalScrollIndicator={ false }
-                refreshControl={
-                    <RefreshControl refreshing={ refreshing } onRefresh={ onRefresh } />
-                }
-                contentContainerStyle={ { paddingBottom: 50 } }
-            >
-                {/* Header Card Section */ }
-                <View className="bg-white pt-2 pb-4 shadow-sm">
-                    <FlatList
-                        data={ bankCard }
-                        horizontal
-                        pagingEnabled
-                        showsHorizontalScrollIndicator={ false }
-                        keyExtractor={ ( item ) => item.id }
-                        snapToInterval={ 330 }
-                        snapToAlignment="center"
-                        renderItem={ ( { item } ) => (
-                            <View className="items-center justify-center mx-1">
-                                <BankingCard
-                                    key={ item.id }
-                                    id={ item.id }
-                                    STK={ item.STK }
-                                    name={ item.name }
-                                    logoBanking={ item.logoBanking }
-                                    bankName={ item.bankName }
-                                />
-                            </View>
-                        ) }
-                        onViewableItemsChanged={ onViewRef.current }
-                        viewabilityConfig={ viewabilityConfig.current }
-                        contentContainerStyle={ { paddingHorizontal: 20 } }
-                        className="my-2"
-                    />
-
-                    {/* Card Indicator */ }
-                    <View className="flex-row justify-center mt-2">
-                        { bankCard.map( ( _, index ) => (
-                            <View
-                                key={ index }
-                                className={ `mx-1 rounded-full ${ currentCardIndex === index
-                                    ? 'bg-blue-500 w-6 h-2'
-                                    : 'bg-gray-300 w-2 h-2'
-                                    }` }
-                            />
-                        ) ) }
-                    </View>
-                </View>
-                {/* -----------------------------------------End----------------------------------------- */ }
-
-                {/* Tổng quan tài khoản */ }
-                <Animated.View
-                    entering={ FadeInDown.duration( 500 ).delay( 200 ) }
-                    className="mx-4 m-4 bg-white rounded-xl shadow-md overflow-hidden"
+            <SafeAreaView className="flex-1 bg-black">
+                <AppHeaderInfo title="Thống Kê Giao Dịch" onPress={ () => router.replace( "/(tabs)/home" ) } />
+                <ScrollView
+                    className="flex-1 bg-gray-50"
+                    showsVerticalScrollIndicator={ false }
+                    refreshControl={
+                        <RefreshControl refreshing={ refreshing } onRefresh={ onRefresh } />
+                    }
+                    contentContainerStyle={ { paddingBottom: 50 } }
                 >
-                    <View className="p-4 border-b border-gray-100">
-                        <Text className="text-lg font-bold text-gray-800">Tổng quan tài khoản</Text>
-                    </View>
-
-                    <View className="flex-row">
-                        <View className="flex-1 p-4 border-r border-gray-100">
-                            <Text className="text-gray-500 text-sm">Số dư hiện tại</Text>
-                            <Text className="text-xl font-bold text-blue-600 mt-1">
-                                { formatCurrencyVND( totalBalance ) }
-                            </Text>
-                        </View>
-                        <View className="flex-1 p-4">
-                            <Text className="text-gray-500 text-sm">Tổng giao dịch</Text>
-                            <Text className="text-xl font-bold text-gray-800 mt-1">{ totalTransactions }</Text>
-                        </View>
-                    </View>
-
-                    <View className="flex-row">
-                        <View className="flex-1 p-4 border-r border-gray-100 border-t">
-                            <View className="flex-row items-center">
-                                <View className="w-6 h-6 rounded-full bg-green-500 items-center justify-center mr-2">
-                                    <Ionicons name="arrow-down" size={ 14 } color="#fff" />
+                    {/* Header Card Section */ }
+                    <View className="bg-white pt-2 pb-4 shadow-sm">
+                        <FlatList
+                            data={ bankCard }
+                            horizontal
+                            pagingEnabled
+                            showsHorizontalScrollIndicator={ false }
+                            keyExtractor={ ( item ) => item.id }
+                            snapToInterval={ 330 }
+                            snapToAlignment="center"
+                            renderItem={ ( { item } ) => (
+                                <View className="items-center justify-center mx-1">
+                                    <BankingCard
+                                        key={ item.id }
+                                        id={ item.id }
+                                        STK={ item.STK }
+                                        name={ item.name }
+                                        logoBanking={ item.logoBanking }
+                                        bankName={ item.bankName }
+                                    />
                                 </View>
-                                <Text className="text-gray-500 text-sm">Thu nhập</Text>
-                            </View>
-                            <Text className="text-base font-semibold text-green-600 mt-1">
-                                { formatCurrencyVND( totalIncome ) }
-                            </Text>
-                            <Text className="text-xs text-gray-500 mt-1">{ incomeTransactions } giao dịch</Text>
-                        </View>
-                        <View className="flex-1 p-4 border-t">
-                            <View className="flex-row items-center">
-                                <View className="w-6 h-6 rounded-full bg-red-500 items-center justify-center mr-2">
-                                    <Ionicons name="arrow-up" size={ 14 } color="#fff" />
-                                </View>
-                                <Text className="text-gray-500 text-sm">Chi tiêu</Text>
-                            </View>
-                            <Text className="text-base font-semibold text-red-600 mt-1">
-                                { formatCurrencyVND( totalExpense ) }
-                            </Text>
-                            <Text className="text-xs text-gray-500 mt-1">{ expenseTransactions } giao dịch</Text>
+                            ) }
+                            onViewableItemsChanged={ onViewRef.current }
+                            viewabilityConfig={ viewabilityConfig.current }
+                            contentContainerStyle={ { paddingHorizontal: 20 } }
+                            className="my-2"
+                        />
+
+                        {/* Card Indicator */ }
+                        <View className="flex-row justify-center mt-2">
+                            { bankCard.map( ( _, index ) => (
+                                <View
+                                    key={ index }
+                                    className={ `mx-1 rounded-full ${ currentCardIndex === index
+                                        ? 'bg-blue-500 w-6 h-2'
+                                        : 'bg-gray-300 w-2 h-2'
+                                        }` }
+                                />
+                            ) ) }
                         </View>
                     </View>
-                </Animated.View>
-                {/* -----------------------------------------End----------------------------------------- */ }
+                    {/* -----------------------------------------End----------------------------------------- */ }
 
-                {/* LineChart */ }
-                <Animated.View entering={ FadeIn.duration( 500 ).delay( 300 ) }>
-                    <LineCharts id={ bankCard[ currentCardIndex ].id } />
-                </Animated.View>
-                {/* -----------------------------------------End----------------------------------------- */ }
-            </ScrollView>
+                    {/* Tổng quan tài khoản */ }
+                    <Animated.View
+                        entering={ FadeInDown.duration( 500 ).delay( 200 ) }
+                        className="mx-4 m-4 bg-white rounded-xl shadow-md overflow-hidden"
+                    >
+                        <View className="p-4 border-b border-gray-100">
+                            <Text className="text-lg font-bold text-gray-800">Tổng quan tài khoản</Text>
+                        </View>
+
+                        <View className="flex-row">
+                            <View className="flex-1 p-4 border-r border-gray-100">
+                                <Text className="text-gray-500 text-sm">Số dư hiện tại</Text>
+                                <Text className="text-xl font-bold text-blue-600 mt-1">
+                                    { formatCurrencyVND( totalBalance ) }
+                                </Text>
+                            </View>
+                            <View className="flex-1 p-4">
+                                <Text className="text-gray-500 text-sm">Tổng giao dịch</Text>
+                                <Text className="text-xl font-bold text-gray-800 mt-1">{ totalTransactions }</Text>
+                            </View>
+                        </View>
+
+                        <View className="flex-row">
+                            <View className="flex-1 p-4 border-r border-gray-100 border-t">
+                                <View className="flex-row items-center">
+                                    <View className="w-6 h-6 rounded-full bg-green-500 items-center justify-center mr-2">
+                                        <Ionicons name="arrow-down" size={ 14 } color="#fff" />
+                                    </View>
+                                    <Text className="text-gray-500 text-sm">Thu nhập</Text>
+                                </View>
+                                <Text className="text-base font-semibold text-green-600 mt-1">
+                                    { formatCurrencyVND( totalIncome ) }
+                                </Text>
+                                <Text className="text-xs text-gray-500 mt-1">{ incomeTransactions } giao dịch</Text>
+                            </View>
+                            <View className="flex-1 p-4 border-t">
+                                <View className="flex-row items-center">
+                                    <View className="w-6 h-6 rounded-full bg-red-500 items-center justify-center mr-2">
+                                        <Ionicons name="arrow-up" size={ 14 } color="#fff" />
+                                    </View>
+                                    <Text className="text-gray-500 text-sm">Chi tiêu</Text>
+                                </View>
+                                <Text className="text-base font-semibold text-red-600 mt-1">
+                                    { formatCurrencyVND( totalExpense ) }
+                                </Text>
+                                <Text className="text-xs text-gray-500 mt-1">{ expenseTransactions } giao dịch</Text>
+                            </View>
+                        </View>
+                    </Animated.View>
+                    {/* -----------------------------------------End----------------------------------------- */ }
+
+                    {/* LineChart */ }
+                    {/* <Animated.View entering={ FadeIn.duration( 500 ).delay( 300 ) }>
+                        <StackedBarChartComponent id={ bankCard[ currentCardIndex ].id } />
+                    </Animated.View> */}
+                    {/* -----------------------------------------End----------------------------------------- */ }
+                </ScrollView>
+            </SafeAreaView>
         </>
     );
 }

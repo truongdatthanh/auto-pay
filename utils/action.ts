@@ -1,4 +1,7 @@
 import { router } from "expo-router";
+import * as MediaLibrary from 'expo-media-library';
+import * as Sharing from 'expo-sharing';
+import * as Clipboard from 'expo-clipboard';
 
 export const Actions = [
     {
@@ -48,3 +51,16 @@ export const Actions = [
         navigate: () => router.push( "/statistics" ),
     },
 ];
+
+export async function shareQR(uri: string) {
+  await Sharing.shareAsync(uri);
+}
+
+export async function saveQR(uri: string) {
+  const asset = await MediaLibrary.createAssetAsync(uri);
+  await MediaLibrary.createAlbumAsync("QR Codes", asset, false);
+}
+
+export function copyNumber(text: string) {
+  Clipboard.setStringAsync(text);
+}

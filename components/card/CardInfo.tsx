@@ -2,7 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
 import { Image, Text, Touchable, TouchableOpacity, View } from "react-native";
 import AntDesign from '@expo/vector-icons/AntDesign';
-import { formatCurrencyVND } from "@/utils/formatCurrencyVND";
+import { formatCurrencyVND } from "@/utils/format";
 
 interface ICardInfoProps
 {

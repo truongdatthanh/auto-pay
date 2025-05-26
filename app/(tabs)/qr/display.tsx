@@ -1,288 +1,4 @@
-// import { convertEMVCode } from "@/utils/encodeEMVCode";
-// import { generateQR } from "@/utils/generateQR";
-// import { useLocalSearchParams, router } from "expo-router";
-// import React, { useState, useEffect, useCallback, useMemo, useRef } from "react";
-// import { Text, View, TouchableOpacity, Image, ScrollView, StatusBar, Alert } from "react-native";
-// import {  FontAwesome, MaterialCommunityIcons, Entypo } from '@expo/vector-icons';
-// import * as MediaLibrary from 'expo-media-library';
-// import * as Clipboard from 'expo-clipboard';
-// import ViewShot from "react-native-view-shot";
-// import * as Sharing from 'expo-sharing';
-// import Loading from "@/components/loading/Loading";
-// import ActionButton from "@/components/button/ActionButton";
-// import InfoRow from "@/components/card/InfoRow";
-// import { BankData, BankInfo } from "@/interface/IBanking";
-// import { formatCurrencyVND } from "@/utils/formatCurrencyVND";
-
-
-// export default function DisplayQR ()
-// {
-//     const params = useLocalSearchParams();
-//     const [ loading, setLoading ] = useState( true );
-//     const [ bankInfo, setBankInfo ] = useState<BankInfo | null>( null );
-//     const [ permissionGranted, setPermissionGranted ] = useState( false );
-//     const [ saving, setSaving ] = useState( false );
-//     const viewShotRef = useRef<ViewShot>( null );
-
-//     // Chuyển đổi dữ liệu JSON từ params.data thành obj BankData
-//     // useMemo chỉ chạy lại khi params.data thay đổi
-//     const data = useMemo<BankData | null>( () =>
-//     {
-//         if ( typeof params.data === 'string' )
-//         {
-//             try
-//             {
-//                 return JSON.parse( params.data );
-//             } catch
-//             {
-//                 console.error( "Failed to parse JSON data" );
-//                 return null;
-//             }
-//         }
-//         return null;
-//     }, [ params.data ] );
-//     // --------------------------------- END ------------------------------------- //
-
-//     // Generate QR string from data
-//     const qrCode = useMemo( () =>
-//     {
-//         if ( !data ) return "";
-//         return convertEMVCode( {
-//             accountNumber: data.STK,
-//             bankBin: data.bin,
-//             amount: Number( data.amount ),
-//             addInfo: String( data.content ),
-//         } );
-//     }, [ data ] );
-//     // --------------------------------- END ------------------------------------- //
-
-//     // Xin phép truy cập vào thư viện ảnh
-//     useEffect( () =>
-//     {
-//         async function requestPermission ()
-//         {
-//             try
-//             {
-//                 const { status } = await MediaLibrary.requestPermissionsAsync();
-//                 setPermissionGranted( status === "granted" );
-//             } catch ( error )
-//             {
-//                 console.error( "Permission request error:", error );
-//             }
-//         }
-//         requestPermission();
-
-//         if ( !data ) return;
-
-//         const timer = setTimeout( () =>
-//         {
-//             setBankInfo( {
-//                 bankName: "Nam A Bank",
-//                 bankLogo: "https://payoo.vn/img/content/2023/03/logo_namabank.png",
-//                 accountName: "TRUONG THANH DAT",
-//                 accountNumber: data.STK,
-//                 amount: Number( data.amount ),
-//                 content: data.content,
-//                 time: new Date().toLocaleString( "vi-VN" ),
-//             } );
-//             setLoading( false );
-//         }, 1000 );
-
-//         return () => clearTimeout( timer );
-//     }, [ data ] );
-//     // --------------------------------- END ------------------------------------- //
-
-//     if ( !data ) return null;
-
-
-//     // Save QR image to gallery
-//     const saveQRCode = useCallback( async () =>
-//     {
-//         if ( !permissionGranted )
-//         {
-//             Alert.alert(
-//                 "Cần quyền truy cập",
-//                 "Ứng dụng cần quyền truy cập vào thư viện ảnh để lưu QR code",
-//                 [ { text: "OK" } ]
-//             );
-//             return;
-//         }
-
-//         try
-//         {
-//             setSaving( true );
-//             const uri = await viewShotRef.current?.capture?.();
-//             if ( uri )
-//             {
-//                 const asset = await MediaLibrary.createAssetAsync( uri );
-//                 await MediaLibrary.createAlbumAsync( "AutoPay QR", asset, false );
-//                 Alert.alert( "Thành công", "Đã lưu mã QR vào thư viện ảnh", [ { text: "OK" } ] );
-//             }
-//         } catch ( error )
-//         {
-//             console.error( "Error saving QR:", error );
-//             Alert.alert( "Lỗi", "Không thể lưu mã QR. Vui lòng thử lại sau.", [ { text: "OK" } ] );
-//         } finally
-//         {
-//             setSaving( false );
-//         }
-//     }, [ permissionGranted ] );
-
-//     // Share QR image
-//     const shareQRCode = useCallback( async () =>
-//     {
-//         try
-//         {
-//             const uri = await viewShotRef.current?.capture?.();
-//             if ( !uri )
-//             {
-//                 Alert.alert( "Lỗi", "Không thể chụp mã QR" );
-//                 return;
-//             }
-//             const canShare = await Sharing.isAvailableAsync();
-//             if ( !canShare )
-//             {
-//                 Alert.alert( "Thiết bị không hỗ trợ chia sẻ" );
-//                 return;
-//             }
-//             await Sharing.shareAsync( uri );
-//         } catch ( error )
-//         {
-//             console.error( error );
-//             Alert.alert( "Lỗi", "Không thể chia sẻ mã QR" );
-//         }
-//     }, [] );
-
-//     // Copy account number to clipboard
-//     const copyAccountNumber = useCallback( async () =>
-//     {
-//         if ( bankInfo?.accountNumber )
-//         {
-//             await Clipboard.setStringAsync( bankInfo.accountNumber );
-//             Alert.alert( "Đã sao chép", "Số tài khoản đã được sao chép vào clipboard." );
-//         }
-//     }, [ bankInfo?.accountNumber ] );
-
-//     // QR Code + logos component
-//     const QRCodeSection = () => (
-//         <>
-//             { generateQR( qrCode ) }
-//             <View className="flex-row justify-center items-center space-x-8 mt-4">
-//                 <Image source={ require( "../../../assets/images/Napas247.png" ) } className="w-[100px] h-[50px]" resizeMode="contain" />
-//                 <Image source={ { uri: bankInfo?.bankLogo } } className="w-[100px] h-[50px]" resizeMode="contain" />
-//             </View>
-//         </>
-//     );
-
-
-//     return (
-//         <>
-//             <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
-//             { loading ? (
-//                 <Loading message="Đang tạo QR..." />
-//             ) : (
-//                 <ScrollView
-//                     className="flex-1 bg-black"
-//                     contentContainerStyle={ { paddingBottom: 40 } }
-//                     showsVerticalScrollIndicator={ false }
-//                 >
-//                     <View className="mx-5 mt-8 bg-white rounded-xl overflow-hidden shadow-md">
-//                         <ViewShot ref={ viewShotRef } options={ { format: "jpg", quality: 0.9 } }>
-//                             <View className="p-4 items-center bg-white">
-//                                 <QRCodeSection />
-//                                 <View className="mt-4 w-full">
-//                                     <InfoRow label="Ngân hàng:" value={ bankInfo?.bankName } />
-//                                     <InfoRow
-//                                         label="Số tài khoản:"
-//                                         value={ bankInfo?.accountNumber }
-//                                         isCopyable
-//                                         onPress={ copyAccountNumber }
-//                                     />
-//                                     <InfoRow label="Chủ tài khoản:" value={ bankInfo?.accountName } />
-//                                     <InfoRow
-//                                         label="Số tiền:"
-//                                         value={ bankInfo?.amount ? formatCurrencyVND( bankInfo.amount ) : "0 VNĐ" }
-//                                         valueClassName="text-[#1c40f2] font-bold"
-//                                     />
-//                                     <InfoRow
-//                                         label="Nội dung:"
-//                                         value={ bankInfo?.content || "-" }
-//                                         multiline
-//                                         valueClassName="text-right max-w-[60%]"
-//                                     />
-//                                     <InfoRow label="Thời gian tạo:" value={ bankInfo?.time } isLast />
-//                                 </View>
-//                             </View>
-//                         </ViewShot>
-
-//                         <View className="flex-row justify-between bg-gray-50 p-4 border-t border-gray-200">
-//                             <ActionButton
-//                                 onPress={ saveQRCode }
-//                                 disabled={ saving }
-//                                 loading={ saving }
-//                                 icon={ <Entypo name="download" size={ 18 } color="#1c40f2" /> }
-//                                 text="Lưu QR"
-//                                 style="mr-2 bg-white border border-gray-200 text-[#1c40f2]"
-//                             />
-//                             <ActionButton
-//                                 onPress={ shareQRCode }
-//                                 disabled={ saving }
-//                                 loading={ saving }
-//                                 icon={ <FontAwesome name="share-square-o" size={ 18 } color="white" /> }
-//                                 text="Chia sẻ"
-//                                 style="ml-2 bg-[#1c40f2] text-white"
-//                             />
-//                         </View>
-//                     </View>
-
-//                     <View className="mx-5 mt-6 bg-white rounded-xl overflow-hidden shadow-md p-5">
-//                         <Text className="text-lg font-bold mb-3">Hướng dẫn thanh toán</Text>
-
-//                         <View className="flex-row items-start mb-3">
-//                             <View className="w-8 h-8 rounded-full bg-[#1c40f2] items-center justify-center mr-3 mt-1">
-//                                 <Text className="text-white font-bold">1</Text>
-//                             </View>
-//                             <View className="flex-1">
-//                                 <Text className="font-semibold">Mở ứng dụng ngân hàng</Text>
-//                                 <Text className="text-gray-500">Mở ứng dụng ngân hàng của bạn và chọn chức năng quét mã QR</Text>
-//                             </View>
-//                         </View>
-
-//                         <View className="flex-row items-start mb-3">
-//                             <View className="w-8 h-8 rounded-full bg-[#1c40f2] items-center justify-center mr-3 mt-1">
-//                                 <Text className="text-white font-bold">2</Text>
-//                             </View>
-//                             <View className="flex-1">
-//                                 <Text className="font-semibold">Quét mã QR</Text>
-//                                 <Text className="text-gray-500">Quét mã QR được hiển thị ở trên</Text>
-//                             </View>
-//                         </View>
-
-//                         <View className="flex-row items-start">
-//                             <View className="w-8 h-8 rounded-full bg-[#1c40f2] items-center justify-center mr-3 mt-1">
-//                                 <Text className="text-white font-bold">3</Text>
-//                             </View>
-//                             <View className="flex-1">
-//                                 <Text className="font-semibold">Xác nhận giao dịch</Text>
-//                                 <Text className="text-gray-500">Kiểm tra thông tin và xác nhận để hoàn tất giao dịch</Text>
-//                             </View>
-//                         </View>
-//                     </View>
-
-//                     <TouchableOpacity
-//                         className="mx-5 mt-6 bg-white rounded-xl shadow-md p-5 flex-row items-center justify-center"
-//                         onPress={ () => router.push( "/(tabs)/qr/create" ) }
-//                     >
-//                         <MaterialCommunityIcons name="qrcode-plus" size={ 24 } color="#1c40f2" />
-//                         <Text className="ml-2 font-bold text-[#1c40f2]">Tạo mã QR mới</Text>
-//                     </TouchableOpacity>
-//                 </ScrollView>
-//             ) }
-//         </>
-//     );
-// }
-
-import React, {useState, useEffect, useCallback, useMemo, useRef} from "react";
+import React, { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import { Text, View, TouchableOpacity, Image, ScrollView, StatusBar, Alert, } from "react-native";
 import { useLocalSearchParams, router } from "expo-router";
 import { FontAwesome, MaterialCommunityIcons, Entypo } from "@expo/vector-icons";
@@ -295,8 +11,8 @@ import ActionButton from "@/components/button/ActionButton";
 import InfoRow from "@/components/card/InfoRow";
 import { convertEMVCode } from "@/utils/encodeEMVCode";
 import { generateQR } from "@/utils/generateQR";
-import { formatCurrencyVND } from "@/utils/formatCurrencyVND";
 import { BankData, BankInfo } from "@/interface/IBanking";
+import { formatCurrencyVND } from "@/utils/format";
 
 const napasLogo = require( "@/assets/images/Napas247.png" );
 
@@ -307,7 +23,8 @@ export default function DisplayQR ()
     const [ loading, setLoading ] = useState( true );
     const [ bankInfo, setBankInfo ] = useState<BankInfo | null>( null );
     const [ permissionGranted, setPermissionGranted ] = useState( false );
-    const [ saving, setSaving ] = useState( false );
+    const [ savingQR, setSavingQR ] = useState( false );
+    const [ sharing, setSharing ] = useState( false );
 
     // Chuyển đổi dữ liệu JSON từ params.data thành obj BankData
     const parsedData = useMemo<BankData | null>( () =>
@@ -334,7 +51,7 @@ export default function DisplayQR ()
             accountNumber: parsedData.STK,
             bankBin: parsedData.bin,
             amount: Number( parsedData.amount ),
-            addInfo: String(parsedData.content),
+            addInfo: String( parsedData.content ),
         } );
     }, [ parsedData ] );
     // --------------------------------- END ------------------------------------- //
@@ -380,7 +97,7 @@ export default function DisplayQR ()
 
         try
         {
-            setSaving( true );
+            setSavingQR( true );
             const uri = await viewShotRef.current?.capture?.();
             if ( uri )
             {
@@ -394,7 +111,7 @@ export default function DisplayQR ()
             Alert.alert( "Lỗi", "Không thể lưu QR. Thử lại sau." );
         } finally
         {
-            setSaving( false );
+            setSavingQR( false );
         }
     }, [ permissionGranted ] );
     // --------------------------------- END ------------------------------------- //
@@ -402,6 +119,7 @@ export default function DisplayQR ()
     // Hàm chia sẻ QR code
     const shareQRCode = useCallback( async () =>
     {
+        setSharing( true );
         try
         {
             const uri = await viewShotRef.current?.capture?.();
@@ -411,10 +129,14 @@ export default function DisplayQR ()
             if ( !canShare ) return Alert.alert( "Thiết bị không hỗ trợ chia sẻ" );
 
             await Sharing.shareAsync( uri );
+
         } catch ( err )
         {
             console.error( err );
             Alert.alert( "Lỗi", "Không thể chia sẻ QR" );
+        } finally
+        {
+            setSharing( false );
         }
     }, [] );
     // ---------------------------------- END ------------------------------------- //
@@ -464,7 +186,7 @@ export default function DisplayQR ()
                                     <InfoRow label="Số tài khoản:" value={ bankInfo?.accountNumber } isCopyable onPress={ copyAccountNumber } />
                                     <InfoRow label="Chủ tài khoản:" value={ bankInfo?.accountName } />
                                     <InfoRow label="Số tiền:" value={ bankInfo?.amount ? formatCurrencyVND( bankInfo.amount ) : "0 VNĐ" } valueClassName="text-[#1c40f2] font-bold" />
-                                    <InfoRow label="Nội dung:" value={ bankInfo?.content || "-" } multiline valueClassName="text-right max-w-[60%]"/>
+                                    <InfoRow label="Nội dung:" value={ bankInfo?.content || "-" } multiline valueClassName="text-right max-w-[60%]" />
                                     <InfoRow label="Thời gian tạo:" value={ bankInfo?.time } isLast />
                                 </View>
                             </View>
@@ -473,16 +195,16 @@ export default function DisplayQR ()
                         <View className="flex-row justify-between bg-gray-50 p-4 border-t border-gray-200">
                             <ActionButton
                                 onPress={ saveQRCode }
-                                disabled={ saving }
-                                loading={ saving }
+                                disabled={ savingQR }
+                                loading={ savingQR }
                                 icon={ <Entypo name="download" size={ 18 } color="#1c40f2" /> }
                                 text="Lưu QR"
                                 style="mr-2 bg-white border border-gray-200 text-[#1c40f2]"
                             />
                             <ActionButton
                                 onPress={ shareQRCode }
-                                disabled={ saving }
-                                loading={ saving }
+                                disabled={ sharing }
+                                loading={ sharing }
                                 icon={ <FontAwesome name="share-square-o" size={ 18 } color="white" /> }
                                 text="Chia sẻ"
                                 style="ml-2 bg-[#1c40f2] text-white"

@@ -189,7 +189,7 @@ export default function Transfer ()
                             <Text className="text-lg text-white font-bold">Chuyển tiền</Text>
                         </View>
                         <View className="w-[25%] items-end">
-                            <TouchableOpacity onPress={ () => router.push( '/(tabs)' ) } className="p-2">
+                            <TouchableOpacity onPress={ () => router.push( '/(tabs)/home' ) } className="p-2">
                                 <Entypo name="dots-three-vertical" size={ 18 } color="white" />
                             </TouchableOpacity>
                         </View>

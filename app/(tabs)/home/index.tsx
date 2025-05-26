@@ -5,6 +5,8 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { Actions } from '@/utils/action';
+import TransactionStatsScreen from '@/app/test/testchart';
+import TransactionSummaryScreen from '@/app/test/chart';
 
 export default function Home ()
 {
@@ -44,6 +46,7 @@ export default function Home ()
           </View>
           {/* -----------------------------------------End----------------------------------------- */ }
 
+          <TransactionSummaryScreen />
           {/* Action */ }
           {/* <View className='m-4 bg-white rounded-xl shadow-md border border-gray-200'>
             <Text className="text-xl font-bold px-4 py-2">Chức năng</Text>

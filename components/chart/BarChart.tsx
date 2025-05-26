@@ -2,10 +2,9 @@ import { BarChart } from 'react-native-gifted-charts';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { useState, useMemo } from 'react';
 import dataBankingCard from "@/assets/banking-card.json"
-import { formatCurrencyVND } from '@/utils/formatCurrencyVND';
 import { router } from 'expo-router';
-import { formatDate } from '@/utils/formatDate';
 import { Ionicons } from '@expo/vector-icons';
+import { formatCurrencyVND, formatDate } from '@/utils/format';
 
 export default function BarCharts ( { id }: { id: String } )
 {

@@ -8,7 +8,7 @@ export default function NotificationLayout ()
             <Stack.Screen
                 name='index'
                 options={ {
-                    header: () => <AppHeaderInfo title="Notification" onPress={ () => router.replace( "/(tabs)" ) }/>,
+                    header: () => <AppHeaderInfo title="Notification" onPress={ () => router.replace( "/(tabs)/home" ) }/>,
                 } }
             />
         </Stack>

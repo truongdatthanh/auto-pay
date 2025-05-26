@@ -2,7 +2,7 @@ import { Image, Text, TouchableWithoutFeedback, View } from "react-native";
 import { LinearGradient } from 'expo-linear-gradient';
 import { router } from "expo-router";
 import {  FontAwesome } from '@expo/vector-icons';
-import { formatCardNumber } from "@/utils/formatCardNumber";
+import { formatCardNumber } from "@/utils/format";
 
 interface IBankCard
 {

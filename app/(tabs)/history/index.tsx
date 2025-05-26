@@ -1,7 +1,7 @@
 import { View, Text, TouchableOpacity, SectionList, Alert, StatusBar, Modal, Image } from 'react-native';
 import { useCallback, useState, useEffect } from 'react';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { formatDate, groupByDate } from '@/utils/formatDate';
+
 import { Feather, Ionicons, MaterialIcons } from '@expo/vector-icons';
 import CardInfo from '@/components/card/CardInfo';
 import NotFound from '@/app/error/404';
@@ -12,6 +12,8 @@ import AppHeaderInfo from '@/components/header/App.headerInfo';
 import { IBankingTransaction } from '@/interface/IBanking';
 import { ISection } from '@/interface/ISection';
 import Loading from '@/components/loading/Loading';
+import { groupByDate } from '@/utils/groupByDate';
+import { formatDate } from '@/utils/format';
 
 export default function History ()
 {
@@ -140,7 +142,7 @@ export default function History ()
       {/* Header */ }
       <AppHeaderInfo
         title="Lịch Sử Giao Dịch"
-        onPress={ () => router.replace( "/(tabs)" ) }
+        onPress={ () => router.replace( "/(tabs)/home" ) }
         rightComponent={
           <TouchableOpacity className="p-2 rounded-full" onPress={ () => setShowFilterModal( true ) }>
             <Feather name="filter" size={ 20 } color="white" />

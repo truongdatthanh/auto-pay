@@ -146,7 +146,7 @@ export default function OpenBank ()
 
                         <TouchableOpacity
                             className="bg-[#1c40f2] py-4 px-8 rounded-xl"
-                            onPress={ () => router.replace( "/(tabs)" ) }
+                            onPress={ () => router.replace( "/(tabs)/home" ) }
                         >
                             <Text className="font-semibold text-white">Về trang chủ</Text>
                         </TouchableOpacity>

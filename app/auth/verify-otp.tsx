@@ -89,7 +89,7 @@ export default function VerifyOTP ()
         if ( code === '1234' )
         { // Mã OTP mẫu
             Alert.alert( "Thành công", "Xác thực OTP thành công!", [
-                { text: "OK", onPress: () => router.replace( "/(auth)/success" ) }
+                { text: "OK", onPress: () => router.replace( "/auth/success" ) }
             ] );
         } else
         {
@@ -124,7 +124,7 @@ export default function VerifyOTP ()
     };
     const handleBackToRegister = () =>
     {
-        router.replace( '/(auth)/register' );
+        router.replace( '/auth/register' );
     };
 
     return (

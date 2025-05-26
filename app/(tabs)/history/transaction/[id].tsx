@@ -1,7 +1,5 @@
 import { router, useLocalSearchParams } from "expo-router";
 import { Alert, BackHandler, Image, Modal, ScrollView, Text, TextInput, TouchableOpacity, View, StatusBar, ActivityIndicator } from "react-native";
-import { formatCurrencyVND } from "@/utils/formatCurrencyVND";
-import { formatDate } from "@/utils/formatDate";
 import { Ionicons, MaterialIcons, FontAwesome6 } from '@expo/vector-icons';
 import { useEffect, useState, useRef, useCallback } from "react";
 import Animated, { FadeIn, FadeInDown, FadeInUp } from "react-native-reanimated";
@@ -11,6 +9,9 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
 import Loading from "@/components/loading/Loading";
 import { IBankingTransaction } from "@/interface/IBanking";
+import { useTabBarStore } from "@/store/useTabbarStore";
+import { useFabStore } from "@/store/useFABStore";
+import { formatCurrencyVND, formatDate } from "@/utils/format";
 
 export default function Transaction ()
 {
@@ -22,6 +23,24 @@ export default function Transaction ()
     const scrollViewRef = useRef( null );
     const [ currentCard, setCurrentCard ] = useState<IBankingTransaction | null>( null );
     const [ isLoading, setIsLoading ] = useState( true );
+    const setTabBarVisible = useTabBarStore( state => state.setTabBarVisible );
+    const setVisible = useFabStore( ( state ) => state.setVisible );
+    const data = currentCard?.transactionHistory.find( ( item ) => item.transactionId === id );
+
+    useFocusEffect(
+        useCallback( () =>
+        {
+            // ẩn khi vào màn hình
+            setVisible( false );
+            setTabBarVisible( false );
+            return () =>
+            {
+                setTabBarVisible( true );
+                setVisible( true );
+            }// hiện lại khi rời màn hình
+        }, [ setTabBarVisible, setVisible ] )
+    );
+    // ---------------------------------- END ------------------------------------- //
 
     // Lấy dữ liệu và thêm thời gian loading 2 giây
     useFocusEffect(
@@ -29,7 +48,6 @@ export default function Transaction ()
         {
             let timer: ReturnType<typeof setTimeout>;
             setIsLoading( true );
-
             const fetchSelectedCard = async () =>
             {
                 try
@@ -39,7 +57,6 @@ export default function Transaction ()
                     {
                         setCurrentCard( JSON.parse( card ) );
                     }
-
                     // Đặt thời gian loading 2 giây
                     timer = setTimeout( () =>
                     {
@@ -51,23 +68,42 @@ export default function Transaction ()
                     setIsLoading( false );
                 }
             };
-
             fetchSelectedCard();
-
             return () =>
             {
                 clearTimeout( timer );
             };
         }, [] )
     );
+    // ---------------------------------- END ------------------------------------- //
 
-    const data = currentCard?.transactionHistory.find( ( item ) => item.transactionId === id );
+    // Hàm xử lý sự kiện back bằng phím vật lý
+    useEffect( () =>
+    {
+        const backAction = () =>
+        {
+            router.push( '/(tabs)/history' );
+            return true;
+        };
 
+        const backHandler = BackHandler.addEventListener(
+            "hardwareBackPress",
+            backAction
+        );
+
+        return () => backHandler.remove();
+    }, [] );
+    // ---------------------------------- END ------------------------------------- //
+
+
+    // Hàm xử lý hiện modal
     const handleAddNote = () =>
     {
         setModalVisible( true );
     };
+    // ---------------------------------- END ------------------------------------- //
 
+    //Hàm xử lý cập nhật ghi chú
     const handleUpdateNote = () =>
     {
         if ( note.trim() === "" )
@@ -75,7 +111,6 @@ export default function Transaction ()
             Alert.alert( "Thông báo", "Vui lòng nhập ghi chú!" );
             return;
         }
-
         Alert.alert( "Thông báo", "Cập nhật ghi chú thành công!", [
             {
                 text: "Đồng ý",
@@ -83,12 +118,16 @@ export default function Transaction ()
             }
         ] );
     };
+    // ---------------------------------- END ------------------------------------- //
 
+    // Hàm xử lý shareQR
     const handleShare = () =>
     {
         Alert.alert( "Thông báo", "Đã sao chép thông tin giao dịch vào bộ nhớ tạm!" );
     };
+    // ---------------------------------- END ------------------------------------- //
 
+    // Hàm xử lý báo cáo vấn đề
     const handleReport = () =>
     {
         Alert.alert(
@@ -106,28 +145,16 @@ export default function Transaction ()
             ]
         );
     };
+    // ---------------------------------- END ------------------------------------- //
 
-    useEffect( () =>
-    {
-        const backAction = () =>
-        {
-            router.push( '/(tabs)/history' );
-            return true;
-        };
 
-        const backHandler = BackHandler.addEventListener(
-            "hardwareBackPress",
-            backAction
-        );
-
-        return () => backHandler.remove();
-    }, [] );
 
     // Hiển thị màn hình loading
     if ( isLoading )
     {
         return <Loading message="Đang tải thông tin giao dịch...." />;
     }
+
 
     if ( !data )
     {
@@ -154,7 +181,7 @@ export default function Transaction ()
             {/* Header */ }
             <LinearGradient
                 colors={ data.amount < 0 ? [ '#ef4444', '#b91c1c' ] : [ '#10b981', '#047857' ] }
-                className="pt-12 pb-8 rounded-b-3xl"
+                className="pt-8 pb-8 rounded-b-3xl"
                 start={ { x: 0, y: 0 } }
                 end={ { x: 1, y: 1 } }
             >
@@ -166,9 +193,7 @@ export default function Transaction ()
                     >
                         <Ionicons name="arrow-back" size={ 24 } color="white" />
                     </TouchableOpacity>
-
                     <Text className="text-lg font-semibold text-white">Chi tiết giao dịch</Text>
-
                     <TouchableOpacity
                         className="w-10 h-10 rounded-full bg-white/20 items-center justify-center"
                         onPress={ handleShare }
@@ -199,9 +224,10 @@ export default function Transaction ()
 
             <ScrollView
                 ref={ scrollViewRef }
-                className="flex-1"
+                className="flex-1 bg-black"
                 showsVerticalScrollIndicator={ false }
                 contentContainerStyle={ { paddingHorizontal: 16, paddingBottom: 30 } }
+
             >
                 {/* Transaction ID and Date */ }
                 <Animated.View entering={ FadeInUp.delay( 200 ).duration( 500 ) } className="bg-white rounded-2xl mt-4 p-4 shadow-sm">
@@ -237,7 +263,6 @@ export default function Transaction ()
                 {/* Beneficiary Account */ }
                 <Animated.View entering={ FadeInUp.delay( 300 ).duration( 500 ) } className="bg-white rounded-2xl mt-4 p-4 shadow-sm" >
                     <Text className="text-base font-semibold text-slate-700 mb-3">Tài khoản thụ hưởng</Text>
-
                     <View className="flex-row items-center">
                         <Image
                             source={ { uri: currentCard?.logoBanking } }

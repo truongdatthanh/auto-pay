@@ -39,7 +39,7 @@ export default function Login ()
         if ( userFound )
         {
             AsyncStorage.setItem( 'user', JSON.stringify( userFound ) );
-            router.replace( '/(tabs)' );
+            router.replace( '/(tabs)/home' );
         } else
         {
             alert( 'Tên đăng nhập hoặc mật khẩu không đúng' );
@@ -48,12 +48,12 @@ export default function Login ()
 
     const handleRegister = () =>
     {
-        router.push( '/(auth)/register' );
+        router.push( '/auth/register' );
     };
 
     const handleForgotPassword = () =>
     {
-        router.replace( '/(auth)/forgot-password' );
+        router.replace( '/auth/forgot-password' );
     };
 
     useEffect( () =>
@@ -134,7 +134,6 @@ export default function Login ()
                                 </View>
                             </View>
                         </View>
-
                         { !keyboardVisible && (
                             <View className="p-6 align-bottom items-center">
                                 <TouchableOpacity
@@ -155,7 +154,6 @@ export default function Login ()
                                 </View>
                             </View>
                         ) }
-
                     </KeyboardAwareScrollView>
                 </SafeAreaView>
             </TouchableWithoutFeedback>

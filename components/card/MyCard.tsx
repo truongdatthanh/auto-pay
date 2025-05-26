@@ -76,7 +76,7 @@ export default function MyCard ()
     // Xem tất cả các banking card
     const handleSeenAllCard = () =>
     {
-        router.push( '/bank-account/list-card' );
+        router.push( '/bank-account/list' );
     };
 
     // xử lý khi cuộn
@@ -243,11 +243,6 @@ export default function MyCard ()
             </View>
             {/* -----------------------------------------End----------------------------------------- */ }
 
-
-            {/* Bar Chart */ }
-            {/* <View className='mx-5 bg-white rounded-2xl shadow-xl mt-2'>
-                <BarCharts id={ bankCard[ currentCardIndex ].id } />
-            </View> */}
 
             {/* Quick Action */ }
             <View className="flex-row mx-4 py-4 bg-black rounded-xl justify-around ">

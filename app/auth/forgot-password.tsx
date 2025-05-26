@@ -17,7 +17,7 @@ export default function ForgotPassword ()
             alert( 'Số điện thoại không hợp lệ' );
             return;
         }
-        router.replace( "/success" );
+        router.replace( "/auth/success" );
     }
     return (
         <>
@@ -25,7 +25,7 @@ export default function ForgotPassword ()
             <SafeAreaView className="bg-black flex-1">
                 <View className="flex-1 p-4">
                     {/* Back button */ }
-                    <TouchableOpacity onPress={ () => router.replace( '/(auth)/login' ) } className="absolute top-4 left-4">
+                    <TouchableOpacity onPress={ () => router.replace( '/auth/login' ) } className="absolute top-4 left-4">
                         <Ionicons name="return-up-back" size={ 40 } color="white" />
                     </TouchableOpacity>
                     {/* -----------------------------------------End----------------------------------------- */ }

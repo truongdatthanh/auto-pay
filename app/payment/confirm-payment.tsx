@@ -3,12 +3,12 @@ import { useLocalSearchParams, router, useFocusEffect } from "expo-router";
 import { View, Text, TouchableOpacity, StatusBar, Image, ScrollView, Modal } from "react-native";
 import { Ionicons, FontAwesome, MaterialIcons } from '@expo/vector-icons';
 import { useCallback, useState } from "react";
-import { formatCurrencyVND } from "@/utils/formatCurrencyVND";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import mockMyBankCard from "@/assets/banking-card.json"
 import AppHeaderInfo from "@/components/header/App.headerInfo";
 import { decodeEMVCo } from "@/utils/decodeEMVCode";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { formatCurrencyVND } from "@/utils/format";
 
 export default function ConfirmPayment ()
 {
