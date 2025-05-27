@@ -1,6 +1,5 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
-import { Image, Text, Touchable, TouchableOpacity, View } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { formatCurrencyVND } from "@/utils/format";
 
@@ -22,7 +21,7 @@ export default function CardInfo ( props: ICardInfoProps )
     const handlePressCard = () =>
     {
         const id = card.transactionId
-        router.push( { pathname: "/(tabs)/history/transaction/[id]", params: { id } } );
+        router.push( { pathname: "/transaction/[id]", params: { id } } );
     }
 
     return (

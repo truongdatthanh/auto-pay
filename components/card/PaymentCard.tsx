@@ -52,7 +52,7 @@ const PaymentCard = ( { amount, time, id, isOpen, toggleOpen }: PaymentCardProps
                         className="flex-row items-center self-end"
                         onPress={ () =>
                             router.push( {
-                                pathname: "/(tabs)/history/transaction/[id]",
+                                pathname: "/transaction/[id]",
                                 params: { id },
                             } )
                         }

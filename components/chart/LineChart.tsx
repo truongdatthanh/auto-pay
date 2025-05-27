@@ -1,172 +1,313 @@
+// import React, { useMemo, useState } from 'react';
+// import { LineChart } from "react-native-gifted-charts";
+// import { View, Text, TouchableOpacity } from 'react-native';
+// import dataBankingCard from "@/assets/banking-card.json";
+// import { LinearGradient } from 'expo-linear-gradient';
+// import { Ionicons } from '@expo/vector-icons';
+// import { formatDate } from '@/utils/format';
 
-import React, { useMemo } from 'react';
-import { View, Text, Dimensions } from 'react-native';
-import dataBankingCard from "@/assets/banking-card.json";
-import Animated, { FadeIn } from 'react-native-reanimated';
+// const daysOfWeek = [ 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN' ];
+
+// export default function LineCharts ( { id }: { id: string } )
+// {
+
+//     const data = dataBankingCard;//set đữ liệu
+//     const indexData = data.find( ( item ) => item.id === id );//tìm ra data theo id
+
+//     const [ weekOffset, setWeekOffset ] = useState( 0 );
+//     // Ngày hiện tại reset về 00:00
+//     const currentDate = new Date();
+//     currentDate.setHours( 0, 0, 0, 0 );
+//     // Lấy ngày bắt đầu tuần cần hiển thị
+//     const currentDay = ( currentDate.getDay() + 6 ) % 7;
+//     const startOfWeek = new Date( currentDate );
+//     startOfWeek.setDate( currentDate.getDate() - currentDay + weekOffset * 7 );
+
+
+//     const { incomeData, expenseData, maxValue } = useMemo( () =>
+//     {
+//         const incomeByDay = Array( 7 ).fill( 0 );// /tạo mảng 7 ngày trong tuần
+//         const expenseByDay = Array( 7 ).fill( 0 );
+
+//         if ( !indexData || !indexData.transactionHistory )
+//         {
+//             return { incomeData: [], expenseData: [], maxValue: 0 };
+//         }
+
+//         indexData.transactionHistory.forEach( item =>
+//         {
+//             const date = new Date( item.date );
+//             const day = ( date.getDay() + 6 ) % 7; // convert Sunday=0 to 6, Monday=1 to 0, etc.
+//             if ( item.amount > 0 )
+//             {
+//                 incomeByDay[ day ] += item.amount;
+//             } else
+//             {
+//                 expenseByDay[ day ] += Math.abs( item.amount );
+//             }
+//         } );
+
+//         const incomeData = incomeByDay.map( ( value, i ) => ( {
+//             value: Math.round( value / 1_000_000 ),
+//             label: daysOfWeek[ i ],
+//             dataPointText: `${ Math.round( value / 1_000_000 ) }`
+//         } ) );
+
+//         const expenseData = expenseByDay.map( ( value, i ) => ( {
+//             value: Math.round( value / 1_000_000 ),
+//             label: daysOfWeek[ i ],
+//             dataPointText: `${ Math.round( value / 1_000_000 ) }`
+//         } ) );
+
+//         const maxVal = Math.max(
+//             ...incomeData.map( d => d.value ),
+//             ...expenseData.map( d => d.value )
+//         );
+
+//         return {
+//             incomeData,
+//             expenseData,
+//             maxValue: Math.ceil( maxVal + 5 )
+//         };
+//     }, [ indexData ] );
+
+//     return (
+//         <View>
+//             <Text style={ { textAlign: 'center', fontSize: 16, marginBottom: 10 } }>
+//                 Thống kê thu & chi theo ngày trong tuần (triệu VND)
+//             </Text>
+//             {/* Nút chuyển tuần */ }
+//             <View className="flex-row justify-between items-center mt-2">
+//                 <TouchableOpacity onPress={ () => setWeekOffset( prev => prev - 1 ) }>
+//                     <Ionicons name="chevron-back" size={ 20 } color="#666" />
+//                 </TouchableOpacity>
+//                 <Text className="text-sm text-gray-500">
+//                     { formatDate( startOfWeek ) } - { formatDate( new Date( startOfWeek.getTime() + 6 * 24 * 60 * 60 * 1000 ) ) }
+//                 </Text>
+//                 <TouchableOpacity
+//                     onPress={ () => setWeekOffset( prev => prev + 1 ) }
+//                     disabled={ weekOffset >= 0 }
+//                 >
+//                     <Ionicons
+//                         name="chevron-forward"
+//                         size={ 20 }
+//                         color={ `${ weekOffset >= 0 ? '#ccc' : '' }` }
+//                     />
+//                 </TouchableOpacity>
+//             </View>
+//             <LinearGradient colors={ [ '#1E2923', '#08130D' ] } start={ { x: 0, y: 0 } } end={ { x: 1, y: 1 } } className='p-2'>
+//                 <LineChart
+//                     data={ expenseData }
+//                     data2={ incomeData }
+//                     height={ 250 }
+//                     width={ 300 }
+//                     spacing={ 50 }
+//                     initialSpacing={ 20 }
+//                     color1="#e74c3c" // chi tiêu
+//                     color2="#2ecc71" // thu nhập
+//                     thickness1={ 2 }// độ dày đường vẽ
+//                     thickness2={ 2 }// độ dày đường vẽ
+//                     hideDataPoints={ false }// ẩn dot và data
+//                     //showXAxisIndices // hiển thị số liệu trên cột
+//                     //showVerticalLines // hiển thị đường kẻ dọc
+//                     xAxisIndicesHeight={ 2 } // độ dày đường kẻ dọc
+//                     xAxisIndicesWidth={ 2 } // độ dày đường kẻ ngang
+//                     xAxisIndicesColor="#eee"// màu đường kẻ dọc
+//                     yAxisColor="#eee" // màu trục y
+//                     xAxisColor="#eee"// màu trục x
+//                     dataPointsColor1="#e74c3c"
+//                     dataPointsColor2="#2ecc71"
+//                     yAxisTextStyle={ { color: '#fff' } } // màu label trục y
+//                     xAxisLabelTextStyle={ { color: '#fff' } } // màu label trục x
+//                     textColor1="#e74c3c" // màu các số trên dot
+//                     textColor2="#2ecc71"
+//                     textFontSize={ 15 }
+//                     maxValue={ maxValue }// giá trị lớn nhất trên trục y
+//                     noOfSections={ 10 }// số lượng đường kẻ ngang
+//                     //yAxisLabelWidth={ 32 }// độ rộng label trục y
+//                     //yAxisLabelSuffix="M"// thêm ký hiệu sau label trục y
+//                     isAnimated// animation
+//                     curved// đường cong
+
+//                     //stepValue={ 1 }// hiển thị các giá trị theo bước
+//                     showValuesAsDataPointsText={ false } // ✅ hiển thị số liệu trên cột
+//                 //hideRules// ẩn các đường kể ngang
+//                 />
+//             </LinearGradient>
+
+//         </View>
+//     );
+// }
+
+import React, { useMemo, useState } from 'react';
+import { View, Text, TouchableOpacity } from 'react-native';
+import { LineChart } from 'react-native-gifted-charts';
+import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
-import { LineChart } from 'react-native-chart-kit';
-import { formatCurrencyVND } from '@/utils/format';
+import dataBankingCard from '@/assets/banking-card.json';
+import { formatDate } from '@/utils/format';
 
 const daysOfWeek = [ 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN' ];
-const screenWidth = Dimensions.get( "window" ).width;
-
-const chartConfig = {
-    backgroundGradientFrom: "#1E2923",
-    backgroundGradientTo: "#08130D",
-    color: ( opacity = 1 ) => `rgba(255, 255, 255, ${ opacity })`,
-    labelColor: () => "#ffffff",
-    strokeWidth: 2,
-    decimalPlaces: 0,
-    propsForDots: {
-        r: "4",
-        strokeWidth: "2",
-        stroke: "#ffa726",
-    },
-};
-
-// 👉 Utility function to process transactions
-function processTransactionData ( transactionHistory: any[] )
-{
-    const incomeByDay = Array( 7 ).fill( 0 );
-    const expenseByDay = Array( 7 ).fill( 0 );
-    let totalIncome = 0;
-    let totalExpense = 0;
-
-    const today = new Date();
-    today.setHours( 0, 0, 0, 0 );
-    const startOfWeek = new Date( today );
-
-    transactionHistory.forEach( item =>
-    {
-        const date = new Date( item.date );
-        date.setHours( 0, 0, 0, 0 );
-        const dayIndex = Math.floor( ( date.getTime() - startOfWeek.getTime() ) / ( 1000 * 60 * 60 * 24 ) );
-
-        if ( dayIndex >= 0 && dayIndex < 7 )
-        {
-            if ( item.amount > 0 )
-            {
-                incomeByDay[ dayIndex ] += item.amount;
-                totalIncome += item.amount;
-            } else
-            {
-                expenseByDay[ dayIndex ] += Math.abs( item.amount );
-                totalExpense += Math.abs( item.amount );
-            }
-        }
-    } );
-
-    const formatChartData = ( values: number[] ) =>
-        values.map( val => parseFloat( ( val / 1_000_000 ).toFixed( 1 ) ) );
-
-    return {
-        incomeData: formatChartData( incomeByDay ),
-        expenseData: formatChartData( expenseByDay ),
-        totalIncome,
-        totalExpense,
-        maxValue: Math.ceil(
-            Math.max( ...incomeByDay, ...expenseByDay ) / 1_000_000
-        ) + 1,
-    };
-}
-
 
 export default function LineCharts ( { id }: { id: string } )
 {
-    const selectedCard = dataBankingCard.find( item => item.id === id );
+    const [ weekOffset, setWeekOffset ] = useState( 0 );
 
-    const {
-        incomeData,
-        expenseData,
-        maxValue,
-        totalIncome,
-        totalExpense
-    } = useMemo( () =>
+    const indexData = dataBankingCard.find( item => item.id === id );
+
+    const currentDate = new Date();
+    currentDate.setHours( 0, 0, 0, 0 );
+    const currentDay = ( currentDate.getDay() + 6 ) % 7;
+    const startOfWeek = new Date( currentDate );
+    startOfWeek.setDate( currentDate.getDate() - currentDay + weekOffset * 7 );
+
+    const { incomeData, expenseData, maxValue } = useMemo( () =>
     {
-        if ( !selectedCard?.transactionHistory )
+        const incomeByDay = Array( 7 ).fill( 0 );
+        const expenseByDay = Array( 7 ).fill( 0 );
+
+        if ( !indexData?.transactionHistory )
         {
-            return {
-                incomeData: [],
-                expenseData: [],
-                maxValue: 0,
-                totalIncome: 0,
-                totalExpense: 0
-            };
+            return { incomeData: [], expenseData: [], maxValue: 0 };
         }
-        return processTransactionData( selectedCard.transactionHistory );
-    }, [ selectedCard ] );
+
+        const start = new Date( startOfWeek );
+        const end = new Date( start );
+        end.setDate( start.getDate() + 6 );
+        end.setHours( 23, 59, 59, 999 );
+
+        indexData.transactionHistory
+            .filter( item =>
+            {
+                const date = new Date( item.date );
+                return date >= start && date <= end;
+            } )
+            .forEach( item =>
+            {
+                const date = new Date( item.date );
+                const day = ( date.getDay() + 6 ) % 7;
+                if ( item.amount > 0 )
+                {
+                    incomeByDay[ day ] += item.amount;
+                } else
+                {
+                    expenseByDay[ day ] += Math.abs( item.amount );
+                }
+            } );
+
+        // const incomeData = incomeByDay.map( ( value, i ) => ( {
+        //     value: Math.round( value / 1_000_000 ),
+        //     label: daysOfWeek[ i ],
+        //     dataPointText: `${ Math.round( value / 1_000_000 ) }`
+        // } ) );
+
+        // const expenseData = expenseByDay.map( ( value, i ) => ( {
+        //     value: Math.round( value / 1_000_000 ),
+        //     label: daysOfWeek[ i ],
+        //     dataPointText: `${ Math.round( value / 1_000_000 ) }`
+        // } ) );
+
+        const incomeData = incomeByDay.map( ( value, i ) =>
+        {
+            const millions = value / 1_000_000;
+            const formatted = parseFloat( millions.toFixed( 1 ) ); // luôn giữ 1 chữ số thập phân
+            return {
+                value: formatted,
+                label: daysOfWeek[ i ],
+                dataPointText: `${ formatted }`,
+            };
+        } );
+
+        const expenseData = expenseByDay.map( ( value, i ) =>
+        {
+            const millions = value / 1_000_000;
+            const formatted = parseFloat( millions.toFixed( 1 ) );
+            return {
+                value: formatted,
+                label: daysOfWeek[ i ],
+                dataPointText: `${ formatted }`
+            };
+        } );
+
+        const maxVal = Math.max(
+            ...incomeData.map( d => d.value ),
+            ...expenseData.map( d => d.value )
+        );
+
+        return {
+            incomeData,
+            expenseData,
+            maxValue: Math.ceil( maxVal + 5 )
+        };
+    }, [ indexData, startOfWeek ] );
+
+    const endOfWeek = new Date( startOfWeek );
+    endOfWeek.setDate( startOfWeek.getDate() + 6 );
 
     return (
-        <Animated.View entering={ FadeIn.duration( 500 ) } className="bg-white rounded-2xl p-4 m-2 shadow-sm">
-            <Text className="text-lg font-bold text-gray-800 mb-4">Biểu đồ thu chi theo tuần</Text>
+        <View>
+            <Text style={ { textAlign: 'center', fontSize: 16, marginBottom: 10 } }>
+                Thống kê thu & chi theo ngày trong tuần (triệu VND)
+            </Text>
 
-            <View className="flex-row justify-between mb-5">
-                <View className="flex-row items-center">
-                    <View className="w-8 h-8 rounded-full bg-green-500 justify-center items-center mr-3">
-                        <Ionicons name="arrow-down" size={ 16 } color="#fff" />
-                    </View>
-                    <View>
-                        <Text className="text-base font-bold text-gray-800">{ formatCurrencyVND( totalIncome ) }</Text>
-                        <Text className="text-xs text-gray-500">Thu nhập</Text>
-                    </View>
-                </View>
-                <View className="flex-row items-center">
-                    <View className="w-8 h-8 rounded-full bg-red-500 justify-center items-center mr-3">
-                        <Ionicons name="arrow-up" size={ 16 } color="#fff" />
-                    </View>
-                    <View>
-                        <Text className="text-base font-bold text-gray-800">{ formatCurrencyVND( totalExpense ) }</Text>
-                        <Text className="text-xs text-gray-500">Chi tiêu</Text>
-                    </View>
-                </View>
+            <View className="flex-row justify-between items-center mt-2">
+                <TouchableOpacity onPress={ () => setWeekOffset( prev => prev - 1 ) }>
+                    <Ionicons name="chevron-back" size={ 20 } color="#666" />
+                </TouchableOpacity>
+                <Text className="text-sm text-gray-500">
+                    { formatDate( startOfWeek ) } - { formatDate( endOfWeek ) }
+                </Text>
+                <TouchableOpacity
+                    onPress={ () => setWeekOffset( prev => prev + 1 ) }
+                    disabled={ weekOffset >= 0 }
+                >
+                    <Ionicons
+                        name="chevron-forward"
+                        size={ 20 }
+                        color={ weekOffset >= 0 ? '#ccc' : '#666' }
+                    />
+                </TouchableOpacity>
             </View>
 
-            <View className="items-center my-2 relative">
-                <Text className="text-xs text-gray-500 absolute -left-3 -top-6 z-10">(Đơn vị: Triệu VNĐ)</Text>
+            <LinearGradient
+                colors={ [ '#1E2923', '#08130D' ] }
+                start={ { x: 0, y: 0 } }
+                end={ { x: 1, y: 1 } }
+                className="p-2"
+            >
                 <LineChart
-                    data={ {
-                        labels: daysOfWeek,
-                        datasets: [
-                            {
-                                data: expenseData,
-                                color: ( opacity = 1 ) => `rgba(255, 99, 132, ${ opacity })`,
-                                strokeWidth: 2,
-                            },
-                            {
-                                data: incomeData,
-                                color: ( opacity = 1 ) => `rgba(0, 200, 132, ${ opacity })`,
-                                strokeWidth: 2,
-                            },
-                        ],
-                        legend: [ 'Chi tiêu', 'Thu nhập' ],
-                    } }
-                    width={ screenWidth - 40 }
-                    height={ 260 }
-                    chartConfig={ chartConfig }
-                    bezier
-                    style={ { borderRadius: 16 } }
-                    withDots
-                    withVerticalLabels={ false }  // Ẩn trục Y
-                    renderDotContent={ ( { x, y, index, indexData } ) =>
-                    {
-                        return (
-                            <Text
-                                key={ index }
-                                style={ {
-                                    position: 'absolute',
-                                    top: y - 20,
-                                    left: x - 10,
-                                    color: indexData ? "red" : 'black',
-                                    fontSize: 12,
-                                    fontWeight: '700',
-                                } }
-                            >
-                                { indexData ? formatCurrencyVND( indexData * 1_000_000 ) : ''}
-                            </Text>
-                        );
-                    } }
+                    key={ weekOffset }
+                    data={ expenseData }
+                    data2={ incomeData }
+                    height={ 250 }
+                    width={ 300 }
+                    spacing={ 50 }
+                    initialSpacing={ 20 }
+                    color1="#e74c3c"
+                    color2="#2ecc71"
+                    thickness1={ 2 }
+                    thickness2={ 2 }
+                    hideDataPoints={ false }
+                    xAxisIndicesHeight={ 2 }
+                    xAxisIndicesWidth={ 2 }
+                    xAxisIndicesColor="#eee"
+                    yAxisColor="#eee"
+                    xAxisColor="#eee"
+                    dataPointsColor1="#e74c3c"
+                    dataPointsColor2="#2ecc71"
+                    yAxisTextStyle={ { color: '#fff' } }
+                    xAxisLabelTextStyle={ { color: '#fff' } }
+                    textColor1="#e74c3c"
+                    textColor2="#2ecc71"
+                    textFontSize={ 15 }
+                    maxValue={ maxValue }
+                    noOfSections={ 10 }
+                    isAnimated
+                    //hideRules// ẩn các đường kẻ ngang
+                    curved
                 />
-            </View>
-        </Animated.View>
+            </LinearGradient>
+        </View>
     );
 }
+

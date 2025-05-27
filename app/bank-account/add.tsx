@@ -1,69 +1,3 @@
-// import React, { useState } from 'react';
-// import { Text, View, TextInput, TouchableOpacity, Alert } from 'react-native';
-// import { Picker } from '@react-native-picker/picker';
-// import mockBanking from '../../assets/banking.json';
-
-// export default function AddCard ()
-// {
-//     const [ banks, setBanks ] = useState( mockBanking );
-//     const [ selectedBank, setSelectedBank ] = useState( banks[ 0 ] );
-//     console.log( selectedBank );
-//     const [ accountNumber, setAccountNumber ] = useState( '' );
-//     const [ accountHolder, setAccountHolder ] = useState( '' );
-
-//     const handleSubmit = () =>
-//     {
-//         if ( !accountNumber || !accountHolder )
-//         {
-//             Alert.alert( 'Lỗi', 'Vui lòng nhập đầy đủ thông tin.' );
-//             return;
-//         }
-
-//         Alert.alert( 'Thành công', `Đã thêm thẻ ngân hàng:\n- Ngân hàng: ${ selectedBank }\n- Số TK: ${ accountNumber }\n- Chủ TK: ${ accountHolder }` );
-//     };
-
-//     return (
-//         <View className="flex-1 px-4 py-6">
-//             <Text className="text-2xl font-bold text-center mb-6">Thêm thẻ ngân hàng</Text>
-//             <Text className="mb-1">Chọn ngân hàng</Text>
-//             <View className="border rounded mb-4 bg-white">
-//                 <Picker
-//                     selectedValue={ selectedBank }
-//                     onValueChange={ ( itemValue ) => setSelectedBank( itemValue ) }
-//                 >
-//                     { banks.map( ( bank ) => (
-//                         <Picker.Item key={ bank.id } label={ bank.name } value={ bank.logo } />
-//                     ) ) }
-//                 </Picker>
-//             </View>
-
-//             <Text className="mb-1">Số tài khoản</Text>
-//             <TextInput
-//                 className="border rounded px-3 py-2 mb-4 bg-white"
-//                 keyboardType="numeric"
-//                 placeholder="Nhập số tài khoản"
-//                 value={ accountNumber }
-//                 onChangeText={ setAccountNumber }
-//             />
-
-//             <Text className="mb-1">Tên chủ tài khoản</Text>
-//             <TextInput
-//                 className="border rounded px-3 py-2 mb-6 bg-white"
-//                 placeholder="Nhập tên chủ tài khoản"
-//                 value={ accountHolder }
-//                 onChangeText={ setAccountHolder }
-//             />
-
-//             <TouchableOpacity
-//                 className="bg-blue-500 py-3 rounded items-center"
-//                 onPress={ handleSubmit }
-//             >
-//                 <Text className="text-white font-semibold">Thêm thẻ</Text>
-//             </TouchableOpacity>
-//         </View>
-//     );
-// }
-
 import React, { useState, useEffect } from 'react';
 import { Text, View, TextInput, TouchableOpacity, Alert, Image, ScrollView, KeyboardAvoidingView, Platform, ActivityIndicator } from 'react-native';
 import mockBanking from '@/assets/banking.json';
@@ -102,6 +36,7 @@ export default function AddCard ()
     // Format account number with spaces
     const formatAccountNumber = ( text: any ) =>
     {
+
         // Remove all non-numeric characters
         const cleaned = text.replace( /[^0-9]/g, '' );
 
@@ -115,7 +50,6 @@ export default function AddCard ()
             }
             formatted += cleaned[ i ];
         }
-
         return formatted;
     };
     // --------------------------------- END ------------------------------------- //
@@ -166,14 +100,11 @@ export default function AddCard ()
             Alert.alert( 'Lỗi', 'Vui lòng nhập đầy đủ thông tin.' );
             return;
         }
-
         setIsLoading( true );
-
         try
         {
             // Simulate API call
             await new Promise( resolve => setTimeout( resolve, 1500 ) );
-
             // Create new card object
             const newCard = {
                 id: Date.now().toString(),
@@ -184,18 +115,14 @@ export default function AddCard ()
                 balance: 0,
                 transactionHistory: []
             };
-
             // Get existing cards from AsyncStorage
             const existingCardsJson = await AsyncStorage.getItem( 'bankingCards' );
             const existingCards = existingCardsJson ? JSON.parse( existingCardsJson ) : [];
-
             // Add new card and save back to AsyncStorage
             const updatedCards = [ ...existingCards, newCard ];
             await AsyncStorage.setItem( 'bankingCards', JSON.stringify( updatedCards ) );
-
             // Set as selected card
             await AsyncStorage.setItem( 'selectedCard', JSON.stringify( newCard ) );
-
             Alert.alert(
                 'Thành công',
                 'Đã thêm thẻ ngân hàng thành công!',
@@ -214,11 +141,11 @@ export default function AddCard ()
 
     // Render step indicator
     const renderStepIndicator = () => (
-        <View className="flex-row justify-center items-center my-6">
+        <View className="flex-row justify-center items-center my-8">
             { [ 1, 2, 3 ].map( ( i ) => (
                 <View key={ i } className="flex-row items-center">
                     <View
-                        className={ `w-8 h-8 rounded-full justify-center items-center ${ i === step ? 'bg-blue-500' : i < step ? 'bg-green-500' : 'bg-gray-300'
+                        className={ `w-8 h-8 rounded-full justify-center items-center ${ i === step ? 'bg-black' : i < step ? 'bg-green-500' : 'bg-gray-300'
                             }` }
                     >
                         { i < step ? (
@@ -228,10 +155,7 @@ export default function AddCard ()
                         ) }
                     </View>
                     { i < 3 && (
-                        <View
-                            className={ `w-16 h-1 ${ i < step ? 'bg-green-500' : 'bg-gray-300'
-                                }` }
-                        />
+                        <View className={ `w-16 h-1 ${ i < step ? 'bg-green-500' : 'bg-gray-300' }` } />
                     ) }
                 </View>
             ) ) }
@@ -251,7 +175,6 @@ export default function AddCard ()
                         className="flex-1 px-4"
                     >
                         <Text className="text-xl font-bold mb-6">Chọn ngân hàng của bạn</Text>
-
                         <ScrollView className="flex-1 mb-4">
                             { banks.map( ( bank ) => (
                                 <TouchableOpacity
@@ -290,7 +213,6 @@ export default function AddCard ()
                     >
                         <Text className="text-xl font-bold mb-2">Nhập số tài khoản</Text>
                         <Text className="text-gray-500 mb-6">Vui lòng nhập số tài khoản của ngân hàng { selectedBank.name }</Text>
-
                         <View className="flex-row items-center mb-2">
                             <Image
                                 source={ { uri: selectedBank.logo } }
@@ -299,7 +221,6 @@ export default function AddCard ()
                             />
                             <Text className="font-bold">{ selectedBank.name }</Text>
                         </View>
-
                         <View className="bg-white rounded-xl border border-gray-200 p-4 mb-4">
                             <Text className="text-gray-500 text-sm mb-2">Số tài khoản</Text>
                             <TextInput
@@ -312,7 +233,6 @@ export default function AddCard ()
                                 autoFocus
                             />
                         </View>
-
                         <Text className="text-gray-500 text-sm">
                             Số tài khoản thường có 10-16 chữ số và không chứa ký tự đặc biệt
                         </Text>
@@ -327,7 +247,6 @@ export default function AddCard ()
                     >
                         <Text className="text-xl font-bold mb-2">Tên chủ tài khoản</Text>
                         <Text className="text-gray-500 mb-6">Vui lòng nhập đúng tên chủ tài khoản</Text>
-
                         <View className="flex-row items-center mb-4">
                             <Image
                                 source={ { uri: selectedBank.logo } }
@@ -339,7 +258,6 @@ export default function AddCard ()
                                 <Text className="text-gray-500">{ accountNumber }</Text>
                             </View>
                         </View>
-
                         <View className="bg-white rounded-xl border border-gray-200 p-4 mb-4">
                             <Text className="text-gray-500 text-sm mb-2">Tên chủ tài khoản</Text>
                             <TextInput
@@ -351,7 +269,6 @@ export default function AddCard ()
                                 autoFocus
                             />
                         </View>
-
                         <Text className="text-gray-500 text-sm">
                             Tên chủ tài khoản phải trùng khớp với thông tin đăng ký tại ngân hàng
                         </Text>
@@ -367,29 +284,28 @@ export default function AddCard ()
     return (
         <KeyboardAvoidingView
             behavior={ Platform.OS === 'ios' ? 'padding' : 'height' }
-            className="flex-1 bg-gray-50"
+            className="flex-1 bg-slate-50"
         >
             <StatusBar style="dark" />
-
             {/* Header */ }
             <Animated.View
                 entering={ FadeInDown.duration( 400 ) }
-                className="pt-12 pb-2 px-4 bg-white border-b border-gray-200"
+                className="pb-2 px-4 bg-white border-b border-gray-200"
             >
-                <View className="flex-row items-center">
-                    <TouchableOpacity onPress={ goToPreviousStep } className="p-2">
-                        <Ionicons name="arrow-back" size={ 24 } color="#333" />
-                    </TouchableOpacity>
-                    <Text className="text-xl font-bold ml-2">Thêm thẻ ngân hàng</Text>
-                </View>
+                { step > 1 && (
+                    <View className="flex-row items-center mt-2">
+                        <TouchableOpacity onPress={ goToPreviousStep } className="p-2">
+                            <Ionicons name="arrow-back" size={ 24 } color="#333" />
+                        </TouchableOpacity>
+                        <Text className="text-xl font-bold ml-2">Quay lại bước trước</Text>
+                    </View>
+                ) }
                 { renderStepIndicator() }
             </Animated.View>
-
             {/* Content */ }
             <ScrollView className="flex-1">
                 { renderStepContent() }
             </ScrollView>
-
             {/* Footer */ }
             <Animated.View
                 entering={ FadeInUp.duration( 400 ) }

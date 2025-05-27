@@ -1,16 +1,14 @@
-
 import React, { useRef, useState, useCallback } from 'react';
 import { View, Text, ScrollView, FlatList, ViewToken, RefreshControl, StatusBar } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Animated, { FadeInDown, FadeIn } from 'react-native-reanimated';
-import data from "../../assets/banking-card.json";
+import data from "@/assets/banking-card.json";
 import BankingCard from '@/components/card/BankCard';
 import AppHeaderInfo from '@/components/header/App.headerInfo';
 import { router } from 'expo-router';
-import LineCharts from '@/components/chart/LineChart';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import StackedBarChartComponent from '@/components/chart/StackedChart';
 import { formatCurrencyVND } from '@/utils/format';
+import LineCharts from '@/components/chart/LineChart';
 
 export default function BankAccountStatistics ()
 {
@@ -65,7 +63,7 @@ export default function BankAccountStatistics ()
                     contentContainerStyle={ { paddingBottom: 50 } }
                 >
                     {/* Header Card Section */ }
-                    <View className="bg-white pt-2 pb-4 shadow-sm">
+                    <View className="pt-2 pb-4">
                         <FlatList
                             data={ bankCard }
                             horizontal
@@ -105,6 +103,14 @@ export default function BankAccountStatistics ()
                             ) ) }
                         </View>
                     </View>
+                    {/* -----------------------------------------End----------------------------------------- */ }
+
+
+
+                    {/* LineChart */ }
+                    <Animated.View entering={ FadeIn.duration( 500 ).delay( 300 ) }>
+                        <LineCharts id={ bankCard[ currentCardIndex ].id } />
+                    </Animated.View>
                     {/* -----------------------------------------End----------------------------------------- */ }
 
                     {/* Tổng quan tài khoản */ }
@@ -157,14 +163,9 @@ export default function BankAccountStatistics ()
                         </View>
                     </Animated.View>
                     {/* -----------------------------------------End----------------------------------------- */ }
-
-                    {/* LineChart */ }
-                    {/* <Animated.View entering={ FadeIn.duration( 500 ).delay( 300 ) }>
-                        <StackedBarChartComponent id={ bankCard[ currentCardIndex ].id } />
-                    </Animated.View> */}
-                    {/* -----------------------------------------End----------------------------------------- */ }
                 </ScrollView>
             </SafeAreaView>
         </>
     );
 }
+

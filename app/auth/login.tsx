@@ -11,6 +11,11 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 
 export default function Login ()
 {
+    const user = [
+        { id: 1, email: 'truongdat@gmail.com', fullName: 'Truong Thanh Dat', password: '123456' },
+        { id: 2, email: '123456@gmail.com', fullName: 'Truong Thanh Dat 1', password: '123456' },
+    ];
+
     const logo = 'https://interdata.vn/assets/interdata-logo.png';
     const router = useRouter();
     const [ email, setEmail ] = useState( 'truongdat@gmail.com' );
@@ -27,11 +32,6 @@ export default function Login ()
             keyboardDidHideListener.remove();
         };
     }, [] );
-
-    const user = [
-        { id: 1, email: 'truongdat@gmail.com', fullName: 'Truong Thanh Dat', password: '123456' },
-        { id: 2, email: '123456@gmail.com', fullName: 'Truong Thanh Dat 1', password: '123456' },
-    ];
 
     const handleLogin = () =>
     {

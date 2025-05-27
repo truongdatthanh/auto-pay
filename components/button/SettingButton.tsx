@@ -24,6 +24,4 @@ export default function SettingButton ( { icon, iconBg, label, desc, onPress }: 
             <MaterialIcons name="keyboard-arrow-right" size={ 24 } color="#9ca3af" />
         </TouchableOpacity>
     );
-
-
 }

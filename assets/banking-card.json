@@ -12,30 +12,30 @@
       {
         "transactionId": "tx001",
         "date": "2025-05-26",
-        "amount": 1000000,
+        "amount": 10000000,
         "description": "Deposit"
       },
       {
         "transactionId": "tx002",
-        "date": "2025-05-26",
-        "amount": -7000000,
+        "date": "2025-05-27",
+        "amount": 7000000,
         "description": "Withdrawal"
       },
       {
         "transactionId": "tx003",
-        "date": "2025-05-26",
+        "date": "2025-05-28",
         "amount": 6000000,
         "description": "Deposit"
       },
       {
         "transactionId": "tx004",
-        "date": "2025-05-26",
-        "amount": -3000000,
+        "date": "2025-05-29",
+        "amount": 100000,
         "description": "Withdrawal"
       },
       {
         "transactionId": "tx005",
-        "date": "2025-05-26",
+        "date": "2025-05-30",
         "amount": 20000000,
         "description": "Transfer In",
         "senderName": "Truong Thanh Dat (Vietcombank)",
@@ -44,8 +44,8 @@
       },
       {
         "transactionId": "tx006",
-        "date": "2025-05-27",
-        "amount": -15000000,
+        "date": "2025-05-31",
+        "amount": 15000000,
         "description": "Transfer Out",
         "receiverName": "Truong Thanh Dat (BIDV)",
         "senderSTK": "123456789",
@@ -53,14 +53,14 @@
       },
       {
         "transactionId": "tx007",
-        "date": "2025-05-28",
-        "amount": 150000,
+        "date": "2025-06-01",
+        "amount": 20000000,
         "description": "Deposit"
       },
       {
         "transactionId": "tx008",
-        "date": "2025-05-29",
-        "amount": 1500000,
+        "date": "2025-05-28",
+        "amount": -1500000,
         "description": "Transfer In",
         "senderName": "Truong Thanh Dat (Vietcombank)",
         "senderSTK": "453453453378",

@@ -1,7 +1,11 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { View, Text, StatusBar, ActivityIndicator } from 'react-native';
 import Animated, { FadeIn } from 'react-native-reanimated';
 import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
+import { useTabBarStore } from '@/store/useTabbarStore';
+import { useFabStore } from '@/store/useFABStore';
+import { useFocusEffect } from '@react-navigation/native';
+
 
 interface LoadingProps
 {

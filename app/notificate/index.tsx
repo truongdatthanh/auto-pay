@@ -6,7 +6,7 @@ import { FontAwesome5 } from "@expo/vector-icons";
 
 export default function Notification ()
 {
-    const [ notificate, setNotificate ] = useState( mockNotificate );
+    const  notificate =  mockNotificate ;
     const [ tabbar, setTabbar ] = useState( "All" );
 
     const handleTabChange = ( tab: string ) =>

@@ -177,7 +177,7 @@ export default function BankAccount ()
         <>
             <ScrollView className="flex-1" showsVerticalScrollIndicator={ false } contentContainerStyle={ { paddingBottom: 50 } }>
                 {/* QR Code */ }
-                <View className="bg-white m-4 p-4 rounded-3xl shadow-md border border-gray-200">
+                <View className="bg-white m-4 p-4 rounded-xl shadow-md border border-gray-200">
                     <View className="justify-center items-center">
                         <ViewShot ref={ viewShotRef } options={ { format: "jpg", quality: 0.9 } }>
                             <View className="items-center bg-white">
@@ -221,7 +221,7 @@ export default function BankAccount ()
                 {/* -----------------------------------------End----------------------------------------- */ }
 
                 {/* Thông tin tài khoản ngân hàng */ }
-                <View className="bg-white mx-4 mb-2 p-4 rounded-3xl shadow-md border border-gray-200 gap-4">
+                <View className="bg-white mx-4 mb-2 p-4 rounded-xl shadow-md border border-gray-200 gap-4">
                     <Text className="text-lg font-bold">Thông tin tài khoản ngân hàng</Text>
                     <View className="border-t border-dashed border-gray-400 w-full" />
                     <View className="flex-row justify-between items-center">
@@ -248,7 +248,7 @@ export default function BankAccount ()
                 {/* -----------------------------------------End----------------------------------------- */ }
 
                 {/* Tùy chọn */ }
-                <View className="bg-white mx-4 mt-2 p-4 rounded-3xl shadow-md border border-gray-200 gap-4">
+                <View className="bg-white mx-4 mt-2 p-4 rounded-xl shadow-md border border-gray-200 gap-4">
                     <Text className="text-lg font-bold">Tùy chọn</Text>
                     <View className="border-t border-dashed border-gray-400 w-full" />
                     <TouchableOpacity className="flex-row items-center justify-between" onPress={ handleCreateQR }>

@@ -1,5 +1,5 @@
 import { BlurView } from 'expo-blur';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { router, Tabs } from 'expo-router';
 import { Image, View } from 'react-native';
 import { useFabStore } from '@/store/useFABStore';
@@ -13,6 +13,7 @@ export default function TabsLayout ()
   const isVisibleFab = useFabStore( ( state ) => state.visible );
   const isOpenFab = useFabStore( state => state.isOpen );
   useAndroidBackHandler();
+  const tabBarHeight = isTabBarVisible ? 80 : 0;
 
   return (
     <SafeAreaView className="flex-1 bg-black">
@@ -82,7 +83,7 @@ export default function TabsLayout ()
           } }
         />
         <Tabs.Screen
-          name="history"
+          name="history/index"
           options={ {
             title: 'Lịch sử',
             tabBarIcon: ( { focused } ) =>
@@ -141,7 +142,8 @@ export default function TabsLayout ()
           style={ {
             position: 'absolute',
             right: 20,
-            bottom: 80,
+            //bottom: 80,
+            bottom: tabBarHeight,
             zIndex: 1100,
           } }
         >

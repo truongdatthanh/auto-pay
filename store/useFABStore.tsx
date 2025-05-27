@@ -9,7 +9,7 @@ type FabStore = {
 
 export const useFabStore = create<FabStore>((set) => ({
   isOpen: false,
-  visible: true, // mặc định là hiển thị
+  visible: true,
   setOpen: (open) => set({ isOpen: open }),
   setVisible: (visible) => set({ visible }),
 }));

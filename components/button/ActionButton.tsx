@@ -1,8 +1,16 @@
 import { ActivityIndicator, Text, TouchableOpacity } from "react-native";
 
-export default function ActionButton ( { onPress, disabled, loading, icon, text, style, }: {
-    onPress: () => void; disabled?: boolean; loading?: boolean; icon: React.ReactNode; text: string; style?: string;
-} )
+interface ActionButtonProps
+{
+    onPress: () => void;
+    disabled?: boolean;
+    loading?: boolean;
+    icon: React.ReactNode;
+    text: string;
+    style?: string;
+}
+
+export default function ActionButton ( { onPress, disabled, loading, icon, text, style, }: ActionButtonProps )
 {
     return (
         <TouchableOpacity

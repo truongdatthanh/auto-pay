@@ -7,8 +7,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons } from '@expo/vector-icons';
 import TransactionList from '@/components/chart/TransactionList';
 
-
-
 export default function MyCard ()
 {
     const [ currentCardIndex, setCurrentCardIndex ] = useState( 0 );
@@ -217,7 +215,7 @@ export default function MyCard ()
                 >
                     <TouchableOpacity
                         onPress={ handleSeenAllCard }
-                        className="items-center justify-center bg-black rounded-xl h-[180px] w-[120px]"
+                        className="items-center justify-center bg-black rounded-xl h-[180px] w-[120px] mr-4"
                     >
                         <View className="items-center">
                             <View className="bg-white/20 rounded-full p-3 mb-3">
