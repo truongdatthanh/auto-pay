@@ -10,14 +10,8 @@ export default function TransactionList ( { id }: { id: string } )
 {
     const data = mockBankingCard;
     const [ currentDate ] = useState( new Date() );
-    const [ openId, setOpenId ] = useState<string>( "" );
+   
     const [ visibleCount, setVisibleCount ] = useState( 5 );
-
-    const toggleOpen = ( id: string ) =>
-    {
-        setOpenId( ( prevId ) => ( prevId === id ? "" : id ) );
-    };
-
     const indexData = data.find( ( item ) => item.id === id );
     const todayTransactions =
         indexData?.transactionHistory
@@ -49,9 +43,9 @@ export default function TransactionList ( { id }: { id: string } )
     };
 
     return (
-        <View className="bg-black rounded-xl flex-1">
-            <View className="flex-row justify-between items-center px-4 py-2">
-                <Text className="text-md font-bold text-white">Giao dịch gần đây</Text>
+        <View className="bg-white rounded-xl flex-1 shadow-md border border-gray-200">
+            <View className="flex-row justify-between items-center px-4 pt-2">
+                <Text className="text-md font-bold text-black">Giao dịch gần đây</Text>
                 <TouchableOpacity
                     onPress={ () => router.push( "/(tabs)/history" ) }
                     className="flex-row items-center"
@@ -62,14 +56,14 @@ export default function TransactionList ( { id }: { id: string } )
             </View>
 
             <View className="px-4">
-                <Text className="text-white">{ formatDate( currentDate ) }</Text>
+                <Text className="text-sm text-gray-400">{ formatDate( currentDate ) }</Text>
             </View>
 
-            <View className="p-4 gap-4 flex-1">
+            <View className="px-4 py-2 gap-1 flex-1">
                 { visibleTransactions.length === 0 ? (
-                    <View className="flex-1 justify-center items-center">
-                        <Text className="text-white text-center text-sm italic">
-                            Hôm nay không có giao dịch
+                    <View className="flex-1 h-[200px] justify-center items-center">
+                        <Text className="text-black text-center text-md italic">
+                            Hôm nay chưa có giao dịch
                         </Text>
                     </View>
                 ) : (
@@ -79,8 +73,6 @@ export default function TransactionList ( { id }: { id: string } )
                                 id={ item.transactionId }
                                 amount={ item.amount }
                                 time={ item.date }
-                                isOpen={ openId === item.transactionId }
-                                toggleOpen={ toggleOpen }
                             />
                         </View>
                     ) )

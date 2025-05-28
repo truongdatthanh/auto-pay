@@ -2,7 +2,7 @@
   {
     "id": "1",
     "STK": "246134029400001",
-    "deeplink" : "deeplinkapp://nab/softotp",
+    "deeplink": "deeplinkapp://nab/softotp",
     "name": "Truong Thanh Dat",
     "bankbin": "970428",
     "logoBanking": "https://payoo.vn/img/content/2023/03/logo_namabank.png",
@@ -12,86 +12,134 @@
       {
         "transactionId": "tx001",
         "date": "2025-05-26",
-        "amount": 10000000,
-        "description": "Deposit"
+        "type": "Nhận tiền",
+        "time": "09:53:01",
+        "amount": -10000000,
+        "description": "NGUYEN VAN A CHUYEN KHOAN",
+        "senderSTK": "123456789",
+        "senderName": "Nguyễn Văn A",
+        "senderBankName": "Ngân hàng TMCP Á Châu",
+        "senderBankLogo": "https://api.vietqr.io/img/ACB.png"
       },
       {
         "transactionId": "tx002",
         "date": "2025-05-27",
-        "amount": 7000000,
-        "description": "Withdrawal"
+        "amount": -7000000,
+        "time": "09:53:01",
+        "type": "Nhận tiền",
+        "description": "NGUYEN VAN B CHUYEN KHOAN",
+        "senderSTK": "1111111111",
+        "senderName": "Nguyễn Văn B",
+        "senderBankName": "Ngân hàng TMCP Đầu tư và Phát triển Việt Nam",
+        "senderBankLogo": "https://thietkelogomondial1fc36.zapwp.com/q:i/r:0/wp:1/w:480/u:https://thietkelogo.mondial.vn/wp-content/uploads/2024/02/bidv-logo-brandlogos.net_.png"
       },
       {
         "transactionId": "tx003",
         "date": "2025-05-28",
+        "type": "Nhận tiền",
         "amount": 6000000,
-        "description": "Deposit"
+        "time": "09:53:01",
+        "description": "NGUYEN VAN C CHUYEN KHOAN",
+        "senderSTK": "222222222222",
+        "senderName": "Nguyễn Văn C",
+        "senderBankName": "Ngân hàng TMCP Á Châu",
+        "senderBankLogo": "https://api.vietqr.io/img/ACB.png"
       },
       {
         "transactionId": "tx004",
         "date": "2025-05-29",
         "amount": 100000,
-        "description": "Withdrawal"
+        "time": "09:53:01",
+        "type": "Nhận tiền",
+        "description": "NGUYEN VAN A CHUYEN KHOAN",
+        "senderSTK": "123456789",
+        "senderName": "Nguyễn Văn A",
+        "senderBankName": "Ngân hàng TMCP Á Châu",
+        "senderBankLogo": "https://api.vietqr.io/img/ACB.png"
       },
       {
         "transactionId": "tx005",
         "date": "2025-05-30",
-        "amount": 20000000,
-        "description": "Transfer In",
-        "senderName": "Truong Thanh Dat (Vietcombank)",
+        "amount": 20500000,
+        "time": "09:53:01",
+        "type": "Nhận tiền",
+        "description": "NGUYEN VAN D CHUYEN TIEN",
+        "senderName": "NGUYEN VAN D",
         "senderSTK": "453453453378",
-        "receiverSTK": "123456789"
+        "senderBankName": "Ngân hàng TMCP Quân đội",
+        "senderBankLogo": "https://api.vietqr.io/img/MB.png"
       },
       {
         "transactionId": "tx006",
         "date": "2025-05-31",
-        "amount": 15000000,
-        "description": "Transfer Out",
+        "amount": -15000000,
+        "time": "09:53:01",
+        "type": "Giao dịch khác",
+        "description": "TRUONG THANH DAT CHUYEN TIEN",
         "receiverName": "Truong Thanh Dat (BIDV)",
-        "senderSTK": "123456789",
-        "receiverSTK": "4531234534345"
+        "receiverSTK": "4531234534345",
+        "receiverBankName": "Ngân hàng TMCP Đầu tư và Phát triển Việt Nam",
+        "receiverBankLogo": "https://thietkelogomondial1fc36.zapwp.com/q:i/r:0/wp:1/w:480/u:https://thietkelogo.mondial.vn/wp-content/uploads/2024/02/bidv-logo-brandlogos.net_.png"
       },
       {
         "transactionId": "tx007",
-        "date": "2025-06-01",
-        "amount": 20000000,
-        "description": "Deposit"
+        "date": "2025-05-31",
+        "amount": -15000000,
+        "time": "09:53:01",
+        "type": "Giao dịch khác",
+        "description": "TRUONG THANH DAT CHUYEN TIEN",
+        "receiverName": "Truong Thanh Dat (BIDV)",
+        "receiverSTK": "4531234534345",
+        "receiverBankName": "Ngân hàng TMCP Đầu tư và Phát triển Việt Nam",
+        "receiverBankLogo": "https://thietkelogomondial1fc36.zapwp.com/q:i/r:0/wp:1/w:480/u:https://thietkelogo.mondial.vn/wp-content/uploads/2024/02/bidv-logo-brandlogos.net_.png"
       },
       {
         "transactionId": "tx008",
-        "date": "2025-05-28",
-        "amount": -1500000,
-        "description": "Transfer In",
-        "senderName": "Truong Thanh Dat (Vietcombank)",
-        "senderSTK": "453453453378",
-        "receiverSTK": "123456789"
+        "date": "2025-05-31",
+        "amount": -15000000,
+        "time": "09:53:01",
+        "type": "Giao dịch khác",
+        "description": "TRUONG THANH DAT CHUYEN TIEN",
+        "receiverName": "Truong Thanh Dat (TCB)",
+        "receiverSTK": "99999999999",
+        "receiverBankName": "Ngân hàng TMCP Kỹ thương Việt Nam",
+        "receiverBankLogo": "https://api.vietqr.io/img/TCB.png"
       },
       {
         "transactionId": "tx009",
-        "date": "2025-05-27",
-        "amount": -3000000,
-        "description": "Transfer Out",
-        "receiverName": "Truong Thanh Dat (Vietcombank)",
-        "senderSTK": "123456789",
-        "receiverSTK": "453453453378"
+        "date": "2025-05-31",
+        "amount": -30000000,
+        "time": "09:53:01",
+        "type": "Giao dịch khác",
+        "description": "TRUONG THANH DAT CHUYEN TIEN",
+        "receiverName": "Truong Thanh Dat (TCB)",
+        "receiverSTK": "99999999999",
+        "receiverBankName": "Ngân hàng TMCP Kỹ thương Việt Nam",
+        "receiverBankLogo": "https://api.vietqr.io/img/TCB.png"
       },
       {
         "transactionId": "tx010",
-        "date": "2025-05-28",
-        "amount": 2000000,
-        "description": "Transfer In",
-        "senderName": "Truong Thanh Dat (BIDV)",
-        "senderSTK": "4531234534345",
-        "receiverSTK": "123456789"
+        "date": "2025-05-31",
+        "amount": -15000000,
+        "time": "09:53:01",
+        "type": "Giao dịch khác",
+        "description": "TRUONG THANH DAT CHUYEN TIEN",
+        "receiverName": "Truong Thanh Dat (TCB)",
+        "receiverSTK": "99999999999",
+        "receiverBankName": "Ngân hàng TMCP Kỹ thương Việt Nam",
+        "receiverBankLogo": "https://api.vietqr.io/img/TCB.png"
       },
       {
         "transactionId": "tx011",
-        "date": "2025-06-01",
-        "amount": -2000000,
-        "description": "Transfer Out",
-        "receiverName": "Truong Thanh Dat (Vietcombank)",
-        "senderSTK": "123456789",
-        "receiverSTK": "453453453378"
+        "date": "2025-05-31",
+        "amount": -20000000,
+        "time": "09:53:01",
+        "type": "Giao dịch khác",
+        "description": "TRUONG THANH DAT CHUYEN TIEN",
+        "receiverName": "Truong Thanh Dat (TCB)",
+        "receiverSTK": "99999999999",
+        "receiverBankName": "Ngân hàng TMCP Kỹ thương Việt Nam",
+        "receiverBankLogo": "https://api.vietqr.io/img/TCB.png"
       }
     ]
   },
@@ -99,7 +147,7 @@
     "id": "2",
     "STK": "8875067628",
     "name": "Truong Thanh Dat",
-    "deeplink" : "bidv.smartbanking.partner://payment",
+    "deeplink": "bidv.smartbanking.partner://payment",
     "logoBanking": "https://payoo.vn/img/content/2023/03/logo_bidv.png",
     "bankName": "BIDV",
     "bankbin": "970418",
@@ -109,27 +157,31 @@
         "transactionId": "tx012",
         "date": "2025-05-19",
         "amount": 15000000,
+        "time": "09:53:01",
         "description": "Deposit"
       },
       {
         "transactionId": "tx013",
         "date": "2025-05-19",
+        "time": "09:53:01",
         "amount": -700000,
         "description": "Withdrawal"
       },
       {
         "transactionId": "tx014",
-        "date": "2025-05-19",
+        "date": "2025-05-28",
         "amount": -2000000,
         "description": "Transfer Out",
         "receiverName": "Truong Thanh Dat (Nam A Bank)",
         "senderSTK": "4531234534345",
+        "time": "09:53:01",
         "receiverSTK": "123456789"
       },
       {
         "transactionId": "tx015",
-        "date": "2025-05-19",
+        "date": "2025-05-28",
         "amount": 2000000,
+        "time": "09:53:01",
         "description": "Transfer In",
         "senderName": "Truong Thanh Dat (Vietcombank)",
         "senderSTK": "453453453378",

@@ -243,27 +243,25 @@ export default function MyCard ()
 
 
             {/* Quick Action */ }
-            <View className="flex-row mx-4 py-4 bg-black rounded-xl justify-around ">
+            <View className="flex-row mx-4 px-4 py-4 bg-white shadow-md border border-gray-200 rounded-xl justify-around ">
+                <TouchableOpacity className="items-center w-1/4" onPress={ () => router.push( '/bank-account/list' ) }>
+                    <Image source={ require( '@/assets/images/credit-card-black.png' ) } className="w-8 h-8" resizeMode='contain' />
+                    <Text className="text-black text-[11px] font-semibold text-center">Tài khoản & thẻ</Text>
+                </TouchableOpacity>
                 {/* Chuyển tiền cho mầy nè */ }
-                <TouchableOpacity className="items-center self-center w-24" onPress={ () => router.push( '/payment/transfer' ) }>
-                    <View className="bg-black rounded-xl">
-                        <Image source={ require( '@/assets/images/cash_white.png' ) } className="w-10 h-10" resizeMode='contain' />
-                    </View>
-                    <Text className="text-white text-[11px] font-semibold text-center">Chuyển tiền</Text>
+                <TouchableOpacity className="items-center w-1/4" onPress={ () => router.push( '/payment/transfer' ) }>
+                    <Image source={ require( '@/assets/images/cash_black.png' ) } className="w-8 h-8" resizeMode='contain' />
+                    <Text className="text-black text-[11px] font-semibold text-center">Chuyển tiền</Text>
                 </TouchableOpacity>
                 {/* QR của tao */ }
-                <TouchableOpacity className="items-center self-center w-24" onPress={ () => router.push( { pathname: '/(tabs)/qr', params: { tabIndex: 1 } } ) }>
-                    <View className="bg-black rounded-xl">
-                        <Image source={ require( '@/assets/images/qr-code-white.png' ) } className="w-10 h-10" resizeMode='contain' />
-                    </View>
-                    <Text className="text-white text-[11px] font-semibold text-center ">QR của tôi</Text>
+                <TouchableOpacity className="items-center w-1/4" onPress={ () => router.push( { pathname: '/(tabs)/qr', params: { tabIndex: 1 } } ) }>
+                    <Image source={ require( '@/assets/images/qr-code.png' ) } className="w-8 h-8" resizeMode='contain' />
+                    <Text className="text-black text-[11px] font-semibold text-center ">QR của tôi</Text>
                 </TouchableOpacity>
                 {/* Chuyển tiền cho tao */ }
-                <TouchableOpacity className="items-center self-center w-24" onPress={ () => router.push("/qr/create") }>
-                    <View className="bg-black rounded-xl">
-                        <Image source={ require( '@/assets/images/save-white.png' ) } className="w-10 h-10" resizeMode='contain' />
-                    </View>
-                    <Text className="text-white text-[11px] font-semibold text-center ">Nhận tiền</Text>
+                <TouchableOpacity className="items-center w-1/4" onPress={ () => router.push( "/qr/create" ) }>
+                    <Image source={ require( '@/assets/images/save_black.png' ) } className="w-8 h-8" resizeMode='contain' />
+                    <Text className="text-black text-[11px] font-semibold text-center ">Nhận tiền</Text>
                 </TouchableOpacity>
             </View>
             {/* -----------------------------------------End----------------------------------------- */ }

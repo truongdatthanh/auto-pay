@@ -3,10 +3,17 @@ export interface ITransaction
     transactionId: string;
     date: string;
     amount: number;
+    time: string;
+    type: string;
     description: string;
+    receiverName: string;
+    receiverSTK: string;
+    receiverBankName: string;
+    receiverBankLogo: string;
     senderName: string;
     senderSTK: string;
-    receiverSTK: string;
+    senderBankName: string;
+    senderBankLogo: string
 }
 
 export interface IBankingTransaction

@@ -2,20 +2,53 @@ import React, { useState, useEffect } from 'react';
 import { Text, View, TextInput, TouchableOpacity, Alert, Image, ScrollView, KeyboardAvoidingView, Platform, ActivityIndicator } from 'react-native';
 import mockBanking from '@/assets/banking.json';
 import { Ionicons } from '@expo/vector-icons';
-import { router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import Animated, { FadeInUp, FadeInDown } from 'react-native-reanimated';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StatusBar } from 'expo-status-bar';
 
+interface IBank
+{
+    id: number;
+    name: string;
+    code: string;
+    bin: string;
+    shortName: string;
+    logo: string;
+    transferSupported: number;
+    lookupSupported: number;
+    short_name: string;
+    support: number;
+    isTransfer: number;
+    swift_code: string;
+}
+
 export default function AddCard ()
 {
     const banks = mockBanking;
-    const [ selectedBank, setSelectedBank ] = useState( banks[ 0 ] );
+    const [ selectedBank, setSelectedBank ] = useState<IBank>( banks[ 0 ] );
     const [ accountNumber, setAccountNumber ] = useState( '' );
     const [ accountHolder, setAccountHolder ] = useState( '' );
     const [ isLoading, setIsLoading ] = useState( false );
     const [ step, setStep ] = useState( 1 );
     const [ isValid, setIsValid ] = useState( false );
+    const { data } = useLocalSearchParams();
+
+    useEffect( () =>
+    {
+        if ( data && typeof data === "string" )
+        {
+            try
+            {
+                const parsed = JSON.parse( data );  // chuyển string -> object
+                setSelectedBank( parsed );          // truyền vào đúng IBank
+                console.log( "Đã chọn ngân hàng:", parsed );
+            } catch ( err )
+            {
+                console.error( "Lỗi khi parse bank:", err );
+            }
+        }
+    }, [ data ] );
 
     // Validate form
     useEffect( () =>
@@ -219,7 +252,7 @@ export default function AddCard ()
                                 className="w-10 h-10 rounded-lg mr-3"
                                 resizeMode="contain"
                             />
-                            <Text className="font-bold">{ selectedBank.name }</Text>
+                            <Text className="font-bold flex-1">{ selectedBank.name }</Text>
                         </View>
                         <View className="bg-white rounded-xl border border-gray-200 p-4 mb-4">
                             <Text className="text-gray-500 text-sm mb-2">Số tài khoản</Text>

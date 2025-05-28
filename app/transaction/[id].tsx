@@ -17,16 +17,17 @@ import { SafeAreaView } from "react-native-safe-area-context";
 export default function Transaction ()
 {
     const { id } = useLocalSearchParams();
+    const [ currentCard, setCurrentCard ] = useState<IBankingTransaction | null>( null );
+    const data = currentCard?.transactionHistory.find( ( item ) => item.transactionId === id );
     const currentDate = new Date();
     const [ modalVisible, setModalVisible ] = useState( false );
     const [ note, setNote ] = useState( "" );
     const [ showFullContent, setShowFullContent ] = useState( false );
     const scrollViewRef = useRef( null );
-    const [ currentCard, setCurrentCard ] = useState<IBankingTransaction | null>( null );
     const [ isLoading, setIsLoading ] = useState( true );
+
     const setTabBarVisible = useTabBarStore( state => state.setTabBarVisible );
     const setVisible = useFabStore( ( state ) => state.setVisible );
-    const data = currentCard?.transactionHistory.find( ( item ) => item.transactionId === id );
 
     useFocusEffect(
         useCallback( () =>
@@ -156,7 +157,6 @@ export default function Transaction ()
         return <Loading message="Đang tải thông tin giao dịch...." />;
     }
 
-
     if ( !data )
     {
         return (
@@ -177,7 +177,7 @@ export default function Transaction ()
 
     return (
         <>
-            <StatusBar barStyle="dark-content" backgroundColor="transparent" translucent/>
+            <StatusBar barStyle="dark-content" backgroundColor="transparent" translucent />
             <SafeAreaView className="flex-1 bg-black">
                 <Animated.View className="flex-1 " entering={ FadeIn.duration( 400 ) }>
                     <StatusBar barStyle="light-content" backgroundColor='transparent' translucent />
@@ -233,92 +233,140 @@ export default function Transaction ()
 
                     >
                         {/* Transaction ID and Date */ }
-                        <Animated.View entering={ FadeInUp.delay( 200 ).duration( 500 ) } className="bg-white rounded-2xl mt-4 p-4 shadow-md border border-gray-200">
+                        <Animated.View entering={ FadeInUp.delay( 200 ).duration( 500 ) } className="bg-white rounded-2xl mt-4 px-4 py-2 shadow-md border border-gray-200">
                             <View className="flex-row justify-between items-center py-2">
-                                <View className="flex-row items-center">
-                                    <MaterialIcons name="receipt-long" size={ 18 } color="#64748b" />
-                                    <Text className="text-slate-500 ml-2">Mã giao dịch</Text>
-                                </View>
-                                <Text className="text-slate-700 font-medium">{ data.transactionId }</Text>
+                                <Text className="text-sm text-gray-500">Mã giao dịch</Text>
+                                <Text className="text-sm text-gray-500">{ data.transactionId }</Text>
                             </View>
 
                             <View className="h-[1px] bg-slate-100 my-2" />
 
                             <View className="flex-row justify-between items-center py-2">
-                                <View className="flex-row items-center">
-                                    <MaterialIcons name="access-time" size={ 18 } color="#64748b" />
-                                    <Text className="text-slate-500 ml-2">Thời gian tạo</Text>
-                                </View>
-                                <Text className="text-slate-700 font-medium">{ formatDate( currentDate ) }</Text>
+                                <Text className="text-sm text-gray-500">Thời gian tạo</Text>
+                                <Text className="text-sm text-gray-500">{ formatDate( currentDate ) }</Text>
                             </View>
 
                             <View className="h-[1px] bg-slate-100 my-2" />
 
                             <View className="flex-row justify-between items-center py-2">
-                                <View className="flex-row items-center">
-                                    <MaterialIcons name="event" size={ 18 } color="#64748b" />
-                                    <Text className="text-slate-500 ml-2">Thời gian thanh toán</Text>
-                                </View>
-                                <Text className="text-slate-700 font-medium">{ formatDate( data.date ) }</Text>
-                            </View>
-                        </Animated.View>
-
-                        {/* Beneficiary Account */ }
-                        <Animated.View entering={ FadeInUp.delay( 300 ).duration( 500 ) } className="bg-white rounded-2xl mt-4 p-4 shadow-md border border-gray-200" >
-                            <Text className="text-base font-semibold text-slate-700 mb-3">Tài khoản thụ hưởng</Text>
-                            <View className="flex-row items-center">
-                                <Image
-                                    source={ { uri: currentCard?.logoBanking } }
-                                    className="w-10 h-10 rounded-lg bg-slate-50"
-                                    resizeMode="contain"
-                                />
-                                <View className="ml-3 flex-1">
-                                    <Text className="text-slate-700 font-semibold text-base">{ currentCard?.name?.toUpperCase() }</Text>
-                                    <View className="flex-row items-center">
-                                        <Text className="text-blue-500">{ currentCard?.STK }</Text>
-                                        <TouchableOpacity className="ml-1.5 p-0.5">
-                                            <MaterialIcons name="content-copy" size={ 14 } color="#3b82f6" />
-                                        </TouchableOpacity>
-                                    </View>
+                                <Text className="text-sm text-slate-500">Thời gian thanh toán</Text>
+                                <View className="flex-row items-center gap-1">
+                                    <Text className="text-sm text-gray-500">{ data.time }</Text>
+                                    <View className="border-l border-gray-500 h-6" />
+                                    <Text className="text-sm text-gray-500">{ formatDate( data.date ) }</Text>
                                 </View>
                             </View>
                         </Animated.View>
 
-                        {/* Source Account */ }
-                        <Animated.View entering={ FadeInUp.delay( 400 ).duration( 500 ) } className="bg-white rounded-2xl mt-4 p-4 shadow-md border border-gray-200">
-                            <Text className="text-base font-semibold text-slate-700 mb-3">Tài khoản giao dịch</Text>
-
-                            <View className="flex-row items-center">
-                                <Image source={ { uri: currentCard?.logoBanking } } className="w-10 h-10 rounded-lg bg-slate-50" resizeMode="contain" />
-                                <View className="ml-3 flex-1">
-                                    <Text className="text-slate-700 font-semibold text-base">Nguyễn Văn A</Text>
+                        { data.amount > 0 ? (
+                            <>
+                                <Animated.View entering={ FadeInUp.delay( 300 ).duration( 500 ) } className="bg-white rounded-2xl mt-4 p-4 shadow-md border border-gray-200" >
+                                    <Text className="text-base font-semibold text-slate-700 mb-3">Tài khoản thụ hưởng</Text>
                                     <View className="flex-row items-center">
-                                        <Text className="text-blue-500">123456789</Text>
-                                        <TouchableOpacity className="ml-1.5 p-0.5">
-                                            <MaterialIcons name="content-copy" size={ 14 } color="#3b82f6" />
-                                        </TouchableOpacity>
+                                        <Image source={ { uri: currentCard?.logoBanking } } className="w-10 h-10 rounded-lg bg-slate-50" resizeMode="contain" />
+                                        <Text>{ currentCard?.bankName }</Text>
                                     </View>
-                                </View>
-                            </View>
+                                    <View className="flex-row item-center justify-between">
+                                        <Text className="text-sm text-gray-500">Số tài khoản</Text>
+                                        <Text className="text-sm text-gray-500">{ currentCard?.STK }</Text>
+                                    </View>
+                                    <View className="flex-row item-center justify-between">
+                                        <Text className="text-sm text-gray-500">Tên chủ tài khoản</Text>
+                                        <Text className="text-sm text-gray-500">{ currentCard?.name }</Text>
+                                    </View>
+                                </Animated.View>
 
-                            <View className="h-[1px] bg-slate-100 my-3" />
+                                <Animated.View entering={ FadeInUp.delay( 400 ).duration( 500 ) } className="bg-white rounded-2xl mt-4 p-4 shadow-md border border-gray-200">
+                                    <Text className="text-base font-semibold text-slate-700 mb-3">Tài khoản giao dịch</Text>
+                                    <View className="flex-row items-center">
+                                        <Image source={ { uri: data.senderBankLogo } } className="w-10 h-10 rounded-lg bg-slate-50" resizeMode="contain" />
+                                        <Text>{ data.senderBankName }</Text>
+                                    </View>
+                                    <View className="flex-row item-center justify-between">
+                                        <Text className="text-sm text-gray-500">Số tài khoản</Text>
+                                        <Text className="text-sm text-gray-500">{ data.senderSTK }</Text>
+                                    </View>
+                                    <View className="flex-row item-center justify-between">
+                                        <Text className="text-sm text-gray-500">Tên chủ tài khoản</Text>
+                                        <Text className="text-sm text-gray-500">{ data.senderName }</Text>
+                                    </View>
 
-                            <View className="mt-1">
-                                <Text className="text-slate-500 text-sm mb-2">Nội dung chuyển khoản</Text>
-                                <View className="bg-slate-50 rounded-lg p-3">
-                                    <Text className="text-slate-700 leading-5" numberOfLines={ showFullContent ? undefined : 2 }>
-                                        { data.description }
-                                    </Text>
-                                    { data.description && data.description.length > 80 && (
-                                        <TouchableOpacity className="mt-2" onPress={ () => setShowFullContent( !showFullContent ) }>
-                                            <Text className="text-blue-500 text-sm">
-                                                { showFullContent ? "Thu gọn" : "Xem thêm" }
+                                    <View className="h-[1px] bg-slate-100 my-3" />
+
+                                    <View className="mt-1">
+                                        <Text className="text-slate-500 text-sm mb-2">Nội dung chuyển khoản</Text>
+                                        <View className="bg-slate-50 rounded-lg p-3">
+                                            <Text className="text-slate-700 leading-5" numberOfLines={ showFullContent ? undefined : 2 }>
+                                                { data.description }
                                             </Text>
-                                        </TouchableOpacity>
-                                    ) }
-                                </View>
-                            </View>
-                        </Animated.View>
+                                            { data.description && data.description.length > 80 && (
+                                                <TouchableOpacity className="mt-2" onPress={ () => setShowFullContent( !showFullContent ) }>
+                                                    <Text className="text-blue-500 text-sm">
+                                                        { showFullContent ? "Thu gọn" : "Xem thêm" }
+                                                    </Text>
+                                                </TouchableOpacity>
+                                            ) }
+                                        </View>
+                                    </View>
+                                </Animated.View>
+                            </>
+
+                        ) : (
+                            <>
+                                <Animated.View entering={ FadeInUp.delay( 400 ).duration( 500 ) } className="bg-white rounded-2xl mt-4 p-4 shadow-md border border-gray-200">
+                                    <Text className="text-base font-semibold text-slate-700 mb-3">Tài khoản giao dịch</Text>
+
+                                    <View className="flex-row items-center">
+                                        <Image source={ { uri: currentCard?.logoBanking } } className="w-10 h-10 rounded-lg bg-slate-50" resizeMode="contain" />
+                                        <Text>{ currentCard?.bankName }</Text>
+                                    </View>
+                                    <View className="flex-row item-center justify-between">
+                                        <Text className="text-sm text-gray-500">Số tài khoản</Text>
+                                        <Text className="text-sm text-gray-500">{ currentCard?.STK }</Text>
+                                    </View>
+                                    <View className="flex-row item-center justify-between">
+                                        <Text className="text-sm text-gray-500">Tên chủ tài khoản</Text>
+                                        <Text className="text-sm text-gray-500">{ currentCard?.name }</Text>
+                                    </View>
+                                </Animated.View>
+
+                                <Animated.View entering={ FadeInUp.delay( 300 ).duration( 500 ) } className="bg-white rounded-2xl mt-4 p-4 shadow-md border border-gray-200" >
+                                    <Text className="text-base font-semibold text-slate-700 mb-3">Tài khoản thụ hưởng</Text>
+                                    <View className="flex-row items-center">
+                                        <Image source={ { uri: data.receiverBankLogo } } className="w-10 h-10 rounded-lg bg-slate-50" resizeMode="contain" />
+                                        <Text>{ data.receiverBankName }</Text>
+                                    </View>
+                                    <View className="flex-row item-center justify-between">
+                                        <Text className="text-sm text-gray-500">Số tài khoản</Text>
+                                        <Text className="text-sm text-gray-500">{ data.receiverSTK }</Text>
+                                    </View>
+                                    <View className="flex-row item-center justify-between">
+                                        <Text className="text-sm text-gray-500">Tên chủ tài khoản</Text>
+                                        <Text className="text-sm text-gray-500">{ data.receiverName }</Text>
+                                    </View>
+
+                                    <View className="h-[1px] bg-slate-100 my-3" />
+
+                                    <View className="mt-1">
+                                        <Text className="text-slate-500 text-sm mb-2">Nội dung chuyển khoản</Text>
+                                        <View className="bg-slate-50 rounded-lg p-3">
+                                            <Text className="text-slate-700 leading-5" numberOfLines={ showFullContent ? undefined : 2 }>
+                                                { data.description }
+                                            </Text>
+                                            { data.description && data.description.length > 80 && (
+                                                <TouchableOpacity className="mt-2" onPress={ () => setShowFullContent( !showFullContent ) }>
+                                                    <Text className="text-blue-500 text-sm">
+                                                        { showFullContent ? "Thu gọn" : "Xem thêm" }
+                                                    </Text>
+                                                </TouchableOpacity>
+                                            ) }
+                                        </View>
+                                    </View>
+                                </Animated.View>
+                            </>
+                        ) }
+                        {/* Beneficiary Account */ }
+
 
                         {/* Transaction Details */ }
                         <Animated.View entering={ FadeInUp.delay( 500 ).duration( 500 ) } className="bg-white rounded-2xl mt-4 p-4 shadow-md border border-gray-200" >
@@ -328,7 +376,7 @@ export default function Transaction ()
                                 <View className="w-1/2 mb-4">
                                     <Text className="text-slate-500 text-sm mb-1">Loại giao dịch</Text>
                                     <Text className="text-slate-700 font-medium">
-                                        { data.amount < 0 ? 'Chuyển tiền' : 'Nhận tiền' }
+                                        { data.type }
                                     </Text>
                                 </View>
 
