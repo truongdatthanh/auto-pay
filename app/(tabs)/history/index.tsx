@@ -1,7 +1,6 @@
 import { View, Text, TouchableOpacity, SectionList, Alert, StatusBar, Modal, Image } from 'react-native';
 import { useCallback, useState, useEffect } from 'react';
 import DateTimePicker from '@react-native-community/datetimepicker';
-
 import { Feather, Ionicons, MaterialIcons } from '@expo/vector-icons';
 import CardInfo from '@/components/card/CardInfo';
 import NotFound from '@/app/error/404';

@@ -1,171 +1,355 @@
+// import { BarChart } from 'react-native-gifted-charts';
+// import { View, Text, TouchableOpacity } from 'react-native';
+// import { useState, useMemo } from 'react';
+// import dataBankingCard from '@/assets/banking-card.json';
+// import { AntDesign, Ionicons } from '@expo/vector-icons';
+// import { formatDate, formatDayMonth } from '@/utils/format';
+
+// const COLORS = {
+//     income: '#2ecc71',
+//     expense: '#e74c3c',
+// };
+
+
+// export default function BarCharts ( { id }: { id: string } )
+// {
+//     const [ weekOffset, setWeekOffset ] = useState( 0 );
+//     const indexData = dataBankingCard.find( ( item ) => item.id === id );
+
+//     // Tính ngày bắt đầu tuần (Thứ 2)
+//     const currentDate = new Date();
+//     currentDate.setHours( 0, 0, 0, 0 );
+//     const currentDay = ( currentDate.getDay() + 6 ) % 7;
+//     const startOfWeek = new Date( currentDate );
+//     startOfWeek.setDate( currentDate.getDate() - currentDay + weekOffset * 7 );
+
+//     const endOfWeek = new Date( startOfWeek );
+//     endOfWeek.setDate( startOfWeek.getDate() + 6 );
+//     endOfWeek.setHours( 23, 59, 59, 999 );
+
+//     const daysLabels = useMemo( () =>
+//     {
+//         const labels: string[] = [];
+//         const date = new Date( startOfWeek );
+//         for ( let i = 0; i < 7; i++ )
+//         {
+//             labels.push( formatDayMonth( date ) );
+//             date.setDate( date.getDate() + 1 );
+//         }
+//         return labels;
+//     }, [ startOfWeek ] );
+
+//     const chartData = useMemo( () =>
+//     {
+//         const incomeByDay = Array( 7 ).fill( 0 );
+//         const expenseByDay = Array( 7 ).fill( 0 );
+
+//         if ( !indexData?.transactionHistory ) return [];
+
+//         const start = new Date( startOfWeek );
+//         const end = new Date( endOfWeek );
+//         end.setHours( 23, 59, 59, 999 );
+
+//         indexData.transactionHistory.forEach( ( item ) =>
+//         {
+//             const date = new Date( item.date );
+//             if ( date >= start && date <= end )
+//             {
+//                 const day = ( date.getDay() + 6 ) % 7;
+//                 const amount = Math.abs( item.amount );
+//                 if ( item.amount > 0 ) incomeByDay[ day ] += amount;
+//                 else expenseByDay[ day ] += amount;
+//             }
+//         } );
+
+//         const data: any[] = [];
+
+//         for ( let i = 0; i < 7; i++ )
+//         {
+//             const income = +( incomeByDay[ i ] / 1_000_000 ).toFixed( 1 );
+//             const expense = +( expenseByDay[ i ] / 1_000_000 ).toFixed( 1 );
+
+//             data.push( {
+//                 value: income,
+//                 label: daysLabels[ i ],
+//                 frontColor: COLORS.income,
+//                 spacing: 2,
+//             } );
+//             data.push( {
+//                 value: expense,
+//                 frontColor: COLORS.expense,
+//             } );
+//         }
+
+//         return data;
+//     }, [ indexData, startOfWeek, endOfWeek, id, daysLabels ] );
+
+//     return (
+//         <View className="p-4 bg-blue-50">
+//             {/* filter */}
+//             <View className='flex-row justify-end items-center'>
+//                 <Text>Tuần</Text>
+//                 <AntDesign name="down" size={ 16 } color="black" />
+//             </View>
+//             {/* Chọn tuần */ }
+//             <View className="flex-row justify-between items-center mb-3">
+//                 <TouchableOpacity onPress={ () => setWeekOffset( ( prev ) => prev - 1 ) }>
+//                     <Ionicons name="chevron-back" size={ 20 } color="#666" />
+//                 </TouchableOpacity>
+//                 <Text className="text-sm text-gray-600">
+//                     { formatDate( startOfWeek ) } - { formatDate( endOfWeek ) }
+//                 </Text>
+//                 <TouchableOpacity
+//                     onPress={ () => setWeekOffset( ( prev ) => prev + 1 ) }
+//                     disabled={ weekOffset >= 0 }
+//                 >
+//                     <Ionicons
+//                         name="chevron-forward"
+//                         size={ 20 }
+//                         color={ weekOffset >= 0 ? '#ccc' : '#666' }
+//                     />
+//                 </TouchableOpacity>
+//             </View>
+
+//             {/* Chú thích */ }
+//             <View className="justify-center items-center mb-2 gap-1">
+//                 <View className='flex-row justify-center gap-6'>
+//                     <View className="flex-row items-center gap-1">
+//                         <View className='w-3 h-3 bg-[#2ecc71] rounded-full' />
+//                         <Text className="text-xs text-gray-600">Nhận tiền</Text>
+//                     </View>
+//                     <View className="flex-row items-center gap-1">
+//                         <View className='w-3 h-3 bg-[#e74c3c] rounded-full' />
+//                         <Text className="text-xs text-gray-600">Chuyển tiền</Text>
+//                     </View>
+//                 </View>
+//                 <Text className='text-xs text-gray-600'>Đơn vị (Triệu VNĐ)</Text>
+//             </View>
+
+//             {/* Biểu đồ cột */ }
+//             <BarChart
+//                 data={ chartData }
+//                 height={ 250 }
+//                 barWidth={ 20 }
+//                 spacing={ 16 }
+//                 barBorderTopLeftRadius={ 4 }
+//                 barBorderTopRightRadius={ 4 }
+//                 noOfSections={ 10 }
+//                 maxValue={ Math.ceil( Math.max( ...chartData.map( ( d ) => d.value ) ) + 5 ) }
+//                 isAnimated
+//                 xAxisLabelTextStyle={ {
+//                     color: '#000',
+//                     marginLeft: 4,
+//                     width: 30,
+//                     textAlign: 'center',
+//                     fontSize: 10,
+//                     fontWeight: "bold"
+//                 } }
+//                 width={ 330 }
+//                 showValuesAsTopLabel
+//                 topLabelTextStyle={ { fontSize: 9, fontWeight: 'bold' } }
+//             />
+//         </View>
+//     );
+// }
+
 import { BarChart } from 'react-native-gifted-charts';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { useState, useMemo } from 'react';
-import dataBankingCard from "@/assets/banking-card.json"
-import { router } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons';
-import { formatCurrencyVND, formatDate } from '@/utils/format';
+import dataBankingCard from '@/assets/banking-card.json';
+import { AntDesign, Ionicons } from '@expo/vector-icons';
+import { formatDate, formatDayMonth } from '@/utils/format';
 
-export default function BarCharts ( { id }: { id: String } )
+const COLORS = {
+    income: '#2ecc71',
+    expense: '#e74c3c',
+};
+
+const FILTERS = [ 'week', 'month', 'quarter' ] as const;
+
+export default function BarCharts ( { id }: { id: string } )
 {
-    const data = dataBankingCard;
-    const [ currentDate, setCurrentDate ] = useState( new Date() );
+    const [ timeFilter, setTimeFilter ] = useState<'week' | 'month' | 'quarter'>( 'week' );
+    const [ offset, setOffset ] = useState( 0 );
+    
+    const indexData = dataBankingCard.find( item => item.id === id );
 
-    const indexData = data.find( ( item ) => item.id === id );
+    const currentDate = new Date();
+    currentDate.setHours( 0, 0, 0, 0 );
 
-    const todayTransactions = indexData?.transactionHistory.filter( ( item ) =>
+    const { startDate, endDate, labels, groupByDay } = useMemo( () =>
     {
-        return new Date( item.date ).setHours( 0, 0, 0, 0 ) === currentDate.setHours( 0, 0, 0, 0 );
-    } ) || [];
+        let start = new Date( currentDate );
+        let end = new Date( currentDate );
+        const labels: string[] = [];
 
-    const { totalIncome, totalExpense, barData, maxValue } = useMemo( () =>
-    {
-        let income = 0;
-        let expense = 0;
-
-        if ( todayTransactions.length === 0 )
+        if ( timeFilter === 'week' )
         {
-            return {
-                totalIncome: 0,
-                totalExpense: 0,
-                barData: [],
-                maxValue: 0,
-            };
+            const currentDay = ( currentDate.getDay() + 6 ) % 7;
+            start.setDate( currentDate.getDate() - currentDay + offset * 7 );
+            end = new Date( start );
+            end.setDate( start.getDate() + 6 );
+            for ( let i = 0; i < 7; i++ )
+            {
+                const date = new Date( start );
+                date.setDate( start.getDate() + i );
+                labels.push( formatDayMonth( date ) );
+            }
+        } else if ( timeFilter === 'month' )
+        {
+            const month = currentDate.getMonth() + offset;
+            const year = currentDate.getFullYear();
+            start = new Date( year, month, 1 );
+            end = new Date( year, month + 1, 0 );
+            const daysInMonth = end.getDate();
+            for ( let i = 1; i <= daysInMonth; i++ )
+            {
+                labels.push( i.toString() );
+            }
+        } else if ( timeFilter === 'quarter' )
+        {
+            const currentMonth = currentDate.getMonth() + offset * 3;
+            const quarterStartMonth = Math.floor( currentMonth / 3 ) * 3;
+            const year = currentDate.getFullYear();
+            start = new Date( year, quarterStartMonth, 1 );
+            end = new Date( year, quarterStartMonth + 3, 0 );
+            const monthLabels = [ 'Th1', 'Th2', 'Th3', 'Th4', 'Th5', 'Th6', 'Th7', 'Th8', 'Th9', 'Th10', 'Th11', 'Th12' ];
+            for ( let i = 0; i < 3; i++ )
+            {
+                labels.push( monthLabels[ quarterStartMonth + i ] );
+            }
         }
 
-        todayTransactions.forEach( item =>
+        end.setHours( 23, 59, 59, 999 );
+        return { startDate: start, endDate: end, labels, groupByDay: timeFilter === 'week' };
+    }, [ timeFilter, offset ] );
+
+    const chartData = useMemo( () =>
+    {
+        if ( !indexData?.transactionHistory ) return [];
+
+        const incomeValues = Array( labels.length ).fill( 0 );
+        const expenseValues = Array( labels.length ).fill( 0 );
+
+        indexData.transactionHistory.forEach( item =>
         {
-            if ( item.amount > 0 )
+            const date = new Date( item.date );
+            if ( date >= startDate && date <= endDate )
             {
-                income += item.amount;
-            } else
-            {
-                expense += item.amount;
+                let index = 0;
+                if ( timeFilter === 'week' )
+                {
+                    index = ( date.getDay() + 6 ) % 7;
+                } else if ( timeFilter === 'month' )
+                {
+                    index = date.getDate() - 1;
+                } else if ( timeFilter === 'quarter' )
+                {
+                    index = date.getMonth() - startDate.getMonth();
+                }
+
+                const amount = Math.abs( item.amount );
+                if ( item.amount > 0 ) incomeValues[ index ] += amount;
+                else expenseValues[ index ] += amount;
             }
         } );
 
-        const incomeInMillions = income / 1_000_000;
-        const expenseInMillions = -expense / 1_000_000;
-
-        const maxVal = Math.ceil( Math.max( incomeInMillions, expenseInMillions ) );
-
-        return {
-            totalIncome: incomeInMillions,
-            totalExpense: expenseInMillions,
-            maxValue: maxVal,
-            barData: [
-                { value: expenseInMillions, label: 'Chi', frontColor: '#e74c3c' },
-                { value: incomeInMillions, label: 'Thu', frontColor: '#2ecc71' },
-            ],
-        };
-    }, [ todayTransactions ] );
-
-    const goToPreviousDay = () =>
-    {
-        const prevDay = new Date( currentDate );
-        prevDay.setDate( prevDay.getDate() - 1 );
-        setCurrentDate( prevDay );
-    };
-
-    const goToNextDay = () =>
-    {
-        const nextDay = new Date( currentDate );
-        nextDay.setDate( nextDay.getDate() + 1 );
-        if ( nextDay <= new Date() )
+        const data: any[] = [];
+        for ( let i = 0; i < labels.length; i++ )
         {
-            setCurrentDate( nextDay );
-        }
-    };
+            const income = +( incomeValues[ i ] / 1_000_000 ).toFixed( 1 );
+            const expense = +( expenseValues[ i ] / 1_000_000 ).toFixed( 1 );
 
-    const isToday = ( date: Date ) =>
-    {
-        const today = new Date();
-        return date.getDate() === today.getDate() &&
-            date.getMonth() === today.getMonth() &&
-            date.getFullYear() === today.getFullYear();
-    };
+            data.push( {
+                value: income,
+                label: labels[ i ],
+                frontColor: COLORS.income,
+                spacing: 2,
+            } );
+            data.push( {
+                value: expense,
+                frontColor: COLORS.expense,
+            } );
+        }
+
+        return data;
+    }, [ indexData, startDate, endDate, timeFilter, labels ] );
 
     return (
-        <View className='p-4'>
-            <View className='flex-row justify-between mb-2'>
-                <View className="flex-row items-center">
-                    <TouchableOpacity
-                        onPress={ goToPreviousDay }
-                        className="p-2 rounded-md bg-gray-100"
-                    >
-                        <Ionicons name="chevron-back" size={ 20 } color="#666" />
-                    </TouchableOpacity>
-                    <View className="flex-row items-center mx-2">
-                        <Text className="text-sm font-semibold text-neutral-800">
-                            { formatDate( currentDate ) }
+        <View className="p-4 bg-blue-50">
+            {/* Bộ lọc thời gian */ }
+            <View className='flex-row justify-center gap-4 mb-3'>
+                { FILTERS.map( ( type ) => (
+                    <TouchableOpacity key={ type } onPress={ () =>
+                    {
+                        setTimeFilter( type );
+                        setOffset( 0 ); // reset offset
+                    } }>
+                        <Text className={ `text-sm font-bold ${ timeFilter === type ? 'text-blue-600' : 'text-gray-500' }` }>
+                            { type === 'week' ? 'Tuần' : type === 'month' ? 'Tháng' : 'Quý' }
                         </Text>
-                    </View>
-                    <TouchableOpacity
-                        onPress={ goToNextDay }
-                        className="p-2 rounded-md bg-gray-100"
-                        disabled={ isToday( currentDate ) }
-                    >
-                        <Ionicons
-                            name="chevron-forward"
-                            size={ 20 }
-                            color={ isToday( currentDate ) ? "#ccc" : "#666" }
-                        />
                     </TouchableOpacity>
-                </View>
-                <TouchableOpacity onPress={ () => router.replace( "/statistics" ) }>
-                    <Text className='text-sm font-bold text-blue-500'>Xem chi tiết</Text>
+                ) ) }
+            </View>
+
+            {/* Tuần/Tháng/Quý trước/sau */ }
+            <View className="flex-row justify-between items-center mb-3">
+                <TouchableOpacity onPress={ () => setOffset( prev => prev - 1 ) }>
+                    <Ionicons name="chevron-back" size={ 20 } color="#666" />
+                </TouchableOpacity>
+                <Text className="text-sm text-gray-600">
+                    { formatDate( startDate ) } - { formatDate( endDate ) }
+                </Text>
+                <TouchableOpacity
+                    onPress={ () => setOffset( prev => prev + 1 ) }
+                    disabled={ offset >= 0 }
+                >
+                    <Ionicons
+                        name="chevron-forward"
+                        size={ 20 }
+                        color={ offset >= 0 ? '#ccc' : '#666' }
+                    />
                 </TouchableOpacity>
             </View>
 
-
-            <View style={ { height: 200 } } className="justify-center items-center">
-                { todayTransactions.length === 0 ? (
-                    <Text className='text-gray-500'>
-                        Không có giao dịch nào cho ngày { formatDate( currentDate ) }
-                    </Text>
-                ) : (
-                    <View className='flex-row'>
-                        {/* BarChart */ }
-                        <View className='items-start'>
-                            <BarChart
-                                dashGap={ 0 }
-                                data={ barData }
-                                barWidth={ 90 }
-                                barBorderRadius={ 4 }
-                                yAxisThickness={ 0 }
-                                xAxisThickness={ 0 }
-                                xAxisColor="#ccc"
-                                yAxisTextStyle={ { color: 'transparent', width: 0 } }
-                                yAxisLabelWidth={ 0 }
-                                noOfSections={ 5 }
-                                spacing={ 10 }
-                                maxValue={ maxValue }
-                                stepHeight={ 30 }
-                                isAnimated={ false }
-                                animationDuration={ 800 }
-                                hideRules={ true }
-                                hideAxesAndRules={ true }
-                            />
-                        </View>
-
-                        {/* Tổng kết thu/chi */ }
-                        <View className='justify-end mb-2'>
-                            <View className='mb-2'>
-                                <Text className='text-[#2ecc71] font-bold'>
-                                    { formatCurrencyVND( totalIncome * 1_000_000 ) }
-                                </Text>
-                                <Text>{ todayTransactions.filter( t => t.amount > 0 ).length } Giao dịch đến</Text>
-                            </View>
-                            <View>
-                                <Text className='text-[#e74c3c] font-bold'>
-                                    { formatCurrencyVND( totalExpense * 1_000_000 ) }
-                                </Text>
-                                <Text>{ todayTransactions.filter( t => t.amount < 0 ).length } Giao dịch đi</Text>
-                            </View>
-                        </View>
+            {/* Chú thích */ }
+            <View className="justify-center items-center mb-2 gap-1">
+                <View className='flex-row justify-center gap-6'>
+                    <View className="flex-row items-center gap-1">
+                        <View className='w-3 h-3 bg-[#2ecc71] rounded-full' />
+                        <Text className="text-xs text-gray-600">Nhận tiền</Text>
                     </View>
-                ) }
+                    <View className="flex-row items-center gap-1">
+                        <View className='w-3 h-3 bg-[#e74c3c] rounded-full' />
+                        <Text className="text-xs text-gray-600">Chuyển tiền</Text>
+                    </View>
+                </View>
+                <Text className='text-xs text-gray-600'>Đơn vị (Triệu VNĐ)</Text>
             </View>
+
+            {/* Biểu đồ cột */ }
+            <BarChart
+                data={ chartData }
+                height={ 250 }
+                barWidth={ 20 }
+                spacing={ 16 }
+                barBorderTopLeftRadius={ 4 }
+                barBorderTopRightRadius={ 4 }
+                noOfSections={ 10 }
+                maxValue={ Math.ceil( Math.max( ...chartData.map( d => d.value ) ) + 5 ) }
+                isAnimated
+                xAxisLabelTextStyle={ {
+                    color: '#000',
+                    marginLeft: 4,
+                    width: 30,
+                    textAlign: 'center',
+                    fontSize: 10,
+                    fontWeight: "bold"
+                } }
+                width={ 330 }
+                showValuesAsTopLabel
+                topLabelTextStyle={ { fontSize: 9, fontWeight: 'bold' } }
+            />
         </View>
     );
 }

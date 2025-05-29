@@ -4,6 +4,7 @@ import MyCard from '@/components/card/MyCard';
 import { AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
+import GroupedBars from '@/app/test/groupbar';
 
 
 export default function Home ()
@@ -56,6 +57,7 @@ export default function Home ()
           {/* -----------------------------------------End----------------------------------------- */ }
 
           {/* <MyLineChart /> */ }
+          <GroupedBars />
 
           {/* Action */ }
           {/* <View className='m-4 bg-white rounded-xl shadow-md border border-gray-200'>

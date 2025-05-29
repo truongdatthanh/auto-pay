@@ -8,7 +8,7 @@ import AppHeaderInfo from '@/components/header/App.headerInfo';
 import { router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { formatCurrencyVND } from '@/utils/format';
-import LineCharts from '@/components/chart/LineChart';
+import BarCharts from '@/components/chart/BarChart';
 
 export default function BankAccountStatistics ()
 {
@@ -109,7 +109,7 @@ export default function BankAccountStatistics ()
 
                     {/* LineChart */ }
                     <Animated.View entering={ FadeIn.duration( 500 ).delay( 300 ) }>
-                        <LineCharts id={ bankCard[ currentCardIndex ].id } />
+                        <BarCharts id={ bankCard[ currentCardIndex ].id } />
                     </Animated.View>
                     {/* -----------------------------------------End----------------------------------------- */ }
 

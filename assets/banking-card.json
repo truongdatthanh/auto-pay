@@ -12,54 +12,31 @@
       {
         "transactionId": "tx001",
         "date": "2025-05-26",
-        "type": "Nhận tiền",
+        "amount": 10500000,
         "time": "09:53:01",
-        "amount": -10000000,
-        "description": "NGUYEN VAN A CHUYEN KHOAN",
-        "senderSTK": "123456789",
-        "senderName": "Nguyễn Văn A",
-        "senderBankName": "Ngân hàng TMCP Á Châu",
-        "senderBankLogo": "https://api.vietqr.io/img/ACB.png"
+        "type": "Nhận tiền",
+        "description": "NGUYEN VAN D CHUYEN TIEN",
+        "senderName": "NGUYEN VAN D",
+        "senderSTK": "453453453378",
+        "senderBankName": "Ngân hàng TMCP Quân đội",
+        "senderBankLogo": "https://api.vietqr.io/img/MB.png"
       },
       {
         "transactionId": "tx002",
+        "date": "2025-05-26",
+        "amount": -15000000,
+        "time": "09:53:01",
+        "type": "Giao dịch khác",
+        "description": "TRUONG THANH DAT CHUYEN TIEN",
+        "receiverName": "Truong Thanh Dat (BIDV)",
+        "receiverSTK": "4531234534345",
+        "receiverBankName": "Ngân hàng TMCP Đầu tư và Phát triển Việt Nam",
+        "receiverBankLogo": "https://thietkelogomondial1fc36.zapwp.com/q:i/r:0/wp:1/w:480/u:https://thietkelogo.mondial.vn/wp-content/uploads/2024/02/bidv-logo-brandlogos.net_.png"
+      },
+
+      {
+        "transactionId": "1231231",
         "date": "2025-05-27",
-        "amount": -7000000,
-        "time": "09:53:01",
-        "type": "Nhận tiền",
-        "description": "NGUYEN VAN B CHUYEN KHOAN",
-        "senderSTK": "1111111111",
-        "senderName": "Nguyễn Văn B",
-        "senderBankName": "Ngân hàng TMCP Đầu tư và Phát triển Việt Nam",
-        "senderBankLogo": "https://thietkelogomondial1fc36.zapwp.com/q:i/r:0/wp:1/w:480/u:https://thietkelogo.mondial.vn/wp-content/uploads/2024/02/bidv-logo-brandlogos.net_.png"
-      },
-      {
-        "transactionId": "tx003",
-        "date": "2025-05-28",
-        "type": "Nhận tiền",
-        "amount": 6000000,
-        "time": "09:53:01",
-        "description": "NGUYEN VAN C CHUYEN KHOAN",
-        "senderSTK": "222222222222",
-        "senderName": "Nguyễn Văn C",
-        "senderBankName": "Ngân hàng TMCP Á Châu",
-        "senderBankLogo": "https://api.vietqr.io/img/ACB.png"
-      },
-      {
-        "transactionId": "tx004",
-        "date": "2025-05-29",
-        "amount": 100000,
-        "time": "09:53:01",
-        "type": "Nhận tiền",
-        "description": "NGUYEN VAN A CHUYEN KHOAN",
-        "senderSTK": "123456789",
-        "senderName": "Nguyễn Văn A",
-        "senderBankName": "Ngân hàng TMCP Á Châu",
-        "senderBankLogo": "https://api.vietqr.io/img/ACB.png"
-      },
-      {
-        "transactionId": "tx005",
-        "date": "2025-05-30",
         "amount": 20500000,
         "time": "09:53:01",
         "type": "Nhận tiền",
@@ -70,8 +47,8 @@
         "senderBankLogo": "https://api.vietqr.io/img/MB.png"
       },
       {
-        "transactionId": "tx006",
-        "date": "2025-05-31",
+        "transactionId": "tx41234006",
+        "date": "2025-05-27",
         "amount": -15000000,
         "time": "09:53:01",
         "type": "Giao dịch khác",
@@ -81,65 +58,130 @@
         "receiverBankName": "Ngân hàng TMCP Đầu tư và Phát triển Việt Nam",
         "receiverBankLogo": "https://thietkelogomondial1fc36.zapwp.com/q:i/r:0/wp:1/w:480/u:https://thietkelogo.mondial.vn/wp-content/uploads/2024/02/bidv-logo-brandlogos.net_.png"
       },
+
       {
-        "transactionId": "tx007",
-        "date": "2025-05-31",
-        "amount": -15000000,
+        "transactionId": "56765634",
+        "date": "2025-05-28",
+        "amount": 54000000,
         "time": "09:53:01",
-        "type": "Giao dịch khác",
-        "description": "TRUONG THANH DAT CHUYEN TIEN",
-        "receiverName": "Truong Thanh Dat (BIDV)",
-        "receiverSTK": "4531234534345",
-        "receiverBankName": "Ngân hàng TMCP Đầu tư và Phát triển Việt Nam",
-        "receiverBankLogo": "https://thietkelogomondial1fc36.zapwp.com/q:i/r:0/wp:1/w:480/u:https://thietkelogo.mondial.vn/wp-content/uploads/2024/02/bidv-logo-brandlogos.net_.png"
+        "type": "Nhận tiền",
+        "description": "NGUYEN VAN D CHUYEN TIEN",
+        "senderName": "NGUYEN VAN D",
+        "senderSTK": "453453453378",
+        "senderBankName": "Ngân hàng TMCP Quân đội",
+        "senderBankLogo": "https://api.vietqr.io/img/MB.png"
       },
       {
-        "transactionId": "tx008",
-        "date": "2025-05-31",
-        "amount": -15000000,
-        "time": "09:53:01",
-        "type": "Giao dịch khác",
-        "description": "TRUONG THANH DAT CHUYEN TIEN",
-        "receiverName": "Truong Thanh Dat (TCB)",
-        "receiverSTK": "99999999999",
-        "receiverBankName": "Ngân hàng TMCP Kỹ thương Việt Nam",
-        "receiverBankLogo": "https://api.vietqr.io/img/TCB.png"
-      },
-      {
-        "transactionId": "tx009",
-        "date": "2025-05-31",
+        "transactionId": "2342346",
+        "date": "2025-05-28",
         "amount": -30000000,
         "time": "09:53:01",
         "type": "Giao dịch khác",
         "description": "TRUONG THANH DAT CHUYEN TIEN",
-        "receiverName": "Truong Thanh Dat (TCB)",
-        "receiverSTK": "99999999999",
-        "receiverBankName": "Ngân hàng TMCP Kỹ thương Việt Nam",
-        "receiverBankLogo": "https://api.vietqr.io/img/TCB.png"
+        "receiverName": "Truong Thanh Dat (BIDV)",
+        "receiverSTK": "4531234534345",
+        "receiverBankName": "Ngân hàng TMCP Đầu tư và Phát triển Việt Nam",
+        "receiverBankLogo": "https://thietkelogomondial1fc36.zapwp.com/q:i/r:0/wp:1/w:480/u:https://thietkelogo.mondial.vn/wp-content/uploads/2024/02/bidv-logo-brandlogos.net_.png"
+      },
+
+      {
+        "transactionId": "68243dsf",
+        "date": "2025-05-29",
+        "amount": 20500000,
+        "time": "09:53:01",
+        "type": "Nhận tiền",
+        "description": "NGUYEN VAN D CHUYEN TIEN",
+        "senderName": "NGUYEN VAN D",
+        "senderSTK": "453453453378",
+        "senderBankName": "Ngân hàng TMCP Quân đội",
+        "senderBankLogo": "https://api.vietqr.io/img/MB.png"
       },
       {
-        "transactionId": "tx010",
+        "transactionId": "sdf5234",
+        "date": "2025-05-29",
+        "amount": -15000000,
+        "time": "09:53:01",
+        "type": "Giao dịch khác",
+        "description": "TRUONG THANH DAT CHUYEN TIEN",
+        "receiverName": "Truong Thanh Dat (BIDV)",
+        "receiverSTK": "4531234534345",
+        "receiverBankName": "Ngân hàng TMCP Đầu tư và Phát triển Việt Nam",
+        "receiverBankLogo": "https://thietkelogomondial1fc36.zapwp.com/q:i/r:0/wp:1/w:480/u:https://thietkelogo.mondial.vn/wp-content/uploads/2024/02/bidv-logo-brandlogos.net_.png"
+      },
+
+      {
+        "transactionId": "dsf233242",
+        "date": "2025-05-30",
+        "amount": 10500000,
+        "time": "09:53:01",
+        "type": "Nhận tiền",
+        "description": "NGUYEN VAN D CHUYEN TIEN",
+        "senderName": "NGUYEN VAN D",
+        "senderSTK": "453453453378",
+        "senderBankName": "Ngân hàng TMCP Quân đội",
+        "senderBankLogo": "https://api.vietqr.io/img/MB.png"
+      },
+      {
+        "transactionId": "645724rfs",
+        "date": "2025-05-30",
+        "amount": -65000000,
+        "time": "09:53:01",
+        "type": "Giao dịch khác",
+        "description": "TRUONG THANH DAT CHUYEN TIEN",
+        "receiverName": "Truong Thanh Dat (BIDV)",
+        "receiverSTK": "4531234534345",
+        "receiverBankName": "Ngân hàng TMCP Đầu tư và Phát triển Việt Nam",
+        "receiverBankLogo": "https://thietkelogomondial1fc36.zapwp.com/q:i/r:0/wp:1/w:480/u:https://thietkelogo.mondial.vn/wp-content/uploads/2024/02/bidv-logo-brandlogos.net_.png"
+      },
+
+      {
+        "transactionId": "124325sfd234",
+        "date": "2025-05-31",
+        "amount": 20500000,
+        "time": "09:53:01",
+        "type": "Nhận tiền",
+        "description": "NGUYEN VAN D CHUYEN TIEN",
+        "senderName": "NGUYEN VAN D",
+        "senderSTK": "453453453378",
+        "senderBankName": "Ngân hàng TMCP Quân đội",
+        "senderBankLogo": "https://api.vietqr.io/img/MB.png"
+      },
+      {
+        "transactionId": "df123124",
         "date": "2025-05-31",
         "amount": -15000000,
         "time": "09:53:01",
         "type": "Giao dịch khác",
         "description": "TRUONG THANH DAT CHUYEN TIEN",
-        "receiverName": "Truong Thanh Dat (TCB)",
-        "receiverSTK": "99999999999",
-        "receiverBankName": "Ngân hàng TMCP Kỹ thương Việt Nam",
-        "receiverBankLogo": "https://api.vietqr.io/img/TCB.png"
+        "receiverName": "Truong Thanh Dat (BIDV)",
+        "receiverSTK": "4531234534345",
+        "receiverBankName": "Ngân hàng TMCP Đầu tư và Phát triển Việt Nam",
+        "receiverBankLogo": "https://thietkelogomondial1fc36.zapwp.com/q:i/r:0/wp:1/w:480/u:https://thietkelogo.mondial.vn/wp-content/uploads/2024/02/bidv-logo-brandlogos.net_.png"
+      },
+
+      {
+        "transactionId": "6756hgeqrw3",
+        "date": "2025-06-01",
+        "amount": 30550000,
+        "time": "09:53:01",
+        "type": "Nhận tiền",
+        "description": "NGUYEN VAN D CHUYEN TIEN",
+        "senderName": "NGUYEN VAN D",
+        "senderSTK": "453453453378",
+        "senderBankName": "Ngân hàng TMCP Quân đội",
+        "senderBankLogo": "https://api.vietqr.io/img/MB.png"
       },
       {
-        "transactionId": "tx011",
-        "date": "2025-05-31",
-        "amount": -20000000,
+        "transactionId": "6745tf2342",
+        "date": "2025-06-01",
+        "amount": -15470000,
         "time": "09:53:01",
         "type": "Giao dịch khác",
         "description": "TRUONG THANH DAT CHUYEN TIEN",
-        "receiverName": "Truong Thanh Dat (TCB)",
-        "receiverSTK": "99999999999",
-        "receiverBankName": "Ngân hàng TMCP Kỹ thương Việt Nam",
-        "receiverBankLogo": "https://api.vietqr.io/img/TCB.png"
+        "receiverName": "Truong Thanh Dat (BIDV)",
+        "receiverSTK": "4531234534345",
+        "receiverBankName": "Ngân hàng TMCP Đầu tư và Phát triển Việt Nam",
+        "receiverBankLogo": "https://thietkelogomondial1fc36.zapwp.com/q:i/r:0/wp:1/w:480/u:https://thietkelogo.mondial.vn/wp-content/uploads/2024/02/bidv-logo-brandlogos.net_.png"
       }
     ]
   },

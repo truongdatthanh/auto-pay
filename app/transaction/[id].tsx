@@ -49,7 +49,7 @@ export default function Transaction ()
         useCallback( () =>
         {
             let timer: ReturnType<typeof setTimeout>;
-            setIsLoading( true );
+            // setIsLoading( true );
             const fetchSelectedCard = async () =>
             {
                 try
@@ -67,7 +67,7 @@ export default function Transaction ()
                 } catch ( error )
                 {
                     console.error( "Error fetching card data:", error );
-                    setIsLoading( false );
+                    // setIsLoading( false );
                 }
             };
             fetchSelectedCard();
@@ -188,11 +188,11 @@ export default function Transaction ()
                         start={ { x: 0, y: 0 } }
                         end={ { x: 1, y: 1 } }
                     >
-                        {/* title */ }
+                        {/* Header */ }
                         <View className="flex-row items-center justify-between px-4">
                             <TouchableOpacity
                                 className="w-10 h-10 rounded-full bg-white/20 items-center justify-center"
-                                onPress={ () => router.push( '/(tabs)/history' ) }
+                                onPress={ () => router.back() }
                             >
                                 <Ionicons name="arrow-back" size={ 24 } color="white" />
                             </TouchableOpacity>
@@ -204,7 +204,6 @@ export default function Transaction ()
                                 <Ionicons name="share-outline" size={ 24 } color="white" />
                             </TouchableOpacity>
                         </View>
-                        {/* -----------------------------------------End----------------------------------------- */ }
 
                         <Animated.View
                             entering={ FadeInDown.delay( 300 ).duration( 500 ) }
@@ -224,7 +223,9 @@ export default function Transaction ()
                             </View>
                         </Animated.View>
                     </LinearGradient>
+                    {/* -----------------------------------------End----------------------------------------- */ }
 
+                    {/* Body */ }
                     <ScrollView
                         ref={ scrollViewRef }
                         className="flex-1 bg-slate-50"
@@ -233,17 +234,17 @@ export default function Transaction ()
 
                     >
                         {/* Transaction ID and Date */ }
-                        <Animated.View entering={ FadeInUp.delay( 200 ).duration( 500 ) } className="bg-white rounded-2xl mt-4 px-4 py-2 shadow-md border border-gray-200">
+                        <Animated.View entering={ FadeInUp.delay( 200 ).duration( 500 ) } className="bg-white rounded-lg mt-4 px-4 py-2 shadow-md border border-gray-200">
                             <View className="flex-row justify-between items-center py-2">
                                 <Text className="text-sm text-gray-500">Mã giao dịch</Text>
-                                <Text className="text-sm text-gray-500">{ data.transactionId }</Text>
+                                <Text className="text-sm text-black font-semibold">{ data.transactionId }</Text>
                             </View>
 
                             <View className="h-[1px] bg-slate-100 my-2" />
 
                             <View className="flex-row justify-between items-center py-2">
                                 <Text className="text-sm text-gray-500">Thời gian tạo</Text>
-                                <Text className="text-sm text-gray-500">{ formatDate( currentDate ) }</Text>
+                                <Text className="text-sm text-black font-semibold">{ formatDate( currentDate ) }</Text>
                             </View>
 
                             <View className="h-[1px] bg-slate-100 my-2" />
@@ -251,51 +252,60 @@ export default function Transaction ()
                             <View className="flex-row justify-between items-center py-2">
                                 <Text className="text-sm text-slate-500">Thời gian thanh toán</Text>
                                 <View className="flex-row items-center gap-1">
-                                    <Text className="text-sm text-gray-500">{ data.time }</Text>
+                                    <Text className="text-sm text-black font-semibold">{ data.time }</Text>
                                     <View className="border-l border-gray-500 h-6" />
-                                    <Text className="text-sm text-gray-500">{ formatDate( data.date ) }</Text>
+                                    <Text className="text-sm text-black font-semibold">{ formatDate( data.date ) }</Text>
                                 </View>
                             </View>
                         </Animated.View>
+                        {/* -----------------------------------------End----------------------------------------- */ }
 
+                        {/* Tài khoản */ }
                         { data.amount > 0 ? (
                             <>
-                                <Animated.View entering={ FadeInUp.delay( 300 ).duration( 500 ) } className="bg-white rounded-2xl mt-4 p-4 shadow-md border border-gray-200" >
+                                {/* Tài khoản thụ hưởng */ }
+                                <Animated.View entering={ FadeInUp.delay( 300 ).duration( 500 ) } className="bg-white rounded-lg mt-4 p-4 shadow-md border border-gray-200" >
                                     <Text className="text-base font-semibold text-slate-700 mb-3">Tài khoản thụ hưởng</Text>
                                     <View className="flex-row items-center">
                                         <Image source={ { uri: currentCard?.logoBanking } } className="w-10 h-10 rounded-lg bg-slate-50" resizeMode="contain" />
-                                        <Text>{ currentCard?.bankName }</Text>
+                                        <Text className="font-semibold ml-2 flex-1">{ currentCard?.bankName }</Text>
                                     </View>
-                                    <View className="flex-row item-center justify-between">
+                                    <View className="h-[1px] bg-slate-100 my-3" />
+                                    <View className="flex-row item-center justify-between ">
                                         <Text className="text-sm text-gray-500">Số tài khoản</Text>
-                                        <Text className="text-sm text-gray-500">{ currentCard?.STK }</Text>
+                                        <Text className="text-sm text-black font-semibold">{ currentCard?.STK }</Text>
                                     </View>
+                                    <View className="h-[1px] bg-slate-100 my-3" />
                                     <View className="flex-row item-center justify-between">
                                         <Text className="text-sm text-gray-500">Tên chủ tài khoản</Text>
-                                        <Text className="text-sm text-gray-500">{ currentCard?.name }</Text>
+                                        <Text className="text-sm text-black font-semibold">{ currentCard?.name }</Text>
                                     </View>
                                 </Animated.View>
+                                {/* -----------------------------------------End----------------------------------------- */ }
 
-                                <Animated.View entering={ FadeInUp.delay( 400 ).duration( 500 ) } className="bg-white rounded-2xl mt-4 p-4 shadow-md border border-gray-200">
+                                {/* Tài khoản giao dịch */ }
+                                <Animated.View entering={ FadeInUp.delay( 400 ).duration( 500 ) } className="bg-white rounded-lg mt-4 p-4 shadow-md border border-gray-200">
                                     <Text className="text-base font-semibold text-slate-700 mb-3">Tài khoản giao dịch</Text>
                                     <View className="flex-row items-center">
                                         <Image source={ { uri: data.senderBankLogo } } className="w-10 h-10 rounded-lg bg-slate-50" resizeMode="contain" />
-                                        <Text>{ data.senderBankName }</Text>
+                                        <Text className="ml-2 font-semibold flex-1">{ data.senderBankName }</Text>
                                     </View>
-                                    <View className="flex-row item-center justify-between">
+                                    <View className="h-[1px] bg-slate-100 my-3" />
+                                    <View className="flex-row item-center justify-between ">
                                         <Text className="text-sm text-gray-500">Số tài khoản</Text>
-                                        <Text className="text-sm text-gray-500">{ data.senderSTK }</Text>
+                                        <Text className="text-sm text-black font-semibold">{ data.senderSTK }</Text>
                                     </View>
-                                    <View className="flex-row item-center justify-between">
+                                    <View className="h-[1px] bg-slate-100 my-3" />
+                                    <View className="flex-row item-center justify-between ">
                                         <Text className="text-sm text-gray-500">Tên chủ tài khoản</Text>
-                                        <Text className="text-sm text-gray-500">{ data.senderName }</Text>
+                                        <Text className="text-sm text-black font-semibold">{ data.senderName }</Text>
                                     </View>
 
                                     <View className="h-[1px] bg-slate-100 my-3" />
 
                                     <View className="mt-1">
                                         <Text className="text-slate-500 text-sm mb-2">Nội dung chuyển khoản</Text>
-                                        <View className="bg-slate-50 rounded-lg p-3">
+                                        <View className="bg-blue-50 rounded-lg p-3">
                                             <Text className="text-slate-700 leading-5" numberOfLines={ showFullContent ? undefined : 2 }>
                                                 { data.description }
                                             </Text>
@@ -309,40 +319,46 @@ export default function Transaction ()
                                         </View>
                                     </View>
                                 </Animated.View>
+                                {/* -----------------------------------------End----------------------------------------- */ }
                             </>
 
                         ) : (
                             <>
-                                <Animated.View entering={ FadeInUp.delay( 400 ).duration( 500 ) } className="bg-white rounded-2xl mt-4 p-4 shadow-md border border-gray-200">
+                                {/* amount < 0 - Chuyển tiền */ }
+                                <Animated.View entering={ FadeInUp.delay( 400 ).duration( 500 ) } className="bg-white rounded-lg mt-4 p-4 shadow-md border border-gray-200">
                                     <Text className="text-base font-semibold text-slate-700 mb-3">Tài khoản giao dịch</Text>
 
                                     <View className="flex-row items-center">
                                         <Image source={ { uri: currentCard?.logoBanking } } className="w-10 h-10 rounded-lg bg-slate-50" resizeMode="contain" />
-                                        <Text>{ currentCard?.bankName }</Text>
+                                        <Text className="font-semibold ml-2 flex-1">{ currentCard?.bankName }</Text>
                                     </View>
+                                    <View className="h-[1px] bg-slate-100 my-3" />
                                     <View className="flex-row item-center justify-between">
                                         <Text className="text-sm text-gray-500">Số tài khoản</Text>
-                                        <Text className="text-sm text-gray-500">{ currentCard?.STK }</Text>
+                                        <Text className="text-sm text-black font-semibold">{ currentCard?.STK }</Text>
                                     </View>
+                                    <View className="h-[1px] bg-slate-100 my-3" />
                                     <View className="flex-row item-center justify-between">
                                         <Text className="text-sm text-gray-500">Tên chủ tài khoản</Text>
-                                        <Text className="text-sm text-gray-500">{ currentCard?.name }</Text>
+                                        <Text className="text-sm text-black font-semibold">{ currentCard?.name }</Text>
                                     </View>
                                 </Animated.View>
 
-                                <Animated.View entering={ FadeInUp.delay( 300 ).duration( 500 ) } className="bg-white rounded-2xl mt-4 p-4 shadow-md border border-gray-200" >
+                                <Animated.View entering={ FadeInUp.delay( 300 ).duration( 500 ) } className="bg-white rounded-lg mt-4 p-4 shadow-md border border-gray-200" >
                                     <Text className="text-base font-semibold text-slate-700 mb-3">Tài khoản thụ hưởng</Text>
                                     <View className="flex-row items-center">
                                         <Image source={ { uri: data.receiverBankLogo } } className="w-10 h-10 rounded-lg bg-slate-50" resizeMode="contain" />
-                                        <Text>{ data.receiverBankName }</Text>
+                                        <Text className="font-semibold ml-2 flex-1">{ data.receiverBankName }</Text>
                                     </View>
+                                    <View className="h-[1px] bg-slate-100 my-3" />
                                     <View className="flex-row item-center justify-between">
                                         <Text className="text-sm text-gray-500">Số tài khoản</Text>
-                                        <Text className="text-sm text-gray-500">{ data.receiverSTK }</Text>
+                                        <Text className="text-sm text-black font-semibold">{ data.receiverSTK }</Text>
                                     </View>
+                                    <View className="h-[1px] bg-slate-100 my-3" />
                                     <View className="flex-row item-center justify-between">
                                         <Text className="text-sm text-gray-500">Tên chủ tài khoản</Text>
-                                        <Text className="text-sm text-gray-500">{ data.receiverName }</Text>
+                                        <Text className="text-sm text-black font-semibold">{ data.receiverName }</Text>
                                     </View>
 
                                     <View className="h-[1px] bg-slate-100 my-3" />
@@ -369,36 +385,36 @@ export default function Transaction ()
 
 
                         {/* Transaction Details */ }
-                        <Animated.View entering={ FadeInUp.delay( 500 ).duration( 500 ) } className="bg-white rounded-2xl mt-4 p-4 shadow-md border border-gray-200" >
+                        <Animated.View entering={ FadeInUp.delay( 500 ).duration( 500 ) } className="bg-white rounded-lg mt-4 p-4 shadow-md border border-gray-200" >
                             <Text className="text-base font-semibold text-slate-700 mb-3">Thông tin giao dịch</Text>
 
                             <View className="flex-row flex-wrap">
                                 <View className="w-1/2 mb-4">
-                                    <Text className="text-slate-500 text-sm mb-1">Loại giao dịch</Text>
-                                    <Text className="text-slate-700 font-medium">
+                                    <Text className="text-slate-500 text-sm mb-1">Loại giao dịch:</Text>
+                                    <Text className="text-sm text-black font-semibold">
                                         { data.type }
                                     </Text>
                                 </View>
 
                                 <View className="w-1/2 mb-4">
-                                    <Text className="text-slate-500 text-sm mb-1">Mã đơn</Text>
-                                    <Text className="text-slate-700 font-medium">-</Text>
+                                    <Text className="text-slate-500 text-sm mb-1">Mã đơn:</Text>
+                                    <Text className="text-sm text-black font-semibold">-</Text>
                                 </View>
 
                                 <View className="w-1/2 mb-4">
-                                    <Text className="text-slate-500 text-sm mb-1">Điểm bán</Text>
-                                    <Text className="text-slate-700 font-medium">-</Text>
+                                    <Text className="text-slate-500 text-sm mb-1">Điểm bán:</Text>
+                                    <Text className="text-sm text-black font-semibold">-</Text>
                                 </View>
 
                                 <View className="w-1/2 mb-4">
-                                    <Text className="text-slate-500 text-sm mb-1">Sản phẩm</Text>
-                                    <Text className="text-slate-700 font-medium">-</Text>
+                                    <Text className="text-slate-500 text-sm mb-1">Sản phẩm:</Text>
+                                    <Text className="text-sm text-black font-semibold">-</Text>
                                 </View>
                             </View>
                         </Animated.View>
 
                         {/* Transaction Note */ }
-                        <Animated.View entering={ FadeInUp.delay( 600 ).duration( 500 ) } className="bg-white rounded-2xl mt-4 p-4 shadow-md border border-gray-200" >
+                        <Animated.View entering={ FadeInUp.delay( 600 ).duration( 500 ) } className="bg-white rounded-lg mt-4 p-4 shadow-md border border-gray-200" >
                             <View className="flex-row justify-between items-center mb-3">
                                 <View className="flex-row items-center">
                                     <MaterialIcons name="note-alt" size={ 18 } color="#64748b" />
@@ -410,7 +426,7 @@ export default function Transaction ()
                                 </TouchableOpacity>
                             </View>
 
-                            <View className="bg-slate-50 rounded-lg p-3">
+                            <View className="bg-blue-50 rounded-lg p-3">
                                 { note ? (
                                     <Text className="text-slate-700">{ note }</Text>
                                 ) : (

@@ -157,10 +157,10 @@ export default function LineCharts ( { id }: { id: string } )
 
     const currentDate = new Date();
     currentDate.setHours( 0, 0, 0, 0 );
-    const currentDay = ( currentDate.getDay() + 6 ) % 7;
-    const startOfWeek = new Date( currentDate );
-    startOfWeek.setDate( currentDate.getDate() - currentDay + weekOffset * 7 );
-
+    const currentDay = ( currentDate.getDay() + 6 ) % 7;//Lấy ra ngày hôm nay
+    const startOfWeek = new Date( currentDate );//Lấy ra ngày bắt đầu trong tuần
+    startOfWeek.setDate( currentDate.getDate() - currentDay + weekOffset * 7 );// convert t2 = 0,..., cn = 6
+    
     const { incomeData, expenseData, maxValue } = useMemo( () =>
     {
         const incomeByDay = Array( 7 ).fill( 0 );
@@ -171,8 +171,8 @@ export default function LineCharts ( { id }: { id: string } )
             return { incomeData: [], expenseData: [], maxValue: 0 };
         }
 
-        const start = new Date( startOfWeek );
-        const end = new Date( start );
+        const start = new Date( startOfWeek );//Ngày bắt đầu trong tuần
+        const end = new Date( start );//Ngày kết thúc trong tuần
         end.setDate( start.getDate() + 6 );
         end.setHours( 23, 59, 59, 999 );
 
@@ -194,18 +194,6 @@ export default function LineCharts ( { id }: { id: string } )
                     expenseByDay[ day ] += Math.abs( item.amount );
                 }
             } );
-
-        // const incomeData = incomeByDay.map( ( value, i ) => ( {
-        //     value: Math.round( value / 1_000_000 ),
-        //     label: daysOfWeek[ i ],
-        //     dataPointText: `${ Math.round( value / 1_000_000 ) }`
-        // } ) );
-
-        // const expenseData = expenseByDay.map( ( value, i ) => ( {
-        //     value: Math.round( value / 1_000_000 ),
-        //     label: daysOfWeek[ i ],
-        //     dataPointText: `${ Math.round( value / 1_000_000 ) }`
-        // } ) );
 
         const incomeData = incomeByDay.map( ( value, i ) =>
         {
