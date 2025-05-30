@@ -1,31 +1,25 @@
-import { Image, Text, TouchableOpacity, View } from "react-native";
-import mockBankingCard from "@/assets/banking-card.json";
+import { Text, TouchableOpacity, View } from "react-native";
 import { useState } from "react";
 import { AntDesign, Octicons } from "@expo/vector-icons";
-import PaymentCard from "../card/PaymentCard";
 import { router } from "expo-router";
 import { formatDate } from "@/utils/format";
+import { useCardStore } from "@/store/useCardStore";
+import TransactionItem from "./TransactionItem";
 
-export default function TransactionList ( { id }: { id: string } )
+export default function TransactionList () 
 {
-    const data = mockBankingCard;
     const [ currentDate ] = useState( new Date() );
-   
     const [ visibleCount, setVisibleCount ] = useState( 5 );
-    const indexData = data.find( ( item ) => item.id === id );
-    const todayTransactions =
-        indexData?.transactionHistory
-            .filter( ( item ) =>
-            {
-                const transactionDate = new Date( item.date );
-                return (
-                    transactionDate.setHours( 0, 0, 0, 0 ) ===
-                    new Date( currentDate ).setHours( 0, 0, 0, 0 )
-                );
-            } )
-            .sort(
-                ( a, b ) => new Date( b.date ).getTime() - new Date( a.date ).getTime()
-            ) || [];
+    const selectedCard = useCardStore( state => state.selectedCard );
+    const todayTransactions = selectedCard?.transactionHistory.filter( ( item ) =>
+    {
+        const transactionDate = new Date( item.date );
+        return (
+            transactionDate.setHours( 0, 0, 0, 0 ) === new Date( currentDate ).setHours( 0, 0, 0, 0 )
+        );
+    } ).sort(
+        ( a, b ) => new Date( b.date ).getTime() - new Date( a.date ).getTime()
+    ) || [];
 
     // Transactions to display based on visibleCount
     const visibleTransactions = todayTransactions.slice( 0, visibleCount );
@@ -43,9 +37,9 @@ export default function TransactionList ( { id }: { id: string } )
     };
 
     return (
-        <View className="bg-white rounded-xl flex-1 shadow-md border border-gray-200">
+        <View>
             <View className="flex-row justify-between items-center px-4 pt-2">
-                <Text className="text-md font-bold text-black">Giao dịch gần đây</Text>
+                <Text className="text-md font-bold text-black">Các giao dịch hôm nay</Text>
                 <TouchableOpacity
                     onPress={ () => router.push( "/(tabs)/history" ) }
                     className="flex-row items-center"
@@ -59,7 +53,7 @@ export default function TransactionList ( { id }: { id: string } )
                 <Text className="text-sm text-gray-400">{ formatDate( currentDate ) }</Text>
             </View>
 
-            <View className="px-4 py-2 gap-1 flex-1">
+            <View className="py-2 gap-1 flex-1 bg-white mx-4 rounded-lg mt-2 shadow-md">
                 { visibleTransactions.length === 0 ? (
                     <View className="flex-1 h-[200px] justify-center items-center">
                         <Text className="text-black text-center text-md italic">
@@ -69,10 +63,10 @@ export default function TransactionList ( { id }: { id: string } )
                 ) : (
                     visibleTransactions.map( ( item ) => (
                         <View key={ item.transactionId }>
-                            <PaymentCard
+                            <TransactionItem
                                 id={ item.transactionId }
                                 amount={ item.amount }
-                                time={ item.date }
+                                time={ item.time}
                             />
                         </View>
                     ) )

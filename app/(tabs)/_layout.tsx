@@ -4,8 +4,8 @@ import { router, Tabs } from 'expo-router';
 import { Image, View } from 'react-native';
 import { useFabStore } from '@/store/useFABStore';
 import { useTabBarStore } from '@/store/useTabbarStore';
-import FABMenu from '@/components/tabbar/FABMenu'; // giả sử bạn để FABMenu ở đây
 import useAndroidBackHandler from '@/hooks/useAndroidBackHanler';
+import FABMenu from '@/components/action/FABMenu';
 
 export default function TabsLayout ()
 {

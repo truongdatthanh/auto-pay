@@ -4,19 +4,18 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { Feather, Ionicons, MaterialIcons } from '@expo/vector-icons';
 import CardInfo from '@/components/card/CardInfo';
 import NotFound from '@/app/error/404';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { router, useFocusEffect } from 'expo-router';
+import { router } from 'expo-router';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 import AppHeaderInfo from '@/components/header/App.headerInfo';
-import { IBankingTransaction } from '@/interface/IBanking';
 import { ISection } from '@/interface/ISection';
 import Loading from '@/components/loading/Loading';
 import { groupByDate } from '@/utils/groupByDate';
 import { formatDate } from '@/utils/format';
+import { useCardStore } from '@/store/useCardStore';
 
 export default function History ()
 {
-  const [ currentCard, setCurrentCard ] = useState<IBankingTransaction | null>( null );
+  const selectedCard = useCardStore( state => state.selectedCard );
   const [ startDate, setStartDate ] = useState( new Date() );
   const [ endDate, setEndDate ] = useState( new Date() );
   const [ showStartPicker, setShowStartPicker ] = useState( false );
@@ -26,40 +25,30 @@ export default function History ()
   const [ showFilterModal, setShowFilterModal ] = useState( false );
   const [ isLoading, setIsLoading ] = useState( true );
 
-  // Fetch selected card
-  useFocusEffect(
-    useCallback( () =>
+  useEffect( () =>
+  {
+    setIsLoading( true );
+
+    const timer = setTimeout( () =>
     {
-      const fetchSelectedCard = async () =>
-      {
-        try
-        {
-          const card = await AsyncStorage.getItem( 'selectedCard' );
-          if ( card ) setCurrentCard( JSON.parse( card ) );
-        } catch ( error )
-        {
-          console.error( "Error fetching selected card:", error );
-        } finally
-        {
-          setIsLoading( false );
-        }
-      };
-      fetchSelectedCard();
-    }, [] )
-  );
+      setIsLoading( false );
+    }, 1000 ); // ví dụ 2 giây
+
+    return () => clearTimeout( timer );
+  }, [] );
   // -------------------------------------- END ------------------------------------- //
 
   // Filter on card change
   useEffect( () =>
   {
-    if ( currentCard ) handleFilterByDate();
-  }, [ currentCard ] );
+    if ( selectedCard ) handleFilterByDate();
+  }, [ selectedCard ] );
   // -------------------------------------- END ------------------------------------- //
 
   // Hàm lọc dữ liệu theo ngày đã chọn
   const handleFilterByDate = () =>
   {
-    if ( !currentCard?.transactionHistory ) return;
+    if ( !selectedCard?.transactionHistory ) return;
 
     const start = new Date( startDate ).setHours( 0, 0, 0, 0 );
     const end = new Date( endDate ).setHours( 0, 0, 0, 0 );
@@ -70,7 +59,7 @@ export default function History ()
       return;
     }
 
-    const filtered = currentCard.transactionHistory.filter( item =>
+    const filtered = selectedCard.transactionHistory.filter( item =>
     {
       const itemDate = new Date( item.date ).setHours( 0, 0, 0, 0 );
       return itemDate >= start && itemDate <= end;
@@ -83,7 +72,7 @@ export default function History ()
   // Hàm lọc dữ liệu theo khoảng ngày
   const handleRecentDays = ( days: number ) =>
   {
-    if ( !currentCard?.transactionHistory ) return;
+    if ( !selectedCard?.transactionHistory ) return;
 
     const now = new Date();
     const past = new Date();
@@ -92,7 +81,7 @@ export default function History ()
     setStartDate( past );
     setEndDate( now );
 
-    const filtered = currentCard.transactionHistory.filter( item =>
+    const filtered = selectedCard.transactionHistory.filter( item =>
     {
       const itemDate = new Date( item.date ).setHours( 0, 0, 0, 0 );
       return itemDate >= past.setHours( 0, 0, 0, 0 ) && itemDate <= now.setHours( 0, 0, 0, 0 );
@@ -130,7 +119,7 @@ export default function History ()
       handleFilterByDate();
       setRefreshing( false );
     }, 800 );
-  }, [ currentCard, startDate, endDate ] );
+  }, [ selectedCard, startDate, endDate ] );
   // ------------------------------------- END ------------------------------------- //
 
   if ( isLoading ) return <Loading message="Đang tải dữ liệu..." />;
@@ -174,13 +163,13 @@ export default function History ()
             renderItem={ ( { item } ) => (
               <Animated.View entering={ FadeInDown.duration( 400 ) }>
                 <CardInfo
-                  id={ currentCard?.id || '' }
-                  STK={ currentCard?.STK || '' }
-                  name={ currentCard?.name || '' }
+                  id={ selectedCard?.id || '' }
+                  STK={ selectedCard?.STK || '' }
+                  name={ selectedCard?.name || '' }
                   date={ item.date }
                   amount={ item.amount }
                   content={ item.description }
-                  logoBanking={ currentCard?.logoBanking || '' }
+                  logoBanking={ selectedCard?.logoBanking || '' }
                   transactionId={ item.transactionId }
                 />
               </Animated.View>

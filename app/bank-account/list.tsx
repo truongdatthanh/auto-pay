@@ -1,6 +1,6 @@
 import { FlatList, Text, TouchableOpacity, View } from "react-native";
 import dataBankingCard from "@/assets/banking-card.json";
-import BankingCard from "@/components/card/BankCard";
+import BankingCard from "@/components/card/BankingCard";
 import { router } from "expo-router";
 export default function ListCard ()
 {

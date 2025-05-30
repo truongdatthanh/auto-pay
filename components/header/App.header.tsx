@@ -4,7 +4,6 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 export default function AppHeader ()
 {
-  const avatar = "@/assets/images/500.jpg";
   const handlePress = () =>
   {
     router.push( "/(tabs)/home" );

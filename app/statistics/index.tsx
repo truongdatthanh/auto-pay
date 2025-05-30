@@ -1,21 +1,22 @@
-import React, { useRef, useState, useCallback } from 'react';
-import { View, Text, ScrollView, FlatList, ViewToken, RefreshControl, StatusBar } from 'react-native';
+import React, {  useState, useCallback } from 'react';
+import { View, Text, ScrollView, RefreshControl, StatusBar } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Animated, { FadeInDown, FadeIn } from 'react-native-reanimated';
 import data from "@/assets/banking-card.json";
-import BankingCard from '@/components/card/BankCard';
 import AppHeaderInfo from '@/components/header/App.headerInfo';
 import { router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { formatCurrencyVND } from '@/utils/format';
 import BarCharts from '@/components/chart/BarChart';
+import { useCardStore } from '@/store/useCardStore';
+import { IBankingTransaction } from '@/interface/IBanking';
 
 export default function BankAccountStatistics ()
 {
-    const [ currentCardIndex, setCurrentCardIndex ] = useState( 0 );
+    const selectedCard = useCardStore( state => state.selectedCard );
+    const [ currentCard, setcurrentCard ] = useState<IBankingTransaction | null>( selectedCard );
     const [ refreshing, setRefreshing ] = useState( false );
     const bankCard = data;
-    const currentCard = bankCard[ currentCardIndex ];
 
     // Tính tổng số dư và số giao dịch
     const totalBalance = currentCard?.balance || 0;
@@ -27,17 +28,6 @@ export default function BankAccountStatistics ()
     const totalIncome = currentCard?.transactionHistory?.reduce( ( sum, t ) => t.amount > 0 ? sum + t.amount : sum, 0 ) || 0;
     const totalExpense = currentCard?.transactionHistory?.reduce( ( sum, t ) => t.amount < 0 ? sum + Math.abs( t.amount ) : sum, 0 ) || 0;
 
-    const viewabilityConfig = useRef( {
-        viewAreaCoveragePercentThreshold: 50,
-    } );
-
-    const onViewRef = useRef( ( { viewableItems }: { viewableItems: ViewToken[] } ) =>
-    {
-        if ( viewableItems.length > 0 && viewableItems[ 0 ].index !== null )
-        {
-            setCurrentCardIndex( viewableItems[ 0 ].index ?? 0 );
-        }
-    } );
 
     const onRefresh = useCallback( () =>
     {
@@ -62,54 +52,10 @@ export default function BankAccountStatistics ()
                     }
                     contentContainerStyle={ { paddingBottom: 50 } }
                 >
-                    {/* Header Card Section */ }
-                    <View className="pt-2 pb-4">
-                        <FlatList
-                            data={ bankCard }
-                            horizontal
-                            pagingEnabled
-                            showsHorizontalScrollIndicator={ false }
-                            keyExtractor={ ( item ) => item.id }
-                            snapToInterval={ 330 }
-                            snapToAlignment="center"
-                            renderItem={ ( { item } ) => (
-                                <View className="items-center justify-center mx-1">
-                                    <BankingCard
-                                        key={ item.id }
-                                        id={ item.id }
-                                        STK={ item.STK }
-                                        name={ item.name }
-                                        logoBanking={ item.logoBanking }
-                                        bankName={ item.bankName }
-                                    />
-                                </View>
-                            ) }
-                            onViewableItemsChanged={ onViewRef.current }
-                            viewabilityConfig={ viewabilityConfig.current }
-                            contentContainerStyle={ { paddingHorizontal: 20 } }
-                            className="my-2"
-                        />
-
-                        {/* Card Indicator */ }
-                        <View className="flex-row justify-center mt-2">
-                            { bankCard.map( ( _, index ) => (
-                                <View
-                                    key={ index }
-                                    className={ `mx-1 rounded-full ${ currentCardIndex === index
-                                        ? 'bg-blue-500 w-6 h-2'
-                                        : 'bg-gray-300 w-2 h-2'
-                                        }` }
-                                />
-                            ) ) }
-                        </View>
-                    </View>
-                    {/* -----------------------------------------End----------------------------------------- */ }
-
-
-
+                
                     {/* LineChart */ }
                     <Animated.View entering={ FadeIn.duration( 500 ).delay( 300 ) }>
-                        <BarCharts id={ bankCard[ currentCardIndex ].id } />
+                        <BarCharts  />
                     </Animated.View>
                     {/* -----------------------------------------End----------------------------------------- */ }
 

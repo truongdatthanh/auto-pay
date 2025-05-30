@@ -43,10 +43,10 @@ export default function ActionFAB ( { url, label, icon, toggleMenu, index }: Act
     return (
         <Animated.View style={ containerStyle }>
             <TouchableOpacity onPress={ handlePress } className="flex-row items-center justify-end space-x-2">
-                <Animated.View style={ labelStyle } className="bg-white/20 rounded-full h-12 justify-center px-4 mr-2">
+                <Animated.View style={ labelStyle } className="bg-white/50 rounded-full h-12 justify-center px-4 mr-2">
                     <Text className="text-white">{ label }</Text>
                 </Animated.View>
-                <View className="bg-white/20 p-4 rounded-full">
+                <View className="bg-white/50 p-4 rounded-full">
                     <Image source={ icon } className="w-5 h-5" resizeMode="contain" />
                 </View>
             </TouchableOpacity>

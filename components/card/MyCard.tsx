@@ -1,19 +1,20 @@
 import React, { useCallback, useEffect, useState, useRef } from 'react';
 import { View, Text, FlatList, TouchableOpacity, Animated, NativeSyntheticEvent, NativeScrollEvent, Image } from 'react-native';
 import data from "@/assets/banking-card.json";
-import BankingCard from './BankCard';
+import BankingCard from './BankingCard';
 import { router } from 'expo-router';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons } from '@expo/vector-icons';
-import TransactionList from '@/components/chart/TransactionList';
+import { useCardStore } from '@/store/useCardStore';
+
 
 export default function MyCard ()
 {
+    const bankCard = data;
     const [ currentCardIndex, setCurrentCardIndex ] = useState( 0 );
     const [ isAtLastCard, setIsAtLastCard ] = useState( false );
     const [ showViewAllButton, setShowViewAllButton ] = useState( false );
     const [ hasStoppedAtLastCard, setHasStoppedAtLastCard ] = useState( false );
-    const bankCard = data;
+    const { setSelectedCard } = useCardStore();
     const flatListRef = useRef<FlatList>( null );
     const cardWidth = 330; //Chiều rộng của card để snap
     const isScrollingRef = useRef( false );//Kiểm tra xem có đang cuộn không
@@ -53,7 +54,7 @@ export default function MyCard ()
         viewAreaCoveragePercentThreshold: 50, // Card sẽ được tính là đang focus khi hiển thị trên 50% diện tích
     };
 
-    // Lưu card được chọn vào AsyncStorage
+    //Lưu card vào zustand
     useEffect( () =>
     {
         const selectedCard = bankCard[ currentCardIndex ];
@@ -61,8 +62,8 @@ export default function MyCard ()
         {
             try
             {
-                await AsyncStorage.setItem( 'selectedCard', JSON.stringify( selectedCard ) );
-                console.log( 'Lưu thẻ vào AsyncStorage:', selectedCard.bankName );
+                await setSelectedCard( selectedCard );
+                console.log("Lưu thẻ ngân hàng thành công!!!")
             } catch ( error )
             {
                 console.error( 'Lưu thẻ thất bại:', error );
@@ -70,6 +71,7 @@ export default function MyCard ()
         };
         storeCard();
     }, [ currentCardIndex ] );
+
 
     // Xem tất cả các banking card
     const handleSeenAllCard = () =>
@@ -240,35 +242,6 @@ export default function MyCard ()
                 </View>
             </View>
             {/* -----------------------------------------End----------------------------------------- */ }
-
-
-            {/* Quick Action */ }
-            <View className="flex-row mx-4 px-4 py-4 bg-white shadow-md border border-gray-200 rounded-xl justify-around ">
-                <TouchableOpacity className="items-center w-1/4" onPress={ () => router.push( '/bank-account/list' ) }>
-                    <Image source={ require( '@/assets/images/credit-card-black.png' ) } className="w-8 h-8" resizeMode='contain' />
-                    <Text className="text-black text-[11px] font-semibold text-center">Tài khoản & thẻ</Text>
-                </TouchableOpacity>
-                {/* Chuyển tiền cho mầy nè */ }
-                <TouchableOpacity className="items-center w-1/4" onPress={ () => router.push( '/payment/transfer' ) }>
-                    <Image source={ require( '@/assets/images/cash_black.png' ) } className="w-8 h-8" resizeMode='contain' />
-                    <Text className="text-black text-[11px] font-semibold text-center">Chuyển tiền</Text>
-                </TouchableOpacity>
-                {/* QR của tao */ }
-                <TouchableOpacity className="items-center w-1/4" onPress={ () => router.push( { pathname: '/(tabs)/qr', params: { tabIndex: 1 } } ) }>
-                    <Image source={ require( '@/assets/images/qr-code.png' ) } className="w-8 h-8" resizeMode='contain' />
-                    <Text className="text-black text-[11px] font-semibold text-center ">QR của tôi</Text>
-                </TouchableOpacity>
-                {/* Chuyển tiền cho tao */ }
-                <TouchableOpacity className="items-center w-1/4" onPress={ () => router.push( "/qr/create" ) }>
-                    <Image source={ require( '@/assets/images/save_black.png' ) } className="w-8 h-8" resizeMode='contain' />
-                    <Text className="text-black text-[11px] font-semibold text-center ">Nhận tiền</Text>
-                </TouchableOpacity>
-            </View>
-            {/* -----------------------------------------End----------------------------------------- */ }
-
-            <View className='mt-2 mx-4'>
-                <TransactionList id={ bankCard[ currentCardIndex ].id } />
-            </View>
         </View>
     );
 }

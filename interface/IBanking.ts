@@ -4,16 +4,16 @@ export interface ITransaction
     date: string;
     amount: number;
     time: string;
-    type: string;
+    type?: string;
     description: string;
-    receiverName: string;
-    receiverSTK: string;
-    receiverBankName: string;
-    receiverBankLogo: string;
-    senderName: string;
-    senderSTK: string;
-    senderBankName: string;
-    senderBankLogo: string
+    receiverName?: string;
+    receiverSTK?: string;
+    receiverBankName?: string;
+    receiverBankLogo?: string;
+    senderName?: string;
+    senderSTK?: string;
+    senderBankName?: string;
+    senderBankLogo?: string;
 }
 
 export interface IBankingTransaction
@@ -24,6 +24,8 @@ export interface IBankingTransaction
     name: string;
     logoBanking: string;
     bankName: string;
+    bankbin: string;
+    balance?: number;
     transactionHistory: ITransaction[];
 }
 
