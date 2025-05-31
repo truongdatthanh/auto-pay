@@ -225,13 +225,10 @@ export default function AddCard ()
                                     />
                                     <View className="flex-1">
                                         <Text className="font-bold text-gray-800">{ bank.name }</Text>
-                                        { selectedBank.id === bank.id && (
-                                            <Text className="text-blue-500 text-sm mt-1">Đã chọn</Text>
-                                        ) }
                                     </View>
-                                    { selectedBank.id === bank.id && (
+                                    {/* { selectedBank.id === bank.id && (
                                         <Ionicons name="checkmark-circle" size={ 24 } color="#3b82f6" />
-                                    ) }
+                                    ) } */}
                                 </TouchableOpacity>
                             ) ) }
                         </ScrollView>
@@ -319,7 +316,7 @@ export default function AddCard ()
             behavior={ Platform.OS === 'ios' ? 'padding' : 'height' }
             className="flex-1 bg-slate-50"
         >
-            <StatusBar style="dark" />
+            <StatusBar style="light" />
             {/* Header */ }
             <Animated.View
                 entering={ FadeInDown.duration( 400 ) }
@@ -336,7 +333,7 @@ export default function AddCard ()
                 { renderStepIndicator() }
             </Animated.View>
             {/* Content */ }
-            <ScrollView className="flex-1">
+            <ScrollView className="flex-1 pt-4">
                 { renderStepContent() }
             </ScrollView>
             {/* Footer */ }
