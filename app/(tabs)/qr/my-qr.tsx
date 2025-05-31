@@ -18,6 +18,7 @@ export default function MyQR ()
 
     useEffect( () =>
     {
+        setIsLoading( true );
         if ( !currentCard ) return;
 
         if ( currentCard )
@@ -29,12 +30,12 @@ export default function MyQR ()
                 addInfo: "",
             } );
             setQrData( emvCode );
+            console.log( emvCode )
+            setIsLoading( false );
         } else if ( data.length > 0 )
         {
             setCurrentCard( data[ 0 ] );
         }
-
-
     }, [ currentCard ] );
 
     const handleSelectCard = ( card: any ) =>
@@ -73,7 +74,7 @@ export default function MyQR ()
                         </View>
                     </View>
                     <View>
-                        { generateQR( qrData ) }
+                        { qrData ? generateQR( qrData ) : <Text className="text-center text-gray-500">Đang tạo mã QR...</Text> }
                     </View>
                     <View className="flex-row justify-center items-center space-x-8">
                         <Image source={ require( "@/assets/images/Napas247.png" ) } className="w-[100px] h-[50px]" resizeMode="contain" />

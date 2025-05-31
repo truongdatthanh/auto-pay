@@ -57,7 +57,7 @@ export default function Profile ()
                         <View className="items-center p-4 pb-4">
                             <View className="relative">
                                 <Image
-                                    source={ require( '../../../assets/images/500.jpg' ) }
+                                    source={ require( '@/assets/images/500.jpg' ) }
                                     className="h-24 w-24 rounded-full border-4 border-white"
                                     resizeMode="cover"
                                 />
@@ -228,7 +228,7 @@ export default function Profile ()
                                     <View className="mb-6 items-center">
                                         <View className="relative">
                                             <Image
-                                                source={ require( '../../../assets/images/500.jpg' ) }
+                                                source={ require( '@/assets/images/500.jpg' ) }
                                                 className="h-24 w-24 rounded-full border-2 border-gray-200"
                                                 resizeMode="cover"
                                             />

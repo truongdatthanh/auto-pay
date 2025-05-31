@@ -19,7 +19,7 @@ export default function TabbarTop ( props: any )
       useNativeDriver: true,
     } ).start();
   };
-
+ 
   return (
     <View className="bg-black relative">
       {/* Tab Bar */ }

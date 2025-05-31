@@ -39,7 +39,11 @@ export default function TransactionList ()
     return (
         <View>
             <View className="flex-row justify-between items-center px-4 pt-2">
-                <Text className="text-md font-bold text-black">Các giao dịch hôm nay</Text>
+                <View className="flex-row items-center gap-1">
+                    <Text className="text-md font-bold text-black">Các giao dịch hôm nay</Text>
+                    <Text className="text-md font-bold text-black">({ todayTransactions.length })</Text>
+                </View>
+
                 <TouchableOpacity
                     onPress={ () => router.push( "/(tabs)/history" ) }
                     className="flex-row items-center"
@@ -53,32 +57,32 @@ export default function TransactionList ()
                 <Text className="text-sm text-gray-400">{ formatDate( currentDate ) }</Text>
             </View>
 
-            <View className="py-2 gap-1 flex-1 bg-white mx-4 rounded-lg mt-2 shadow-md">
+            <View className="py-2 gap-1 flex-1 bg-white mx-4 rounded-lg mt-2 shadow-md min-h-[200px]">
                 { visibleTransactions.length === 0 ? (
-                    <View className="flex-1 h-[200px] justify-center items-center">
+                    <View className="flex-1 justify-center items-center">
                         <Text className="text-black text-center text-md italic">
                             Hôm nay chưa có giao dịch
                         </Text>
                     </View>
                 ) : (
                     visibleTransactions.map( ( item ) => (
-                        <View key={ item.transactionId }>
+                        <View key={ item.transactionId } >
                             <TransactionItem
                                 id={ item.transactionId }
                                 amount={ item.amount }
-                                time={ item.time}
+                                time={ item.time }
                             />
                         </View>
                     ) )
                 ) }
-                <View className="flex-row items-center gap-4">
+                <View className="flex-row items-center gap-4 px-4">
                     { visibleCount < todayTransactions.length && (
                         <TouchableOpacity
                             className="flex-row items-center"
                             onPress={ handleLoadMore }
                         >
-                            <Text className="text-white font-semibold text-sm">Xem thêm</Text>
-                            <AntDesign name="arrowright" size={ 12 } color="white" />
+                            <Text className="text-black font-semibold text-sm">Xem thêm</Text>
+                            <AntDesign name="arrowright" size={ 12 } color="black" />
                         </TouchableOpacity>
                     ) }
 
@@ -87,8 +91,8 @@ export default function TransactionList ()
                             className="flex-row items-center"
                             onPress={ handleHideLess }
                         >
-                            <Text className="text-white font-semibold text-sm">Ẩn bớt</Text>
-                            <AntDesign name="arrowleft" size={ 12 } color="white" />
+                            <Text className="text-black font-semibold text-sm">Ẩn bớt</Text>
+                            <AntDesign name="arrowleft" size={ 12 } color="black" />
                         </TouchableOpacity>
                     ) }
                 </View>

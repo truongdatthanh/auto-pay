@@ -26,6 +26,23 @@ export default function Loading ( {
     statusBarStyle = 'light-content'
 }: LoadingProps )
 {
+
+    const setTabBarVisible = useTabBarStore( state => state.setTabBarVisible );
+    const setVisible = useFabStore( state => state.setVisible );
+    useFocusEffect(
+        useCallback( () =>
+        {
+            // ẩn khi vào màn hình
+            setVisible( false );
+            setTabBarVisible( false );
+            return () =>
+            {
+                setTabBarVisible( true );
+                setVisible( true );
+            }// hiện lại khi rời màn hình
+        }, [ setTabBarVisible, setVisible ] )
+    );
+
     // Map icon type to the appropriate icon component
     const renderIcon = () =>
     {

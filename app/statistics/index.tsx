@@ -1,6 +1,6 @@
-import React, {  useState, useCallback } from 'react';
-import { View, Text, ScrollView, RefreshControl, StatusBar } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import React, { useState, useCallback } from 'react';
+import { View, Text, ScrollView, RefreshControl, StatusBar, TouchableOpacity, Modal, Image } from 'react-native';
+import { AntDesign, Ionicons } from '@expo/vector-icons';
 import Animated, { FadeInDown, FadeIn } from 'react-native-reanimated';
 import data from "@/assets/banking-card.json";
 import AppHeaderInfo from '@/components/header/App.headerInfo';
@@ -14,19 +14,20 @@ import { IBankingTransaction } from '@/interface/IBanking';
 export default function BankAccountStatistics ()
 {
     const selectedCard = useCardStore( state => state.selectedCard );
-    const [ currentCard, setcurrentCard ] = useState<IBankingTransaction | null>( selectedCard );
+    const setSelectedCard = useCardStore( state => state.setSelectedCard )
     const [ refreshing, setRefreshing ] = useState( false );
     const bankCard = data;
+    const [ openModal, setOpenModal ] = useState( false );
 
     // Tính tổng số dư và số giao dịch
-    const totalBalance = currentCard?.balance || 0;
-    const totalTransactions = currentCard?.transactionHistory?.length || 0;
-    const incomeTransactions = currentCard?.transactionHistory?.filter( t => t.amount > 0 ).length || 0;
-    const expenseTransactions = currentCard?.transactionHistory?.filter( t => t.amount < 0 ).length || 0;
+    const totalBalance = selectedCard?.balance || 0;
+    const totalTransactions = selectedCard?.transactionHistory?.length || 0;
+    const incomeTransactions = selectedCard?.transactionHistory?.filter( t => t.amount > 0 ).length || 0;
+    const expenseTransactions = selectedCard?.transactionHistory?.filter( t => t.amount < 0 ).length || 0;
 
     // Tính tổng thu nhập và chi tiêu
-    const totalIncome = currentCard?.transactionHistory?.reduce( ( sum, t ) => t.amount > 0 ? sum + t.amount : sum, 0 ) || 0;
-    const totalExpense = currentCard?.transactionHistory?.reduce( ( sum, t ) => t.amount < 0 ? sum + Math.abs( t.amount ) : sum, 0 ) || 0;
+    const totalIncome = selectedCard?.transactionHistory?.reduce( ( sum, t ) => t.amount > 0 ? sum + t.amount : sum, 0 ) || 0;
+    const totalExpense = selectedCard?.transactionHistory?.reduce( ( sum, t ) => t.amount < 0 ? sum + Math.abs( t.amount ) : sum, 0 ) || 0;
 
 
     const onRefresh = useCallback( () =>
@@ -39,11 +40,27 @@ export default function BankAccountStatistics ()
         }, 1000 );
     }, [] );
 
+    const handleSelectBank = ( bank: IBankingTransaction ) =>
+    {
+        console.log( bank )
+        setSelectedCard( bank );
+        setOpenModal( false );
+    };
+
     return (
         <>
             <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
             <SafeAreaView className="flex-1 bg-black">
-                <AppHeaderInfo title="Thống Kê Giao Dịch" onPress={ () => router.replace( "/(tabs)/home" ) } />
+                <AppHeaderInfo title="Thống Kê Giao Dịch" onPress={ () => router.replace( "/(tabs)/home" ) }
+                    rightComponent={
+                        <>
+                            <TouchableOpacity className='p-2 bg-white/20 rounded-full h-10 w-10 items-center justify-center' onPress={ () => setOpenModal( true ) }>
+                                <View className=''>
+                                    <AntDesign name="creditcard" size={ 18 } color="white" />
+                                </View>
+                            </TouchableOpacity>
+                        </>
+                    } />
                 <ScrollView
                     className="flex-1 bg-gray-50"
                     showsVerticalScrollIndicator={ false }
@@ -52,10 +69,10 @@ export default function BankAccountStatistics ()
                     }
                     contentContainerStyle={ { paddingBottom: 50 } }
                 >
-                
+
                     {/* LineChart */ }
                     <Animated.View entering={ FadeIn.duration( 500 ).delay( 300 ) }>
-                        <BarCharts  />
+                        <BarCharts />
                     </Animated.View>
                     {/* -----------------------------------------End----------------------------------------- */ }
 
@@ -110,6 +127,51 @@ export default function BankAccountStatistics ()
                     </Animated.View>
                     {/* -----------------------------------------End----------------------------------------- */ }
                 </ScrollView>
+
+                <Modal
+                    visible={ openModal }
+                    transparent={ true }
+                    animationType="slide"
+                    onRequestClose={ () => setOpenModal( false ) }
+                >
+                    <View className="flex-1 bg-black/70 justify-end">
+                        <View className="bg-white rounded-t-3xl p-4 max-h-[70%]">
+                            <View className="self-center w-24 h-1.5 bg-gray-300 rounded-full mb-4" />
+                            <View className="flex-row justify-between items-center mb-4">
+                                <Text className="text-xl font-bold">Chọn tài khoản</Text>
+                                <TouchableOpacity onPress={ () => setOpenModal( false ) }>
+                                    <Ionicons name="close-circle" size={ 28 } color="#666" />
+                                </TouchableOpacity>
+                            </View>
+                            <ScrollView className="max-h-[500px]">
+                                { bankCard.map( ( bank ) => (
+                                    <TouchableOpacity
+                                        key={ bank.STK }
+                                        className={ `border-b border-gray-200 p-4 ${ selectedCard?.STK === bank.STK ? "bg-blue-50" : "" }` }
+                                        onPress={ () => handleSelectBank( bank ) }
+                                    >
+                                        <View className="flex-row justify-between items-center">
+                                            <View>
+                                                <Text className="font-medium">{ bank.STK ?? "" }</Text>
+                                                <Text className="text-gray-500">{ bank.bankName ?? "" }</Text>
+                                            </View>
+                                            <View className="flex-row items-center">
+                                                <Image
+                                                    source={ { uri: bank.logoBanking ?? "" } }
+                                                    className="w-16 h-10"
+                                                    resizeMode="contain"
+                                                />
+                                                { selectedCard?.STK === bank.STK && (
+                                                    <Ionicons name="checkmark-circle" size={ 24 } color="#1c40f2" />
+                                                ) }
+                                            </View>
+                                        </View>
+                                    </TouchableOpacity>
+                                ) ) }
+                            </ScrollView>
+                        </View>
+                    </View>
+                </Modal>
             </SafeAreaView>
         </>
     );
