@@ -1,70 +1,21 @@
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
-import { useLocalSearchParams } from "expo-router/build/hooks";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Image, Modal, ScrollView, Text, TextInput, TouchableOpacity, View, TouchableWithoutFeedback, Keyboard, StatusBar } from "react-native";
 import mockDataBankingCard from "@/assets/banking-card.json";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { useCardStore } from "@/store/useCardStore";
+import { IBankingTransaction } from "@/interface/IBanking";
 
 export default function CreateMyQR ()
 {
-    const params = useLocalSearchParams();
-    const { cardSTK } = params;
+    const selectedCard = useCardStore( state => state.selectedCard );
+    const setSelectedCard = useCardStore( state => state.setSelectedCard )
     const [ amount, setAmount ] = useState( "10000" );
     const [ content, setContent ] = useState( "abc" );
     const data = mockDataBankingCard;
-    const [ selectedCard, setSelectedCard ] = useState<any>( null );
     const [ showCardSelector, setShowCardSelector ] = useState( false );
     const scrollViewRef = useRef<KeyboardAwareScrollView | null>( null );
-
-    // Hàm để cuộn lên đầu trang
-    const scrollToTop = () =>
-    {
-        scrollViewRef.current?.scrollToPosition( 0, 0, true );
-    };
-    // ---------------------------------- END ------------------------------------- //
-
-    // Lấy thẻ được chọn từ params hoặc từ AsyncStorage
-    useEffect( () =>
-    {
-        const loadSelectedCard = async () =>
-        {
-            if ( cardSTK )
-            {
-                const card = data.find( ( item ) => item.STK === cardSTK );
-                if ( card )
-                {
-                    setSelectedCard( card );
-                    return;
-                }
-            }
-
-            try
-            {
-                const storedCard = await AsyncStorage.getItem( "selectedCard" );
-                if ( storedCard )
-                {
-                    const parsedCard = JSON.parse( storedCard );
-                    setSelectedCard( parsedCard );
-                } else if ( data.length > 0 )
-                {
-                    setSelectedCard( data[ 0 ] );
-                }
-            } catch ( error )
-            {
-                console.error( "Lỗi khi lấy thẻ từ AsyncStorage:", error );
-                if ( data.length > 0 )
-                {
-                    setSelectedCard( data[ 0 ] );
-                }
-            }
-        };
-
-        loadSelectedCard();
-    }, [ cardSTK, data ] );
-    // ---------------------------------- END ------------------------------------- //
-
 
     // Hàm submit để tạo mã QR thanh toán
     const handleSubmit = () =>
@@ -82,10 +33,13 @@ export default function CreateMyQR ()
         }
 
         const qrData = {
-            STK: selectedCard.STK,
+            accountNumber: selectedCard.STK,
             amount: amount,
             bin: selectedCard.bankbin,
             content: content,
+            bankName: selectedCard.bankName,
+            bankLogo: selectedCard.logoBanking,
+            accountName: selectedCard.name
         };
 
         router.push( {
@@ -98,23 +52,32 @@ export default function CreateMyQR ()
     // ---------------------------------- END ------------------------------------- //
 
     // Hàm chọn thẻ ngân hàng
-    const handleSelectCard = ( card: any ) =>
+    const handleSelectCard = useCallback( ( card: IBankingTransaction ) =>
     {
         setSelectedCard( card );
         setShowCardSelector( false );
-
-        // Lưu thẻ đã chọn vào AsyncStorage
-        AsyncStorage.setItem( "selectedCard", JSON.stringify( card ) )
-            .catch( err => console.error( "Lỗi khi lưu thẻ:", err ) );
-    };
+    }, [ setSelectedCard ] );
     // ---------------------------------- END ------------------------------------- //
+
+    const handleAmountChange = ( text: string ) =>
+    {
+        // Allow only numeric values and prevent negative or excessive amounts
+        const numericValue = text.replace( /[^0-9]/g, '' );
+        if ( numericValue && Number( numericValue ) > 1_000_000_000 )
+        {
+            // Example max limit: 1 billion VND
+            alert( 'Số tiền vượt quá giới hạn cho phép (1 tỷ VNĐ)' );
+            return;
+        }
+        setAmount( numericValue );
+    };
 
     return (
         <>
             <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
             <TouchableWithoutFeedback onPress={ () => Keyboard.dismiss() }>
                 <KeyboardAwareScrollView
-                    ref={ scrollToTop }
+                    ref={ scrollViewRef }
                     enableOnAndroid
                     keyboardShouldPersistTaps="handled"
                     showsVerticalScrollIndicator={ false }
@@ -128,7 +91,7 @@ export default function CreateMyQR ()
                                 <Text className="text-4xl font-bold text-black italic">⛛ AUTOPAY </Text>
                             </View>
 
-                            {/* Số tài khoản */}
+                            {/* Số tài khoản */ }
                             <View className="mb-6">
                                 <Text className="text-gray-700 font-medium mb-2 ml-1">Số tài khoản</Text>
                                 <TouchableOpacity
@@ -181,7 +144,7 @@ export default function CreateMyQR ()
                                             placeholder="Nhập số tiền thanh toán"
                                             keyboardType="numeric"
                                             value={ amount }
-                                            onChangeText={ setAmount }
+                                            onChangeText={ handleAmountChange }
                                         />
                                         <Text>VNĐ</Text>
                                     </View>
@@ -202,6 +165,7 @@ export default function CreateMyQR ()
                                         maxLength={ 100 }
                                         value={ content }
                                         onChangeText={ setContent }
+                                        keyboardType="email-address"
                                     />
                                     <View className="bg-gray-50 px-4 py-2 border-t border-gray-100 flex-row justify-end">
                                         <Text className="text-gray-500 text-xs">{ content.length }/100</Text>
@@ -249,7 +213,7 @@ export default function CreateMyQR ()
                                     <ScrollView className="max-h-[500px]">
                                         { data.map( ( card, index ) => (
                                             <TouchableOpacity
-                                                key={ index }
+                                                key={ card.id }
                                                 className={ `border-b border-gray-200 p-4 rounded-xl ${ selectedCard?.STK === card.STK ? "bg-blue-50 border border-blue-200" : ""
                                                     }` }
                                                 onPress={ () => handleSelectCard( card ) }
@@ -282,3 +246,4 @@ export default function CreateMyQR ()
         </>
     );
 }
+

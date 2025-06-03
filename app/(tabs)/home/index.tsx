@@ -20,7 +20,7 @@ export default function Home ()
           <TouchableOpacity onPress={ () => void ( 0 ) } className='ml-1 flex-1'>
             <Text className="text-white text-2xl font-bold ">⛛ AUTOPAY</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={ () => router.push( '/notificate' ) } className="flex-row items-center relative">
+          <TouchableOpacity onPress={ () => router.push( '/notification' ) } className="flex-row items-center relative">
             <View className="">
               <MaterialCommunityIcons name="bell" size={ 20 } color="white" />
             </View>

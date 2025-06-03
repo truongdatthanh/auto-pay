@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import { Text, View, TouchableOpacity, Image, ScrollView, StatusBar, Alert, } from "react-native";
-import { useLocalSearchParams, router } from "expo-router";
+import { useLocalSearchParams, router, useFocusEffect } from "expo-router";
 import { FontAwesome, MaterialCommunityIcons, Entypo } from "@expo/vector-icons";
 import * as MediaLibrary from "expo-media-library";
 import * as Clipboard from "expo-clipboard";
@@ -11,8 +11,10 @@ import ActionButton from "@/components/button/ActionButton";
 import InfoRow from "@/components/card/InfoRow";
 import { convertEMVCode } from "@/utils/encodeEMVCode";
 import { generateQR } from "@/utils/generateQR";
-import { BankData, BankInfo } from "@/interface/IBanking";
+import { BankInfo } from "@/interface/IBanking";
 import { formatCurrencyVND } from "@/utils/format";
+import { useFabStore } from "@/store/useFABStore";
+import { useTabBarStore } from "@/store/useTabbarStore";
 
 const napasLogo = require( "@/assets/images/Napas247.png" );
 
@@ -25,9 +27,24 @@ export default function DisplayQR ()
     const [ permissionGranted, setPermissionGranted ] = useState( false );
     const [ savingQR, setSavingQR ] = useState( false );
     const [ sharing, setSharing ] = useState( false );
+    const setVisible = useFabStore( ( state ) => state.setVisible );
+    const setTabBarVisible = useTabBarStore( state => state.setTabBarVisible );
+    useFocusEffect(
+        useCallback( () =>
+        {
+            // ẩn khi vào màn hình
+            setVisible( false );
+            setTabBarVisible( false );
+            return () =>
+            {
+                setTabBarVisible( true );
+                setVisible( true );
+            }// hiện lại khi rời màn hình
+        }, [ setTabBarVisible, setVisible ] )
+    );
 
     // Chuyển đổi dữ liệu JSON từ params.data thành obj BankData
-    const parsedData = useMemo<BankData | null>( () =>
+    const parsedData = useMemo<BankInfo | null>( () =>
     {
         if ( typeof params.data === "string" )
         {
@@ -48,8 +65,8 @@ export default function DisplayQR ()
     {
         if ( !parsedData ) return "";
         return convertEMVCode( {
-            accountNumber: parsedData.STK,
-            bankBin: parsedData.bin,
+            accountNumber: String( parsedData.accountNumber ),
+            bankBin: String( parsedData.bin ),
             amount: Number( parsedData.amount ),
             addInfo: String( parsedData.content ),
         } );
@@ -67,21 +84,17 @@ export default function DisplayQR ()
 
         if ( !parsedData ) return;
 
-        const timeout = setTimeout( () =>
-        {
-            setBankInfo( {
-                bankName: "Nam A Bank",
-                bankLogo: "https://payoo.vn/img/content/2023/03/logo_namabank.png",
-                accountName: "TRUONG THANH DAT",
-                accountNumber: parsedData.STK,
-                amount: Number( parsedData.amount ),
-                content: parsedData.content,
-                time: new Date().toLocaleString( "vi-VN" ),
-            } );
-            setLoading( false );
-        }, 1000 );
-
-        return () => clearTimeout( timeout );
+        // Loại bỏ timeout không cần thiết
+        setBankInfo( {
+            bankName: parsedData.bankName,
+            bankLogo: parsedData.bankLogo,
+            accountName: parsedData.accountName,
+            accountNumber: parsedData.accountNumber,
+            amount: Number( parsedData.amount ),
+            content: parsedData.content,
+            time: new Date().toLocaleString( "vi-VN" ),
+        } );
+        setLoading( false );
     }, [ parsedData ] );
     // --------------------------------- END ------------------------------------- //
 
@@ -176,12 +189,12 @@ export default function DisplayQR ()
             { loading ? (
                 <Loading message="Đang tạo QR..." />
             ) : (
-                <ScrollView className="flex-1 bg-black" contentContainerStyle={ { paddingBottom: 40 } }>
-                    <View className="mx-5 mt-8 bg-white rounded-xl overflow-hidden shadow-md">
+                <ScrollView className="flex-1 bg-slate-50" contentContainerStyle={ { paddingBottom: 40 } }>
+                    <View className="mx-4 mt-8 bg-white rounded-lg overflow-hidden shadow-md border border-gray-200">
                         <ViewShot ref={ viewShotRef } options={ { format: "jpg", quality: 0.9 } }>
                             <View className="p-4 items-center bg-white">
                                 <QRCodeSection />
-                                <View className="mt-4 w-full">
+                                <View className="w-full">
                                     <InfoRow label="Ngân hàng:" value={ bankInfo?.bankName } />
                                     <InfoRow label="Số tài khoản:" value={ bankInfo?.accountNumber } isCopyable onPress={ copyAccountNumber } />
                                     <InfoRow label="Chủ tài khoản:" value={ bankInfo?.accountName } />
@@ -213,7 +226,7 @@ export default function DisplayQR ()
                     </View>
 
                     {/* Hướng dẫn thanh toán */ }
-                    <View className="mx-5 mt-6 bg-white rounded-xl overflow-hidden shadow-md p-5">
+                    <View className="mx-4 mt-6 bg-white rounded-lg overflow-hidden shadow-md p-5 border border-gray-200">
                         <Text className="text-lg font-bold mb-3">Hướng dẫn thanh toán</Text>
                         { [ "Mở ứng dụng ngân hàng", "Quét mã QR", "Xác nhận giao dịch" ].map( ( title, index ) => (
                             <View className="flex-row items-start mb-3" key={ index }>
@@ -238,7 +251,7 @@ export default function DisplayQR ()
 
                     {/* Tạo QR mới */ }
                     <TouchableOpacity
-                        className="mx-5 mt-6 bg-white rounded-xl shadow-md p-5 flex-row items-center justify-center"
+                        className="mx-4 mt-6 bg-white rounded-lg shadow-md p-5 flex-row items-center justify-center border border-gray-200"
                         onPress={ () => router.push( "/(tabs)/qr/create" ) }
                     >
                         <MaterialCommunityIcons name="qrcode-plus" size={ 24 } color="#1c40f2" />

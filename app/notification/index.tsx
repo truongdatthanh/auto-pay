@@ -7,15 +7,15 @@ import { FontAwesome5 } from "@expo/vector-icons";
 export default function Notification ()
 {
     const  notificate =  mockNotificate ;
-    const [ tabbar, setTabbar ] = useState( "All" );
+    const [ tabbar, setTabbar ] = useState( "Tất cả" );
 
     const handleTabChange = ( tab: string ) =>
     {
         setTabbar( tab );
     };
 
-    const unReadList = notificate.filter( ( item ) => item.status === "unread" );
-    const dataToShow = tabbar === "All" ? notificate : unReadList;
+    const unReadList = notificate.filter( ( item ) => item.status === "Chưa đọc" );
+    const dataToShow = tabbar === "Tất cả" ? notificate : unReadList;
 
     const renderItem = ( { item }: any ) => (
         <View
@@ -40,7 +40,7 @@ export default function Notification ()
 
     return (
         <View className="flex-1 bg-gray-50">
-            <TabbarTop tabs={ [ "All", "Unread" ] } onTabChange={ handleTabChange } />
+            <TabbarTop tabs={ [ "Tất cả", "Chưa đọc" ] } onTabChange={ handleTabChange } />
             <FlatList
                 data={ dataToShow }
                 keyExtractor={ ( item ) => item.id.toString() }

@@ -2,17 +2,19 @@ import { Text, View } from "react-native";
 
 interface InfoTextProps
 {
-  label: string;
-  value: string;
-  className?: string;
+  label?: string;
+  value?: string;
+  containerClassName?: string;
+  labelClassName?: string;
+  valueClassName?: string
 }
 
-export default function InfoText ( { label, value, className }: InfoTextProps )
+export default function InfoText ( { label, value ="-", containerClassName, labelClassName, valueClassName }: InfoTextProps )
 {
   return (
-    <View className="flex-row items-center justify-between mb-4 pb-2">
-      <Text className={ className }>{ label }</Text>
-      <Text className={ className }>{ value }</Text>
+    <View className={ containerClassName }>
+      <Text className={ labelClassName }>{ label }</Text>
+      <Text className={ valueClassName }>{ value }</Text>
     </View>
   );
 }

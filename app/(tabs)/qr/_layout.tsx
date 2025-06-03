@@ -9,24 +9,24 @@ import { TouchableOpacity, View, Text, Modal, Animated, StyleSheet, Dimensions }
 
 export default function QRLayout ()
 {
-    const setTabBarVisible = useTabBarStore( state => state.setTabBarVisible );
+
     const [ menuVisible, setMenuVisible ] = useState( false );
     const menuAnimation = useRef( new Animated.Value( 0 ) ).current;
     const setVisible = useFabStore( ( state ) => state.setVisible );
-
+    const setTabBarVisible = useTabBarStore( state => state.setTabBarVisible );
     // Ẩn tabbarBottom, FAB khi vào QR 
     useFocusEffect(
         useCallback( () =>
         {
             // ẩn khi vào màn hình
             setVisible( false );
-            setTabBarVisible( false ); 
+            setTabBarVisible( false );
             return () =>
             {
                 setTabBarVisible( true );
                 setVisible( true );
             }// hiện lại khi rời màn hình
-        }, [ setTabBarVisible,  setVisible] )
+        }, [ setTabBarVisible, setVisible ] )
     );
     // ------------------------------------- END ------------------------------------- //
 

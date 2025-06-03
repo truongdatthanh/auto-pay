@@ -2,7 +2,7 @@ import { Image, ScrollView, Text, TouchableOpacity, View, Modal, Alert } from "r
 import { useEffect, useState, useCallback, useRef } from "react";
 import Entypo from '@expo/vector-icons/Entypo';
 import { FontAwesome, FontAwesome6, Ionicons, MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
 import Loading from "@/components/loading/Loading";
@@ -12,16 +12,21 @@ import ViewShot from "react-native-view-shot";
 import * as MediaLibrary from 'expo-media-library';
 import * as Sharing from 'expo-sharing';
 import { ITransactionHistory } from "@/interface/ITransaction";
+import InfoText from "@/components/card/InfoText";
+import ActionButton from "@/components/button/ActionButton";
 
 
 export default function BankAccount ()
 {
+    const { id } = useLocalSearchParams();
+    console.log(id)
     const [ currentCard, setCurrentCard ] = useState<ITransactionHistory>();
     const [ isLoading, setIsLoading ] = useState( true );
     const [ qrData, setQrData ] = useState( "" );
     const [ isModalVisible, setIsModalVisible ] = useState( false );
     const [ permissionGranted, setPermissionGranted ] = useState( false );
-    const [ saving, setSaving ] = useState( false );
+    const [ savingQR, setSavingQR ] = useState( false );
+    const [ sharing, setSharing ] = useState( false );
     const viewShotRef = useRef<ViewShot>( null );
 
 
@@ -93,73 +98,60 @@ export default function BankAccount ()
         } );
     };
 
-    const handleSaveQR = useCallback( async () =>
+    // Hàm saveQR vào thư viện ảnh
+    const saveQRCode = useCallback( async () =>
     {
         if ( !permissionGranted )
         {
-            Alert.alert(
-                "Cần quyền truy cập",
-                "Ứng dụng cần quyền truy cập vào thư viện ảnh để lưu QR code",
-                [ { text: "OK" } ]
-            );
+            Alert.alert( "Cần quyền truy cập", "Cho phép lưu QR vào thư viện ảnh", [ { text: "OK" } ] );
             return;
         }
 
         try
         {
-            setSaving( true );
+            setSavingQR( true );
             const uri = await viewShotRef.current?.capture?.();
-
             if ( uri )
             {
                 const asset = await MediaLibrary.createAssetAsync( uri );
                 await MediaLibrary.createAlbumAsync( "AutoPay QR", asset, false );
-
-                Alert.alert(
-                    "Thành công",
-                    "Đã lưu mã QR vào thư viện ảnh",
-                    [ { text: "OK" } ]
-                );
+                Alert.alert( "Thành công", "QR đã lưu vào thư viện" );
             }
-        } catch ( error )
+        } catch ( err )
         {
-            Alert.alert(
-                "Lỗi",
-                "Không thể lưu mã QR. Vui lòng thử lại sau.",
-                [ { text: "OK" } ]
-            );
-            console.error( "Lỗi khi lưu QR:", error );
+            console.error( err );
+            Alert.alert( "Lỗi", "Không thể lưu QR. Thử lại sau." );
         } finally
         {
-            setSaving( false );
+            setSavingQR( false );
         }
     }, [ permissionGranted ] );
+    // --------------------------------- END ------------------------------------- //
 
-    const handleShareQR = async () =>
+    // Hàm chia sẻ QR code
+    const shareQRCode = useCallback( async () =>
     {
+        setSharing( true );
         try
         {
             const uri = await viewShotRef.current?.capture?.();
-            if ( !uri )
-            {
-                Alert.alert( 'Lỗi', 'Không thể chụp mã QR' );
-                return;
-            }
+            if ( !uri ) return Alert.alert( "Lỗi", "Không thể chụp mã QR" );
 
             const canShare = await Sharing.isAvailableAsync();
-            if ( !canShare )
-            {
-                Alert.alert( 'Thiết bị không hỗ trợ chia sẻ' );
-                return;
-            }
+            if ( !canShare ) return Alert.alert( "Thiết bị không hỗ trợ chia sẻ" );
 
             await Sharing.shareAsync( uri );
-        } catch ( error )
+
+        } catch ( err )
         {
-            console.error( error );
-            Alert.alert( 'Lỗi', 'Không thể chia sẻ mã QR' );
+            console.error( err );
+            Alert.alert( "Lỗi", "Không thể chia sẻ QR" );
+        } finally
+        {
+            setSharing( false );
         }
-    };
+    }, [] );
+    // ---------------------------------- END ------------------------------------- //
 
     const handleDeleteBankingAccount = () =>
     {
@@ -177,7 +169,7 @@ export default function BankAccount ()
         <>
             <ScrollView className="flex-1" showsVerticalScrollIndicator={ false } contentContainerStyle={ { paddingBottom: 50 } }>
                 {/* QR Code */ }
-                <View className="bg-white m-4 p-4 rounded-xl shadow-md border border-gray-200">
+                <View className="bg-white m-4 p-4 rounded-lg shadow-md border border-gray-200">
                     <View className="justify-center items-center">
                         <ViewShot ref={ viewShotRef } options={ { format: "jpg", quality: 0.9 } }>
                             <View className="items-center bg-white">
@@ -201,54 +193,71 @@ export default function BankAccount ()
                         </View>
                         <View className="border-t border-dashed border-gray-400 my-2 w-full" />
                         <View className="flex-row justify-between items-center w-full mt-2">
-                            <TouchableOpacity
-                                className="border border-slate-300 bg-slate-50 px-4 py-2.5 rounded-xl flex-row items-center"
-                                onPress={ handleSaveQR }
-                            >
-                                <Entypo name="download" size={ 16 } color="#475569" />
-                                <Text className="text-slate-600 ml-2 font-medium">Lưu mã QR</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity
-                                className="px-4 py-2.5 rounded-xl flex-row items-center bg-[#1c40f2]"
-                                onPress={ handleShareQR }
-                            >
-                                <FontAwesome name="share-square-o" size={ 16 } color="white" />
-                                <Text className="text-white ml-2 font-medium">Chia sẻ QR</Text>
-                            </TouchableOpacity>
+                            <ActionButton
+                                onPress={ saveQRCode }
+                                disabled={ savingQR }
+                                loading={ savingQR }
+                                icon={ <Entypo name="download" size={ 18 } color="#1c40f2" /> }
+                                text="Lưu QR"
+                                style="mr-2 bg-white border border-gray-200 text-[#1c40f2]"
+                            />
+                            <ActionButton
+                                onPress={ shareQRCode }
+                                disabled={ sharing }
+                                loading={ sharing }
+                                icon={ <FontAwesome name="share-square-o" size={ 18 } color="white" /> }
+                                text="Chia sẻ"
+                                style="ml-2 bg-[#1c40f2] text-white"
+                            />
                         </View>
                     </View>
                 </View>
                 {/* -----------------------------------------End----------------------------------------- */ }
 
                 {/* Thông tin tài khoản ngân hàng */ }
-                <View className="bg-white mx-4 mb-2 p-4 rounded-xl shadow-md border border-gray-200 gap-4">
+                <View className="bg-white mx-4 mb-2 p-4 rounded-lg shadow-md border border-gray-200 gap-4">
                     <Text className="text-lg font-bold">Thông tin tài khoản ngân hàng</Text>
                     <View className="border-t border-dashed border-gray-400 w-full" />
-                    <View className="flex-row justify-between items-center">
-                        <Text className="text-gray-500">Tên ngân hàng</Text>
-                        <Text className="font-semibold">{ currentCard?.bankName }</Text>
-                    </View>
-                    <View className="flex-row justify-between items-center">
-                        <Text className="text-gray-500">Số tài khoản</Text>
-                        <Text className="font-semibold">{ currentCard?.STK }</Text>
-                    </View>
-                    <View className="flex-row justify-between items-center">
-                        <Text className="text-gray-500">Chủ tài khoản</Text>
-                        <Text className="font-semibold">{ currentCard?.name?.toUpperCase() }</Text>
-                    </View>
-                    <View className="flex-row justify-between items-center">
-                        <Text className="text-gray-500">Căn cước công dân</Text>
-                        <Text className="font-semibold">123456789</Text>
-                    </View>
-                    <View className="flex-row justify-between items-center">
-                        <Text className="text-gray-500">Số điện thoại xác thực</Text>
-                        <Text className="font-semibold">0123456789</Text>
-                    </View>
+                    <InfoText
+                        label="Tên ngân hàng"
+                        value={ currentCard?.bankName }
+                        labelClassName="text-gray-500"
+                        valueClassName="font-semibold"
+                        containerClassName="flex-row justify-between items-center"
+                    />
+                    <InfoText
+                        label="Số tài khoản"
+                        value={ currentCard?.STK }
+                        labelClassName="text-gray-500"
+                        valueClassName="font-semibold"
+                        containerClassName="flex-row justify-between items-center"
+                    />
+                    <InfoText
+                        label="Tên chủ tài khoản"
+                        value={ currentCard?.name?.toUpperCase() }
+                        labelClassName="text-gray-500"
+                        valueClassName="font-semibold"
+                        containerClassName="flex-row justify-between items-center"
+                    />
+                    <InfoText
+                        label="Căn cước công dân"
+                        value="123456789"
+                        labelClassName="text-gray-500"
+                        valueClassName="font-semibold"
+                        containerClassName="flex-row justify-between items-center"
+                    />
+                    <InfoText
+                        label="Số điện thoại xác thực"
+                        value="0123456789"
+                        labelClassName="text-gray-500"
+                        valueClassName="font-semibold"
+                        containerClassName="flex-row justify-between items-center"
+                    />
                 </View>
                 {/* -----------------------------------------End----------------------------------------- */ }
 
                 {/* Tùy chọn */ }
-                <View className="bg-white mx-4 mt-2 p-4 rounded-xl shadow-md border border-gray-200 gap-4">
+                <View className="bg-white mx-4 mt-2 p-4 rounded-lg shadow-md border border-gray-200 gap-4">
                     <Text className="text-lg font-bold">Tùy chọn</Text>
                     <View className="border-t border-dashed border-gray-400 w-full" />
                     <TouchableOpacity className="flex-row items-center justify-between" onPress={ handleCreateQR }>

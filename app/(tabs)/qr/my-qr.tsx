@@ -57,7 +57,7 @@ export default function MyQR ()
     return (
         <View className="flex-1">
             {/* QR Container */ }
-            <View className="bg-white m-4 mt-8 p-2 rounded-3xl shadow-md border border-gray-200">
+            <View className="bg-white m-4 mt-8 p-2 rounded-lg shadow-md border border-gray-200">
                 <View className="justify-center items-center p-4">
                     <View className="items-center">
                         <View className="flex-row justify-between items-center">
@@ -85,7 +85,7 @@ export default function MyQR ()
 
             {/* Chọn thẻ */ }
             <TouchableOpacity
-                className="mx-4 bg-white rounded-2xl overflow-hidden shadow-md border border-gray-100"
+                className="mx-4 bg-white rounded-lg overflow-hidden shadow-md border border-gray-100"
                 onPress={ () => setShowCardSelector( true ) }
             >
                 <View className="p-4">

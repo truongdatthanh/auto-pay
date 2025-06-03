@@ -45,22 +45,16 @@ export interface IBanking
     swift_code: string;
 }
 
-export interface BankData
-{
-    STK: string;
-    bin: string;
-    amount: number | string;
-    content?: string;
-}
 
 export interface BankInfo
 {
-    bankName: string;
-    bankLogo: string;
-    accountName: string;
-    accountNumber: string;
-    amount: number;
+    bankName?: string;
+    bankLogo?: string;
+    bin?: string;
+    accountName?: string;
+    accountNumber?: string;
+    amount?: number;
     content?: string;
-    time: string;
+    time?: string;
 }
 
