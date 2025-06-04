@@ -1,5 +1,4 @@
 import { Image, Text, View } from "react-native";
-import Animated, { FadeIn, FadeInDown, FadeInUp } from "react-native-reanimated";
 
 interface AccountInfoProps
 {

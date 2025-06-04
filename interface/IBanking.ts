@@ -18,15 +18,15 @@ export interface ITransaction
 
 export interface IBankingTransaction
 {
-    id: string;
-    STK: string;
-    deeplink: string;
-    name: string;
-    logoBanking: string;
-    bankName: string;
-    bankbin: string;
+    id?: string;
+    STK?: string;
+    deeplink?: string;
+    name?: string;
+    logoBanking?: string;
+    bankName?: string;
+    bankbin?: string;
     balance?: number;
-    transactionHistory: ITransaction[];
+    transactionHistory?: ITransaction[];
 }
 
 export interface IBanking

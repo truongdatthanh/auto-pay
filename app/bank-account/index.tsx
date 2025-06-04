@@ -11,16 +11,18 @@ import { convertEMVCode } from "@/utils/encodeEMVCode";
 import ViewShot from "react-native-view-shot";
 import * as MediaLibrary from 'expo-media-library';
 import * as Sharing from 'expo-sharing';
-import { ITransactionHistory } from "@/interface/ITransaction";
 import InfoText from "@/components/card/InfoText";
 import ActionButton from "@/components/button/ActionButton";
+import data from "@/assets/banking-card.json"
+import { IBankingTransaction } from "@/interface/IBanking";
 
 
 export default function BankAccount ()
 {
-    const { id } = useLocalSearchParams();
-    console.log(id)
-    const [ currentCard, setCurrentCard ] = useState<ITransactionHistory>();
+    const { stk } = useLocalSearchParams();
+    console.log( stk )
+    const indexCard = data.find( ( item ) => item.STK === stk );
+    const [ currentCard, setCurrentCard ] = useState<IBankingTransaction>();
     const [ isLoading, setIsLoading ] = useState( true );
     const [ qrData, setQrData ] = useState( "" );
     const [ isModalVisible, setIsModalVisible ] = useState( false );
@@ -33,17 +35,14 @@ export default function BankAccount ()
     useFocusEffect(
         useCallback( () =>
         {
-            let timeout: ReturnType<typeof setTimeout>;
-
             const fetchCardData = async () =>
             {
                 setIsLoading( true );
                 try
                 {
-                    const getCard = await AsyncStorage.getItem( "selectedCard" );
-                    if ( getCard !== null )
+                    if ( indexCard )
                     {
-                        const parsedCard = JSON.parse( getCard );
+                        const parsedCard = indexCard;
                         setCurrentCard( parsedCard );
                         setQrData(
                             convertEMVCode( {
@@ -56,23 +55,15 @@ export default function BankAccount ()
                     }
                 } catch ( error )
                 {
-                    console.error( "Error fetching card data:", error );
+                    console.error( "Error:", error );
+                    Alert.alert( "Lỗi", "Không thể tải thông tin tài khoản" );
                 } finally
                 {
-                    timeout = setTimeout( () =>
-                    {
-                        setIsLoading( false );
-                    }, 1500 );
+                    setIsLoading( false );
                 }
             };
-
             fetchCardData();
-
-            return () =>
-            {
-                clearTimeout( timeout ); // ✅ cleanup timeout
-            };
-        }, [] )
+        }, [stk] )
     );
 
     // Yêu cầu quyền và tải thông tin ngân hàng

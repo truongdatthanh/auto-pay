@@ -29,11 +29,11 @@ export default function Home ()
             </View>
           </TouchableOpacity>
           <TouchableOpacity onPress={ () => router.push( '/user' ) } className="p-2 bg-white/20 rounded-full ml-4">
-            <Image source={require("@/assets/images/user-white.png")} className='h-6 w-6' resizeMode='contain' />
+            <Image source={ require( "@/assets/images/user-white.png" ) } className='h-6 w-6' resizeMode='contain' />
           </TouchableOpacity>
         </View>
 
-        {/* Content */}
+        {/* Content */ }
         <ScrollView
           //contentContainerStyle={ { paddingBottom: 100 } }
           showsVerticalScrollIndicator={ false }
@@ -57,4 +57,3 @@ export default function Home ()
     </>
   );
 }
-

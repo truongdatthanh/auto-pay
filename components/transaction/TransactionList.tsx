@@ -11,7 +11,7 @@ export default function TransactionList ()
     const [ currentDate ] = useState( new Date() );
     const [ visibleCount, setVisibleCount ] = useState( 5 );
     const selectedCard = useCardStore( state => state.selectedCard );
-    const todayTransactions = selectedCard?.transactionHistory.filter( ( item ) =>
+    const todayTransactions = selectedCard?.transactionHistory?.filter( ( item ) =>
     {
         const transactionDate = new Date( item.date );
         return (

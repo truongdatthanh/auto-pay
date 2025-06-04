@@ -5,7 +5,7 @@ import { Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useFocusEffect } from "@react-navigation/native";
 import { router, Stack } from "expo-router";
 import { useState, useRef, useEffect, useCallback } from "react";
-import { TouchableOpacity, View, Text, Modal, Animated, StyleSheet, Dimensions } from "react-native";
+import { TouchableOpacity, Text, Modal, Animated, StyleSheet } from "react-native";
 
 export default function QRLayout ()
 {

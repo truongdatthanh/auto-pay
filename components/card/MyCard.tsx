@@ -63,7 +63,7 @@ export default function MyCard ()
             try
             {
                 await setSelectedCard( selectedCard );
-                console.log("Lưu thẻ ngân hàng thành công!!!")
+                console.log( "Lưu thẻ ngân hàng thành công!!!" )
             } catch ( error )
             {
                 console.error( 'Lưu thẻ thất bại:', error );
@@ -159,6 +159,21 @@ export default function MyCard ()
             }
         }
     };
+    const renderDotIndicator = useCallback( () => (
+        <View className='h-[24px] items-center justify-center'>
+            <View className="flex-row justify-center items-center">
+                { bankCard.map( ( _, index ) => (
+                    <View
+                        key={ index }
+                        className={ `mx-1 rounded-full ${ currentCardIndex === index
+                            ? 'bg-black w-6 h-2'
+                            : 'border-2 w-2 h-2'
+                            }` }
+                    />
+                ) ) }
+            </View>
+        </View>
+    ), [ bankCard.length, currentCardIndex ] );
 
     return (
         <View className="flex-1">
@@ -231,18 +246,8 @@ export default function MyCard ()
             {/* -----------------------------------------End----------------------------------------- */ }
 
             {/* Active dot */ }
-            <View className='h-[24px] items-center justify-center'>
-                <View className="flex-row justify-center items-center">
-                    { bankCard.map( ( _, index ) => (
-                        <View
-                            key={ index }
-                            className={ `mx-1 rounded-full ${ currentCardIndex === index ? 'bg-black w-6 h-2' : 'border-2 w-2 h-2' }` }
-                        />
-                    ) ) }
-                </View>
-            </View>
+            { renderDotIndicator() }
             {/* -----------------------------------------End----------------------------------------- */ }
         </View>
     );
 }
-
