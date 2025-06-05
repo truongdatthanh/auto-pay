@@ -1,4 +1,3 @@
-
 import { useLocalSearchParams, router, useFocusEffect } from "expo-router";
 import { View, Text, TouchableOpacity, StatusBar, Image, ScrollView, Modal } from "react-native";
 import { Ionicons, FontAwesome, MaterialIcons } from '@expo/vector-icons';

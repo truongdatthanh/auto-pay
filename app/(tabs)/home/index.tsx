@@ -20,7 +20,7 @@ export default function Home ()
           <TouchableOpacity onPress={ () => void ( 0 ) } className='ml-1 flex-1'>
             <Text className="text-white text-2xl font-bold ">⛛ AUTOPAY</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={ () => router.push( '/notification' ) } className="flex-row items-center relative">
+          <TouchableOpacity activeOpacity={0.7} onPress={ () => router.push( '/notification' ) } className="flex-row items-center relative">
             <View className="">
               <MaterialCommunityIcons name="bell" size={ 20 } color="white" />
             </View>
@@ -28,7 +28,7 @@ export default function Home ()
               <Text className="text-[6px] font-bold text-white">99+</Text>
             </View>
           </TouchableOpacity>
-          <TouchableOpacity onPress={ () => router.push( '/user' ) } className="p-2 bg-white/20 rounded-full ml-4">
+          <TouchableOpacity activeOpacity={0.7} onPress={ () => router.push( '/user' ) } className="p-2 bg-white/20 rounded-full ml-4">
             <Image source={ require( "@/assets/images/user-white.png" ) } className='h-6 w-6' resizeMode='contain' />
           </TouchableOpacity>
         </View>

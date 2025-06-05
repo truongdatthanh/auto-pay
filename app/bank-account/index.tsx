@@ -1,4 +1,4 @@
-import { Image, ScrollView, Text, TouchableOpacity, View, Modal, Alert } from "react-native";
+import { Image, ScrollView, Text, TouchableOpacity, View, Modal, Alert, DimensionValue } from "react-native";
 import { useEffect, useState, useCallback, useRef } from "react";
 import Entypo from '@expo/vector-icons/Entypo';
 import { FontAwesome, FontAwesome6, Ionicons, MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
@@ -15,6 +15,7 @@ import InfoText from "@/components/card/InfoText";
 import ActionButton from "@/components/button/ActionButton";
 import data from "@/assets/banking-card.json"
 import { IBankingTransaction } from "@/interface/IBanking";
+import AppHeaderInfo from "@/components/header/App.headerInfo";
 
 
 export default function BankAccount ()
@@ -31,6 +32,7 @@ export default function BankAccount ()
     const [ sharing, setSharing ] = useState( false );
     const viewShotRef = useRef<ViewShot>( null );
 
+   
 
     useFocusEffect(
         useCallback( () =>
@@ -59,11 +61,14 @@ export default function BankAccount ()
                     Alert.alert( "Lỗi", "Không thể tải thông tin tài khoản" );
                 } finally
                 {
-                    setIsLoading( false );
+                    setTimeout( () =>
+                    {
+                        setIsLoading( false );
+                    }, 500 );
                 }
             };
             fetchCardData();
-        }, [stk] )
+        }, [ stk ] )
     );
 
     // Yêu cầu quyền và tải thông tin ngân hàng
@@ -153,126 +158,131 @@ export default function BankAccount ()
     {
         return (
             <Loading message="Đang tải thông tin tài khoản..." />
+            // <LoadingSkeleton />
         );
     }
 
     return (
         <>
-            <ScrollView className="flex-1" showsVerticalScrollIndicator={ false } contentContainerStyle={ { paddingBottom: 50 } }>
-                {/* QR Code */ }
-                <View className="bg-white m-4 p-4 rounded-lg shadow-md border border-gray-200">
-                    <View className="justify-center items-center">
-                        <ViewShot ref={ viewShotRef } options={ { format: "jpg", quality: 0.9 } }>
-                            <View className="items-center bg-white">
-                                <View className="flex-row justify-between items-center bg-white">
-                                    <Text className="font-semibold text-lg">{ currentCard?.name?.toUpperCase() }</Text>
+            <View className="flex-1">
+                <AppHeaderInfo title="Chi tiết" onPress={ () => router.replace( "/(tabs)/home" ) } />
+                <ScrollView className="flex-1" showsVerticalScrollIndicator={ false } contentContainerStyle={ { paddingBottom: 50 } }>
+                    {/* QR Code */ }
+                    <View className="bg-white m-4 p-4 rounded-lg shadow-md border border-gray-200">
+                        <View className="justify-center items-center">
+                            <ViewShot ref={ viewShotRef } options={ { format: "jpg", quality: 0.9 } }>
+                                <View className="items-center bg-white">
+                                    <View className="flex-row justify-between items-center bg-white">
+                                        <Text className="font-semibold text-lg">{ currentCard?.name?.toUpperCase() }</Text>
+                                    </View>
+                                    <View className="flex-row justify-between items-center bg-white">
+                                        <Text className="font-semibold text-md">{ currentCard?.STK }</Text>
+                                        <TouchableOpacity className="p-1">
+                                            <Ionicons name="copy-outline" size={ 16 } color="#3b82f6" />
+                                        </TouchableOpacity>
+                                    </View>
                                 </View>
-                                <View className="flex-row justify-between items-center bg-white">
-                                    <Text className="font-semibold text-md">{ currentCard?.STK }</Text>
-                                    <TouchableOpacity className="p-1">
-                                        <Ionicons name="copy-outline" size={ 16 } color="#3b82f6" />
-                                    </TouchableOpacity>
+                                <View className="bg-white">
+                                    { generateQR( qrData ) }
                                 </View>
+                            </ViewShot>
+                            <View className="flex-row justify-center items-center space-x-8">
+                                <Image source={ require( "@/assets/images/Napas247.png" ) } className="w-[100px] h-[50px]" resizeMode="contain" />
+                                <Image source={ { uri: currentCard?.logoBanking } } className="w-[100px] h-[50px]" resizeMode="contain" />
                             </View>
-                            <View className="bg-white">
-                                { generateQR( qrData ) }
+                            <View className="border-t border-dashed border-gray-400 my-2 w-full" />
+                            <View className="flex-row justify-between items-center w-full mt-2">
+                                <ActionButton
+                                    onPress={ saveQRCode }
+                                    disabled={ savingQR }
+                                    loading={ savingQR }
+                                    icon={ <Entypo name="download" size={ 18 } color="#1c40f2" /> }
+                                    text="Lưu QR"
+                                    style="mr-2 bg-white border border-gray-200 text-[#1c40f2]"
+                                />
+                                <ActionButton
+                                    onPress={ shareQRCode }
+                                    disabled={ sharing }
+                                    loading={ sharing }
+                                    icon={ <FontAwesome name="share-square-o" size={ 18 } color="white" /> }
+                                    text="Chia sẻ"
+                                    style="ml-2 bg-[#1c40f2] text-white"
+                                />
                             </View>
-                        </ViewShot>
-                        <View className="flex-row justify-center items-center space-x-8">
-                            <Image source={ require( "@/assets/images/Napas247.png" ) } className="w-[100px] h-[50px]" resizeMode="contain" />
-                            <Image source={ { uri: currentCard?.logoBanking } } className="w-[100px] h-[50px]" resizeMode="contain" />
-                        </View>
-                        <View className="border-t border-dashed border-gray-400 my-2 w-full" />
-                        <View className="flex-row justify-between items-center w-full mt-2">
-                            <ActionButton
-                                onPress={ saveQRCode }
-                                disabled={ savingQR }
-                                loading={ savingQR }
-                                icon={ <Entypo name="download" size={ 18 } color="#1c40f2" /> }
-                                text="Lưu QR"
-                                style="mr-2 bg-white border border-gray-200 text-[#1c40f2]"
-                            />
-                            <ActionButton
-                                onPress={ shareQRCode }
-                                disabled={ sharing }
-                                loading={ sharing }
-                                icon={ <FontAwesome name="share-square-o" size={ 18 } color="white" /> }
-                                text="Chia sẻ"
-                                style="ml-2 bg-[#1c40f2] text-white"
-                            />
                         </View>
                     </View>
-                </View>
-                {/* -----------------------------------------End----------------------------------------- */ }
+                    {/* -----------------------------------------End----------------------------------------- */ }
 
-                {/* Thông tin tài khoản ngân hàng */ }
-                <View className="bg-white mx-4 mb-2 p-4 rounded-lg shadow-md border border-gray-200 gap-4">
-                    <Text className="text-lg font-bold">Thông tin tài khoản ngân hàng</Text>
-                    <View className="border-t border-dashed border-gray-400 w-full" />
-                    <InfoText
-                        label="Tên ngân hàng"
-                        value={ currentCard?.bankName }
-                        labelClassName="text-gray-500"
-                        valueClassName="font-semibold"
-                        containerClassName="flex-row justify-between items-center"
-                    />
-                    <InfoText
-                        label="Số tài khoản"
-                        value={ currentCard?.STK }
-                        labelClassName="text-gray-500"
-                        valueClassName="font-semibold"
-                        containerClassName="flex-row justify-between items-center"
-                    />
-                    <InfoText
-                        label="Tên chủ tài khoản"
-                        value={ currentCard?.name?.toUpperCase() }
-                        labelClassName="text-gray-500"
-                        valueClassName="font-semibold"
-                        containerClassName="flex-row justify-between items-center"
-                    />
-                    <InfoText
-                        label="Căn cước công dân"
-                        value="123456789"
-                        labelClassName="text-gray-500"
-                        valueClassName="font-semibold"
-                        containerClassName="flex-row justify-between items-center"
-                    />
-                    <InfoText
-                        label="Số điện thoại xác thực"
-                        value="0123456789"
-                        labelClassName="text-gray-500"
-                        valueClassName="font-semibold"
-                        containerClassName="flex-row justify-between items-center"
-                    />
-                </View>
-                {/* -----------------------------------------End----------------------------------------- */ }
+                    {/* Thông tin tài khoản ngân hàng */ }
+                    <View className="bg-white mx-4 mb-2 p-4 rounded-lg shadow-md border border-gray-200 gap-4">
+                        <Text className="text-lg font-bold">Thông tin tài khoản ngân hàng</Text>
+                        <View className="border-t border-dashed border-gray-400 w-full" />
+                        <InfoText
+                            label="Tên ngân hàng"
+                            value={ currentCard?.bankName }
+                            labelClassName="text-gray-500"
+                            valueClassName="font-semibold"
+                            containerClassName="flex-row justify-between items-center"
+                        />
+                        <InfoText
+                            label="Số tài khoản"
+                            value={ currentCard?.STK }
+                            labelClassName="text-gray-500"
+                            valueClassName="font-semibold"
+                            containerClassName="flex-row justify-between items-center"
+                        />
+                        <InfoText
+                            label="Tên chủ tài khoản"
+                            value={ currentCard?.name?.toUpperCase() }
+                            labelClassName="text-gray-500"
+                            valueClassName="font-semibold"
+                            containerClassName="flex-row justify-between items-center"
+                        />
+                        <InfoText
+                            label="Căn cước công dân"
+                            value="123456789"
+                            labelClassName="text-gray-500"
+                            valueClassName="font-semibold"
+                            containerClassName="flex-row justify-between items-center"
+                        />
+                        <InfoText
+                            label="Số điện thoại xác thực"
+                            value="0123456789"
+                            labelClassName="text-gray-500"
+                            valueClassName="font-semibold"
+                            containerClassName="flex-row justify-between items-center"
+                        />
+                    </View>
+                    {/* -----------------------------------------End----------------------------------------- */ }
 
-                {/* Tùy chọn */ }
-                <View className="bg-white mx-4 mt-2 p-4 rounded-lg shadow-md border border-gray-200 gap-4">
-                    <Text className="text-lg font-bold">Tùy chọn</Text>
-                    <View className="border-t border-dashed border-gray-400 w-full" />
-                    <TouchableOpacity className="flex-row items-center justify-between" onPress={ handleCreateQR }>
-                        <View className="flex-row items-center gap-2">
-                            <View className="w-10 h-10 bg-blue-100 rounded-full items-center justify-center">
-                                <MaterialCommunityIcons name="qrcode-edit" size={ 18 } color="#1c40f2" />
+                    {/* Tùy chọn */ }
+                    <View className="bg-white mx-4 mt-2 p-4 rounded-lg shadow-md border border-gray-200 gap-4">
+                        <Text className="text-lg font-bold">Tùy chọn</Text>
+                        <View className="border-t border-dashed border-gray-400 w-full" />
+                        <TouchableOpacity className="flex-row items-center justify-between" onPress={ handleCreateQR }>
+                            <View className="flex-row items-center gap-2">
+                                <View className="w-10 h-10 bg-blue-100 rounded-full items-center justify-center">
+                                    <MaterialCommunityIcons name="qrcode-edit" size={ 18 } color="#1c40f2" />
+                                </View>
+                                <Text>Tạo mã QR</Text>
                             </View>
-                            <Text>Tạo mã QR</Text>
-                        </View>
-                        <MaterialIcons name="keyboard-arrow-right" size={ 24 } color="#9ca3af" />
-                    </TouchableOpacity>
-                    <View className="border-t border-dashed border-gray-400 w-full" />
-                    <TouchableOpacity className="flex-row items-center justify-between" onPress={ handleDeleteBankingAccount }>
-                        <View className="flex-row items-center gap-2">
-                            <View className="w-10 h-10 bg-red-100 rounded-full items-center justify-center">
-                                <FontAwesome6 name="trash-can" size={ 18 } color="red" />
+                            <MaterialIcons name="keyboard-arrow-right" size={ 24 } color="#9ca3af" />
+                        </TouchableOpacity>
+                        <View className="border-t border-dashed border-gray-400 w-full" />
+                        <TouchableOpacity className="flex-row items-center justify-between" onPress={ handleDeleteBankingAccount }>
+                            <View className="flex-row items-center gap-2">
+                                <View className="w-10 h-10 bg-red-100 rounded-full items-center justify-center">
+                                    <FontAwesome6 name="trash-can" size={ 18 } color="red" />
+                                </View>
+                                <Text>Xóa tài khoản ngân hàng</Text>
                             </View>
-                            <Text>Xóa tài khoản ngân hàng</Text>
-                        </View>
-                        <MaterialIcons name="keyboard-arrow-right" size={ 24 } color="#9ca3af" />
-                    </TouchableOpacity>
-                </View>
-                {/* -----------------------------------------End----------------------------------------- */ }
-            </ScrollView>
+                            <MaterialIcons name="keyboard-arrow-right" size={ 24 } color="#9ca3af" />
+                        </TouchableOpacity>
+                    </View>
+                    {/* -----------------------------------------End----------------------------------------- */ }
+                </ScrollView>
+
+            </View>
 
             <Modal visible={ isModalVisible } transparent={ true } animationType="fade">
                 <View className="flex-1 justify-center items-center bg-black/50">
@@ -306,3 +316,4 @@ export default function BankAccount ()
         </>
     );
 }
+

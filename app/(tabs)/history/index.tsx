@@ -293,7 +293,7 @@
 //   );
 // }
 
-import { View, Text, TouchableOpacity, SectionList, Alert, StatusBar, Modal, Image } from 'react-native';
+import { View, Text, TouchableOpacity, SectionList, Alert, StatusBar, Image, Modal } from 'react-native';
 import { useCallback, useState, useEffect, useMemo } from 'react';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Feather, Ionicons, MaterialIcons } from '@expo/vector-icons';
@@ -349,13 +349,11 @@ export default function History ()
   useEffect( () =>
   {
     setIsLoading( true );
-    const timer = setTimeout( () =>
+    if ( selectedCard?.transactionHistory )
     {
       setIsLoading( false );
-    }, 1000 );
-
-    return () => clearTimeout( timer );
-  }, [] );
+    }
+  }, [ selectedCard?.transactionHistory ] );
 
 
 

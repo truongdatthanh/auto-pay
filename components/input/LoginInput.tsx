@@ -40,7 +40,7 @@ export default function LoginInput ( {
     }, [] );
 
     return (
-        <View className={ `flex-row items-center border ${ isFocused ? 'border-blue-500' : 'border-black' } rounded-3xl px-2 gap-2 py-1` } >
+        <View className={ `flex-row items-center border ${ isFocused ? 'border-blue-500' : 'border-black' } rounded-3xl px-2 gap-2 py-1 overflow-hidden` } >
             <Image source={ iconSource } className="w-10 h-8" resizeMode="contain" />
             <TextInput
                 ref={ inputRef }
@@ -52,7 +52,7 @@ export default function LoginInput ( {
                 { ...rest }
             />
             { showPasswordToggle && (
-                <TouchableOpacity onPress={ togglePasswordVisibility }>
+                <TouchableOpacity onPress={ togglePasswordVisibility } className='p-2'>
                     <Ionicons
                         name={ hidePassword ? 'eye-outline' : 'eye-off-outline' }
                         size={ 24 }

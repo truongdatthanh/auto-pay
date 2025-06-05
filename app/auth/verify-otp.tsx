@@ -130,18 +130,18 @@ export default function VerifyOTP ()
     return (
         <>
             <StatusBar style="light" />
-            <SafeAreaView className="flex-1 bg-black">
+            <SafeAreaView className="flex-1 bg-[#cbd5e1]">
                 <View className="flex-1 px-4">
                     {/* Back button */ }
                     <TouchableOpacity onPress={ handleBackToRegister } className="absolute top-4 left-4">
-                        <Ionicons name="return-up-back" size={ 40 } color="white" />
+                        <Ionicons name="return-up-back" size={ 40 } color="black" />
                     </TouchableOpacity>
                     {/* -----------------------------------------End----------------------------------------- */ }
 
                     {/* Title */ }
                     <View className="mt-16">
-                        <Text className="text-4xl font-bold text-white">Xác thực OTP</Text>
-                        <Text className="text-md text-gray-400 mt-1">
+                        <Text className="text-4xl font-bold text-black">Xác thực OTP</Text>
+                        <Text className="text-md text-black mt-1">
                             Nhập mã OTP 4 số đã được gửi đến số điện thoại
                         </Text>
                         <Text className="text-white italic text-lg font-semibold">*{ phone }</Text>
@@ -159,7 +159,7 @@ export default function VerifyOTP ()
                                             style={ {
                                                 fontSize: 28,
                                                 fontWeight: 'bold',
-                                                color: 'white',
+                                                color: 'black',
                                                 height: 40,
                                                 marginBottom: 4,
                                                 transform: [
@@ -176,7 +176,7 @@ export default function VerifyOTP ()
                                         </Animated.Text>
                                         {/* Dấu gạch ngang - đổi màu khi đã nhập */ }
                                         <View
-                                            className={ `w-12 h-1 rounded-full ${ i < otp.length ? 'bg-white' : 'bg-gray-600' }` }
+                                            className={ `w-12 h-1 rounded-full ${ i < otp.length ? 'bg-black' : 'bg-gray-500' }` }
                                         />
                                     </View>
                                 ) ) }
@@ -195,7 +195,7 @@ export default function VerifyOTP ()
 
                         {/* Thời gian đếm ngược */ }
                         <View className="flex-row items-center justify-center">
-                            <Text className="text-gray-400">Mã OTP sẽ hết hạn sau </Text>
+                            <Text className="text-black">Mã OTP sẽ hết hạn sau </Text>
                             <Text className={ `font-bold ${ timeLeft > 60 ? 'text-white' : 'text-red-500' }` }>
                                 { formatTime( timeLeft ) }
                             </Text>
@@ -203,7 +203,7 @@ export default function VerifyOTP ()
 
                         {/* Gửi lại mã */ }
                         <View className="flex-row items-center justify-center mt-4">
-                            <Text className="text-gray-400">Không nhận được mã? </Text>
+                            <Text className="text-black">Không nhận được mã? </Text>
                             <TouchableOpacity
                                 onPress={ handleResendOtp }
                                 disabled={ isResending }
@@ -212,7 +212,7 @@ export default function VerifyOTP ()
                                     isResending ? (
                                         <ActivityIndicator size="small" color="#1c40f2" />
                                     ) : (
-                                        <Text className="underline text-white font-semibold text-md">
+                                        <Text className="underline text-black font-semibold text-md">
                                             Gửi lại mã OTP
                                         </Text>
                                     )
@@ -226,9 +226,9 @@ export default function VerifyOTP ()
                     <TouchableOpacity
                         onPress={ () => verifyOtp( otp ) }
                         disabled={ otp.length !== 4 }
-                        className={ `mt-12 py-4 rounded-xl w-[300px] self-center ${ otp.length === 4 ? 'border-2 border-white' : 'border-2 border-gray-600' }` }
+                        className={ `mt-12 py-4 rounded-xl w-[300px] self-center ${ otp.length === 4 ? 'bg-black' : 'bg-gray-600' }` }
                     >
-                        <Text className={ `${ otp.length === 4 ? 'text-white' : 'text-gray-600' } text-base font-semibold text-center` }>
+                        <Text className="text-white text-base font-semibold text-center">
                             Xác nhận
                         </Text>
                     </TouchableOpacity>
