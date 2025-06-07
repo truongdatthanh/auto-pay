@@ -1,5 +1,5 @@
 // import React, { useEffect, useState, useRef, useCallback } from "react";
-// import { View, Text, Alert, StyleSheet, TouchableOpacity, ActivityIndicator, Animated } from "react-native";
+// import { View, Text, Alert, TouchableOpacity, ActivityIndicator, Animated, Dimensions, StyleSheet } from "react-native";
 // import { CameraView, Camera } from "expo-camera";
 // import { router } from "expo-router";
 // import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
@@ -15,28 +15,32 @@
 //     const [ processingImage, setProcessingImage ] = useState( false );
 
 //     const scanLineAnimation = useRef( new Animated.Value( 0 ) ).current;
-
 //     const isFocused = useIsFocused();
+
+//     // Tính toán kích thước khung QR dựa trên chiều rộng màn hình
+//     const { width } = Dimensions.get( "window" );
+//     const qrFrameSize = Math.min( width * 0.7, 288 ); // 70% chiều rộng, tối đa 288px
+
 //     useEffect( () =>
 //     {
 //         setScanning( isFocused );
 //     }, [ isFocused ] );
 
-//     // Request camera permission once on mount
+//     // Yêu cầu quyền camera
 //     useEffect( () =>
 //     {
 //         ( async () =>
 //         {
 //             const { status } = await Camera.requestCameraPermissionsAsync();
 //             setHasPermission( status === "granted" );
-//             setScanning( true ); // reset scanning when mount
+//             setScanning( status === "granted" && isFocused );
 //         } )();
-//     }, [] );
+//     }, [ isFocused ] );
 
-//     // Animate scan line
+//     // Hiệu ứng đường quét
 //     useEffect( () =>
 //     {
-//         if ( !scanning ) return;
+//         if ( !scanning || hasPermission !== true ) return;
 //         const animation = Animated.loop(
 //             Animated.sequence( [
 //                 Animated.timing( scanLineAnimation, {
@@ -53,31 +57,38 @@
 //         );
 //         animation.start();
 //         return () => animation.stop();
-//     }, [ scanning ] );
+//     }, [ scanning, hasPermission ] );
 
-//     const handleBarcodeScanned = useCallback( ( result: any ) =>
-//     {
-//         if ( !scanning ) return;
-//         try
+//     const handleBarcodeScanned = useCallback(
+//         ( result: any ) =>
 //         {
-//             Haptics.notificationAsync( Haptics.NotificationFeedbackType.Success );
-//             setScanning( false );
-//             const jsonData = result?.data || "";
-//             router.push( {
-//                 pathname: "/payment/confirm-payment",
-//                 params: { data: jsonData },
-//             } );
-//         } catch ( error )
-//         {
-//             Haptics.notificationAsync( Haptics.NotificationFeedbackType.Error );
-//             Alert.alert(
-//                 "QR không hợp lệ",
-//                 "Mã QR không đúng định dạng hoặc không chứa thông tin thanh toán hợp lệ",
-//                 [ { text: "Thử lại", onPress: () => setScanning( true ) } ]
-//             );
-//             console.log( "data", result?.data );
-//         }
-//     }, [ scanning ] );
+//             if ( !scanning ) return;
+//             try
+//             {
+//                 Haptics.notificationAsync( Haptics.NotificationFeedbackType.Success );
+//                 setScanning( false );
+//                 const jsonData = result?.data || "";
+//                 if ( !jsonData || typeof jsonData !== "string" )
+//                 {
+//                     throw new Error( "Dữ liệu QR không hợp lệ" );
+//                 }
+//                 router.push( {
+//                     pathname: "/payment/confirm-payment",
+//                     params: { data: jsonData },
+//                 } );
+//             } catch ( error )
+//             {
+//                 Haptics.notificationAsync( Haptics.NotificationFeedbackType.Error );
+//                 Alert.alert(
+//                     "QR không hợp lệ",
+//                     "Mã QR không đúng định dạng hoặc không chứa thông tin thanh toán hợp lệ",
+//                     [ { text: "Thử lại", onPress: () => setScanning( true ) } ]
+//                 );
+//                 console.error( "Error scanning QR:", error );
+//             }
+//         },
+//         [ scanning ]
+//     );
 
 //     const toggleFlash = () => setFlashEnabled( ( f ) => !f );
 
@@ -107,11 +118,9 @@
 //             if ( !result.canceled && result.assets.length > 0 )
 //             {
 //                 const selectedImage = result.assets[ 0 ];
-
 //                 try
 //                 {
 //                     const scannedResults = await Camera.scanFromURLAsync( selectedImage.uri, [ "qr" ] );
-
 //                     if ( scannedResults && scannedResults.length > 0 )
 //                     {
 //                         handleBarcodeScanned( { data: scannedResults[ 0 ].data } );
@@ -149,7 +158,7 @@
 //         return (
 //             <View className="flex-1 bg-white justify-center items-center">
 //                 <MaterialCommunityIcons name="camera" size={ 60 } color="#ccc" />
-//                 <Text style={ { marginTop: 16, fontSize: 18 } }>Đang yêu cầu quyền camera...</Text>
+//                 <Text className="mt-4 text-lg text-gray-800">Đang yêu cầu quyền camera...</Text>
 //             </View>
 //         );
 //     }
@@ -159,10 +168,10 @@
 //         return (
 //             <View className="flex-1 bg-white justify-center items-center px-6">
 //                 <MaterialCommunityIcons name="camera-off" size={ 60 } color="#ef4444" />
-//                 <Text style={ { marginTop: 16, fontSize: 18, fontWeight: "500", textAlign: "center" } }>
+//                 <Text className="mt-4 text-lg font-semibold text-gray-800 text-center">
 //                     Không có quyền truy cập camera
 //                 </Text>
-//                 <Text style={ { marginTop: 8, color: "#6b7280", textAlign: "center", marginBottom: 24 } }>
+//                 <Text className="mt-2 text-sm text-gray-500 text-center">
 //                     Vui lòng cấp quyền truy cập camera trong cài đặt để sử dụng tính năng quét mã QR
 //                 </Text>
 //             </View>
@@ -178,28 +187,26 @@
 //                 onBarcodeScanned={ scanning ? handleBarcodeScanned : undefined }
 //                 onCameraReady={ () => console.log( "Camera ready" ) }
 //             >
-//                 <View className="flex-1 items-center justify-center">
+//                 <View className="flex-1 justify-center items-center">
 //                     {/* QR Frame */ }
-//                     <View className="w-72 h-72 relative overflow-hidden">
+//                     <View
+//                         className="relative overflow-hidden"
+//                         style={ { width: qrFrameSize, height: qrFrameSize } }
+//                     >
 //                         {/* Corner borders */ }
 //                         <View style={ styles.cornerTopLeft } />
 //                         <View style={ styles.cornerTopRight } />
 //                         <View style={ styles.cornerBottomLeft } />
 //                         <View style={ styles.cornerBottomRight } />
+//                         {/* Scan Line */ }
 //                         <Animated.View
+//                             className="absolute left-0 right-0 h-[2px] bg-lime-500 opacity-80 align-center"
 //                             style={ {
-//                                 position: "absolute",
-//                                 top: 0,
-//                                 left: 0,
-//                                 right: 0,
-//                                 height: 2,
-//                                 backgroundColor: "lime",
-//                                 opacity: 0.8,
 //                                 transform: [
 //                                     {
 //                                         translateY: scanLineAnimation.interpolate( {
 //                                             inputRange: [ 0, 1 ],
-//                                             outputRange: [ 0, 288 ], // Chiều cao khung 72 * 4 = 288
+//                                             outputRange: [ 0, qrFrameSize - 2 ], // Không tràn khung
 //                                         } ),
 //                                     },
 //                                 ],
@@ -207,15 +214,15 @@
 //                         />
 //                     </View>
 
-//                     <Text className="mt-6 text-white text-base text-center px-10">
+//                     <Text className="mt-4 text-white text-base font-medium text-center px-5">
 //                         Đặt mã QR vào khung để quét tự động
 //                     </Text>
 //                 </View>
-//                 <View className="w-full mb-8">
-//                     <View className="flex-row justify-center items-center space-x-4 gap-10">
+//                 <View className="w-full pb-8">
+//                     <View className="flex-row justify-center items-center gap-6">
 //                         {/* Gallery Button */ }
 //                         <TouchableOpacity
-//                             className="bg-black/20 rounded-full p-4"
+//                             className="bg-black/30 rounded-full p-4"
 //                             onPress={ pickImageAndScanQR }
 //                             disabled={ processingImage }
 //                         >
@@ -227,7 +234,7 @@
 //                         </TouchableOpacity>
 
 //                         <TouchableOpacity
-//                             className="bg-black/20 rounded-full p-4"
+//                             className="bg-black/30 rounded-full p-4"
 //                             onPress={ toggleFlash }
 //                         >
 //                             <Ionicons
@@ -254,6 +261,7 @@
 //         borderLeftWidth: 5,
 //         borderColor: '#ffffff',
 //         borderTopLeftRadius: 12,
+//         zIndex: 10
 //     },
 //     cornerTopRight: {
 //         position: 'absolute',
@@ -265,6 +273,7 @@
 //         borderRightWidth: 5,
 //         borderColor: '#ffffff',
 //         borderTopRightRadius: 12,
+//         zIndex: 10
 //     },
 //     cornerBottomLeft: {
 //         position: 'absolute',
@@ -276,6 +285,7 @@
 //         borderLeftWidth: 5,
 //         borderColor: '#ffffff',
 //         borderBottomLeftRadius: 12,
+//         zIndex: 10
 //     },
 //     cornerBottomRight: {
 //         position: 'absolute',
@@ -287,9 +297,9 @@
 //         borderRightWidth: 5,
 //         borderColor: '#ffffff',
 //         borderBottomRightRadius: 12,
+//         zIndex: 10
 //     },
 // } );
-
 
 import React, { useEffect, useState, useRef, useCallback } from "react";
 import { View, Text, Alert, TouchableOpacity, ActivityIndicator, Animated, Dimensions, StyleSheet } from "react-native";
@@ -303,8 +313,9 @@ import { useIsFocused } from "@react-navigation/native";
 export default function QRScanner ()
 {
     const [ hasPermission, setHasPermission ] = useState<boolean | null>( null );
+    const [ permissionRequested, setPermissionRequested ] = useState( false );
     const [ flashEnabled, setFlashEnabled ] = useState( false );
-    const [ scanning, setScanning ] = useState( true );
+    const [ scanning, setScanning ] = useState( false );
     const [ processingImage, setProcessingImage ] = useState( false );
 
     const scanLineAnimation = useRef( new Animated.Value( 0 ) ).current;
@@ -314,21 +325,47 @@ export default function QRScanner ()
     const { width } = Dimensions.get( "window" );
     const qrFrameSize = Math.min( width * 0.7, 288 ); // 70% chiều rộng, tối đa 288px
 
+    // Chỉ check permission khi component được focus (vào màn hình scanner)
     useEffect( () =>
     {
-        setScanning( isFocused );
-    }, [ isFocused ] );
-
-    // Yêu cầu quyền camera
-    useEffect( () =>
-    {
-        ( async () =>
+        if ( isFocused && !permissionRequested )
         {
+            checkAndRequestPermission();
+        } else if ( !isFocused )
+        {
+            setScanning( false );
+        }
+    }, [ isFocused, permissionRequested ] );
+
+    // Kiểm tra và yêu cầu quyền camera
+    const checkAndRequestPermission = async () =>
+    {
+        try
+        {
+            setPermissionRequested( true );
+
+            // Kiểm tra quyền hiện tại trước
+            const { status: currentStatus } = await Camera.getCameraPermissionsAsync();
+
+            if ( currentStatus === 'granted' )
+            {
+                setHasPermission( true );
+                setScanning( true );
+                return;
+            }
+
+            // Nếu chưa có quyền, yêu cầu quyền
             const { status } = await Camera.requestCameraPermissionsAsync();
             setHasPermission( status === "granted" );
-            setScanning( status === "granted" && isFocused );
-        } )();
-    }, [ isFocused ] );
+            setScanning( status === "granted" );
+
+        } catch ( error )
+        {
+            console.error( "Error requesting camera permission:", error );
+            setHasPermission( false );
+            setScanning( false );
+        }
+    };
 
     // Hiệu ứng đường quét
     useEffect( () =>
@@ -446,7 +483,16 @@ export default function QRScanner ()
         }
     };
 
-    if ( hasPermission === null )
+    // Thêm function để retry permission
+    const retryPermission = () =>
+    {
+        setPermissionRequested( false );
+        setHasPermission( null );
+        checkAndRequestPermission();
+    };
+
+    // Hiển thị loading khi chưa request permission hoặc đang chờ
+    if ( !permissionRequested || hasPermission === null )
     {
         return (
             <View className="flex-1 bg-white justify-center items-center">
@@ -456,6 +502,7 @@ export default function QRScanner ()
         );
     }
 
+    // Hiển thị khi không có quyền
     if ( hasPermission === false )
     {
         return (
@@ -464,9 +511,32 @@ export default function QRScanner ()
                 <Text className="mt-4 text-lg font-semibold text-gray-800 text-center">
                     Không có quyền truy cập camera
                 </Text>
-                <Text className="mt-2 text-sm text-gray-500 text-center">
-                    Vui lòng cấp quyền truy cập camera trong cài đặt để sử dụng tính năng quét mã QR
+                <Text className="mt-2 text-sm text-gray-500 text-center mb-6">
+                    Vui lòng cấp quyền truy cập camera để sử dụng tính năng quét mã QR
                 </Text>
+
+                {/* Nút thử lại */ }
+                <TouchableOpacity
+                    className="bg-blue-500 px-6 py-3 rounded-lg"
+                    onPress={ retryPermission }
+                >
+                    <Text className="text-white font-semibold">Thử lại</Text>
+                </TouchableOpacity>
+
+                {/* Hướng dẫn mở settings */ }
+                <TouchableOpacity
+                    className="mt-3 px-6 py-3"
+                    onPress={ () =>
+                    {
+                        Alert.alert(
+                            "Cách cấp quyền camera",
+                            "1. Vào Cài đặt thiết bị\n2. Tìm ứng dụng này\n3. Chọn Quyền\n4. Bật Camera",
+                            [ { text: "Đã hiểu" } ]
+                        );
+                    } }
+                >
+                    <Text className="text-blue-500 font-medium">Hướng dẫn cấp quyền</Text>
+                </TouchableOpacity>
             </View>
         );
     }

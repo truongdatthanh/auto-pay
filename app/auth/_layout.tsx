@@ -7,7 +7,7 @@ export default function AuthLayout ()
     <>
       <Stack initialRouteName='login'>
         <Stack.Screen name='login' options={ { headerShown: false, } } />
-        <Stack.Screen name='register' options={ { headerShown: false, } } />
+        <Stack.Screen name='register' options={ { headerShown: false, presentation: "modal" } } />
         <Stack.Screen name='forgot-password' options={ { headerShown: false, } } />
         <Stack.Screen name='pin' options={ { headerShown: false, } } />
         <Stack.Screen name='confirm-pin' options={ { headerShown: false, } } />

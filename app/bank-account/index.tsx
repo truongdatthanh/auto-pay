@@ -1,9 +1,8 @@
-import { Image, ScrollView, Text, TouchableOpacity, View, Modal, Alert, DimensionValue } from "react-native";
+import { Image, ScrollView, Text, TouchableOpacity, View, Modal, Alert } from "react-native";
 import { useEffect, useState, useCallback, useRef } from "react";
 import Entypo from '@expo/vector-icons/Entypo';
 import { FontAwesome, FontAwesome6, Ionicons, MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import { router, useLocalSearchParams } from "expo-router";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
 import Loading from "@/components/loading/Loading";
 import { generateQR } from "@/utils/generateQR";
@@ -31,8 +30,6 @@ export default function BankAccount ()
     const [ savingQR, setSavingQR ] = useState( false );
     const [ sharing, setSharing ] = useState( false );
     const viewShotRef = useRef<ViewShot>( null );
-
-   
 
     useFocusEffect(
         useCallback( () =>
@@ -80,9 +77,7 @@ export default function BankAccount ()
             const { status } = await MediaLibrary.requestPermissionsAsync();
             setPermissionGranted( status === 'granted' );
         };
-
         getPermissions();
-
     }, [ currentCard ] ); // Chỉ chạy lại khi data thay đổi
 
 

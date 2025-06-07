@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, TouchableOpacity, Image } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, Image, Pressable } from 'react-native';
 import MyCard from '@/components/card/MyCard';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { router } from 'expo-router';

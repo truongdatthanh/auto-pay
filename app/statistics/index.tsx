@@ -1,7 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { View, Text, ScrollView, RefreshControl, StatusBar, TouchableOpacity, Modal, Image } from 'react-native';
 import { AntDesign, Ionicons } from '@expo/vector-icons';
-import Animated, { FadeInDown, FadeIn } from 'react-native-reanimated';
 import data from "@/assets/banking-card.json";
 import AppHeaderInfo from '@/components/header/App.headerInfo';
 import { router } from 'expo-router';
@@ -51,7 +50,7 @@ export default function BankAccountStatistics ()
         <>
             <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
             <SafeAreaView className="flex-1 bg-black">
-                <AppHeaderInfo title="Thống Kê Giao Dịch" onPress={ () => router.replace( "/(tabs)/home" ) }
+                <AppHeaderInfo title="Thống kê giao dịch" onPress={ () => router.replace( "/(tabs)/home" ) }
                     rightComponent={
                         <>
                             <TouchableOpacity className='p-2 bg-white/20 rounded-full h-10 w-10 items-center justify-center' onPress={ () => setOpenModal( true ) }>
@@ -71,14 +70,13 @@ export default function BankAccountStatistics ()
                 >
 
                     {/* LineChart */ }
-                    <Animated.View entering={ FadeIn.duration( 500 ).delay( 300 ) }>
+                    <View>
                         <BarCharts />
-                    </Animated.View>
+                    </View>
                     {/* -----------------------------------------End----------------------------------------- */ }
 
                     {/* Tổng quan tài khoản */ }
-                    <Animated.View
-                        entering={ FadeInDown.duration( 500 ).delay( 200 ) }
+                    <View
                         className="mx-4 m-4 bg-white rounded-xl shadow-md overflow-hidden"
                     >
                         <View className="p-4 border-b border-gray-100">
@@ -124,7 +122,7 @@ export default function BankAccountStatistics ()
                                 <Text className="text-xs text-gray-500 mt-1">{ expenseTransactions } giao dịch</Text>
                             </View>
                         </View>
-                    </Animated.View>
+                    </View>
                     {/* -----------------------------------------End----------------------------------------- */ }
                 </ScrollView>
 

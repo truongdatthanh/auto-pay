@@ -227,7 +227,7 @@ export default function BarCharts ()
 
                     {/* Dropdown Menu */ }
                     { showDropdown && (
-                        <View className='absolute top-full left-0 right-0 mt-1 bg-white rounded-lg border border-gray-200 shadow-lg z-10'>
+                        <View className='absolute top-4 left-0 right-0 mt-1 bg-white rounded-lg border border-gray-200 shadow-lg z-10'>
                             { FILTERS.map( ( filter, index ) => (
                                 <TouchableOpacity
                                     key={ filter.key }
@@ -263,34 +263,37 @@ export default function BarCharts ()
             </View>
 
             {/* Bar chart */ }
-            <BarChart
-                data={ chartData }
-                height={ 250 }
-                barWidth={ 20 }
-                spacing={ 16 }
-                barBorderTopLeftRadius={ 4 }
-                barBorderTopRightRadius={ 4 }
-                noOfSections={ 10 }
-                maxValue={ Math.ceil( Math.max( ...chartData.map( d => d.value ) ) + 5 ) }
-                isAnimated
-                xAxisLabelTextStyle={ {
-                    color: '#000',
-                    marginLeft: 4,
-                    width: 30,
-                    textAlign: 'center',
-                    fontSize: 10,
-                    fontWeight: 'bold',
-                } }
-                width={ 330 }
-                showValuesAsTopLabel
-                topLabelTextStyle={ {
-                    fontSize: 11,
-                    fontWeight: 'bold',
-                    color: '#333',
-                    textAlign: 'center',
-                    width: 40
-                } }
-            />
+            <View>
+                <BarChart
+                    data={ chartData }
+                    height={ 250 }
+                    barWidth={ 20 }
+                    spacing={ 16 }
+                    barBorderTopLeftRadius={ 4 }
+                    barBorderTopRightRadius={ 4 }
+                    noOfSections={ 10 }
+                    maxValue={ Math.ceil( Math.max( ...chartData.map( d => d.value ) ) + 5 ) }
+                    isAnimated
+                    xAxisLabelTextStyle={ {
+                        color: '#000',
+                        marginLeft: 4,
+                        width: 30,
+                        textAlign: 'center',
+                        fontSize: 10,
+                        fontWeight: 'bold',
+                    } }
+                    width={ 330 }
+                    showValuesAsTopLabel
+                    topLabelTextStyle={ {
+                        fontSize: 11,
+                        fontWeight: 'bold',
+                        color: '#333',
+                        textAlign: 'center',
+                        width: 40
+                    } }
+                />
+            </View>
+
         </View>
     );
 }

@@ -71,7 +71,7 @@ export default function QRLayout ()
 
     return (
         <>
-            <Stack initialRouteName='scanner-qr'>
+            <Stack initialRouteName='index'>
                 <Stack.Screen
                     name="index"
                     options={ {

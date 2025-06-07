@@ -19,33 +19,6 @@ export default function TabsLayout ()
   // Animation cho hiệu ứng quét
   const scanLineAnim = useRef( new Animated.Value( 0 ) ).current;
 
-  // useEffect( () =>
-  // {
-  //   const createScanAnimation = () =>
-  //   {
-  //     return Animated.sequence( [
-  //       Animated.timing( scanLineAnim, {
-  //         toValue: 1,
-  //         duration: 1500,
-  //         useNativeDriver: false,
-  //       } ),
-  //       Animated.timing( scanLineAnim, {
-  //         toValue: 0,
-  //         duration: 1500,
-  //         useNativeDriver: false,
-  //       } ),
-  //     ] );
-  //   };
-
-  //   const runScanAnimation = () =>
-  //   {
-  //     Animated.loop( createScanAnimation() ).start();
-  //   };
-
-  //   runScanAnimation();
-  // }, [ scanLineAnim ] );
-
-
   useEffect( () =>
   {
     const createScanAnimation = () =>

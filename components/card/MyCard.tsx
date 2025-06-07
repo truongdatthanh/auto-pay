@@ -176,7 +176,7 @@ export default function MyCard ()
     ), [ bankCard.length, currentCardIndex ] );
 
     return (
-        <View className="flex-1">
+        <View>
             <View className="relative">
                 <FlatList
                     ref={ flatListRef }
