@@ -1,4 +1,3 @@
-
 import FloatingInputs from "@/components/input/FloatingInput";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { useRef, useState } from "react";
@@ -31,9 +30,9 @@ export default function RegisterModal ( { isVisible = false, onRequestClose }: R
                 onRequestClose={ onRequestClose }>
                 <>
                     <View className="flex-1 justify-end relative">
-                        <TouchableOpacity className="absolute left-4 top-10 flex-row self-start pr-2 py-2 bg-white rounded-full" onPress={ onRequestClose }>
-                            <Ionicons name="chevron-back" size={ 20 } color="black" />
-                            <Text className="font-semibold text-black">Quay lại</Text>
+                        <TouchableOpacity className="absolute left-4 top-10 bg-white p-3 rounded-full" onPress={ onRequestClose }>
+                            <Ionicons name="chevron-back" size={ 24 } color="black" />
+                            {/* <Text className="font-semibold text-black">Quay lại</Text> */ }
                         </TouchableOpacity>
                         <View className="bg-white p-5 h-[80%]" style={ { borderTopLeftRadius: 50, borderTopRightRadius: 50 } }>
                             <Text className="text-black font-bold text-3xl self-center mt-4 text-center break-words whitespace-normal">Bắt đầu hành trình của bạn tại đây!</Text>
@@ -79,10 +78,10 @@ export default function RegisterModal ( { isVisible = false, onRequestClose }: R
 
 
                                     {/* Checkbox điều khoản */ }
-                                    <View className="flex-row items-center ml-4 mb-8">
+                                    <View className="flex-row items-center ml-4 mb-4">
                                         <Pressable
                                             onPress={ handleSetChecked }
-                                            className={ `w-6 h-6 mr-3 rounded border-2 justify-center items-center ${ checked ? "bg-black" : "border-gray-400"
+                                            className={ `w-5 h-5 mr-1 rounded border-2 justify-center items-center ${ checked ? "bg-black" : "border-gray-400"
                                                 }` }
                                         >
                                             { checked && <Ionicons name="checkmark" size={ 18 } color="white" /> }

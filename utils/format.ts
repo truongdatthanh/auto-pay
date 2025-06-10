@@ -41,3 +41,34 @@ export const formatDayMonth = ( date: Date ) =>
     const month = ( date.getMonth() + 1 ).toString().padStart( 2, '0' );
     return `${ day }/${ month }`;
 };
+
+export const formatAccountNumber = ( text: any ) =>
+{
+
+    // Remove all non-numeric characters
+    const cleaned = text.replace( /[^0-9]/g, '' );
+
+    // Format with spaces every 4 digits
+    let formatted = '';
+    for ( let i = 0; i < cleaned.length; i++ )
+    {
+        if ( i > 0 && i % 4 === 0 )
+        {
+            formatted += ' ';
+        }
+        formatted += cleaned[ i ];
+    }
+    return formatted;
+};
+
+export const removeVietnameseTonesAndSpaces = ( str: string ) =>
+{
+    if ( !str ) return '';
+
+    return str
+        .normalize( 'NFD' )
+        .replace( /[\u0300-\u036f]/g, '' ) // Loại bỏ dấu
+        .replace( /đ/g, 'd' )
+        .replace( /Đ/g, 'D' )
+        .replace( /\s+/g, '' ); // Loại bỏ tất cả khoảng trắng
+};

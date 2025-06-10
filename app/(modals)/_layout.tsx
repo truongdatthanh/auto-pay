@@ -1,6 +1,5 @@
 import { Stack } from 'expo-router';
 import { StatusBar } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function ModalLayout ()
 {
@@ -12,9 +11,6 @@ export default function ModalLayout ()
         <Stack.Screen name='index' options={ { headerShown: false } } />
       </Stack>
     </>
-
     /* </SafeAreaView> */ 
-
-
   );
 }

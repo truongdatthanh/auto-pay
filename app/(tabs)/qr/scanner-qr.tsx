@@ -309,6 +309,7 @@ import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
 import * as ImagePicker from "expo-image-picker";
 import { useIsFocused } from "@react-navigation/native";
+import { decodeEMVCo } from "@/utils/decodeEMVCode";
 
 export default function QRScanner ()
 {
@@ -336,6 +337,7 @@ export default function QRScanner ()
             setScanning( false );
         }
     }, [ isFocused, permissionRequested ] );
+    //---------------------------------------------------- END ----------------------------------------------------//
 
     // Kiểm tra và yêu cầu quyền camera
     const checkAndRequestPermission = async () =>
@@ -366,6 +368,7 @@ export default function QRScanner ()
             setScanning( false );
         }
     };
+    //---------------------------------------------------- END ----------------------------------------------------//
 
     // Hiệu ứng đường quét
     useEffect( () =>
@@ -388,40 +391,57 @@ export default function QRScanner ()
         animation.start();
         return () => animation.stop();
     }, [ scanning, hasPermission ] );
+    //---------------------------------------------------- END ----------------------------------------------------//
 
-    const handleBarcodeScanned = useCallback(
-        ( result: any ) =>
+
+    //Hàm xử lý sự kiện quét QR
+    const handleBarcodeScanned = useCallback( ( result: any ) =>
+    {
+        if ( !scanning ) return;
+        try
         {
-            if ( !scanning ) return;
-            try
+            Haptics.notificationAsync( Haptics.NotificationFeedbackType.Success );
+            setScanning( false );
+            const jsonData = result?.data || "";
+            if ( !jsonData || typeof jsonData !== "string" )
             {
-                Haptics.notificationAsync( Haptics.NotificationFeedbackType.Success );
-                setScanning( false );
-                const jsonData = result?.data || "";
-                if ( !jsonData || typeof jsonData !== "string" )
-                {
-                    throw new Error( "Dữ liệu QR không hợp lệ" );
-                }
+                throw new Error( "Dữ liệu QR không hợp lệ" );
+            }
+            const parseData = decodeEMVCo( jsonData );
+            console.log( "parseData", parseData )
+            if ( parseData.amount )
+            {
                 router.push( {
                     pathname: "/payment/confirm-payment",
                     params: { data: jsonData },
                 } );
-            } catch ( error )
+
+            } else
             {
-                Haptics.notificationAsync( Haptics.NotificationFeedbackType.Error );
-                Alert.alert(
-                    "QR không hợp lệ",
-                    "Mã QR không đúng định dạng hoặc không chứa thông tin thanh toán hợp lệ",
-                    [ { text: "Thử lại", onPress: () => setScanning( true ) } ]
-                );
-                console.error( "Error scanning QR:", error );
+                router.push( {
+                    pathname: "/payment/transfer",
+                    params: { data: jsonData }
+                } );
             }
-        },
+
+        } catch ( error )
+        {
+            Haptics.notificationAsync( Haptics.NotificationFeedbackType.Error );
+            Alert.alert(
+                "QR không hợp lệ",
+                "Mã QR không đúng định dạng hoặc không chứa thông tin thanh toán hợp lệ",
+                [ { text: "Thử lại", onPress: () => setScanning( true ) } ]
+            );
+            console.error( "Error scanning QR:", error );
+        }
+    },
         [ scanning ]
     );
+    //---------------------------------------------------- END ----------------------------------------------------//
 
     const toggleFlash = () => setFlashEnabled( ( f ) => !f );
 
+    //Hàm chọn ảnh Qr từ thiết bị
     const pickImageAndScanQR = async () =>
     {
         try
@@ -482,6 +502,7 @@ export default function QRScanner ()
             setProcessingImage( false );
         }
     };
+    //---------------------------------------------------- END ----------------------------------------------------//
 
     // Thêm function để retry permission
     const retryPermission = () =>

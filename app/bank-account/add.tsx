@@ -6,6 +6,7 @@ import { router, useLocalSearchParams } from 'expo-router';
 import Animated, { FadeInUp, FadeInDown } from 'react-native-reanimated';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StatusBar } from 'expo-status-bar';
+import { formatAccountNumber } from '@/utils/format';
 
 interface IBank
 {
@@ -64,27 +65,6 @@ export default function AddCard ()
             setIsValid( accountHolder.length >= 3 );
         }
     }, [ selectedBank, accountNumber, accountHolder, step ] );
-    // --------------------------------- END ------------------------------------- //
-
-    // Format account number with spaces
-    const formatAccountNumber = ( text: any ) =>
-    {
-
-        // Remove all non-numeric characters
-        const cleaned = text.replace( /[^0-9]/g, '' );
-
-        // Format with spaces every 4 digits
-        let formatted = '';
-        for ( let i = 0; i < cleaned.length; i++ )
-        {
-            if ( i > 0 && i % 4 === 0 )
-            {
-                formatted += ' ';
-            }
-            formatted += cleaned[ i ];
-        }
-        return formatted;
-    };
     // --------------------------------- END ------------------------------------- //
 
 

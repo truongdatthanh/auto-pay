@@ -52,14 +52,12 @@ export default function InfomationLayout ()
                             headerShown: false,
                         } }
                     />
-
                     <Stack.Screen
                         name="contact"
                         options={ {
                             headerShown: false,
                         } }
                     />
-
                     <Stack.Screen
                         name="report-problem"
                         options={ {
@@ -67,7 +65,6 @@ export default function InfomationLayout ()
                             header: () => <AppHeaderInfo title='Vấn Đề Của Bạn?' onPress={ () => router.back() } />,
                         } }
                     />
-
                     <Stack.Screen
                         name="biometric"
                         options={ {

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ImageBackground, Pressable, Text, TouchableOpacity, View } from "react-native";
+import { ImageBackground, Pressable, Text, View } from "react-native";
 import LoginModal from "./login";
 import RegisterModal from "./register";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -28,6 +28,7 @@ export default function TestModal ()
                 className="flex-1"
             >
                 <SafeAreaView className="flex-1 relative">
+                    {/* <View className="flex-1 relative"> */ }
                     <View className="flex-1 justify-center items-center">
                         <Text className="text-white text-4xl font-semibold text-center break-words whitespace-normal">
                             Chào mừng đã đến với Auto PAY!!!
@@ -59,6 +60,7 @@ export default function TestModal ()
                     {/* --------------------------------------------------------------------------------------------------------------------------- */ }
                     <LoginModal isVisible={ visibleLogin } onRequestClose={ handleShowLoginModal } />
                     <RegisterModal isVisible={ visibleRegister } onRequestClose={ handleShowRegisterModal } />
+                    {/* </View> */ }
                 </SafeAreaView>
             </ImageBackground>
         </>

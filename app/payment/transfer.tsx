@@ -1,7 +1,7 @@
 import { Entypo, Ionicons, MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
-import { router } from "expo-router";
-import { useEffect, useRef, useState } from "react";
-import { ActivityIndicator, Image, Keyboard, Modal, ScrollView, StatusBar, TextInput, TouchableOpacity, TouchableWithoutFeedback, View, Text } from "react-native";
+import { router, useLocalSearchParams } from "expo-router";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { ActivityIndicator, Image, Keyboard, Modal, StatusBar, TextInput, TouchableOpacity, TouchableWithoutFeedback, View, Text, FlatList, KeyboardAvoidingView, Platform } from "react-native";
 import mockBanking from "@/assets/banking.json"
 import mockMyBankCard from "@/assets/banking-card.json"
 import Loading from "@/components/loading/Loading";
@@ -9,98 +9,151 @@ import { convertEMVCode } from "@/utils/encodeEMVCode";
 import { IBanking } from "@/interface/IBanking";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { decodeEMVCo } from "@/utils/decodeEMVCode";
+import { useBankingData } from "@/hooks/useBankingData";
+import { removeVietnameseTonesAndSpaces } from "@/utils/format";
+
 
 export default function Transfer ()
 {
+    const params = useLocalSearchParams();
+    const data = params.data ? decodeEMVCo( params.data as string ) : null
     const myBankCard = mockMyBankCard;
-    const listBanking = mockBanking;
     const [ loading, setLoading ] = useState( false );
-    const [ amount, setAmount ] = useState( '20000' );
+    const [ amount, setAmount ] = useState<string | undefined>( data?.amount );
     const [ isVisibleModal, setIsVisibleModal ] = useState( false );
+    const [ accountNumber, setAccountNumber ] = useState( data?.STK );
     const [ selectedBanking, setSelectedBanking ] = useState<IBanking>();
-    const [ accountNumber, setAccountNumber ] = useState( '246134029400001' );
     const [ searchQueryBank, setSearchQueryBank ] = useState( '' );
     const [ accountName, setAccountName ] = useState( '' );
-    const [ content, setContent ] = useState( 'hello ửold' );
+    const [ content, setContent ] = useState( '' );
     const [ error, setError ] = useState( "" );
     const [ loadingIndicator, setLoadingIndicator ] = useState( false );
+    const { listBanking, loading: bankingLoading, error: bankingError } = useBankingData();
     const scrollViewRef = useRef<KeyboardAwareScrollView | null>( null );
 
-    // scrollToTop
-    const scrollToTop = () =>
-    {
-        scrollViewRef.current?.scrollToPosition( 0, 0, true );
-    };
-    // --------------------------------- END ------------------------------------- //
-
-
+    //Lấy data
     useEffect( () =>
     {
-        const keyboardDidHideListener = Keyboard.addListener( "keyboardDidHide", () =>
+        if ( data && mockBanking?.length > 0 )
         {
-            if ( selectedBanking && accountNumber )
+            try
             {
-                checkAccountOwner();
+                const selectedBank = mockBanking.find( ( item ) => item.bin === data.bin );
+                if ( selectedBank )
+                {
+                    setSelectedBanking( selectedBank );
+                }
+            } catch ( error )
+            {
+                console.error( 'Error selecting bank:', error );
+                setError( 'Không thể khởi tạo ngân hàng' );
             }
-        } );
-
-        return () =>
-        {
-            keyboardDidHideListener.remove();
-        };
-    }, [ accountNumber ] );
+        }
+    }, [ data, mockBanking ] );
     // --------------------------------- END ------------------------------------- //
 
+    //Loading nhẹ để kiểm tra tên chủ tài khoản
     useEffect( () =>
     {
-        if ( selectedBanking && accountNumber )
+        if ( selectedBanking && accountNumber && accountNumber.length >= 8 )
         {
-            checkAccountOwner();
+            const timeoutId = setTimeout( checkAccountOwner, 500 ); // Debounce
+            return () => clearTimeout( timeoutId );
+        } else
+        {
+            setAccountName( '' );
+            setError( '' );
         }
-    }, [ selectedBanking ] );
+    }, [ selectedBanking, accountNumber ] );
     // --------------------------------- END ------------------------------------- //
 
-
-    const checkAccountOwner = async () =>
+    //Hàm check tên chủ account
+    // const checkAccountOwner = async () =>
+    // {
+    //     setError( "" );
+    //     setLoadingIndicator( true );
+    //     try
+    //     {
+    //         const item = myBankCard.find( ( item ) => item.STK === accountNumber && item.bankbin === selectedBanking?.bin );
+    //         if ( item )
+    //         {
+    //             setTimeout( () =>
+    //             {
+    //                 setLoadingIndicator( false );
+    //                 setAccountName( item.name );
+    //             }, 1000 );
+    //             setError( "" );
+    //             return;
+    //         } else
+    //         {
+    //             setAccountName( '' );
+    //             setTimeout( () =>
+    //             {
+    //                 setLoadingIndicator( false );
+    //                 setError( "Không tìm thấy ngân hàng thụ hưởng." );
+    //             }, 1000 );
+    //         }
+    //     } catch ( error )
+    //     {
+    //         alert( "Đã có lỗi xảy ra khi tra cứu." );
+    //         console.error( error );
+    //     } finally
+    //     {
+    //         setTimeout( () =>
+    //         {
+    //             setLoadingIndicator( false );
+    //         }, 2000 );
+    //     }
+    // };
+    const checkAccountOwner = useCallback( async () =>
     {
-        setError( "" );
+        if ( !selectedBanking || !accountNumber ) return;
+
+        setError( '' );
         setLoadingIndicator( true );
+
         try
         {
-            const item = myBankCard.find( ( item ) => item.STK === accountNumber && item.bankbin === selectedBanking?.bin );
-            if ( item )
+            const result = await new Promise<{ success: boolean; name?: string }>( ( resolve ) =>
             {
                 setTimeout( () =>
                 {
-                    setLoadingIndicator( false );
-                    setAccountName( item.name );
+                    const item = myBankCard.find(
+                        ( item ) => item.STK === accountNumber && item.bankbin === selectedBanking.bin
+                    );
+
+                    if ( item )
+                    {
+                        resolve( { success: true, name: item.name } );
+                    } else
+                    {
+                        resolve( { success: false } );
+                    }
                 }, 1000 );
-                setError( "" );
-                return;
+            } );
+
+            if ( result.success && result.name )
+            {
+                setAccountName( result.name );
+                setError( '' );
             } else
             {
                 setAccountName( '' );
-                setTimeout( () =>
-                {
-                    setLoadingIndicator( false );
-                    setError( "Không tìm thấy ngân hàng thụ hưởng." );
-                }, 1000 );
+                setError( 'Không tìm thấy tài khoản thụ hưởng' );
             }
         } catch ( error )
         {
-            alert( "Đã có lỗi xảy ra khi tra cứu." );
-            console.error( error );
+            console.error( 'Account validation error:', error );
+            setError( 'Lỗi kiểm tra tài khoản. Vui lòng thử lại' );
         } finally
         {
-            setTimeout( () =>
-            {
-                setLoadingIndicator( false );
-            }, 2000 );
+            setLoadingIndicator( false );
         }
-    };
+    }, [ selectedBanking, accountNumber, myBankCard ] );
     // --------------------------------- END ------------------------------------- //
 
-
+    //Fake loading
     useEffect( () =>
     {
         setLoading( true );
@@ -111,12 +164,14 @@ export default function Transfer ()
     }, [] );
     // --------------------------------- END ------------------------------------- //
 
+    //Hàm show modal selectedCard
     const handleShowModal = () =>
     {
         setIsVisibleModal( !isVisibleModal );
     };
     // --------------------------------- END ------------------------------------- //
 
+    //Hàm chọn thẻ ngân hàng
     const handleSelectBank = ( item: IBanking ) =>
     {
         setSelectedBanking( item );
@@ -124,6 +179,7 @@ export default function Transfer ()
     }
     // --------------------------------- END ------------------------------------- //
 
+    //Hàm sử lý sự kiện submit sau khi đã điền đủ thông tin
     const handleSubmit = () =>
     {
         if ( !selectedBanking )
@@ -138,11 +194,11 @@ export default function Transfer ()
             return;
         }
 
-        if ( !accountName )
-        {
-            alert( "Vui lòng nhập tên chủ tài khoản" );
-            return;
-        }
+        // if ( !accountName )
+        // {
+        //     alert( "Vui lòng nhập tên chủ tài khoản" );
+        //     return;
+        // }
 
         if ( !amount )
         {
@@ -150,26 +206,64 @@ export default function Transfer ()
             return;
         }
 
-        const data = convertEMVCode( {
+        const data = {
             accountNumber: accountNumber,
             bankBin: selectedBanking?.bin,
             amount: parseInt( amount ),
             addInfo: content,
-        } );
+            bankName: selectedBanking?.name
+        };
 
         router.push( {
             pathname: "/payment/confirm-payment",
             params: {
-                data: data,
+                data: JSON.stringify( data ),
             },
         } );
     }
     // --------------------------------- END ------------------------------------- //
 
-    if ( loading )
+    // Sử dụng useMemo để tối ưu filter
+    const filteredBanking = useMemo( () =>
+    {
+        if ( !searchQueryBank ) return listBanking;
+
+        const searchTerm = removeVietnameseTonesAndSpaces( searchQueryBank.toLowerCase().trim() );
+
+        return listBanking.filter( item =>
+        {
+            const nameNoTones = removeVietnameseTonesAndSpaces( item.name.toLowerCase() );
+            const shortNameNoTones = removeVietnameseTonesAndSpaces( item.shortName?.toLowerCase() || '' );
+            const short_nameNoTones = removeVietnameseTonesAndSpaces( item.short_name?.toLowerCase() || '' );
+            const codeNoTones = removeVietnameseTonesAndSpaces( item.code?.toLowerCase() || '' );
+
+            return nameNoTones.includes( searchTerm ) ||
+                shortNameNoTones.includes( searchTerm ) ||
+                short_nameNoTones.includes( searchTerm ) ||
+                codeNoTones.includes( searchTerm );
+        } );
+    }, [ listBanking, searchQueryBank ] );
+    // --------------------------------- END ------------------------------------- //
+
+
+    //Loading && Error
+    if ( loading || bankingLoading )
     {
         return <Loading message="Vui lòng chờ..." />;
     }
+
+    if ( bankingError )
+    {
+        return (
+            <View className="flex-1 justify-center items-center">
+                <Text className="text-red-500 text-center mb-4">{ bankingError }</Text>
+                <TouchableOpacity onPress={ () => window.location.reload() }>
+                    <Text className="text-blue-500">Thử lại</Text>
+                </TouchableOpacity>
+            </View>
+        );
+    }
+    // --------------------------------- END ------------------------------------- //
 
     return (
         <>
@@ -196,7 +290,7 @@ export default function Transfer ()
                     </View>
                     {/* Main Content */ }
                     <KeyboardAwareScrollView
-                        ref={ scrollToTop }
+                        ref={ scrollViewRef }
                         enableOnAndroid
                         keyboardShouldPersistTaps="handled"
                         showsVerticalScrollIndicator={ false }
@@ -209,7 +303,6 @@ export default function Transfer ()
                             <Text className="text-center text-sm text-gray-500 mb-1">
                                 Nhập số tiền
                             </Text>
-
                             <TextInput
                                 placeholder="0"
                                 keyboardType="number-pad"
@@ -310,17 +403,21 @@ export default function Transfer ()
                         animationType="slide"
                         onRequestClose={ handleShowModal }
                     >
-                        <View className="flex-1 bg-black/70 justify-end">
-                            <View className="bg-white rounded-t-3xl p-4 overflow-hidden max-h-[70%]">
-                                <View className="self-center w-24 h-1.5 bg-gray-300 rounded-full mb-4" />
-                                <View className="justify-center items-center mb-4">
-                                    <Text className="font-bold text-xl">Thông tin ngân hàng</Text>
-                                    <TouchableOpacity className="absolute top-0 right-4" onPress={ handleShowModal }>
-                                        <Ionicons name="close-outline" size={ 24 } color="gray" />
-                                    </TouchableOpacity>
-                                </View>
-
-                                <ScrollView className="max-h-[500px]">
+                        <TouchableWithoutFeedback onPress={ Keyboard.dismiss }>
+                            {/* <View className="flex-1 bg-black/70 justify-end"> */ }
+                            <KeyboardAvoidingView
+                                className="flex-1 bg-black/70 justify-end"
+                                behavior={ Platform.OS === 'ios' ? 'padding' : 'height' }
+                                keyboardVerticalOffset={ Platform.OS === 'ios' ? 0 : 20 }
+                            >
+                                <View className="bg-white rounded-t-3xl p-4 overflow-hidden min-h-[70%] max-h-[70%]">
+                                    <View className="self-center w-24 h-1.5 bg-gray-300 rounded-full mb-4" />
+                                    <View className="justify-center items-center mb-4">
+                                        <Text className="font-bold text-xl">Thông tin ngân hàng</Text>
+                                        <TouchableOpacity className="absolute top-0 right-4" onPress={ handleShowModal }>
+                                            <Ionicons name="close-outline" size={ 24 } color="gray" />
+                                        </TouchableOpacity>
+                                    </View>
                                     <View className="p-2">
                                         <TextInput
                                             className="border rounded-full pl-6"
@@ -329,25 +426,45 @@ export default function Transfer ()
                                             onChangeText={ setSearchQueryBank }
                                         />
                                     </View>
-                                    { listBanking.map( ( item ) => (
-                                        <TouchableOpacity key={ item.id } className={ `border-b border-gray-200 rounded-xl p-2  ${ selectedBanking?.id === item.id ? "bg-blue-50" : "" }` } onPress={ () => handleSelectBank( item ) }>
-                                            <View className="flex-row items-center justify-between">
-                                                <View className="flex-row items-center flex-1">
-                                                    <Image source={ { uri: item.logo } } className="w-12 h-12 mr-4" resizeMode="contain" />
-                                                    <Text className="text-sm flex-1">{ item.name }</Text>
+
+                                    <FlatList
+                                        data={ filteredBanking }
+                                        keyExtractor={ ( item ) => item.id.toString() }
+                                        renderItem={ ( { item } ) => (
+                                            <TouchableOpacity
+                                                key={ item.id }
+                                                className={ `border-b border-gray-200 rounded-xl p-2 ${ selectedBanking?.id === item.id ? "bg-blue-50" : "" }` }
+                                                onPress={ () => handleSelectBank( item ) }
+                                            >
+                                                <View className="flex-row items-center justify-between">
+                                                    <View className="flex-row items-center flex-1">
+                                                        <Image
+                                                            source={ { uri: item.logo } }
+                                                            className="w-12 h-12 mr-4"
+                                                            resizeMode="contain"
+                                                        />
+                                                        <Text className="text-sm flex-1">{ item.name }</Text>
+                                                    </View>
+                                                    { selectedBanking?.id === item.id && (
+                                                        <Ionicons name="checkmark-circle" size={ 24 } color="#1c40f2" />
+                                                    ) }
                                                 </View>
-                                                { selectedBanking?.id === item.id && (
-                                                    <Ionicons name="checkmark-circle" size={ 24 } color="#1c40f2" />
-                                                ) }
-                                            </View>
-                                        </TouchableOpacity>
-                                    ) ) }
-                                </ScrollView>
-                            </View>
-                        </View>
+                                            </TouchableOpacity>
+                                        ) }
+                                        initialNumToRender={ 10 }
+                                        maxToRenderPerBatch={ 10 }
+                                        windowSize={ 10 }
+                                        getItemLayout={ ( data, index ) => (
+                                            { length: 60, offset: 60 * index, index }
+                                        ) }
+                                    />
+                                </View>
+                            </KeyboardAvoidingView>
+                            {/* </View> */ }
+                        </TouchableWithoutFeedback>
                     </Modal >
                 </SafeAreaView>
-            </TouchableWithoutFeedback>
+            </TouchableWithoutFeedback >
         </>
     );
 }

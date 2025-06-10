@@ -1,5 +1,4 @@
 import FloatingInputs from "@/components/input/FloatingInput";
-import LoginInput from "@/components/input/LoginInput";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { useRef, useState } from "react";
@@ -14,8 +13,6 @@ interface LoginModalProps extends ModalProps
 
 export default function LoginModal ( { isVisible = false, onRequestClose }: LoginModalProps )
 {
-
-
     const scrollViewRef = useRef<ScrollView | null>( null );
     const [ email, setEmail ] = useState( "" );
     const [ password, setPassword ] = useState( "" );
@@ -37,9 +34,9 @@ export default function LoginModal ( { isVisible = false, onRequestClose }: Logi
                 animationType="none"
             >
                 <View className="flex-1 justify-end relative">
-                    <TouchableOpacity className="absolute left-4 top-10 flex-row self-start pr-2 py-2 bg-white rounded-full" onPress={ onRequestClose }>
-                        <Ionicons name="chevron-back" size={ 20 } color="black" />
-                        <Text className="font-semibold text-black">Quay lại</Text>
+                    <TouchableOpacity className="absolute left-4 top-10 bg-white p-3 rounded-full" onPress={ onRequestClose }>
+                        <Ionicons name="chevron-back" size={ 24 } color="black" />
+                        {/* <Text className="font-semibold text-black">Quay lại</Text> */ }
                     </TouchableOpacity>
                     <View className="bg-white p-5 h-[70%]" style={ { borderTopLeftRadius: 50, borderTopRightRadius: 50 } }>
                         <Text className="text-black font-bold text-3xl self-center mt-4">Đăng nhập tại đây!</Text>
@@ -57,7 +54,7 @@ export default function LoginModal ( { isVisible = false, onRequestClose }: Logi
                                         value={ email }
                                         placeholder="Nhập email"
                                         labelClassName="bg-white"
-                                    />                       
+                                    />
                                     <FloatingInputs
                                         showPasswordToggle
                                         label="Mật khẩu"
@@ -67,7 +64,7 @@ export default function LoginModal ( { isVisible = false, onRequestClose }: Logi
                                         labelClassName="bg-white"
                                     />
                                 </View>
-                                <View className="mb-8">
+                                <View className="mb-4">
                                     <TouchableOpacity className="self-end" onPress={ handleForgotPassword }>
                                         <Text className="text-sm font-semibold">Quên mật khẩu?</Text>
                                     </TouchableOpacity>
