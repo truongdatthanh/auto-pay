@@ -6,6 +6,7 @@ import mockDataBankingCard from "@/assets/banking-card.json";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import Loading from "@/components/loading/Loading";
 import { useCardStore } from "@/store/useCardStore";
+import { IBankingTransaction } from "@/interface/IBanking";
 
 export default function MyQR ()
 {
@@ -30,7 +31,7 @@ export default function MyQR ()
                 addInfo: "",
             } );
             setQrData( emvCode );
-            console.log( emvCode )
+            console.log("EMVCo myqr: ", emvCode )
             setIsLoading( false );
         } else if ( data.length > 0 )
         {
@@ -38,7 +39,7 @@ export default function MyQR ()
         }
     }, [ currentCard ] );
 
-    const handleSelectCard = ( card: any ) =>
+    const handleSelectCard = ( card: IBankingTransaction ) =>
     {
         setCurrentCard( card );
         setShowCardSelector( false );

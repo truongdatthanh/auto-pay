@@ -2,20 +2,19 @@ import { Entypo, Ionicons, MaterialCommunityIcons, MaterialIcons } from "@expo/v
 import { router, useLocalSearchParams } from "expo-router";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ActivityIndicator, Image, Keyboard, Modal, StatusBar, TextInput, TouchableOpacity, TouchableWithoutFeedback, View, Text, FlatList, KeyboardAvoidingView, Platform } from "react-native";
-import mockBanking from "@/assets/banking.json"
 import mockMyBankCard from "@/assets/banking-card.json"
 import Loading from "@/components/loading/Loading";
-import { convertEMVCode } from "@/utils/encodeEMVCode";
 import { IBanking } from "@/interface/IBanking";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { decodeEMVCo } from "@/utils/decodeEMVCode";
 import { useBankingData } from "@/hooks/useBankingData";
-import { removeVietnameseTonesAndSpaces } from "@/utils/format";
-
+import { formatCurrency, parseCurrency, removeVietnameseTonesAndSpaces } from "@/utils/format";
+import { replace } from "expo-router/build/global-state/routing";
 
 export default function Transfer ()
 {
+    const MAX_VALUE = 1_000_000_000;
     const params = useLocalSearchParams();
     const data = params.data ? decodeEMVCo( params.data as string ) : null
     const myBankCard = mockMyBankCard;
@@ -31,17 +30,20 @@ export default function Transfer ()
     const [ loadingIndicator, setLoadingIndicator ] = useState( false );
     const { listBanking, loading: bankingLoading, error: bankingError } = useBankingData();
     const scrollViewRef = useRef<KeyboardAwareScrollView | null>( null );
+    const [ suggestionAmount, setSuggestionAmount ] = useState<number[]>();
 
     //Lấy data
     useEffect( () =>
     {
-        if ( data && mockBanking?.length > 0 )
+        if ( data && listBanking?.length > 0 )
         {
+            console.log( "data transfer: ", data )
             try
             {
-                const selectedBank = mockBanking.find( ( item ) => item.bin === data.bin );
+                const selectedBank = listBanking.find( ( item ) => item.bin === data.bin );
                 if ( selectedBank )
                 {
+                    console.log( "selected transfer: ", selectedBank )
                     setSelectedBanking( selectedBank );
                 }
             } catch ( error )
@@ -50,7 +52,7 @@ export default function Transfer ()
                 setError( 'Không thể khởi tạo ngân hàng' );
             }
         }
-    }, [ data, mockBanking ] );
+    }, [ data?.bin, listBanking ] );
     // --------------------------------- END ------------------------------------- //
 
     //Loading nhẹ để kiểm tra tên chủ tài khoản
@@ -68,44 +70,74 @@ export default function Transfer ()
     }, [ selectedBanking, accountNumber ] );
     // --------------------------------- END ------------------------------------- //
 
-    //Hàm check tên chủ account
-    // const checkAccountOwner = async () =>
-    // {
-    //     setError( "" );
-    //     setLoadingIndicator( true );
-    //     try
-    //     {
-    //         const item = myBankCard.find( ( item ) => item.STK === accountNumber && item.bankbin === selectedBanking?.bin );
-    //         if ( item )
-    //         {
-    //             setTimeout( () =>
-    //             {
-    //                 setLoadingIndicator( false );
-    //                 setAccountName( item.name );
-    //             }, 1000 );
-    //             setError( "" );
-    //             return;
-    //         } else
-    //         {
-    //             setAccountName( '' );
-    //             setTimeout( () =>
-    //             {
-    //                 setLoadingIndicator( false );
-    //                 setError( "Không tìm thấy ngân hàng thụ hưởng." );
-    //             }, 1000 );
-    //         }
-    //     } catch ( error )
-    //     {
-    //         alert( "Đã có lỗi xảy ra khi tra cứu." );
-    //         console.error( error );
-    //     } finally
-    //     {
-    //         setTimeout( () =>
-    //         {
-    //             setLoadingIndicator( false );
-    //         }, 2000 );
-    //     }
-    // };
+    //hàm xử lý gợi ý số tiền
+    const suggestAmount = useCallback( ( amount: string ) =>
+    {
+        if ( !amount ) return [];
+
+        const numericAmount = parseInt( parseCurrency( amount ) );
+        if ( isNaN( numericAmount ) || numericAmount <= 0 ) return [];
+
+        const suggestions = [];
+        let base = 0;
+
+        if ( numericAmount < 1000 )
+        {
+
+            const result = numericAmount.toString().replace( /0/g, "" );
+            base = Number( result ) * 1000;
+        } else
+        {
+            base = numericAmount;
+        }
+
+
+        // Tạo 4 mức gợi ý với multiplier: 1, 10, 100, 1000
+        for ( let index = 0; index < 4; index++ )
+        {
+            if ( numericAmount < MAX_VALUE )
+            {
+                console.log( "numericAmount: ", numericAmount );
+                console.log( "base: ", base );
+                // Tạo multiplier theo cấp số nhân 10: 1, 10, 100, 1000
+                const multiplier = Math.pow( 10, index ); // 10^0=1, 10^1=10, 10^2=100, 10^3=1000
+                const amountSuggest = base * multiplier;
+
+                // Kiểm tra không vượt quá MAX_VALUE
+                if ( amountSuggest < MAX_VALUE )
+                {
+                    suggestions.push( amountSuggest );
+                }
+            }
+        }
+
+        return suggestions;
+    }, [] );
+
+    // --------------------------------- END ------------------------------------- //
+
+    useEffect( () =>
+    {
+        try
+        {
+            if ( amount )
+            {
+                const suggestions = suggestAmount( amount );
+                setSuggestionAmount( suggestions )
+            } else
+            {
+                console.log( "Không có dữ liệu amount" );
+                setSuggestionAmount( undefined )
+            }
+        } catch ( e )
+        {
+            console.error( "Lỗi khi tạo gợi ý:", e );
+        }
+    }, [ amount, suggestAmount ] );
+    // --------------------------------- END ------------------------------------- //
+
+
+    //Kiểm tra tên chủ tài khoản
     const checkAccountOwner = useCallback( async () =>
     {
         if ( !selectedBanking || !accountNumber ) return;
@@ -157,10 +189,11 @@ export default function Transfer ()
     useEffect( () =>
     {
         setLoading( true );
-        setTimeout( () =>
+        const timer = setTimeout( () =>
         {
             setLoading( false );
         }, 1000 );
+        return () => clearTimeout( timer );
     }, [] );
     // --------------------------------- END ------------------------------------- //
 
@@ -205,6 +238,8 @@ export default function Transfer ()
             alert( "Vui lòng nhập số tiền" );
             return;
         }
+
+        console.log( "content: transfer", content )
 
         const data = {
             accountNumber: accountNumber,
@@ -294,10 +329,10 @@ export default function Transfer ()
                         enableOnAndroid
                         keyboardShouldPersistTaps="handled"
                         showsVerticalScrollIndicator={ false }
-                        contentContainerStyle={ { flexGrow: 1 } }
-                        keyboardDismissMode="interactive"
+                        //contentContainerStyle={ { flexGrow: 1 } }
+                        //keyboardDismissMode="interactive"
                         keyboardOpeningTime={ 250 }
-                        className="bg-slate-50"
+                        className="bg-slate-50 flex-1"
                     >
                         <View className="mx-4 mt-6 bg-white p-4 rounded-xl overflow-hidden shadow-md border border-gray-200">
                             <Text className="text-center text-sm text-gray-500 mb-1">
@@ -306,7 +341,7 @@ export default function Transfer ()
                             <TextInput
                                 placeholder="0"
                                 keyboardType="number-pad"
-                                value={ amount }
+                                value={ formatCurrency( amount || '' ) }
                                 onChangeText={ ( text ) => setAmount( text ) }
                                 autoFocus
                                 placeholderTextColor="#A0AEC0"
@@ -316,6 +351,31 @@ export default function Transfer ()
                             <Text className="text-center text-lg text-gray-600 mt-2">
                                 VND
                             </Text>
+                            { Array.isArray( suggestionAmount ) && suggestionAmount.length > 0 && (
+                                <>
+                                    <Text className="text-center text-xs text-gray-400 mb-3">
+                                        Gợi ý số tiền
+                                    </Text>
+                                    <FlatList
+                                        data={ suggestionAmount }
+                                        horizontal
+                                        keyExtractor={ ( item, index ) => index.toString() }
+                                        showsHorizontalScrollIndicator={ false }
+                                        contentContainerStyle={ { paddingHorizontal: 8 } }
+                                        ItemSeparatorComponent={ () => <View style={ { width: 8 } } /> }
+                                        renderItem={ ( { item } ) => (
+                                            <TouchableOpacity
+                                                onPress={ () => setAmount( item.toString() ) }
+                                                className="bg-blue-50 border border-blue-200 px-3 py-2 rounded-full"
+                                            >
+                                                <Text className="text-[#1c40f2] text-sm font-medium">
+                                                    { item.toLocaleString( "vi-VN" ) } VND
+                                                </Text>
+                                            </TouchableOpacity>
+                                        ) }
+                                    />
+                                </>
+                            ) }
                             <View className="border-t border-dashed w-[50%] border-gray-400 my-4 self-center" />
                             <TextInput
                                 placeholder="Thêm ghi chú cho giao dịch..."

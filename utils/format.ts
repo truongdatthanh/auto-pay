@@ -72,3 +72,15 @@ export const removeVietnameseTonesAndSpaces = ( str: string ) =>
         .replace( /Đ/g, 'D' )
         .replace( /\s+/g, '' ); // Loại bỏ tất cả khoảng trắng
 };
+
+export const formatCurrency = ( value: string ) =>
+{
+    if ( !value ) return '';
+    const number = parseInt( value.replace( /\D/g, '' ) );
+    return number.toLocaleString( 'vi-VN' );
+};
+
+export const parseCurrency = ( value: string ) =>
+{
+    return value.replace( /\D/g, '' );
+};

@@ -14,6 +14,7 @@ import InfoText from "@/components/card/InfoText";
 import ActionButton from "@/components/button/ActionButton";
 import data from "@/assets/banking-card.json"
 import { IBankingTransaction } from "@/interface/IBanking";
+import * as Clipboard from "expo-clipboard";
 import AppHeaderInfo from "@/components/header/App.headerInfo";
 
 
@@ -144,6 +145,17 @@ export default function BankAccount ()
     }, [] );
     // ---------------------------------- END ------------------------------------- //
 
+    // Hàm sao chép số tài khoản vào clipboard
+    const copyAccountNumber = useCallback( async () =>
+    {
+        if ( currentCard?.STK )
+        {
+            await Clipboard.setStringAsync( currentCard?.STK );
+            Alert.alert( "Đã sao chép", "Số tài khoản đã được sao chép" );
+        }
+    }, [ currentCard?.STK ] );
+    // --------------------------------- END ------------------------------------- //
+
     const handleDeleteBankingAccount = () =>
     {
         setIsModalVisible( true );
@@ -172,7 +184,7 @@ export default function BankAccount ()
                                     </View>
                                     <View className="flex-row justify-between items-center bg-white">
                                         <Text className="font-semibold text-md">{ currentCard?.STK }</Text>
-                                        <TouchableOpacity className="p-1">
+                                        <TouchableOpacity className="p-1" onPress={copyAccountNumber}>
                                             <Ionicons name="copy-outline" size={ 16 } color="#3b82f6" />
                                         </TouchableOpacity>
                                     </View>
@@ -213,11 +225,11 @@ export default function BankAccount ()
                         <Text className="text-lg font-bold">Thông tin tài khoản ngân hàng</Text>
                         <View className="border-t border-dashed border-gray-400 w-full" />
                         <InfoText
-                            label="Tên ngân hàng"
+                            label="Ngân hàng"
                             value={ currentCard?.bankName }
-                            labelClassName="text-gray-500"
-                            valueClassName="font-semibold"
-                            containerClassName="flex-row justify-between items-center"
+                            labelClassName="text-gray-500 w-[40%]"
+                            valueClassName="font-semibold flex-1 text-right"
+                            containerClassName="flex-row justify-between"
                         />
                         <InfoText
                             label="Số tài khoản"
@@ -241,7 +253,7 @@ export default function BankAccount ()
                             containerClassName="flex-row justify-between items-center"
                         />
                         <InfoText
-                            label="Số điện thoại xác thực"
+                            label="Số điện thoại"
                             value="0123456789"
                             labelClassName="text-gray-500"
                             valueClassName="font-semibold"

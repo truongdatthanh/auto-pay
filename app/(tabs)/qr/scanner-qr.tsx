@@ -408,7 +408,7 @@ export default function QRScanner ()
                 throw new Error( "Dữ liệu QR không hợp lệ" );
             }
             const parseData = decodeEMVCo( jsonData );
-            console.log( "parseData", parseData )
+            console.log( "ScannerData: ", parseData )
             if ( parseData.amount )
             {
                 router.push( {

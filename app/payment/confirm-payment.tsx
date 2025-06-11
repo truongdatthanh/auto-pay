@@ -251,11 +251,13 @@ export default function ConfirmPayment ()
     const rawData = params.data;
     // Parse JSON string thành object, nếu data tồn tại
     const data = rawData ? JSON.parse( rawData as string ) : null;
+    const currentData: PaymentData = data;
+    console.log( "data confirm: ", currentData );
 
 
     const [ isVisible, setIsVisible ] = useState( false );
     const [ loading, setLoading ] = useState( false );
-    const [ selectedCard, setSelectedCard ] = useState < IBankingTransaction | null>( null );
+    const [ selectedCard, setSelectedCard ] = useState<IBankingTransaction | null>( null );
     const listBankingCard = mockMyBankCard;
     const currenCard = useCardStore( state => state.selectedCard )
 
@@ -320,7 +322,7 @@ export default function ConfirmPayment ()
                 <AppHeaderInfo title="Xác nhận thanh toán" onPress={ () => router.back() } />
                 {/* Transaction Card */ }
                 <View className="bg-slate-50 flex-1">
-                    <View className="flex-1 px-6 py-4 justify-center">
+                    <View className="flex-1 px-2 justify-center">
                         <View className="bg-white rounded-xl border border-gray-300 shadow-md p-5 mb-6">
                             <View className="items-center mb-4">
                                 <View className="w-16 h-16 bg-blue-100 rounded-full items-center justify-center mb-2">
@@ -333,25 +335,25 @@ export default function ConfirmPayment ()
 
                             <View className="pt-4 gap-4">
                                 <View className="flex-row justify-between">
-                                    <Text className="text-gray-500">Tài khoản thụ hưởng</Text>
-                                    <Text className="font-medium">{ data?.accountNumber }</Text>
+                                    <Text className="text-gray-500">Tài khoản:</Text>
+                                    <Text className="font-medium">{ currentData?.accountNumber }</Text>
                                 </View>
                                 <View className="border-t border-gray-100 w-full" />
                                 <View className="flex-row justify-between">
-                                    <Text className="text-gray-500 text-md">Ngân hàng thụ hưởng</Text>
-                                    <Text className="flex-1 text-right">{ data?.bankName }</Text>
+                                    <Text className="text-gray-500 text-md">Ngân hàng:</Text>
+                                    <Text className="flex-1 text-right">{ currentData?.bankName }</Text>
                                 </View>
                                 <View className="border-t border-gray-100 w-full" />
                                 <View className="flex-row justify-between">
                                     <Text className="text-gray-500">Số tiền</Text>
                                     <Text className="font-medium text-blue-600">
-                                        { formatCurrencyVND( data?.amount ) }
+                                        { formatCurrencyVND( currentData?.amount ) }
                                     </Text>
                                 </View>
                                 <View className="border-t border-gray-100 w-full" />
                                 <View className="flex-row justify-between">
                                     <Text className="text-gray-500">Nội dung</Text>
-                                    <Text className={ `${ data?.content ? 'font-medium' : 'text-gray-500' }` }>{ data?.content ? data?.content : '-' }</Text>
+                                    <Text className={ `${ currentData?.addInfo ? 'font-medium' : 'text-gray-500' }` }>{ currentData?.addInfo ? currentData?.addInfo : '-' }</Text>
                                 </View>
                             </View>
                         </View>
@@ -389,7 +391,7 @@ export default function ConfirmPayment ()
                                                     resizeMode="contain"
                                                 />
                                                 <View>
-                                                    {/* <Text className="font-bold text-gray-800">{ selectedCard.bankbin }</Text> */}
+                                                    {/* <Text className="font-bold text-gray-800">{ selectedCard.bankbin }</Text> */ }
                                                     <Text className="text-black text-sm">{ selectedCard.STK }</Text>
                                                 </View>
                                             </View>
