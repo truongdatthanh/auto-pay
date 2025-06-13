@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Text, View, TextInput, TouchableOpacity, Alert, Image, ScrollView, KeyboardAvoidingView, Platform, ActivityIndicator } from 'react-native';
 import mockBanking from '@/assets/banking.json';
 import { Ionicons } from '@expo/vector-icons';
@@ -7,27 +7,13 @@ import Animated, { FadeInUp, FadeInDown } from 'react-native-reanimated';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StatusBar } from 'expo-status-bar';
 import { formatAccountNumber } from '@/utils/format';
+import { IBanking } from '@/interface/IBanking';
 
-interface IBank
-{
-    id: number;
-    name: string;
-    code: string;
-    bin: string;
-    shortName: string;
-    logo: string;
-    transferSupported: number;
-    lookupSupported: number;
-    short_name: string;
-    support: number;
-    isTransfer: number;
-    swift_code: string;
-}
 
 export default function AddCard ()
 {
     const banks = mockBanking;
-    const [ selectedBank, setSelectedBank ] = useState<IBank>( banks[ 0 ] );
+    const [ selectedBank, setSelectedBank ] = useState<IBanking>( banks[ 0 ] );
     const [ accountNumber, setAccountNumber ] = useState( '' );
     const [ accountHolder, setAccountHolder ] = useState( '' );
     const [ isLoading, setIsLoading ] = useState( false );
@@ -206,9 +192,6 @@ export default function AddCard ()
                                     <View className="flex-1">
                                         <Text className="font-bold text-gray-800">{ bank.name }</Text>
                                     </View>
-                                    {/* { selectedBank.id === bank.id && (
-                                        <Ionicons name="checkmark-circle" size={ 24 } color="#3b82f6" />
-                                    ) } */}
                                 </TouchableOpacity>
                             ) ) }
                         </ScrollView>

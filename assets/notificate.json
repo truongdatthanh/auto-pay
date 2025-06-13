@@ -3,70 +3,70 @@
         "id": "1",
         "amount": "1000",
         "time": "10:20 AM",
-        "status": "read",
+        "status": true,
         "name": "Nguyen Van A"
     },
     {
         "id": "2",
         "amount": "1000",
         "time": "10:20 AM",
-        "status": "unread",
+        "status": true,
         "name": "Nguyen Van B"
     },
     {
         "id": "3",
         "amount": "1000",
         "time": "10:20 AM",
-        "status": "read",
+        "status": false,
         "name": "Nguyen Van C"
     },
     {
         "id": "4",
         "amount": "1000",
         "time": "10:20 AM",
-        "status": "read",
+        "status": false,
         "name": "Nguyen Van D"
     },
     {
         "id": "5",
         "amount": "1000",
         "time": "10:20 AM",
-        "status": "unread",
+        "status": false,
         "name": "Nguyen Van E"
     },
     {
         "id": "6",
         "amount": "1000",
         "time": "10:20 AM",
-        "status": "read",
+        "status": true,
         "name": "Nguyen Van F"
     },
     {
         "id": "7",
         "amount": "1000",
         "time": "10:20 AM",
-        "status": "unread",
+        "status": false,
         "name": "Nguyen Van G"
     },
     {
         "id": "8",
         "amount": "1000",
         "time": "10:20 AM",
-        "status": "read",
+        "status": true,
         "name": "Nguyen Van H"
     },
     {
         "id": "9",
         "amount": "1000",
         "time": "10:20 AM",
-        "status": "unread",
+        "status": false,
         "name": "Nguyen Van I"
     },
     {
         "id": "10",
         "amount": "1000",
         "time": "10:20 AM",
-        "status": "read",
+        "status": true,
         "name": "Nguyen Van J"
     }
 ]
