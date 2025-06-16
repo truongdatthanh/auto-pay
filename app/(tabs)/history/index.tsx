@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, SectionList, Alert, StatusBar, Image, Modal } from 'react-native';
+import { View, Text, TouchableOpacity, SectionList, StatusBar, Image, Modal } from 'react-native';
 import { useCallback, useState, useEffect, useMemo } from 'react';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Feather, Ionicons, MaterialIcons } from '@expo/vector-icons';
@@ -170,8 +170,10 @@ export default function History ()
     }
   ], [ startDate, endDate, showStartPicker, showEndPicker, handleDateChange ] );
 
+
   if ( isLoading ) return <Loading message="Đang tải dữ liệu..." />;
 
+  
   return (
     <>
       <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />

@@ -24,7 +24,8 @@ export default function RegisterModal ( { isVisible = false, onRequestClose }: R
 
     return (
         <>
-            <Modal visible={ isVisible }
+            <Modal
+                visible={ isVisible }
                 transparent
                 animationType="none"
                 onRequestClose={ onRequestClose }>

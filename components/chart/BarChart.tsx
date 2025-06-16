@@ -227,7 +227,7 @@ export default function BarCharts ()
 
                     {/* Dropdown Menu */ }
                     { showDropdown && (
-                        <View className='absolute top-4 left-0 right-0 mt-1 bg-white rounded-lg border border-gray-200 shadow-lg z-10'>
+                        <View className='absolute top-9 left-0 right-0 mt-1 bg-white rounded-lg border border-gray-200 shadow-lg z-10'>
                             { FILTERS.map( ( filter, index ) => (
                                 <TouchableOpacity
                                     key={ filter.key }
@@ -293,7 +293,7 @@ export default function BarCharts ()
                     } }
                 />
             </View>
-
         </View>
     );
 }
+

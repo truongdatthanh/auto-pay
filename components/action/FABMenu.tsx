@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { View, TouchableOpacity, Image } from "react-native";
 import { useFabStore } from "@/store/useFABStore";
-import Animated, { useSharedValue, useAnimatedStyle, withTiming, interpolate, Easing} from "react-native-reanimated";
+import Animated, { useSharedValue, useAnimatedStyle, withTiming, interpolate, Easing } from "react-native-reanimated";
 import ActionFAB from "@/components/button/ActionFAB";
 
 export default function FABMenu ()
@@ -18,6 +18,7 @@ export default function FABMenu ()
             easing: Easing.out( Easing.exp ),
         } );
     }, [ open ] );
+    //-------------------------------------- END -------------------------------------- //
 
     const rotateStyle = useAnimatedStyle( () =>
     {
@@ -32,10 +33,12 @@ export default function FABMenu ()
             ],
         };
     } );
+    //-------------------------------------- END -------------------------------------- //
 
     const iconListStyle = useAnimatedStyle( () => ( {
         opacity: interpolate( progress.value, [ 0, 1 ], [ 1, 0 ] ),
     } ) );
+
 
     const iconCloseStyle = useAnimatedStyle( () => ( {
         opacity: interpolate( progress.value, [ 0, 1 ], [ 0, 1 ] ),
@@ -73,7 +76,7 @@ export default function FABMenu ()
                 <Animated.View style={ rotateStyle }>
                     {/* Icon list */ }
                     <Animated.Image
-                        source={ require( "@/assets/images/list-dot-white.png" ) }
+                        source={ require( "@/assets/images/menu-white.png" ) }
                         className="w-7 h-7"
                         resizeMode="contain"
                         style={ iconListStyle }

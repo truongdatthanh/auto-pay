@@ -71,6 +71,7 @@ export default function MyCard ()
         };
         storeCard();
     }, [ currentCardIndex ] );
+    //-------------------------------------- END -------------------------------------- //
 
 
     // Xem tất cả các banking card
@@ -78,6 +79,7 @@ export default function MyCard ()
     {
         router.push( '/bank-account/list' );
     };
+    //-------------------------------------- END -------------------------------------- //
 
     // xử lý khi cuộn
     const handleScroll = ( event: NativeSyntheticEvent<NativeScrollEvent> ) =>
@@ -101,6 +103,7 @@ export default function MyCard ()
             }
         }
     };
+    //-------------------------------------- END -------------------------------------- //
 
     // xử lý khi dừng cuộn
     const handleScrollEnd = () =>
@@ -112,12 +115,11 @@ export default function MyCard ()
             setHasStoppedAtLastCard( true );
         }
     };
+    //-------------------------------------- END -------------------------------------- //
 
     // Animations for the "See all" button and the arrow
     const fadeAnim = useRef( new Animated.Value( 0 ) ).current;
     const slideAnim = useRef( new Animated.Value( 20 ) ).current; // For button slide in
-
-
     useEffect( () =>
     {
         if ( showViewAllButton )
@@ -140,6 +142,7 @@ export default function MyCard ()
 
         }
     }, [ showViewAllButton ] );
+    //-------------------------------------- END -------------------------------------- //
 
     // tự động snap về thẻ cuối cùng nếu người dùng kéo quá xa mà không đủ để hiện nút
     const handleScrollEndDrag = ( event: NativeSyntheticEvent<NativeScrollEvent> ) =>
@@ -159,21 +162,25 @@ export default function MyCard ()
             }
         }
     };
-    const renderDotIndicator = useCallback( () => (
-        <View className='h-[24px] items-center justify-center'>
-            <View className="flex-row justify-center items-center">
-                { bankCard.map( ( _, index ) => (
-                    <View
-                        key={ index }
-                        className={ `mx-1 rounded-full ${ currentCardIndex === index
-                            ? 'bg-black w-6 h-2'
-                            : 'border-2 w-2 h-2'
-                            }` }
-                    />
-                ) ) }
-            </View>
-        </View>
-    ), [ bankCard.length, currentCardIndex ] );
+    //-------------------------------------- END -------------------------------------- //
+
+    //Hàm render dot
+    // const renderDotIndicator = useCallback( () => (
+    //     <View className='h-[24px] items-center justify-center'>
+    //         <View className="flex-row justify-center items-center">
+    //             { bankCard.map( ( _, index ) => (
+    //                 <View
+    //                     key={ index }
+    //                     className={ `mx-1 rounded-full ${ currentCardIndex === index
+    //                         ? 'bg-black w-6 h-2'
+    //                         : 'border-2 w-2 h-2'
+    //                         }` }
+    //                 />
+    //             ) ) }
+    //         </View>
+    //     </View>
+    // ), [ bankCard.length, currentCardIndex ] );
+    //-------------------------------------- END -------------------------------------- //
 
     return (
         <View>
@@ -246,7 +253,7 @@ export default function MyCard ()
             {/* -----------------------------------------End----------------------------------------- */ }
 
             {/* Active dot */ }
-            { renderDotIndicator() }
+            {/* { renderDotIndicator() } */ }
             {/* -----------------------------------------End----------------------------------------- */ }
         </View>
     );

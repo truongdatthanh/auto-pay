@@ -7,7 +7,7 @@ export default function ModalLayout ()
     // <SafeAreaView className='flex-1'>
     <>
       <StatusBar backgroundColor="transparent" translucent />
-      <Stack screenOptions={ { presentation: 'modal', headerShown: false } } initialRouteName='index'>
+      <Stack screenOptions={ { headerShown: true } } initialRouteName='index'>
         <Stack.Screen name='index' options={ { headerShown: false } } />
       </Stack>
     </>
