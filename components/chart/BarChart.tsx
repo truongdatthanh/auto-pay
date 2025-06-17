@@ -2,7 +2,7 @@ import { BarChart } from 'react-native-gifted-charts';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { useState, useMemo } from 'react';
 import { Ionicons } from '@expo/vector-icons';
-import { formatDate, formatDayMonth } from '@/utils/format';
+import { formatDayMonth, formatDayMonthYear } from '@/utils/format';
 import { useCardStore } from '@/store/useCardStore';
 
 const COLORS = {
@@ -201,7 +201,7 @@ export default function BarCharts ()
                                 <Ionicons name="chevron-back" size={ 20 } color="#666" />
                             </TouchableOpacity>
                             <Text className="text-sm text-gray-700 font-semibold">
-                                { formatDate( startDate ) } - { formatDate( endDate ) }
+                                { formatDayMonthYear( startDate ) } - { formatDayMonthYear( endDate ) }
                             </Text>
                             <TouchableOpacity onPress={ () => setOffset( prev => prev + 1 ) } disabled={ offset >= 0 }>
                                 <Ionicons name="chevron-forward" size={ 20 } color={ offset >= 0 ? '#ccc' : '#666' } />

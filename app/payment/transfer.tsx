@@ -9,7 +9,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { decodeEMVCo } from "@/utils/decodeEMVCode";
 import { useBankingData } from "@/hooks/useBankingData";
-import { formatCurrency, parseCurrency, removeVietnameseTonesAndSpaces } from "@/utils/format";
+import { formatCurrencyWithoutCode, parseCurrency, removeVietnameseTonesAndSpaces } from "@/utils/format";
 import AppHeaderInfo from "@/components/header/App.headerInfo";
 
 
@@ -351,7 +351,7 @@ export default function Transfer ()
                             ref={ amountInputRef }
                             placeholder="0"
                             keyboardType="number-pad"
-                            value={ formatCurrency( amount || '' ) }
+                            value={ formatCurrencyWithoutCode( amount || '' ) }
                             onChangeText={ ( text ) => setAmount( text ) }
                             autoFocus
                             placeholderTextColor="#A0AEC0"

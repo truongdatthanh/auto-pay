@@ -9,7 +9,7 @@ import { useFocusEffect } from "@react-navigation/native";
 import Loading from "@/components/loading/Loading";
 import { useTabBarStore } from "@/store/useTabbarStore";
 import { useFabStore } from "@/store/useFABStore";
-import { formatCurrencyVND, formatDate } from "@/utils/format";
+import { formatCurrencyWithCode, formatDayMonthYear } from "@/utils/format";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useCardStore } from "@/store/useCardStore";
 import AccountInfo from "@/components/card/AccountInfo";
@@ -198,7 +198,7 @@ export default function Transaction ()
                                 { data.amount < 0 ? 'Chi tiêu' : 'Nhận vào' }
                             </Text>
                             <Text className="text-3xl font-bold text-white mb-2">
-                                { formatCurrencyVND( Math.abs( data.amount ) ) }
+                                { formatCurrencyWithCode( Math.abs( data.amount ) ) }
                             </Text>
                             <View className="flex-row items-center bg-white/20 px-3 py-1.5 rounded-full">
                                 <Ionicons name={ data.amount < 0 ? "arrow-up" : "arrow-down" } size={ 14 } color="white" />
@@ -233,7 +233,7 @@ export default function Transaction ()
                             <InfoText
                                 label="Thời gian tạo"
                                 containerClassName="flex-row justify-between items-center py-2"
-                                value={ formatDate( currentDate ) }
+                                value={ formatDayMonthYear( currentDate ) }
                                 labelClassName="text-sm text-gray-500"
                                 valueClassName="text-sm text-black font-semibold"
                             />
@@ -245,7 +245,7 @@ export default function Transaction ()
                                 <View className="flex-row items-center gap-1">
                                     <Text className="text-sm text-black font-semibold">{ data.time }</Text>
                                     <View className="border-l border-gray-500 h-6" />
-                                    <Text className="text-sm text-black font-semibold">{ formatDate( data.date ) }</Text>
+                                    <Text className="text-sm text-black font-semibold">{ formatDayMonthYear( data.date ) }</Text>
                                 </View>
                             </View>
                         </Animated.View>

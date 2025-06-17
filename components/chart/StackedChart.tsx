@@ -4,7 +4,7 @@ import Animated, { FadeIn } from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
 import { BarChart } from 'react-native-gifted-charts';
 import dataBankingCard from '@/assets/banking-card.json';
-import { formatCurrencyVND } from '@/utils/format';
+import { formatCurrencyWithCode } from '@/utils/format';
 
 const screenWidth = Dimensions.get( 'window' ).width;
 const barWidth = 20;
@@ -108,7 +108,7 @@ export default function StackedBarChartComponent ( { id }: { id: string } )
             </View>
             <View>
               <Text style={ { fontWeight: '700', fontSize: 16, color: '#222' } }>
-                { formatCurrencyVND( totalIncome ) }
+                { formatCurrencyWithCode( totalIncome ) }
               </Text>
               <Text style={ { fontSize: 12, color: '#555' } }>Thu nhập</Text>
             </View>
@@ -130,7 +130,7 @@ export default function StackedBarChartComponent ( { id }: { id: string } )
             </View>
             <View>
               <Text style={ { fontWeight: '700', fontSize: 16, color: '#222' } }>
-                { formatCurrencyVND( totalExpense ) }
+                { formatCurrencyWithCode( totalExpense ) }
               </Text>
               <Text style={ { fontSize: 12, color: '#555' } }>Chi tiêu</Text>
             </View>

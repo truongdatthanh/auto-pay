@@ -1,7 +1,7 @@
 import { router } from "expo-router";
 import { Text, TouchableOpacity, View } from "react-native";
 import AntDesign from '@expo/vector-icons/AntDesign';
-import { formatCurrencyVND } from "@/utils/format";
+import { formatCurrencyWithCode } from "@/utils/format";
 
 interface ICardInfoProps
 {
@@ -29,7 +29,7 @@ export default function CardInfo ( props: ICardInfoProps )
             <AntDesign name="creditcard" size={ 24 } color="black" />
             <View className="flex-1 ml-4">
                 <Text className={ `font-semibold ${ card.amount < 0 ? 'text-red-500' : 'text-green-500' }` }>
-                    { formatCurrencyVND( card.amount ) }
+                    { formatCurrencyWithCode( card.amount ) }
                 </Text>
                 <Text className="text-sm text-gray-500">{ card.transactionId }</Text>
             </View>

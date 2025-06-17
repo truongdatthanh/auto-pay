@@ -1,9 +1,11 @@
+//Hàm format số thẻ cứ 4 số sẽ chèn space
 export const formatCardNumber = ( cardNumber: string | undefined ) =>
 {
     if ( !cardNumber ) return "";
     return cardNumber.replace( /(\d{4})/g, "$1 " ).trim();
 };
 
+//hàm format ẩn hiện số thẻ thành ****
 export const formatHiddenCardNumber = ( cardNumber: string | undefined ) =>
 {
     if ( !cardNumber ) return "";
@@ -12,7 +14,8 @@ export const formatHiddenCardNumber = ( cardNumber: string | undefined ) =>
     return formatCardNumber( first4 + hidden );
 };
 
-export const formatCurrencyVND = ( amount: any ) =>
+//Hàm format số tiền thành Vnđ
+export const formatCurrencyWithCode = ( amount: any ): string =>
 {
     if ( typeof amount !== "number" )
     {
@@ -22,10 +25,13 @@ export const formatCurrencyVND = ( amount: any ) =>
     return new Intl.NumberFormat( "vi-VN", {
         style: "currency",
         currency: "VND",
+        currencyDisplay: "code", // Hiển thị mã tiền tệ VND thay vì ký hiệu ₫
     } ).format( amount );
 };
 
-export const formatDate = ( dateInput: string | Date ): string =>
+
+//Hàm format ngày (dd/mm/yyyy)
+export const formatDayMonthYear = ( dateInput: string | Date ): string =>
 {
     const date = new Date( dateInput );
     return date.toLocaleDateString( 'vi-VN', {
@@ -35,6 +41,20 @@ export const formatDate = ( dateInput: string | Date ): string =>
     } );
 };
 
+
+// Hàm format time (giờ:phút:giây)
+export const formatHourMinuteSecond = ( dateInput: string | Date ): string =>
+{
+    const date = new Date( dateInput );
+    return date.toLocaleTimeString( 'vi-VN', {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false, // Định dạng 24h
+    } );
+};
+
+//Hàm format (dd/mm)
 export const formatDayMonth = ( date: Date ) =>
 {
     const day = date.getDate().toString().padStart( 2, '0' );
@@ -42,6 +62,7 @@ export const formatDayMonth = ( date: Date ) =>
     return `${ day }/${ month }`;
 };
 
+//Hàm format  khoảng cách
 export const formatAccountNumber = ( text: any ) =>
 {
 
@@ -61,6 +82,8 @@ export const formatAccountNumber = ( text: any ) =>
     return formatted;
 };
 
+
+//Hàm xóa các thanh dấu Việt Nam
 export const removeVietnameseTonesAndSpaces = ( str: string ) =>
 {
     if ( !str ) return '';
@@ -73,7 +96,8 @@ export const removeVietnameseTonesAndSpaces = ( str: string ) =>
         .replace( /\s+/g, '' ); // Loại bỏ tất cả khoảng trắng
 };
 
-export const formatCurrency = ( value: string ) =>
+
+export const formatCurrencyWithoutCode = ( value: string ) =>
 {
     if ( !value ) return '';
     const number = parseInt( value.replace( /\D/g, '' ) );
@@ -83,4 +107,24 @@ export const formatCurrency = ( value: string ) =>
 export const parseCurrency = ( value: string ) =>
 {
     return value.replace( /\D/g, '' );
+};
+
+export const generateIdOptimized = (): string =>
+{
+    const characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
+    const parts = [];
+
+    // Tạo 3 phần, mỗi phần 4 ký tự
+    for ( let part = 0; part < 3; part++ )
+    {
+        let partString = '';
+        for ( let i = 0; i < 4; i++ )
+        {
+            const randomIndex = Math.floor( Math.random() * characters.length );
+            partString += characters[ randomIndex ];
+        }
+        parts.push( partString );
+    }
+
+    return parts.join( '-' );
 };

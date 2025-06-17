@@ -12,7 +12,7 @@ import InfoRow from "@/components/card/InfoRow";
 import { convertEMVCode } from "@/utils/encodeEMVCode";
 import { generateQR } from "@/utils/generateQR";
 import { BankInfo } from "@/interface/IBanking";
-import { formatCurrencyVND } from "@/utils/format";
+import { formatCurrencyWithCode } from "@/utils/format";
 import { useFabStore } from "@/store/useFABStore";
 import { useTabBarStore } from "@/store/useTabbarStore";
 
@@ -64,12 +64,13 @@ export default function DisplayQR ()
     const qrCode = useMemo( () =>
     {
         if ( !parsedData ) return "";
-        return convertEMVCode( {
+        const value = {
             accountNumber: String( parsedData.accountNumber ),
             bankBin: String( parsedData.bin ),
             amount: Number( parsedData.amount ),
             addInfo: String( parsedData.content ),
-        } );
+        }
+        return convertEMVCode( value );
     }, [ parsedData ] );
     // --------------------------------- END ------------------------------------- //
 
@@ -85,7 +86,7 @@ export default function DisplayQR ()
         if ( !parsedData ) return;
 
         // Loại bỏ timeout không cần thiết
-        setBankInfo( {
+        const value = {
             bankName: parsedData.bankName,
             bankLogo: parsedData.bankLogo,
             accountName: parsedData.accountName,
@@ -93,7 +94,8 @@ export default function DisplayQR ()
             amount: Number( parsedData.amount ),
             content: parsedData.content,
             time: new Date().toLocaleString( "vi-VN" ),
-        } );
+        }
+        setBankInfo( value );
         setLoading( false );
     }, [ parsedData ] );
     // --------------------------------- END ------------------------------------- //
@@ -198,7 +200,7 @@ export default function DisplayQR ()
                                     <InfoRow label="Ngân hàng:" value={ bankInfo?.bankName } />
                                     <InfoRow label="Số tài khoản:" value={ bankInfo?.accountNumber } isCopyable onPress={ copyAccountNumber } />
                                     <InfoRow label="Chủ tài khoản:" value={ bankInfo?.accountName } />
-                                    <InfoRow label="Số tiền:" value={ bankInfo?.amount ? formatCurrencyVND( bankInfo.amount ) : "0 VNĐ" } valueClassName="text-[#1c40f2] font-bold" />
+                                    <InfoRow label="Số tiền:" value={ bankInfo?.amount ? formatCurrencyWithCode( bankInfo.amount ) : "0 VNĐ" } valueClassName="text-[#1c40f2] font-bold" />
                                     <InfoRow label="Nội dung:" value={ bankInfo?.content || "-" } multiline valueClassName="text-right max-w-[60%]" />
                                     <InfoRow label="Thời gian tạo:" value={ bankInfo?.time } isLast />
                                 </View>

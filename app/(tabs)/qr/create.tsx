@@ -103,12 +103,12 @@ export default function CreateMyQR ()
                                             <View className="flex-row justify-between items-center">
                                                 <View className="flex-row items-center">
                                                     <Image
-                                                        source={ require( "@/assets/images/dots.png" ) }
-                                                        className="w-5 h-5 mr-8"
+                                                        source={ require( "@/assets/images/bank-black.png" ) }
+                                                        className="w-7 h-7 mr-8"
                                                     />
                                                     <Text className="font-semibold text-md">{ selectedCard.STK }</Text>
                                                 </View>
-                                                <MaterialIcons name="keyboard-arrow-down" size={ 24 } color="#1c40f2" />
+                                                <MaterialIcons name="keyboard-arrow-down" size={ 24 } color="black" />
                                             </View>
                                         </View>
                                     ) : (

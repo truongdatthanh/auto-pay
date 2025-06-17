@@ -145,7 +145,7 @@ import { LineChart } from 'react-native-gifted-charts';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import dataBankingCard from '@/assets/banking-card.json';
-import { formatDate } from '@/utils/format';
+import { formatDayMonthYear } from '@/utils/format';
 
 const daysOfWeek = [ 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN' ];
 
@@ -243,7 +243,7 @@ export default function LineCharts ( { id }: { id: string } )
                     <Ionicons name="chevron-back" size={ 20 } color="#666" />
                 </TouchableOpacity>
                 <Text className="text-sm text-gray-500">
-                    { formatDate( startOfWeek ) } - { formatDate( endOfWeek ) }
+                    { formatDayMonthYear( startOfWeek ) } - { formatDayMonthYear( endOfWeek ) }
                 </Text>
                 <TouchableOpacity
                     onPress={ () => setWeekOffset( prev => prev + 1 ) }

@@ -9,7 +9,7 @@ import Animated, { FadeInDown } from 'react-native-reanimated';
 import AppHeaderInfo from '@/components/header/App.headerInfo';
 import Loading from '@/components/loading/Loading';
 import { groupByDate } from '@/utils/groupByDate';
-import { formatDate } from '@/utils/format';
+import { formatDayMonthYear } from '@/utils/format';
 import { useCardStore } from '@/store/useCardStore';
 import { validateDateRange } from '@/utils/validation';
 
@@ -49,6 +49,7 @@ export default function History ()
       return [];
     }
   }, [ selectedCard?.transactionHistory, startDate, endDate ] );
+  //------------------------------------ END ------------------------------------//
 
   // Initial loading effect
   useEffect( () =>
@@ -59,6 +60,7 @@ export default function History ()
       setIsLoading( false );
     }
   }, [ selectedCard?.transactionHistory ] );
+  //------------------------------------ END ------------------------------------//
 
 
 
@@ -75,6 +77,7 @@ export default function History ()
     setEndDate( now );
     setShowFilterModal( false );
   }, [ selectedCard?.transactionHistory ] );
+  //------------------------------------ END ------------------------------------//
 
   // Apply custom filter
   const applyCustomFilter = useCallback( () =>
@@ -82,6 +85,7 @@ export default function History ()
     if ( !validateDateRange( startDate, endDate ) ) return;
     setShowFilterModal( false );
   }, [ startDate, endDate, validateDateRange ] );
+  //------------------------------------ END ------------------------------------//
 
   // Reset filter dates
   const handleResetFilterDate = useCallback( () =>
@@ -90,6 +94,7 @@ export default function History ()
     setStartDate( today );
     setEndDate( today );
   }, [] );
+  //------------------------------------ END ------------------------------------//
 
   // Refresh data
   const onRefresh = useCallback( () =>
@@ -100,6 +105,7 @@ export default function History ()
       setRefreshing( false );
     }, 800 );
   }, [] );
+  //------------------------------------ END ------------------------------------//
 
   // Handle date picker change
   const handleDateChange = useCallback( ( type: 'start' | 'end' ) =>
@@ -116,13 +122,15 @@ export default function History ()
       }
     }, []
   );
+  //------------------------------------ END ------------------------------------//
 
   // Render section header
   const renderSectionHeader = useCallback( ( { section: { title } }: any ) => (
     <Text className="px-4 py-2 bg-gray-100 text-gray-700 font-semibold">
-      { formatDate( title ) }
+      { formatDayMonthYear( title ) }
     </Text>
   ), [] );
+  //------------------------------------ END ------------------------------------//
 
   // Render item
   const renderItem = useCallback( ( { item }: any ) => (
@@ -139,11 +147,13 @@ export default function History ()
       />
     </Animated.View>
   ), [ selectedCard ] );
+  //------------------------------------ END ------------------------------------//
 
   // Key extractor
   const keyExtractor = useCallback( ( item: any, index: number ) =>
     `${ item.transactionId }-${ index }`, []
   );
+  //------------------------------------ END ------------------------------------//
 
   // Quick filter options
   const quickFilterOptions = useMemo( () => [
@@ -151,6 +161,7 @@ export default function History ()
     { days: 30, label: '30 ngày gần đây' },
     { days: 90, label: '3 tháng gần đây' }
   ], [] );
+  //------------------------------------ END ------------------------------------//
 
   // Date picker configs
   const datePickerConfigs = useMemo( () => [
@@ -169,11 +180,12 @@ export default function History ()
       onChange: handleDateChange( 'end' )
     }
   ], [ startDate, endDate, showStartPicker, showEndPicker, handleDateChange ] );
+  //------------------------------------ END ------------------------------------//
 
 
   if ( isLoading ) return <Loading message="Đang tải dữ liệu..." />;
 
-  
+
   return (
     <>
       <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
@@ -198,8 +210,8 @@ export default function History ()
         <View className="flex-row items-center justify-between p-4 rounded-t-3xl bg-white">
           <Text className="text-lg font-semibold">Thời gian</Text>
           <Text className="text-gray-500 text-sm">
-            { formatDate( startDate ) }
-            { startDate.getTime() !== endDate.getTime() && ` - ${ formatDate( endDate ) }` }
+            { formatDayMonthYear( startDate ) }
+            { startDate.getTime() !== endDate.getTime() && ` - ${ formatDayMonthYear( endDate ) }` }
           </Text>
         </View>
 
@@ -278,7 +290,7 @@ export default function History ()
                       onPress={ () => setShow( true ) }
                     >
                       <MaterialIcons name="date-range" size={ 18 } color="#64748b" />
-                      <Text className="ml-2 text-gray-700">{ formatDate( date ) }</Text>
+                      <Text className="ml-2 text-gray-700">{ formatDayMonthYear( date ) }</Text>
                     </TouchableOpacity>
                     { show && (
                       <DateTimePicker

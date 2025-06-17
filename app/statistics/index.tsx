@@ -5,7 +5,7 @@ import data from "@/assets/banking-card.json";
 import AppHeaderInfo from '@/components/header/App.headerInfo';
 import { router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { formatCurrencyVND } from '@/utils/format';
+import { formatCurrencyWithCode} from '@/utils/format';
 import BarCharts from '@/components/chart/BarChart';
 import { useCardStore } from '@/store/useCardStore';
 import { IBankingTransaction } from '@/interface/IBanking';
@@ -87,7 +87,7 @@ export default function BankAccountStatistics ()
                             <View className="flex-1 p-4 border-r border-gray-100">
                                 <Text className="text-gray-500 text-sm">Số dư hiện tại</Text>
                                 <Text className="text-xl font-bold text-blue-600 mt-1">
-                                    { formatCurrencyVND( totalBalance ) }
+                                    { formatCurrencyWithCode( totalBalance ) }
                                 </Text>
                             </View>
                             <View className="flex-1 p-4">
@@ -105,7 +105,7 @@ export default function BankAccountStatistics ()
                                     <Text className="text-gray-500 text-sm">Thu nhập</Text>
                                 </View>
                                 <Text className="text-base font-semibold text-green-600 mt-1">
-                                    { formatCurrencyVND( totalIncome ) }
+                                    { formatCurrencyWithCode( totalIncome ) }
                                 </Text>
                                 <Text className="text-xs text-gray-500 mt-1">{ incomeTransactions } giao dịch</Text>
                             </View>
@@ -117,7 +117,7 @@ export default function BankAccountStatistics ()
                                     <Text className="text-gray-500 text-sm">Chi tiêu</Text>
                                 </View>
                                 <Text className="text-base font-semibold text-red-600 mt-1">
-                                    { formatCurrencyVND( totalExpense ) }
+                                    { formatCurrencyWithCode( totalExpense ) }
                                 </Text>
                                 <Text className="text-xs text-gray-500 mt-1">{ expenseTransactions } giao dịch</Text>
                             </View>

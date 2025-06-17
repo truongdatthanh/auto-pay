@@ -1,72 +1,106 @@
 [
     {
         "id": "1",
+        "transactionId": "sahd-sdf-123",
         "amount": "1000",
-        "time": "10:20 AM",
+        "time": "10:20",
+        "date": "2025-06-17",
         "status": true,
-        "name": "Nguyen Van A"
+        "name": "Nguyen Van A",
+        "content": "Nguyen Van A chuyen khoan",
+        "recieveCard": "246134029400001",
+        "type": "fluctuation"
     },
     {
         "id": "2",
+        "transactionId": "asdjash-12312-h6t",
         "amount": "1000",
-        "time": "10:20 AM",
+        "time": "10:20",
+        "date": "2025-06-17",
         "status": true,
-        "name": "Nguyen Van B"
+        "name": "Nguyen Van A",
+        "content": "Nguyen Van A chuyen khoan",
+        "recieveCard": "246134029400001",
+        "type": "fluctuation"
     },
     {
         "id": "3",
+        "transactionId": "sajhd-1231-dsa",
         "amount": "1000",
-        "time": "10:20 AM",
-        "status": false,
-        "name": "Nguyen Van C"
+        "time": "10:20",
+        "date": "2025-06-17",
+        "status": true,
+        "name": "Nguyen Van A",
+        "content": "Nguyen Van A chuyen khoan",
+        "recieveCard": "246134029400001",
+        "type": "fluctuation"
     },
     {
         "id": "4",
-        "amount": "1000",
-        "time": "10:20 AM",
-        "status": false,
-        "name": "Nguyen Van D"
+        "time": "10:20",
+        "date": "2025-06-17",
+        "status": true,
+        "content": "✨ Chỉ vài chạm trên AutoPAY, bạn sẽ có ngay thẻ game trong tay để \"chiến\" hết mình cùng hội bạn thân.\n\n✅ Nạp thẻ cực dễ, chơi game cực đã, chỉ vài bước đơn giản:\n• Truy cập ứng dụng \n• Chọn \"Thẻ Game\"\n• Chọn Mệnh giá\n• Thanh toán\n\n✅ Lên ngay lịch hẹn mỗi ngày và nạp thẻ ngay thôi.\n\n📞 Hotline (IRIS): 0902 102 355",
+        "type": "promotion"
     },
     {
         "id": "5",
-        "amount": "1000",
-        "time": "10:20 AM",
-        "status": false,
-        "name": "Nguyen Van E"
+        "time": "10:20",
+        "date": "2025-06-17",
+        "status": true,
+        "content": "📱 Bạn đã nhận quà chưa?\n\nChỉ cần mua mã thẻ điện thoại cùng loại trị giá từ 200.000đ trở lên trên AutoPAY , bạn sẽ được 🎉 tặng ngay 1 thẻ điện thoại 10.000đ!\n\n✨ Thời gian: Từ 09/06/2025 - 06/07/2025\n✨ Đa dạng lựa chọn với Mã thẻ điện thoại Viettel, MobiFone, Vinaphone, Vietnamobile,...\n\n🎯 Ưu đãi có giới hạn – 1.000 thẻ quà tặng mỗi tuần!\n\n✍️ Đừng quên điền thông tin email khi mua thẻ để nhận quà tặng.\n\n🚀 Khám phá ngay tính năng \"Thẻ điện thoại\" trên ứng dụng AutoPAY !\n\n📞 Hotline (IMEDIA): 0902 193 266",
+        "type": "promotion"
     },
     {
         "id": "6",
-        "amount": "1000",
-        "time": "10:20 AM",
+        "time": "09:30",
+        "date": "2025-06-17",
         "status": true,
-        "name": "Nguyen Van F"
+        "content": "⭐ Từ ngày 15/07/2025, Quý khách hàng chuyển/nhận tiền bằng tài khoản AutoPAY vui lòng CHỈ SỬ DỤNG các tài khoản đã được rút gọn (tài khoản có độ dài từ 3-8 và 10 số thay vì tài khoản có độ dài 14 số) để không bị gián đoạn giao dịch.\n\n⭐ Quý khách hàng có thể tra cứu số tài khoản mới trên:\n• Ứng dụng AutoPAY \n• Hotline 24/7: 19009247\n• Các Điểm giao dịch của AutoPAY trên toàn quốc\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n⭐ From July 15, 2025, customers making or receiving transfers via AutoPAY must use shortened account numbers (3–8 or 10 digits) instead of 14-digit account numbers to avoid any disruption to their transactions.\n\n⭐ You can look up your new account number via:\n• AutoPAY  app\n• AutoPAY 24/7 Hotline: 1900 9247\n• Any AutoPAY branch or transaction office nationwide",
+        "type": "warning"
     },
     {
         "id": "7",
-        "amount": "1000",
-        "time": "10:20 AM",
-        "status": false,
-        "name": "Nguyen Van G"
+        "time": "14:30 ",
+        "date": "2025-05-20",
+        "status": true,
+        "content": "Kính gửi Quý khách hàng,\n\nCăn cứ Thông báo số 237/TB-CT ngày 14/05/2025 của Cục Thuế về kế hoạch tạm dừng ứng dụng nộp thuế để phục vụ công tác chuyển đổi địa điểm Trung tâm dữ liệu của Cục Thuế, AutoPAY xin trân trọng thông báo:\n\n⏰ Thời gian tạm dừng: Từ 18h00 ngày 23/05/2025 (thứ Sáu) đến 16h00 ngày 25/05/2025 (Chủ Nhật)\n\n🚫 Các dịch vụ nộp thuế điện tử sẽ tạm dừng hoạt động:\n• Ứng dụng Etax Mobile\n• Dịch vụ Nộp thuế trên Cổng Dịch vụ công quốc gia\n• Dịch vụ Nộp thuế và Lệ phí trước bạ trên AutoPAY \n• Dịch vụ nộp thuế nội địa và phí trước bạ giao thông trên AutoPAY iBank\n\n👉 Quý khách vui lòng chủ động sắp xếp kế hoạch nộp thuế, lệ phí phù hợp trước hoặc sau thời gian nêu trên.\n\n📞 Mọi thông tin chi tiết, vui lòng liên hệ:\n• Tổng đài CSKH AutoPAY 24/7: 1900 9247\n• Chi nhánh AutoPAY gần nhất\n\nTrân trọng cảm ơn Quý khách hàng đã tin tưởng sử dụng dịch vụ của AutoPAY!",
+        "type": "warning"
     },
     {
         "id": "8",
+        "transactionId": "asd-asd-123",
         "amount": "1000",
-        "time": "10:20 AM",
+        "time": "10:20",
+        "date": "2025-06-17",
         "status": true,
-        "name": "Nguyen Van H"
+        "name": "Nguyen Van A",
+        "content": "Nguyen Van A chuyen khoan",
+        "recieveCard": "246134029400001",
+        "type": "fluctuation"
     },
     {
         "id": "9",
+        "transactionId": "123-asd-123",
         "amount": "1000",
-        "time": "10:20 AM",
-        "status": false,
-        "name": "Nguyen Van I"
+        "time": "10:20",
+        "date": "2025-06-17",
+        "status": true,
+        "name": "Nguyen Van A",
+        "content": "Nguyen Van A chuyen khoan",
+        "recieveCard": "246134029400001",
+        "type": "fluctuation"
     },
     {
         "id": "10",
+        "transactionId": "asd-12dsa-asd",
         "amount": "1000",
-        "time": "10:20 AM",
+        "time": "10:20",
+        "date": "2025-06-17",
         "status": true,
-        "name": "Nguyen Van J"
+        "name": "Nguyen Van A",
+        "content": "Nguyen Van A chuyen khoan",
+        "recieveCard": "246134029400001",
+        "type": "fluctuation"
     }
 ]
