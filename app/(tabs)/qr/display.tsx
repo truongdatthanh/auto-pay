@@ -29,6 +29,7 @@ export default function DisplayQR ()
     const [ sharing, setSharing ] = useState( false );
     const setVisible = useFabStore( ( state ) => state.setVisible );
     const setTabBarVisible = useTabBarStore( state => state.setTabBarVisible );
+    
     useFocusEffect(
         useCallback( () =>
         {

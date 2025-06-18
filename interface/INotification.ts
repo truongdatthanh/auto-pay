@@ -9,5 +9,6 @@ export interface INotification
     name?: string,
     content?: string,
     recieveCard?: string,
-    type?: string
+    type?: string,
+    bankLogo?: string
 }

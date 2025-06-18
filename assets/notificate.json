@@ -9,7 +9,8 @@
         "name": "Nguyen Van A",
         "content": "Nguyen Van A chuyen khoan",
         "recieveCard": "246134029400001",
-        "type": "fluctuation"
+        "type": "fluctuation",
+        "bankLogo": "https://api.vietqr.io/img/NAB.png"
     },
     {
         "id": "2",
@@ -17,11 +18,12 @@
         "amount": "1000",
         "time": "10:20",
         "date": "2025-06-17",
-        "status": true,
+        "status": false,
         "name": "Nguyen Van A",
         "content": "Nguyen Van A chuyen khoan",
-        "recieveCard": "246134029400001",
-        "type": "fluctuation"
+        "recieveCard": "123456789",
+        "type": "fluctuation",
+        "bankLogo": "https://thietkelogomondial1fc36.zapwp.com/q:i/r:0/wp:1/w:480/u:https://thietkelogo.mondial.vn/wp-content/uploads/2024/02/bidv-logo-brandlogos.net_.png"
     },
     {
         "id": "3",
@@ -29,11 +31,12 @@
         "amount": "1000",
         "time": "10:20",
         "date": "2025-06-17",
-        "status": true,
+        "status": false,
         "name": "Nguyen Van A",
         "content": "Nguyen Van A chuyen khoan",
         "recieveCard": "246134029400001",
-        "type": "fluctuation"
+        "type": "fluctuation",
+        "bankLogo": "https://api.vietqr.io/img/ACB.png"
     },
     {
         "id": "4",
@@ -76,8 +79,9 @@
         "status": true,
         "name": "Nguyen Van A",
         "content": "Nguyen Van A chuyen khoan",
-        "recieveCard": "246134029400001",
-        "type": "fluctuation"
+        "recieveCard": "88641235",
+        "type": "fluctuation",
+        "bankLogo": "https://api.vietqr.io/img/NAB.png"
     },
     {
         "id": "9",
@@ -85,11 +89,12 @@
         "amount": "1000",
         "time": "10:20",
         "date": "2025-06-17",
-        "status": true,
+        "status": false,
         "name": "Nguyen Van A",
         "content": "Nguyen Van A chuyen khoan",
-        "recieveCard": "246134029400001",
-        "type": "fluctuation"
+        "recieveCard": "12354678",
+        "type": "fluctuation",
+        "bankLogo": "https://api.vietqr.io/img/ACB.png"
     },
     {
         "id": "10",
@@ -100,7 +105,8 @@
         "status": true,
         "name": "Nguyen Van A",
         "content": "Nguyen Van A chuyen khoan",
-        "recieveCard": "246134029400001",
-        "type": "fluctuation"
+        "recieveCard": "111111111111",
+        "type": "fluctuation",
+        "bankLogo": "https://thietkelogomondial1fc36.zapwp.com/q:i/r:0/wp:1/w:480/u:https://thietkelogo.mondial.vn/wp-content/uploads/2024/02/bidv-logo-brandlogos.net_.png"
     }
 ]
