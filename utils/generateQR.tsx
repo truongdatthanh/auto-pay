@@ -2,8 +2,9 @@ import { Text, View } from "react-native";
 import QRCode from "react-native-qrcode-svg";
 
 
-export const generateQR = ( data: any ) =>
+export const generateQR = ( data: string ) =>
 {
+    console.log( "data in generate: ", data )
     return (
         <>
             {/* <QRCode value={ data } size={ 200 } logo={ require( "../assets/images/logo-autopay-4.png" ) } logoSize={ 30 } /> */ }

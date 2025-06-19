@@ -5,7 +5,7 @@ export interface INotification
     amount?: string,
     time?: string,
     date?: string,
-    status?: boolean,
+    unread?: boolean,
     name?: string,
     content?: string,
     recieveCard?: string,

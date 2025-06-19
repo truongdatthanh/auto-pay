@@ -80,7 +80,7 @@ export default function Home ()
 
 
 
-
+//#region base
 // import { View, Text, ScrollView, TouchableOpacity, Image, Pressable } from 'react-native';
 // import MyCard from '@/components/card/MyCard';
 // import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -144,3 +144,4 @@ export default function Home ()
 //     </>
 //   );
 // }
+//#endregion

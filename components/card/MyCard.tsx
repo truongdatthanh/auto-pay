@@ -224,7 +224,7 @@ export default function MyCard ()
                 <Animated.View
                     style={ {
                         position: 'absolute',
-                        right: 20,
+                        right: 5,
                         top: 0,
                         bottom: 0,
                         justifyContent: 'center',
@@ -239,13 +239,13 @@ export default function MyCard ()
                 >
                     <TouchableOpacity
                         onPress={ handleSeenAllCard }
-                        className="items-center justify-center bg-black rounded-xl h-[180px] w-[120px] mr-4"
+                        className="items-center justify-center h-[180px] w-[120px]"
                     >
                         <View className="items-center">
-                            <View className="bg-white/20 rounded-full p-3 mb-3">
-                                <Ionicons name="card-outline" size={ 24 } color="white" />
+                            <View className="bg-black/20 rounded-full p-3 mb-1">
+                                <Ionicons name="card-outline" size={ 24 } color="black" />
                             </View>
-                            <Text className="text-white font-medium text-sm text-center">Xem tất cả thẻ</Text>
+                            <Text className="text-black font-semibold text-[10px] text-center">Xem tất cả thẻ</Text>
                         </View>
                     </TouchableOpacity>
                 </Animated.View>
