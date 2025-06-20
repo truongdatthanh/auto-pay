@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, Image, ScrollView, Modal, StatusBar } fro
 import { router } from 'expo-router';
 import { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Ionicons, FontAwesome5, MaterialIcons, Octicons, AntDesign, Feather, FontAwesome } from '@expo/vector-icons';
+import { Ionicons, FontAwesome5, Octicons, AntDesign, Feather, FontAwesome } from '@expo/vector-icons';
 import Animated, { FadeInDown, FadeIn } from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
 import { IUser } from '@/interface/IUser';
@@ -165,7 +165,7 @@ export default function UserHome ()
 
 
 
-
+//#region base
 // import { View, Text, TouchableOpacity, Image, ScrollView, Modal, StatusBar, SafeAreaView, Platform } from 'react-native';
 // import { router } from 'expo-router';
 // import { useEffect, useState } from 'react';
@@ -436,3 +436,4 @@ export default function UserHome ()
 //         </>
 //     );
 // }
+//#endregion

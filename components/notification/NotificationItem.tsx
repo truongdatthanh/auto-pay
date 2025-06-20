@@ -55,28 +55,31 @@ export default function NotificationItem ( { item, isSelectionMode, isSelected, 
     if ( item.type === "fluctuation" )
     {
         return (
-            <View className="flex-row items-center mx-4">
-                { isSelectionMode && (
-                    <NotificationCheckbox
-                        itemId={ item.id || '' }
-                        isSelected={ isSelected }
-                        onToggle={ onToggleSelection }
-                    />
-                ) }
-                <TouchableOpacity
-                    onPress={ () => onPress( item.id || '' ) }
-                    onLongPress={ () => onLongPress( item.id || '' ) }
-                    delayLongPress={ 300 }
-                    className={ `flex-1 px-4 py-2 my-1.5 flex-row items-center relative bg-slate-100 border border-gray-200 rounded-lg ${ item.unread ? "bg-white shadow-lg" : ""
-                        }` }
-                >
-                    <FluctuationContent item={ item } />
-                    <UnreadDot
-                        isUnread={ !!item.unread }
-                        show={ !isSelectionMode }
-                    />
-                </TouchableOpacity>
-            </View>
+            <>
+                <View className="flex-row items-center">
+                    { isSelectionMode && (
+                        <NotificationCheckbox
+                            itemId={ item.id || '' }
+                            isSelected={ isSelected }
+                            onToggle={ onToggleSelection }
+                        />
+                    ) }
+                    <TouchableOpacity
+                        onPress={ () => onPress( item.id || '' ) }
+                        onLongPress={ () => onLongPress( item.id || '' ) }
+                        delayLongPress={ 300 }
+                        className="flex-1 px-4 py-1 flex-row items-center relative"
+                    >
+                        <FluctuationContent item={ item } />
+                        <UnreadDot
+                            isUnread={ !!item.unread }
+                            show={ !isSelectionMode }
+                        />
+                    </TouchableOpacity>
+                </View>
+                <View className='border-b border-gray-200'/>
+            </>
+
         );
     }
 

@@ -6,7 +6,7 @@ export default function useAndroidBackHandler ()
 {
     const router = useRouter();
     const segments = useSegments();
-
+    console.log("trgger backHandler")
     useEffect( () =>
     {
         const onBackPress = () =>

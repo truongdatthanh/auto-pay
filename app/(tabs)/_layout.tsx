@@ -222,7 +222,7 @@ export default function TabsLayout ()
 
 
 
-
+//#region base
 // import { BlurView } from 'expo-blur';
 // import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 // import { router, Tabs } from 'expo-router';
@@ -367,3 +367,4 @@ export default function TabsLayout ()
 //     </SafeAreaView>
 //   );
 // }
+//#endregion

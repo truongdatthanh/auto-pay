@@ -15,7 +15,7 @@
     {
         "id": "2",
         "transactionId": "asdjash-12312-h6t",
-        "amount": "1000",
+        "amount": "-1000",
         "time": "10:20",
         "date": "2025-06-17",
         "unread": false,
@@ -28,7 +28,7 @@
     {
         "id": "3",
         "transactionId": "sajhd-1231-dsa",
-        "amount": "1000",
+        "amount": "-1000",
         "time": "10:20",
         "date": "2025-06-17",
         "unread": false,
@@ -86,7 +86,7 @@
     {
         "id": "9",
         "transactionId": "123-asd-123",
-        "amount": "1000",
+        "amount": "-1000",
         "time": "10:20",
         "date": "2025-06-17",
         "unread": false,
@@ -112,7 +112,7 @@
     {
         "id": "11",
         "transactionId": "sahd-sdf-123",
-        "amount": "1000",
+        "amount": "-1000",
         "time": "10:20",
         "date": "2025-06-17",
         "unread": true,
@@ -183,7 +183,7 @@
     {
         "id": "18",
         "transactionId": "asd-asd-123",
-        "amount": "1000",
+        "amount": "-1000",
         "time": "10:20",
         "date": "2025-06-17",
         "unread": true,

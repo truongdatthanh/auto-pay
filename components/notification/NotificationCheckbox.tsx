@@ -14,7 +14,7 @@ export default function NotificationCheckbox ( { itemId, isSelected, onToggle }:
         <>
             <TouchableOpacity
                 onPress={ () => onToggle( itemId ) }
-                className="w-6 h-6 mr-3 rounded border-2 border-gray-400 flex items-center justify-center"
+                className="w-6 h-6 mx-3 rounded border-2 border-gray-400 flex items-center justify-center"
                 style={ {
                     backgroundColor: isSelected ? '#3B82F6' : 'transparent',
                     borderColor: isSelected ? '#3B82F6' : '#9CA3AF'

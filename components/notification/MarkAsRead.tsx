@@ -15,7 +15,7 @@ export default function MarkAsRead ( {
 {
     if ( unreadCount === 0 ) return null;
 
-    return (  
+    return (
         <View className="px-4 py-2 bg-white border-b border-gray-200">
             <TouchableOpacity
                 onPress={ onMarkAllRead }
@@ -25,10 +25,10 @@ export default function MarkAsRead ( {
                     { unreadCount } thông báo chưa đọc
                 </Text>
                 <View className="flex-row items-center">
-                    <FontAwesome5 name="check-double" size={ 14 } color="#3B82F6" />
-                    <Text className="text-sm text-blue-500 ml-2 font-medium">
+                    <Text className="text-sm text-blue-500 mr-2 font-medium">
                         Đánh dấu đã đọc
                     </Text>
+                    <FontAwesome5 name="check-double" size={ 14 } color="#3B82F6" />
                 </View>
             </TouchableOpacity>
         </View>
