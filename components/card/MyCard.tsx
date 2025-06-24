@@ -25,6 +25,7 @@ export default function MyCard ()
     //sử dụng useCallback để chắc chắn onViewRef không bị thay đổi giữa các render
     const onViewRef = useCallback( ( { viewableItems }: { viewableItems: any[] } ) =>
     {
+        console.log("viewitem: ", viewableItems)
         if ( viewableItems.length > 0 && viewableItems[ 0 ].index !== null )
         {
             const index = viewableItems[ 0 ].index ?? 0;
@@ -242,10 +243,10 @@ export default function MyCard ()
                         className="items-center justify-center h-[180px] w-[120px]"
                     >
                         <View className="items-center">
-                            <View className="bg-black/20 rounded-full p-3 mb-1">
-                                <Ionicons name="card-outline" size={ 24 } color="black" />
+                            <View className="bg-white/20 rounded-full p-3 mb-1">
+                                <Ionicons name="card-outline" size={ 24 } color="white" />
                             </View>
-                            <Text className="text-black font-semibold text-[10px] text-center">Xem tất cả thẻ</Text>
+                            <Text className="text-white font-semibold text-[10px] text-center">Xem tất cả thẻ</Text>
                         </View>
                     </TouchableOpacity>
                 </Animated.View>

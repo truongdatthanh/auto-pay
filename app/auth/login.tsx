@@ -1,4 +1,4 @@
-import { Image, StatusBar, Text, TouchableOpacity, View, Keyboard, Platform, TouchableWithoutFeedback, Alert, BackHandler, TextInput, } from 'react-native';
+import { Image, StatusBar, Text, TouchableOpacity, View, Keyboard, TouchableWithoutFeedback, Alert, BackHandler } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';

@@ -115,7 +115,7 @@ const BANK_GRADIENTS: Record<string, [ string, string ]> = {
     techcombank: [ '#BB0F23', '#F44336' ],
     mbbank: [ '#1A237E', '#3F51B5' ],
     bidv: [ '#FFD700', '#FFA500' ],
-    default: [ '#020617', '#1e293b' ]
+    default: [ '#0284c7', '#1e293b' ]
 };
 
 interface BankingCardProps extends IBankingTransaction
@@ -126,7 +126,7 @@ interface BankingCardProps extends IBankingTransaction
 export default function BankingCard ( props: BankingCardProps )
 {
     const { onPress, ...bankCard } = props;
-    console.log("------bank account")
+    console.log( "------bank account" )
     // Memoized gradient calculation
     const cardGradient = useMemo( (): [ string, string ] =>
     {

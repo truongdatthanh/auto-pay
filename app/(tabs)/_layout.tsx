@@ -51,13 +51,18 @@ export default function TabsLayout ()
             headerShown: false,
             tabBarActiveTintColor: '#1c40f2',
             tabBarInactiveTintColor: 'black',
+
+
             tabBarLabelStyle: {
+              display: "none",
               fontSize: 10,
               width: 100,
             },
 
             tabBarItemStyle: {
               paddingHorizontal: 12,
+              paddingTop: 10,
+              //backgroundColor: "red",
               paddingVertical: 6,
               marginHorizontal: 6,
               justifyContent: 'center',
@@ -69,20 +74,52 @@ export default function TabsLayout ()
             tabBarStyle: {
               display: isTabBarVisible ? "flex" : "none",
               position: 'absolute',
-              backgroundColor: "white",
+              // backgroundColor: "blue",
               alignItems: 'center',
+              justifyContent: "center",
               height: 60,
               paddingBottom: 10,
             },
           } }
         >
+          {/* <Tabs
+          initialRouteName="home/index"
+          screenOptions={ {
+            animation: "none",
+            headerShown: false,
+            tabBarActiveTintColor: '#1c40f2',
+            tabBarInactiveTintColor: 'black',
+
+            tabBarLabelStyle: {
+              display: "none",
+            },
+
+            tabBarItemStyle: {
+              paddingVertical: 6,
+              justifyContent: 'center',
+              alignItems: 'center',
+              flex: 1, // Thêm này để các item căng đều
+              // Bỏ minWidth và marginHorizontal
+            },
+
+            tabBarStyle: {
+              display: isTabBarVisible ? "flex" : "none",
+              position: 'absolute',
+              backgroundColor: "white",
+              alignItems: 'center',
+              justifyContent: "center",
+              height: 60,
+              paddingBottom: 10,
+            },
+          } }
+        > */}
           <Tabs.Screen
             name="home/index"
             options={ {
               title: 'Trang chủ',
               tabBarIcon: ( { focused } ) =>
-                <Image source={ focused ? require( "@/assets/images/home_blue.png" ) : require( "@/assets/images/home_black.png" ) }
-                  className={ focused ? "w-10 h-10" : "w-6 h-6" }
+                <Image source={ focused ? require( "@/assets/images/home-black.png" ) : require( "@/assets/images/home-white.png" ) }
+                  className="w-8 h-8"
                   resizeMode='contain'
                 />
             } }
@@ -155,8 +192,8 @@ export default function TabsLayout ()
             options={ {
               title: 'Lịch sử',
               tabBarIcon: ( { focused } ) =>
-                <Image source={ focused ? require( "@/assets/images/history_blue.png" ) : require( "@/assets/images/history.png" ) }
-                  className={ focused ? "w-8 h-8" : "w-6 h-6" }
+                <Image source={ focused ? require( "@/assets/images/history-black.png" ) : require( "@/assets/images/history-white.png" ) }
+                  className="w-7 h-7"
                   resizeMode='contain'
                 />,
             } }

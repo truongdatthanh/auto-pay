@@ -1,11 +1,11 @@
-import React, { useState, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import { View, Text, ScrollView, RefreshControl, StatusBar, TouchableOpacity, Modal, Image } from 'react-native';
 import { AntDesign, Ionicons } from '@expo/vector-icons';
 import data from "@/assets/banking-card.json";
 import AppHeaderInfo from '@/components/header/App.headerInfo';
 import { router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { formatCurrencyWithCode} from '@/utils/format';
+import { formatCurrencyWithCode, formatCurrencyWithoutCode } from '@/utils/format';
 import BarCharts from '@/components/chart/BarChart';
 import { useCardStore } from '@/store/useCardStore';
 import { IBankingTransaction } from '@/interface/IBanking';
@@ -61,7 +61,7 @@ export default function BankAccountStatistics ()
                         </>
                     } />
                 <ScrollView
-                    className="flex-1 bg-gray-50"
+                    className="flex-1 bg-[#041838]"
                     showsVerticalScrollIndicator={ false }
                     refreshControl={
                         <RefreshControl refreshing={ refreshing } onRefresh={ onRefresh } />
@@ -75,10 +75,36 @@ export default function BankAccountStatistics ()
                     </View>
                     {/* -----------------------------------------End----------------------------------------- */ }
 
+                    <View>
+                        <View className="flex-row justify-between px-4 gap-3">
+                            <View className="flex-1 p-4 bg-[#1072ff] flex-row items-center rounded-lg">
+                                <View className="w-10 h-10 rounded-full bg-white items-center justify-center mr-2">
+                                    <Ionicons name="arrow-up" size={ 20 } color="#1072ff" />
+                                </View>
+                                <View className="flex-1">
+                                    <Text className="text-white text-sm">Chi tiêu (VND)</Text>
+                                    <Text className="text-base font-semibold text-white">
+                                        { formatCurrencyWithoutCode( totalExpense ) }
+                                    </Text>
+                                </View>
+                            </View>
+
+                            <View className="flex-1 p-4 flex-row items-center bg-[#1e2e4b] rounded-lg">
+                                <View className="w-10 h-10 rounded-full bg-white items-center justify-center mr-2">
+                                    <Ionicons name="arrow-down" size={ 20 } color="#1e2e4b" />
+                                </View>
+                                <View className="flex-1">
+                                    <Text className="text-white text-sm">Thu nhập (VND)</Text>
+                                    <Text className="text-base font-semibold text-white">
+                                        { formatCurrencyWithoutCode( totalIncome ) }
+                                    </Text>
+                                </View>
+                            </View>
+                        </View>
+                    </View>
+
                     {/* Tổng quan tài khoản */ }
-                    <View
-                        className="mx-4 m-4 bg-white rounded-xl shadow-md overflow-hidden"
-                    >
+                    {/* <View className="mx-4 m-4 bg-white rounded-xl shadow-md overflow-hidden">
                         <View className="p-4 border-b border-gray-100">
                             <Text className="text-lg font-bold text-gray-800">Tổng quan tài khoản</Text>
                         </View>
@@ -122,7 +148,7 @@ export default function BankAccountStatistics ()
                                 <Text className="text-xs text-gray-500 mt-1">{ expenseTransactions } giao dịch</Text>
                             </View>
                         </View>
-                    </View>
+                    </View> */}
                     {/* -----------------------------------------End----------------------------------------- */ }
                 </ScrollView>
 

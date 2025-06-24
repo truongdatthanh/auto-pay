@@ -71,7 +71,7 @@ export default function FABMenu ()
             {/* FAB chính */ }
             <TouchableOpacity
                 onPress={ toggleMenu }
-                className="w-14 h-14 bg-black rounded-xl justify-center items-center shadow-lg"
+                className="w-14 h-14 bg-black rounded-full justify-center items-center shadow-lg"
             >
                 <Animated.View style={ rotateStyle }>
                     {/* Icon list */ }

@@ -14,21 +14,6 @@ export const formatHiddenCardNumber = ( cardNumber: string | undefined ) =>
     return formatCardNumber( first4 + hidden );
 };
 
-//Hàm format số tiền thành Vnđ
-export const formatCurrencyWithCode = ( amount: any ): string =>
-{
-    if ( typeof amount !== "number" )
-    {
-        amount = Number( amount );
-    }
-
-    return new Intl.NumberFormat( "vi-VN", {
-        style: "currency",
-        currency: "VND",
-        currencyDisplay: "code", // Hiển thị mã tiền tệ VND thay vì ký hiệu ₫
-    } ).format( amount );
-};
-
 
 //Hàm format ngày (dd/mm/yyyy)
 export const formatDayMonthYear = ( dateInput: string | Date ): string =>
@@ -96,11 +81,31 @@ export const removeVietnameseTonesAndSpaces = ( str: string ) =>
         .replace( /\s+/g, '' ); // Loại bỏ tất cả khoảng trắng
 };
 
-
-export const formatCurrencyWithoutCode = ( value: string ) =>
+//Hàm format số tiền thành Vnđ
+export const formatCurrencyWithCode = ( amount: any ): string =>
 {
-    if ( !value ) return '';
-    const number = parseInt( value.replace( /\D/g, '' ) );
+    if ( typeof amount !== "number" )
+    {
+        amount = Number( amount );
+    }
+
+    return new Intl.NumberFormat( "vi-VN", {
+        style: "currency",
+        currency: "VND",
+        currencyDisplay: "code", // Hiển thị mã tiền tệ VND thay vì ký hiệu ₫
+    } ).format( amount );
+};
+
+export const formatCurrencyWithoutCode = ( amount: any ): string =>
+{
+    if ( !amount && amount !== 0 ) return '';
+
+    // Chuyển đổi về number bằng cách loại bỏ tất cả ký tự không phải số
+    const number = parseFloat( String( amount ).replace( /[^\d.-]/g, '' ) );
+
+    // Kiểm tra nếu không phải số hợp lệ
+    if ( isNaN( number ) ) return '';
+
     return number.toLocaleString( 'vi-VN' );
 };
 

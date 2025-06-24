@@ -6,8 +6,8 @@ import { formatDayMonth, formatDayMonthYear } from '@/utils/format';
 import { useCardStore } from '@/store/useCardStore';
 
 const COLORS = {
-    income: '#2ecc71',
-    expense: '#e74c3c',
+    income: 'white',
+    expense: '#1072ff',
 };
 
 const FILTERS = [
@@ -116,7 +116,7 @@ export default function BarCharts ()
                 value: income,
                 label: labels[ i ],
                 frontColor: COLORS.income,
-                spacing: 2,
+                spacing: 4,
             } );
             data.push( {
                 value: expense,
@@ -158,18 +158,18 @@ export default function BarCharts ()
                         <View className='items-center'>
                             <View className="flex-row items-center gap-2">
                                 <TouchableOpacity onPress={ () => setYearOffset( prev => prev - 1 ) }>
-                                    <Ionicons name="chevron-back" size={ 20 } color="#666" />
+                                    <Ionicons name="chevron-back" size={ 20 } color="white" />
                                 </TouchableOpacity>
-                                <Text className="text-sm text-gray-700 font-semibold">
+                                <Text className="text-sm text-white font-semibold">
                                     Năm { currentDate.getFullYear() + yearOffset }
                                 </Text>
                                 <TouchableOpacity onPress={ () => setYearOffset( prev => prev + 1 ) }>
-                                    <Ionicons name="chevron-forward" size={ 20 } color="#666" />
+                                    <Ionicons name="chevron-forward" size={ 20 } color="white" />
                                 </TouchableOpacity>
                             </View>
                             <View className='flex-row justify-center mb-2 mt-2'>
                                 { [ 0, 1, 2, 3 ].map( q => (
-                                    <TouchableOpacity className={ `px-2 py-1 border ${ selectedQuarter === q ? 'bg-black' : 'text-gray-500' }` } key={ q } onPress={ () => setSelectedQuarter( q ) }>
+                                    <TouchableOpacity className={ `px-2 py-1 border ${ selectedQuarter === q ? 'bg-[#1072ff]' : 'text-gray-500' }` } key={ q } onPress={ () => setSelectedQuarter( q ) }>
                                         <Text className={ `text-sm font-semibold  ${ selectedQuarter === q ? 'text-white' : 'text-gray-500' }` }>
                                             Quý { q + 1 }
                                         </Text>
@@ -183,13 +183,13 @@ export default function BarCharts ()
                     { timeFilter === 'month' && (
                         <View className="flex-row justify-center items-center gap-2">
                             <TouchableOpacity onPress={ () => setYearOffset( prev => prev - 1 ) }>
-                                <Ionicons name="chevron-back" size={ 20 } color="#666" />
+                                <Ionicons name="chevron-back" size={ 20 } color="white" />
                             </TouchableOpacity>
-                            <Text className="text-sm text-gray-700 font-semibold">
+                            <Text className="text-sm text-white font-semibold">
                                 Năm { currentDate.getFullYear() + yearOffset }
                             </Text>
                             <TouchableOpacity onPress={ () => setYearOffset( prev => prev + 1 ) }>
-                                <Ionicons name="chevron-forward" size={ 20 } color="#666" />
+                                <Ionicons name="chevron-forward" size={ 20 } color="white" />
                             </TouchableOpacity>
                         </View>
                     ) }
@@ -198,13 +198,13 @@ export default function BarCharts ()
                     { timeFilter === 'week' && (
                         <View className="flex-row justify-center items-center gap-2">
                             <TouchableOpacity onPress={ () => setOffset( prev => prev - 1 ) }>
-                                <Ionicons name="chevron-back" size={ 20 } color="#666" />
+                                <Ionicons name="chevron-back" size={ 20 } color="white" />
                             </TouchableOpacity>
-                            <Text className="text-sm text-gray-700 font-semibold">
+                            <Text className="text-sm text-white font-semibold">
                                 { formatDayMonthYear( startDate ) } - { formatDayMonthYear( endDate ) }
                             </Text>
                             <TouchableOpacity onPress={ () => setOffset( prev => prev + 1 ) } disabled={ offset >= 0 }>
-                                <Ionicons name="chevron-forward" size={ 20 } color={ offset >= 0 ? '#ccc' : '#666' } />
+                                <Ionicons name="chevron-forward" size={ 20 } color={ offset >= 0 ? '#666' : 'white' } />
                             </TouchableOpacity>
                         </View>
                     ) }
@@ -251,15 +251,15 @@ export default function BarCharts ()
             <View className="justify-center items-center mb-2 gap-1">
                 <View className='flex-row justify-center gap-6'>
                     <View className="flex-row items-center gap-1">
-                        <View className='w-3 h-3 bg-[#2ecc71] rounded-full' />
-                        <Text className="text-xs text-gray-600">Nhận tiền</Text>
+                        <View className='w-3 h-3 bg-white rounded-full' />
+                        <Text className="text-xs text-white">Nhận tiền</Text>
                     </View>
                     <View className="flex-row items-center gap-1">
-                        <View className='w-3 h-3 bg-[#e74c3c] rounded-full' />
-                        <Text className="text-xs text-gray-600">Chuyển tiền</Text>
+                        <View className='w-3 h-3 bg-[#1072ff] rounded-full' />
+                        <Text className="text-xs text-white">Chuyển tiền</Text>
                     </View>
                 </View>
-                <Text className='text-xs text-gray-600'>Đơn vị (Triệu VNĐ)</Text>
+                <Text className='text-xs text-white'>Đơn vị (Triệu VNĐ)</Text>
             </View>
 
             {/* Bar chart */ }
@@ -267,29 +267,42 @@ export default function BarCharts ()
                 <BarChart
                     data={ chartData }
                     height={ 250 }
-                    barWidth={ 20 }
-                    spacing={ 16 }
-                    barBorderTopLeftRadius={ 4 }
-                    barBorderTopRightRadius={ 4 }
-                    noOfSections={ 10 }
+                    barWidth={ 15 }
+                    spacing={ 18 }
+                    hideRules
+                    barBorderRadius={ 4 }
+                    noOfSections={ 8 }
                     maxValue={ Math.ceil( Math.max( ...chartData.map( d => d.value ) ) + 5 ) }
                     isAnimated
+
+                    // Chỉ ẩn đường trục, KHÔNG dùng hideAxesAndRules
+                    xAxisThickness={ 0 }        // Ẩn đường trục X
+                    yAxisThickness={ 0 }        // Ẩn đường trục Y
+                    // KHÔNG dùng hideYAxisText={true} - để giữ số liệu Y
+                    // Styling cho text trục Y (nếu cần)
+                    yAxisTextStyle={ {
+                        color: 'white',
+                        fontSize: 11,
+                    } }
+                    yAxisOffset={ 0 }           // Điều chỉnh offset để căn chỉnh số 0
+                    //yAxisLabelWidth={ 30 }      // Đặt width cho label trục Y
+
                     xAxisLabelTextStyle={ {
-                        color: '#000',
-                        marginLeft: 4,
+                        color: 'white',
+                        marginLeft: 5,
                         width: 30,
                         textAlign: 'center',
                         fontSize: 10,
                         fontWeight: 'bold',
                     } }
                     width={ 330 }
-                    showValuesAsTopLabel
+                    //showValuesAsTopLabel//Hiện/ ẩn số trên cột
                     topLabelTextStyle={ {
                         fontSize: 11,
-                        fontWeight: 'bold',
-                        color: '#333',
+                        //fontWeight: 'bold',
+                        color: 'white',//CSS cho số trên cột
                         textAlign: 'center',
-                        width: 40
+                        width: 40,
                     } }
                 />
             </View>

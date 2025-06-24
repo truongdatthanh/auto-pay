@@ -18,7 +18,7 @@ export default function QuickActionsButton ( { title, imgIcon, url }: QuickActio
     return (
         <TouchableOpacity className="items-center w-1/4" onPress={ handlePress }>
             <Image source={ imgIcon } className="w-8 h-8" resizeMode='contain' />
-            <Text className="text-black font-medium text-[10px] text-center pt-2">{ title }</Text>
+            <Text className="text-white font-medium text-[10px] text-center pt-2">{ title }</Text>
         </TouchableOpacity>
     );
 }

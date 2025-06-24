@@ -1,4 +1,3 @@
-
 import { View, Text, TouchableOpacity, Image } from 'react-native';
 import { FlatList } from 'react-native';
 import MyCard from '@/components/card/MyCard';
@@ -22,10 +21,10 @@ export default function Home ()
     <>
       <StatusBar style="light" />
       {/* Container */ }
-      <View className="flex-1 bg-black overflow-hidden">
+      <View className="flex-1 bg-[#041838] overflow-hidden">
         {/* Header */ }
         <View className="flex-row p-4 pt-8 items-center justify-between">
-          <Text className="text-white text-2xl leading-none font-bold">⛛ AUTOPAY</Text>
+          <Text className="text-white text-2xl leading-none font-bold">⛛ AutoPAY</Text>
           <View className="flex-row gap-4 items-center justify-center">
             <TouchableOpacity
               activeOpacity={ 0.7 }
@@ -60,7 +59,7 @@ export default function Home ()
         </View>
 
         {/* Content */ }
-        <View className='bg-[#cbd5e1]'>
+        <View className='bg-[#041838]'>
           <FlatList
             data={ sections }
             renderItem={ ( { item } ) => (

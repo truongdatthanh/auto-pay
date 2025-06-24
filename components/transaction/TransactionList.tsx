@@ -73,8 +73,8 @@ export default function TransactionList ()
                     onPress={ () => router.push( "/(tabs)/history" ) }
                     className="flex-row items-center"
                 >
-                    <Text className="text-gray-400 text-sm mr-1 italic">Xem tất cả</Text>
-                    <Octicons name="stack" size={ 14 } color="gray" />
+                    <Text className="text-[#1077fd] text-sm mr-1 italic">Xem tất cả</Text>
+                    <Octicons name="stack" size={ 14 } color="#1077fd" />
                 </TouchableOpacity>
             </View>
 
