@@ -21,6 +21,7 @@ export default function CardInfo ( props: ICardInfoProps )
     const handlePressCard = () =>
     {
         const id = card.transactionId
+        console.log("id cardInfo", id)
         router.push( { pathname: "/transaction/[id]", params: { id } } );
     }
 

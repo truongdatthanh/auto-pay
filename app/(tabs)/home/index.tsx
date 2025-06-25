@@ -19,12 +19,11 @@ export default function Home ()
 
   return (
     <>
-      <StatusBar style="light" />
       {/* Container */ }
       <View className="flex-1 bg-[#041838] overflow-hidden">
         {/* Header */ }
-        <View className="flex-row p-4 pt-8 items-center justify-between">
-          <Text className="text-white text-2xl leading-none font-bold">⛛ AutoPAY</Text>
+        <View className="flex-row p-4 items-center justify-between">
+          <Text className="text-white text-2xl leading-none font-bold">⛛AutoPAY</Text>
           <View className="flex-row gap-4 items-center justify-center">
             <TouchableOpacity
               activeOpacity={ 0.7 }

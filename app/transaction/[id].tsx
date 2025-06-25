@@ -1,5 +1,5 @@
 import { router, useLocalSearchParams } from "expo-router";
-import { Alert, BackHandler, Image, Modal, ScrollView, Text, TextInput, TouchableOpacity, View, StatusBar } from "react-native";
+import { Alert, BackHandler, Image, Modal, ScrollView, Text, TextInput, TouchableOpacity, View, StatusBar, ImageBackground } from "react-native";
 import { Ionicons, MaterialIcons, FontAwesome6 } from '@expo/vector-icons';
 import { useEffect, useState, useRef, useCallback, useMemo } from "react";
 import Animated, { FadeIn, FadeInDown, FadeInUp } from "react-native-reanimated";
@@ -14,6 +14,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useCardStore } from "@/store/useCardStore";
 import AccountInfo from "@/components/card/AccountInfo";
 import InfoText from "@/components/card/InfoText";
+import AppHeaderInfo from "@/components/header/App.headerInfo";
 
 export default function Transaction ()
 {
@@ -32,6 +33,8 @@ export default function Transaction ()
         if ( !selectedCard?.transactionHistory ) return null;
         return selectedCard.transactionHistory.find( item => item.transactionId === id );
     }, [ id, selectedCard ] );
+
+    console.log( "data transactionID: ", data )
 
     const setTabBarVisible = useTabBarStore( state => state.setTabBarVisible );
     const setVisible = useFabStore( ( state ) => state.setVisible );
@@ -162,297 +165,443 @@ export default function Transaction ()
 
     return (
         <>
-            <StatusBar barStyle="dark-content" backgroundColor="transparent" translucent />
-            <SafeAreaView className="flex-1 bg-black">
-                <Animated.View className="flex-1 " entering={ FadeIn.duration( 400 ) }>
-                    <StatusBar barStyle="light-content" backgroundColor='transparent' translucent />
-                    {/* Header */ }
-                    <LinearGradient
-                        colors={ data.amount < 0 ? [ '#ef4444', '#b91c1c' ] : [ '#10b981', '#047857' ] }
-                        className="pt-8 pb-8 rounded-b-3xl"
-                        start={ { x: 0, y: 0 } }
-                        end={ { x: 1, y: 1 } }
-                    >
-                        {/* Header */ }
-                        <View className="flex-row items-center justify-between px-4">
-                            <TouchableOpacity
-                                className="w-10 h-10 rounded-full bg-white/20 items-center justify-center"
-                                onPress={ () => router.back() }
-                            >
-                                <Ionicons name="arrow-back" size={ 24 } color="white" />
-                            </TouchableOpacity>
-                            <Text className="text-lg font-semibold text-white">Chi tiết giao dịch</Text>
-                            <TouchableOpacity
-                                className="w-10 h-10 rounded-full bg-white/20 items-center justify-center"
-                                onPress={ handleShare }
-                            >
-                                <Ionicons name="share-outline" size={ 24 } color="white" />
-                            </TouchableOpacity>
-                        </View>
+           
+            <SafeAreaView className="flex-1 bg-[#041838]" >
+                <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
 
-                        <Animated.View
-                            entering={ FadeInDown.delay( 300 ).duration( 500 ) }
-                            className="items-center mt-5"
-                        >
-                            <Text className="text-white/80 text-sm mb-1">
-                                { data.amount < 0 ? 'Chi tiêu' : 'Nhận vào' }
-                            </Text>
-                            <Text className="text-3xl font-bold text-white mb-2">
-                                { formatCurrencyWithCode( Math.abs( data.amount ) ) }
-                            </Text>
-                            <View className="flex-row items-center bg-white/20 px-3 py-1.5 rounded-full">
-                                <Ionicons name={ data.amount < 0 ? "arrow-up" : "arrow-down" } size={ 14 } color="white" />
-                                <Text className="text-white text-xs ml-1">
-                                    { data.amount < 0 ? 'Đã thanh toán' : 'Đã nhận' }
+
+                <AppHeaderInfo title="Kết Quả Giao Dịch" onPress={ () => router.replace( "/(tabs)/home" ) } />
+                <LinearGradient
+                    colors={ [ '#041838', '#64748b' ] }
+                    locations={ [ 0, 0.1 ] }
+                    className="flex-1"
+                    start={ { x: 0, y: 0 } }
+                    end={ { x: 0, y: 1 } }
+                >
+                    <ScrollView className="flex-1">
+                        <View className="bg-white pb-10 m-4 rounded-xl relative mt-10">
+                            <View className="absolute -top-8 self-center bg-white rounded-full p-1">
+                                <Image source={ require( "@/assets/images/check-mark.png" ) } className="w-14 h-14" resizeMode="contain" />
+                            </View>
+                            <View className="justify-center items-center mt-10 gap-2">
+                                <Text className="font-semibold">Giao dịch thành công</Text>
+                                <Text className={ `${ data.amount > 0 ? "text-green-500" : "text-red-500" } font-bold text-2xl` }>
+                                    { data.amount > 0 && "+" }{ formatCurrencyWithCode( data.amount ) }
                                 </Text>
                             </View>
-                        </Animated.View>
-                    </LinearGradient>
-                    {/* -----------------------------------------End----------------------------------------- */ }
 
-                    {/* Body */ }
-                    <ScrollView
-                        ref={ scrollViewRef }
-                        className="flex-1 bg-slate-50"
-                        showsVerticalScrollIndicator={ false }
-                        contentContainerStyle={ { paddingHorizontal: 16, paddingBottom: 30 } }
+                            <Seperate />
 
-                    >
-                        {/* Transaction ID and Date */ }
-                        <Animated.View entering={ FadeInUp.delay( 200 ).duration( 500 ) } className="bg-white rounded-lg mt-4 px-4 py-2 shadow-md border border-gray-200">
-                            <InfoText
-                                label="Mã giao dịch"
-                                containerClassName="flex-row justify-between items-center py-2"
-                                value={ data.transactionId }
-                                labelClassName="text-sm text-gray-500"
-                                valueClassName="text-sm text-black font-semibold"
-                            />
+                            <View className="px-4 gap-4">
+                                <InfoText
+                                    label="Mã giao dịch"
+                                    containerClassName="flex-row justify-between items-center"
+                                    value={ data.transactionId }
+                                    labelClassName="text-sm text-gray-500"
+                                    valueClassName="text-sm text-black font-semibold"
+                                />
+                                <View className="flex-row justify-between items-center">
+                                    <Text className="text-sm text-slate-500">Thời gian thanh toán</Text>
+                                    <View className="flex-row items-center gap-1">
+                                        <Text className="text-sm text-black font-semibold">{ data.time }</Text>
+                                        <Text className="text-sm text-black font-semibold">-</Text>
+                                        <Text className="text-sm text-black font-semibold">{ formatDayMonthYear( data.date ) }</Text>
+                                    </View>
+                                </View>
+                                <InfoText
+                                    label="Số thẻ/TK"
+                                    containerClassName="flex-row justify-between items-center"
+                                    value={ selectedCard?.STK }
+                                    labelClassName="text-sm text-gray-500"
+                                    valueClassName="text-sm text-black font-semibold"
+                                />
+                                <View className="flex-row justify-between items-center">
+                                    <Text className="text-sm text-slate-500">Ngân hàng</Text>
+                                    <View className="flex-row items-center gap-1">
+                                        {/* <View className="w-7 h-7 border items-center border-gray-200 rounded-full"> */ }
+                                        <Image source={ { uri: selectedCard?.logoBanking } } className="w-6 h-6 rounded-full border border-gray-200" resizeMode="contain" />
+                                        {/* </View> */ }
 
-                            <View className="h-[1px] bg-slate-100 my-2" />
-
-                            <InfoText
-                                label="Thời gian tạo"
-                                containerClassName="flex-row justify-between items-center py-2"
-                                value={ formatDayMonthYear( currentDate ) }
-                                labelClassName="text-sm text-gray-500"
-                                valueClassName="text-sm text-black font-semibold"
-                            />
-
-                            <View className="h-[1px] bg-slate-100 my-2" />
-
-                            <View className="flex-row justify-between items-center py-2">
-                                <Text className="text-sm text-slate-500">Thời gian thanh toán</Text>
-                                <View className="flex-row items-center gap-1">
-                                    <Text className="text-sm text-black font-semibold">{ data.time }</Text>
-                                    <View className="border-l border-gray-500 h-6" />
-                                    <Text className="text-sm text-black font-semibold">{ formatDayMonthYear( data.date ) }</Text>
+                                        <Text className="text-sm text-black font-semibold">{ selectedCard?.bankName }</Text>
+                                    </View>
                                 </View>
                             </View>
-                        </Animated.View>
-                        {/* -----------------------------------------End----------------------------------------- */ }
 
-                        {/* Tài khoản */ }
-                        { data.amount > 0 ? (
-                            <>
-                                {/* Tài khoản thụ hưởng */ }
-                                <Animated.View entering={ FadeInUp.delay( 300 ).duration( 500 ) } className="bg-white rounded-lg mt-4 p-4 shadow-md border border-gray-200" >
-                                    <AccountInfo
-                                        title="Tài khoản thụ hưởng"
-                                        accountHolder={ selectedCard?.name }
-                                        accountNumber={ selectedCard?.STK }
-                                        bankName={ selectedCard?.bankName }
-                                        logo={ selectedCard?.logoBanking }
-                                    />
-                                </Animated.View>
+                            <Seperate />
 
-                                {/* -----------------------------------------End----------------------------------------- */ }
-
-                                {/* Tài khoản giao dịch */ }
-                                <Animated.View entering={ FadeInUp.delay( 400 ).duration( 500 ) } className="bg-white rounded-lg mt-4 p-4 shadow-md border border-gray-200">
-                                    <AccountInfo
-                                        title="Tài khoản giao dịch"
-                                        accountHolder={ data.senderName }
-                                        accountNumber={ data.senderSTK }
-                                        bankName={ data.senderBankName }
-                                        logo={ data.senderBankLogo }
-                                    />
-
-                                    <View className="h-[1px] bg-slate-100 my-3" />
-
-                                    <View className="mt-1">
-                                        <Text className="text-slate-500 text-sm mb-2">Nội dung chuyển khoản</Text>
-                                        <View className="bg-blue-50 rounded-lg p-3">
-                                            <Text className="text-slate-700 leading-5" numberOfLines={ showFullContent ? undefined : 2 }>
-                                                { data.description }
-                                            </Text>
-                                            { data.description && data.description.length > 80 && (
-                                                <TouchableOpacity className="mt-2" onPress={ () => setShowFullContent( !showFullContent ) }>
-                                                    <Text className="text-blue-500 text-sm">
-                                                        { showFullContent ? "Thu gọn" : "Xem thêm" }
-                                                    </Text>
-                                                </TouchableOpacity>
-                                            ) }
-                                        </View>
+                            <View className="px-4 gap-4">
+                                <InfoText
+                                    label={ data.amount > 0 ? "Người gửi" : "Người nhận" }
+                                    containerClassName="flex-row justify-between items-center"
+                                    value={ data.amount > 0 ? data.senderName : data.receiverName }
+                                    labelClassName="text-sm text-gray-500"
+                                    valueClassName="text-sm text-black font-semibold"
+                                />
+                                <InfoText
+                                    label="Số thẻ/TK"
+                                    containerClassName="flex-row justify-between items-center"
+                                    value={ data.amount > 0 ? data.senderSTK : data.receiverSTK }
+                                    labelClassName="text-sm text-gray-500"
+                                    valueClassName="text-sm text-black font-semibold"
+                                />
+                                <View className="flex-row justify-between items-center">
+                                    <Text className="text-sm text-slate-500">Ngân hàng</Text>
+                                    <View className="flex-row items-center gap-1">
+                                        <Image source={ { uri: data.amount > 0 ? data.senderBankLogo : data.receiverBankLogo } } className="w-6 h-6 rounded-full border border-gray-200" resizeMode="contain" />
+                                        <Text className="text-sm text-black font-semibold">{ data.amount > 0 ? data.senderBankName : data.receiverBankName }</Text>
                                     </View>
-                                </Animated.View>
-                                {/* -----------------------------------------End----------------------------------------- */ }
-                            </>
-
-                        ) : (
-                            <>
-                                {/* amount < 0 - Chuyển tiền */ }
-                                <Animated.View entering={ FadeInUp.delay( 400 ).duration( 500 ) } className="bg-white rounded-lg mt-4 p-4 shadow-md border border-gray-200">
-                                    <AccountInfo title="Tài khoản giao dịch"
-                                        accountHolder={ selectedCard?.name }
-                                        accountNumber={ selectedCard?.STK }
-                                        bankName={ selectedCard?.bankName }
-                                        logo={ selectedCard?.logoBanking }
-                                    />
-                                    <View className="h-[1px] bg-slate-100 my-3" />
-
-                                    <View className="mt-1">
-                                        <Text className="text-slate-500 text-sm mb-2">Nội dung chuyển khoản</Text>
-                                        <View className="bg-blue-50 rounded-lg p-3">
-                                            <Text className="text-slate-700 leading-5" numberOfLines={ showFullContent ? undefined : 2 }>
-                                                { data.description }
-                                            </Text>
-                                            { data.description && data.description.length > 80 && (
-                                                <TouchableOpacity className="mt-2" onPress={ () => setShowFullContent( !showFullContent ) }>
-                                                    <Text className="text-blue-500 text-sm">
-                                                        { showFullContent ? "Thu gọn" : "Xem thêm" }
-                                                    </Text>
-                                                </TouchableOpacity>
-                                            ) }
-                                        </View>
-                                    </View>
-                                </Animated.View>
-
-                                <Animated.View entering={ FadeInUp.delay( 300 ).duration( 500 ) } className="bg-white rounded-lg mt-4 p-4 shadow-md border border-gray-200" >
-                                    <AccountInfo
-                                        title="Tài khoản thụ hưởng"
-                                        accountHolder={ data.receiverName }
-                                        accountNumber={ data.receiverSTK }
-                                        logo={ data.receiverBankLogo }
-                                        bankName={ data.receiverBankName }
-                                    />
-                                </Animated.View>
-                            </>
-                        ) }
-
-
-
-                        {/* Transaction Details */ }
-                        <Animated.View entering={ FadeInUp.delay( 500 ).duration( 500 ) } className="bg-white rounded-lg mt-4 p-4 shadow-md border border-gray-200" >
-                            <Text className="text-base font-semibold text-slate-700 mb-3">Thông tin giao dịch</Text>
-                            <View className="flex-row flex-wrap">
-                                <InfoText
-                                    containerClassName="w-1/2 mb-4"
-                                    label="Loại giao dịch: "
-                                    labelClassName="text-slate-500 text-sm mb-1"
-                                    value={ data.type }
-                                    valueClassName="text-sm text-black font-semibold"
-                                />
-                                <InfoText
-                                    containerClassName="w-1/2 mb-4"
-                                    label="Mã đơn: "
-                                    labelClassName="text-slate-500 text-sm mb-1"
-                                    valueClassName="text-sm text-black font-semibold"
-                                />
-                                <InfoText
-                                    containerClassName="w-1/2 mb-4"
-                                    label="Điểm bán: "
-                                    labelClassName="text-slate-500 text-sm mb-1"
-                                    valueClassName="text-sm text-black font-semibold"
-                                />
-                                <InfoText
-                                    containerClassName="w-1/2 mb-4"
-                                    label="Sản phẩm: "
-                                    labelClassName="text-slate-500 text-sm mb-1"
-                                    valueClassName="text-sm text-black font-semibold"
-                                />
-                            </View>
-                        </Animated.View>
-
-                        {/* Transaction Note */ }
-                        <Animated.View entering={ FadeInUp.delay( 600 ).duration( 500 ) } className="bg-white rounded-lg mt-4 p-4 shadow-md border border-gray-200" >
-                            <View className="flex-row justify-between items-center mb-3">
-                                <View className="flex-row items-center">
-                                    <MaterialIcons name="note-alt" size={ 18 } color="#64748b" />
-                                    <Text className="text-slate-500 ml-2">Ghi chú cho giao dịch</Text>
                                 </View>
-                                <TouchableOpacity className="bg-blue-500 px-2.5 py-1.5 rounded-full flex-row items-center" onPress={ handleAddNote } >
-                                    <FontAwesome6 name="pen" size={ 12 } color="white" />
-                                    <Text className="text-white text-xs ml-1">Cập nhật</Text>
-                                </TouchableOpacity>
-                            </View>
-
-                            <View className="bg-blue-50 rounded-lg p-3">
-                                { note ? (
-                                    <Text className="text-slate-700">{ note }</Text>
-                                ) : (
-                                    <Text className="text-slate-400 italic">
-                                        Hiện chưa có ghi chú cho giao dịch này
+                                <View className="flex-row justify-between items-start">
+                                    <Text className="text-sm text-gray-500 w-[30%]">Tin nhắn</Text>
+                                    <Text className="text-sm text-black font-semibold text-right w-[70%]">
+                                        { data.description }
                                     </Text>
-                                ) }
-                            </View>
-                        </Animated.View>
-
-                        {/* Report Issue Button */ }
-                        <TouchableOpacity className="flex-row items-center justify-center mt-6 mb-2" onPress={ handleReport }>
-                            <MaterialIcons name="report-problem" size={ 16 } color="#64748b" />
-                            <Text className="text-slate-500 ml-2 text-sm">Báo cáo vấn đề với giao dịch này</Text>
-                        </TouchableOpacity>
-                    </ScrollView>
-
-                    {/* Note Modal */ }
-                    <Modal
-                        transparent={ true }
-                        visible={ modalVisible }
-                        onRequestClose={ () => setModalVisible( false ) }
-                        statusBarTranslucent={ true }
-                        animationType="slide"
-                    >
-                        <BlurView intensity={ 100 } tint="dark" className="flex-1">
-                            <View className="flex-1 justify-end">
-                                <View className="bg-white rounded-t-3xl p-5">
-                                    <View className="flex-row justify-between items-center">
-                                        <Text className="text-lg font-semibold text-slate-800">Cập nhật ghi chú</Text>
-                                        <TouchableOpacity
-                                            className="p-2 rounded-full"
-                                            onPress={ () => setModalVisible( false ) }
-                                        >
-                                            <Ionicons name="close" size={ 24 } color="#64748b" />
-                                        </TouchableOpacity>
-                                    </View>
-
-                                    <View className="h-[1px] bg-slate-100 my-4" />
-
-                                    <View className="bg-slate-100 rounded-xl p-3 min-h-[120px] mb-4">
-                                        <TextInput
-                                            className="text-slate-700 text-base"
-                                            placeholder="Nhập ghi chú cho giao dịch này..."
-                                            placeholderTextColor="#94a3b8"
-                                            value={ note }
-                                            onChangeText={ setNote }
-                                            multiline
-                                            autoFocus
-                                        />
-                                    </View>
-
-                                    <TouchableOpacity
-                                        className="bg-blue-500 rounded-full p-4"
-                                        onPress={ handleUpdateNote }
-                                    >
-                                        <Text className="text-white text-center font-semibold">Cập nhật</Text>
-                                    </TouchableOpacity>
                                 </View>
                             </View>
-                        </BlurView>
-                    </Modal>
-                </Animated.View>
-            </SafeAreaView>
+                        </View>
+
+                        <View className="bg-white mx-4 rounded-xl">
+                            <View className="px-4 py-2" >
+                                <Text className="text-base font-semibold text-slate-700 mb-3">Thông tin giao dịch</Text>
+                                <View className="flex-row flex-wrap">
+                                    <InfoText
+                                        containerClassName="w-1/2 mb-4"
+                                        label="Loại giao dịch: "
+                                        labelClassName="text-slate-500 text-sm mb-1"
+                                        value={ data.type }
+                                        valueClassName="text-sm text-black font-semibold"
+                                    />
+                                    <InfoText
+                                        containerClassName="w-1/2 mb-4"
+                                        label="Mã đơn: "
+                                        labelClassName="text-slate-500 text-sm mb-1"
+                                        valueClassName="text-sm text-black font-semibold"
+                                    />
+                                    <InfoText
+                                        containerClassName="w-1/2 mb-4"
+                                        label="Điểm bán: "
+                                        labelClassName="text-slate-500 text-sm mb-1"
+                                        valueClassName="text-sm text-black font-semibold"
+                                    />
+                                    <InfoText
+                                        containerClassName="w-1/2 mb-4"
+                                        label="Sản phẩm: "
+                                        labelClassName="text-slate-500 text-sm mb-1"
+                                        valueClassName="text-sm text-black font-semibold"
+                                    />
+                                </View>
+                            </View>
+                        </View>
+                    </ScrollView>
+                </LinearGradient>
+            </SafeAreaView >
         </>
     );
 }
 
+const Seperate = () =>
+{
+    return (
+        <>
+            <View className="relative mx-4 my-4">
+                {/* Left half circle */ }
+                <View className="w-4 h-4 bg-[#64748b] rounded-full absolute -left-6 top-1/2 -translate-y-2" />
+                {/* Dashed line */ }
+                <View className="border-t-2 border-dashed border-slate-500" />
+                {/* Right half circle */ }
+                <View className="w-4 h-4 bg-[#64748b] rounded-full absolute -right-6 top-1/2 -translate-y-2" />
+            </View></>
+    );
+}
 
+
+//  return (
+//         <>
+//             <StatusBar barStyle="dark-content" backgroundColor="transparent" translucent />
+//             <SafeAreaView className="flex-1 bg-black">
+//                 <Animated.View className="flex-1 " entering={ FadeIn.duration( 400 ) }>
+//                     <StatusBar barStyle="light-content" backgroundColor='transparent' translucent />
+                  
+//                     <LinearGradient
+//                         colors={ data.amount < 0 ? [ '#ef4444', '#b91c1c' ] : [ '#10b981', '#047857' ] }
+//                         className="pt-8 pb-8 rounded-b-3xl"
+//                         start={ { x: 0, y: 0 } }
+//                         end={ { x: 1, y: 1 } }
+//                     >
+                     
+//                         <View className="flex-row items-center justify-between px-4">
+//                             <TouchableOpacity
+//                                 className="w-10 h-10 rounded-full bg-white/20 items-center justify-center"
+//                                 onPress={ () => router.back() }
+//                             >
+//                                 <Ionicons name="arrow-back" size={ 24 } color="white" />
+//                             </TouchableOpacity>
+//                             <Text className="text-lg font-semibold text-white">Chi tiết giao dịch</Text>
+//                             <TouchableOpacity
+//                                 className="w-10 h-10 rounded-full bg-white/20 items-center justify-center"
+//                                 onPress={ handleShare }
+//                             >
+//                                 <Ionicons name="share-outline" size={ 24 } color="white" />
+//                             </TouchableOpacity>
+//                         </View>
+
+//                         <Animated.View
+//                             entering={ FadeInDown.delay( 300 ).duration( 500 ) }
+//                             className="items-center mt-5"
+//                         >
+//                             <Text className="text-white/80 text-sm mb-1">
+//                                 { data.amount < 0 ? 'Chi tiêu' : 'Nhận vào' }
+//                             </Text>
+//                             <Text className="text-3xl font-bold text-white mb-2">
+//                                 { formatCurrencyWithCode( Math.abs( data.amount ) ) }
+//                             </Text>
+//                             <View className="flex-row items-center bg-white/20 px-3 py-1.5 rounded-full">
+//                                 <Ionicons name={ data.amount < 0 ? "arrow-up" : "arrow-down" } size={ 14 } color="white" />
+//                                 <Text className="text-white text-xs ml-1">
+//                                     { data.amount < 0 ? 'Đã thanh toán' : 'Đã nhận' }
+//                                 </Text>
+//                             </View>
+//                         </Animated.View>
+//                     </LinearGradient>
+                  
+
+                  
+//                     <ScrollView
+//                         ref={ scrollViewRef }
+//                         className="flex-1 bg-slate-50"
+//                         showsVerticalScrollIndicator={ false }
+//                         contentContainerStyle={ { paddingHorizontal: 16, paddingBottom: 30 } }
+
+//                     >
+                        
+//                         <Animated.View entering={ FadeInUp.delay( 200 ).duration( 500 ) } className="bg-white rounded-lg mt-4 px-4 py-2 shadow-md border border-gray-200">
+//                             <InfoText
+//                                 label="Mã giao dịch"
+//                                 containerClassName="flex-row justify-between items-center py-2"
+//                                 value={ data.transactionId }
+//                                 labelClassName="text-sm text-gray-500"
+//                                 valueClassName="text-sm text-black font-semibold"
+//                             />
+
+//                             <View className="h-[1px] bg-slate-100 my-2" />
+
+//                             <InfoText
+//                                 label="Thời gian tạo"
+//                                 containerClassName="flex-row justify-between items-center py-2"
+//                                 value={ formatDayMonthYear( currentDate ) }
+//                                 labelClassName="text-sm text-gray-500"
+//                                 valueClassName="text-sm text-black font-semibold"
+//                             />
+
+//                             <View className="h-[1px] bg-slate-100 my-2" />
+
+//                             <View className="flex-row justify-between items-center py-2">
+//                                 <Text className="text-sm text-slate-500">Thời gian thanh toán</Text>
+//                                 <View className="flex-row items-center gap-1">
+//                                     <Text className="text-sm text-black font-semibold">{ data.time }</Text>
+//                                     <View className="border-l border-gray-500 h-6" />
+//                                     <Text className="text-sm text-black font-semibold">{ formatDayMonthYear( data.date ) }</Text>
+//                                 </View>
+//                             </View>
+//                         </Animated.View>
+                       
+
+                     
+//                         { data.amount > 0 ? (
+//                             <>
+                             
+//                                 <Animated.View entering={ FadeInUp.delay( 300 ).duration( 500 ) } className="bg-white rounded-lg mt-4 p-4 shadow-md border border-gray-200" >
+//                                     <AccountInfo
+//                                         title="Tài khoản thụ hưởng"
+//                                         accountHolder={ selectedCard?.name }
+//                                         accountNumber={ selectedCard?.STK }
+//                                         bankName={ selectedCard?.bankName }
+//                                         logo={ selectedCard?.logoBanking }
+//                                     />
+//                                 </Animated.View>
+
+                             
+
+                              
+//                                 <Animated.View entering={ FadeInUp.delay( 400 ).duration( 500 ) } className="bg-white rounded-lg mt-4 p-4 shadow-md border border-gray-200">
+//                                     <AccountInfo
+//                                         title="Tài khoản giao dịch"
+//                                         accountHolder={ data.senderName }
+//                                         accountNumber={ data.senderSTK }
+//                                         bankName={ data.senderBankName }
+//                                         logo={ data.senderBankLogo }
+//                                     />
+
+//                                     <View className="h-[1px] bg-slate-100 my-3" />
+
+//                                     <View className="mt-1">
+//                                         <Text className="text-slate-500 text-sm mb-2">Nội dung chuyển khoản</Text>
+//                                         <View className="bg-blue-50 rounded-lg p-3">
+//                                             <Text className="text-slate-700 leading-5" numberOfLines={ showFullContent ? undefined : 2 }>
+//                                                 { data.description }
+//                                             </Text>
+//                                             { data.description && data.description.length > 80 && (
+//                                                 <TouchableOpacity className="mt-2" onPress={ () => setShowFullContent( !showFullContent ) }>
+//                                                     <Text className="text-blue-500 text-sm">
+//                                                         { showFullContent ? "Thu gọn" : "Xem thêm" }
+//                                                     </Text>
+//                                                 </TouchableOpacity>
+//                                             ) }
+//                                         </View>
+//                                     </View>
+//                                 </Animated.View>
+                               
+//                             </>
+
+//                         ) : (
+//                             <>
+//                                 <Animated.View entering={ FadeInUp.delay( 400 ).duration( 500 ) } className="bg-white rounded-lg mt-4 p-4 shadow-md border border-gray-200">
+//                                     <AccountInfo title="Tài khoản giao dịch"
+//                                         accountHolder={ selectedCard?.name }
+//                                         accountNumber={ selectedCard?.STK }
+//                                         bankName={ selectedCard?.bankName }
+//                                         logo={ selectedCard?.logoBanking }
+//                                     />
+//                                     <View className="h-[1px] bg-slate-100 my-3" />
+
+//                                     <View className="mt-1">
+//                                         <Text className="text-slate-500 text-sm mb-2">Nội dung chuyển khoản</Text>
+//                                         <View className="bg-blue-50 rounded-lg p-3">
+//                                             <Text className="text-slate-700 leading-5" numberOfLines={ showFullContent ? undefined : 2 }>
+//                                                 { data.description }
+//                                             </Text>
+//                                             { data.description && data.description.length > 80 && (
+//                                                 <TouchableOpacity className="mt-2" onPress={ () => setShowFullContent( !showFullContent ) }>
+//                                                     <Text className="text-blue-500 text-sm">
+//                                                         { showFullContent ? "Thu gọn" : "Xem thêm" }
+//                                                     </Text>
+//                                                 </TouchableOpacity>
+//                                             ) }
+//                                         </View>
+//                                     </View>
+//                                 </Animated.View>
+
+//                                 <Animated.View entering={ FadeInUp.delay( 300 ).duration( 500 ) } className="bg-white rounded-lg mt-4 p-4 shadow-md border border-gray-200" >
+//                                     <AccountInfo
+//                                         title="Tài khoản thụ hưởng"
+//                                         accountHolder={ data.receiverName }
+//                                         accountNumber={ data.receiverSTK }
+//                                         logo={ data.receiverBankLogo }
+//                                         bankName={ data.receiverBankName }
+//                                     />
+//                                 </Animated.View>
+//                             </>
+//                         ) }
+
+
+
+                        
+//                         <Animated.View entering={ FadeInUp.delay( 500 ).duration( 500 ) } className="bg-white rounded-lg mt-4 p-4 shadow-md border border-gray-200" >
+//                             <Text className="text-base font-semibold text-slate-700 mb-3">Thông tin giao dịch</Text>
+//                             <View className="flex-row flex-wrap">
+//                                 <InfoText
+//                                     containerClassName="w-1/2 mb-4"
+//                                     label="Loại giao dịch: "
+//                                     labelClassName="text-slate-500 text-sm mb-1"
+//                                     value={ data.type }
+//                                     valueClassName="text-sm text-black font-semibold"
+//                                 />
+//                                 <InfoText
+//                                     containerClassName="w-1/2 mb-4"
+//                                     label="Mã đơn: "
+//                                     labelClassName="text-slate-500 text-sm mb-1"
+//                                     valueClassName="text-sm text-black font-semibold"
+//                                 />
+//                                 <InfoText
+//                                     containerClassName="w-1/2 mb-4"
+//                                     label="Điểm bán: "
+//                                     labelClassName="text-slate-500 text-sm mb-1"
+//                                     valueClassName="text-sm text-black font-semibold"
+//                                 />
+//                                 <InfoText
+//                                     containerClassName="w-1/2 mb-4"
+//                                     label="Sản phẩm: "
+//                                     labelClassName="text-slate-500 text-sm mb-1"
+//                                     valueClassName="text-sm text-black font-semibold"
+//                                 />
+//                             </View>
+//                         </Animated.View>
+
+                      
+//                         <Animated.View entering={ FadeInUp.delay( 600 ).duration( 500 ) } className="bg-white rounded-lg mt-4 p-4 shadow-md border border-gray-200" >
+//                             <View className="flex-row justify-between items-center mb-3">
+//                                 <View className="flex-row items-center">
+//                                     <MaterialIcons name="note-alt" size={ 18 } color="#64748b" />
+//                                     <Text className="text-slate-500 ml-2">Ghi chú cho giao dịch</Text>
+//                                 </View>
+//                                 <TouchableOpacity className="bg-blue-500 px-2.5 py-1.5 rounded-full flex-row items-center" onPress={ handleAddNote } >
+//                                     <FontAwesome6 name="pen" size={ 12 } color="white" />
+//                                     <Text className="text-white text-xs ml-1">Cập nhật</Text>
+//                                 </TouchableOpacity>
+//                             </View>
+
+//                             <View className="bg-blue-50 rounded-lg p-3">
+//                                 { note ? (
+//                                     <Text className="text-slate-700">{ note }</Text>
+//                                 ) : (
+//                                     <Text className="text-slate-400 italic">
+//                                         Hiện chưa có ghi chú cho giao dịch này
+//                                     </Text>
+//                                 ) }
+//                             </View>
+//                         </Animated.View>
+
+//                         <TouchableOpacity className="flex-row items-center justify-center mt-6 mb-2" onPress={ handleReport }>
+//                             <MaterialIcons name="report-problem" size={ 16 } color="#64748b" />
+//                             <Text className="text-slate-500 ml-2 text-sm">Báo cáo vấn đề với giao dịch này</Text>
+//                         </TouchableOpacity>
+//                     </ScrollView>
+
+//                     <Modal
+//                         transparent={ true }
+//                         visible={ modalVisible }
+//                         onRequestClose={ () => setModalVisible( false ) }
+//                         statusBarTranslucent={ true }
+//                         animationType="slide"
+//                     >
+//                         <BlurView intensity={ 100 } tint="dark" className="flex-1">
+//                             <View className="flex-1 justify-end">
+//                                 <View className="bg-white rounded-t-3xl p-5">
+//                                     <View className="flex-row justify-between items-center">
+//                                         <Text className="text-lg font-semibold text-slate-800">Cập nhật ghi chú</Text>
+//                                         <TouchableOpacity
+//                                             className="p-2 rounded-full"
+//                                             onPress={ () => setModalVisible( false ) }
+//                                         >
+//                                             <Ionicons name="close" size={ 24 } color="#64748b" />
+//                                         </TouchableOpacity>
+//                                     </View>
+
+//                                     <View className="h-[1px] bg-slate-100 my-4" />
+
+//                                     <View className="bg-slate-100 rounded-xl p-3 min-h-[120px] mb-4">
+//                                         <TextInput
+//                                             className="text-slate-700 text-base"
+//                                             placeholder="Nhập ghi chú cho giao dịch này..."
+//                                             placeholderTextColor="#94a3b8"
+//                                             value={ note }
+//                                             onChangeText={ setNote }
+//                                             multiline
+//                                             autoFocus
+//                                         />
+//                                     </View>
+
+//                                     <TouchableOpacity
+//                                         className="bg-blue-500 rounded-full p-4"
+//                                         onPress={ handleUpdateNote }
+//                                     >
+//                                         <Text className="text-white text-center font-semibold">Cập nhật</Text>
+//                                     </TouchableOpacity>
+//                                 </View>
+//                             </View>
+//                         </BlurView>
+//                     </Modal>
+//                 </Animated.View>
+//             </SafeAreaView>
+//         </>
+//     );

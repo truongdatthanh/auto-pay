@@ -6,7 +6,7 @@
     "name": "Truong Thanh Dat",
     "bankbin": "970428",
     "logoBanking": "https://payoo.vn/img/content/2023/03/logo_namabank.png",
-    "bankName": "TMCP NGANG HANG NAM A BANK",
+    "bankName": "Nam A Bank",
     "balance": 18515000,
     "transactionHistory": [
       {
@@ -15,7 +15,7 @@
         "amount": 10500000,
         "time": "09:53:01",
         "type": "Nhận tiền",
-        "description": "NGUYEN VAN D CHUYEN TIEN",
+        "description": "NGUYEN VAN D CHUYEN TIEN QUA MOMO GUI EM DAT TIEN UONG CAPHE",
         "senderName": "NGUYEN VAN D",
         "senderSTK": "453453453378",
         "senderBankName": "Ngân hàng TMCP Quân đội",

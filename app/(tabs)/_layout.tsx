@@ -1,7 +1,7 @@
 import { BlurView } from 'expo-blur';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { router, Tabs } from 'expo-router';
-import { Image, View, Animated, StyleSheet } from 'react-native';
+import { Image, View, Animated, StyleSheet, StatusBar } from 'react-native';
 import { useFabStore } from '@/store/useFABStore';
 import { useTabBarStore } from '@/store/useTabbarStore';
 import useAndroidBackHandler from '@/hooks/useAndroidBackHanler';
@@ -42,7 +42,8 @@ export default function TabsLayout ()
   }, [ scanLineAnim ] );
 
   return (
-    <SafeAreaView className="flex-1 bg-black">
+    <SafeAreaView className="flex-1 bg-[#041838]">
+      <StatusBar barStyle={"light-content"} translucent backgroundColor={"transparent"} />
       <>
         <Tabs
           initialRouteName="home/index"

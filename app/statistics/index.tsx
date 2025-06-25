@@ -49,7 +49,7 @@ export default function BankAccountStatistics ()
     return (
         <>
             <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
-            <SafeAreaView className="flex-1 bg-black">
+            <SafeAreaView className="flex-1  bg-[#041838]">
                 <AppHeaderInfo title="Thống kê giao dịch" onPress={ () => router.replace( "/(tabs)/home" ) }
                     rightComponent={
                         <>
@@ -102,63 +102,15 @@ export default function BankAccountStatistics ()
                             </View>
                         </View>
                     </View>
-
-                    {/* Tổng quan tài khoản */ }
-                    {/* <View className="mx-4 m-4 bg-white rounded-xl shadow-md overflow-hidden">
-                        <View className="p-4 border-b border-gray-100">
-                            <Text className="text-lg font-bold text-gray-800">Tổng quan tài khoản</Text>
-                        </View>
-
-                        <View className="flex-row">
-                            <View className="flex-1 p-4 border-r border-gray-100">
-                                <Text className="text-gray-500 text-sm">Số dư hiện tại</Text>
-                                <Text className="text-xl font-bold text-blue-600 mt-1">
-                                    { formatCurrencyWithCode( totalBalance ) }
-                                </Text>
-                            </View>
-                            <View className="flex-1 p-4">
-                                <Text className="text-gray-500 text-sm">Tổng giao dịch</Text>
-                                <Text className="text-xl font-bold text-gray-800 mt-1">{ totalTransactions }</Text>
-                            </View>
-                        </View>
-
-                        <View className="flex-row">
-                            <View className="flex-1 p-4 border-r border-gray-100 border-t">
-                                <View className="flex-row items-center">
-                                    <View className="w-6 h-6 rounded-full bg-green-500 items-center justify-center mr-2">
-                                        <Ionicons name="arrow-down" size={ 14 } color="#fff" />
-                                    </View>
-                                    <Text className="text-gray-500 text-sm">Thu nhập</Text>
-                                </View>
-                                <Text className="text-base font-semibold text-green-600 mt-1">
-                                    { formatCurrencyWithCode( totalIncome ) }
-                                </Text>
-                                <Text className="text-xs text-gray-500 mt-1">{ incomeTransactions } giao dịch</Text>
-                            </View>
-                            <View className="flex-1 p-4 border-t">
-                                <View className="flex-row items-center">
-                                    <View className="w-6 h-6 rounded-full bg-red-500 items-center justify-center mr-2">
-                                        <Ionicons name="arrow-up" size={ 14 } color="#fff" />
-                                    </View>
-                                    <Text className="text-gray-500 text-sm">Chi tiêu</Text>
-                                </View>
-                                <Text className="text-base font-semibold text-red-600 mt-1">
-                                    { formatCurrencyWithCode( totalExpense ) }
-                                </Text>
-                                <Text className="text-xs text-gray-500 mt-1">{ expenseTransactions } giao dịch</Text>
-                            </View>
-                        </View>
-                    </View> */}
-                    {/* -----------------------------------------End----------------------------------------- */ }
                 </ScrollView>
 
-                <Modal
+                {/* <Modal
                     visible={ openModal }
                     transparent={ true }
                     animationType="slide"
                     onRequestClose={ () => setOpenModal( false ) }
                 >
-                    <View className="flex-1 bg-black/70 justify-end">
+                    <View className="flex-1 bg-black/30 justify-end">
                         <View className="bg-white rounded-t-3xl p-4 max-h-[70%]">
                             <View className="self-center w-24 h-1.5 bg-gray-300 rounded-full mb-4" />
                             <View className="flex-row justify-between items-center mb-4">
@@ -185,9 +137,6 @@ export default function BankAccountStatistics ()
                                                     className="w-16 h-10"
                                                     resizeMode="contain"
                                                 />
-                                                { selectedCard?.STK === bank.STK && (
-                                                    <Ionicons name="checkmark-circle" size={ 24 } color="#1c40f2" />
-                                                ) }
                                             </View>
                                         </View>
                                     </TouchableOpacity>
@@ -195,9 +144,63 @@ export default function BankAccountStatistics ()
                             </ScrollView>
                         </View>
                     </View>
-                </Modal>
+                </Modal> */}
             </SafeAreaView>
+
+            <Modal
+                visible={ openModal }
+                transparent={ true }
+                animationType="slide"
+                onRequestClose={ () => setOpenModal( false ) }
+                statusBarTranslucent={ true }
+            >
+                <TouchableOpacity
+                    className="flex-1 bg-black/30 justify-end"
+                    activeOpacity={ 1 }
+                    onPress={ () => setOpenModal( false ) }
+                >
+                    <View
+                        className="bg-white rounded-t-3xl p-4 max-h-[70%]"
+                    // activeOpacity={ 1 }
+                    // onPress={ ( e ) => e.stopPropagation() }
+                    >
+                        <View className="self-center w-24 h-1.5 bg-gray-300 rounded-full mb-4" />
+                        <View className="flex-row justify-between items-center mb-4">
+                            <Text className="text-xl font-bold">Chọn tài khoản</Text>
+                            <TouchableOpacity onPress={ () => setOpenModal( false ) }>
+                                <Ionicons name="close-circle" size={ 28 } color="#666" />
+                            </TouchableOpacity>
+                        </View>
+                        <ScrollView className="max-h-[500px]">
+                            { bankCard.map( ( bank ) => (
+                                <TouchableOpacity
+                                    key={ bank.STK }
+                                    className={ `border-b border-gray-200 p-4 ${ selectedCard?.STK === bank.STK ? "bg-blue-50" : "" }` }
+                                    onPress={ () => handleSelectBank( bank ) }
+                                >
+                                    <View className="flex-row justify-between items-center">
+                                        <View>
+                                            <Text className="font-medium">{ bank.STK ?? "" }</Text>
+                                            <Text className="text-gray-500">{ bank.bankName ?? "" }</Text>
+                                        </View>
+                                        <View className="flex-row items-center">
+                                            <Image
+                                                source={ { uri: bank.logoBanking ?? "" } }
+                                                className="w-16 h-10"
+                                                resizeMode="contain"
+                                            />
+                                        </View>
+                                    </View>
+                                </TouchableOpacity>
+                            ) ) }
+
+
+                        </ScrollView>
+                    </View>
+                </TouchableOpacity>
+            </Modal>
         </>
     );
 }
+
 

@@ -9,13 +9,13 @@ export default function AppHeaderInfo ( { title, onPress, rightComponent, }: { t
     return (
         <>
             <StatusBar style="light" />
-            <View className="flex-row bg-black items-center justify-between p-4">
+            <View className="flex-row  bg-[#041838] items-center justify-between p-4">
                 <View className="w-[25%]">
                     <TouchableOpacity onPress={ onPress } className="p-2 bg-white/20 rounded-full h-10 w-10 items-center justify-center">
                         <Ionicons name="arrow-back-outline" size={ 18 } color="white" />
                     </TouchableOpacity>
                 </View>
-                <View className="flex-1 items-center ">
+                <View className="flex-1 items-center">
                     <Text className="text-white font-bold text-lg">{ title }</Text>
                 </View>
                 <View className="w-[25%] items-end">
