@@ -165,11 +165,8 @@ export default function Transaction ()
 
     return (
         <>
-           
             <SafeAreaView className="flex-1 bg-[#041838]" >
                 <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
-
-
                 <AppHeaderInfo title="Kết Quả Giao Dịch" onPress={ () => router.replace( "/(tabs)/home" ) } />
                 <LinearGradient
                     colors={ [ '#041838', '#64748b' ] }
@@ -244,16 +241,24 @@ export default function Transaction ()
                                     labelClassName="text-sm text-gray-500"
                                     valueClassName="text-sm text-black font-semibold"
                                 />
-                                <View className="flex-row justify-between items-center">
-                                    <Text className="text-sm text-slate-500">Ngân hàng</Text>
-                                    <View className="flex-row items-center gap-1">
-                                        <Image source={ { uri: data.amount > 0 ? data.senderBankLogo : data.receiverBankLogo } } className="w-6 h-6 rounded-full border border-gray-200" resizeMode="contain" />
-                                        <Text className="text-sm text-black font-semibold">{ data.amount > 0 ? data.senderBankName : data.receiverBankName }</Text>
+                                <View className="flex-row justify-between items-start">
+                                    <Text className="text-sm text-slate-500 w-[30%]">Ngân hàng</Text>
+                                    <View className="w-[70%]">
+                                        <View className="flex-row gap-1">
+                                            <Image
+                                                source={ { uri: data.amount > 0 ? data.senderBankLogo : data.receiverBankLogo } }
+                                                className="w-6 h-6 rounded-full border border-gray-200"
+                                                resizeMode="contain"
+                                            />
+                                            <Text className="text-sm text-black font-semibold flex-1">
+                                                { data.amount > 0 ? data.senderBankName : data.receiverBankName }
+                                            </Text>
+                                        </View>
                                     </View>
                                 </View>
                                 <View className="flex-row justify-between items-start">
-                                    <Text className="text-sm text-gray-500 w-[30%]">Tin nhắn</Text>
-                                    <Text className="text-sm text-black font-semibold text-right w-[70%]">
+                                    <Text className="text-sm text-slate-500 w-[30%]">Tin nhắn</Text>
+                                    <Text className="text-sm text-black font-semibold w-[70%]">
                                         { data.description }
                                     </Text>
                                 </View>

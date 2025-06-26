@@ -8,7 +8,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { formatCurrencyWithCode, formatCurrencyWithoutCode } from '@/utils/format';
 import BarCharts from '@/components/chart/BarChart';
 import { useCardStore } from '@/store/useCardStore';
-import { IBankingTransaction } from '@/interface/IBanking';
+import { IBankingTransaction, ITransaction } from '@/interface/IBanking';
 
 export default function BankAccountStatistics ()
 {

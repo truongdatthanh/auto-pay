@@ -503,7 +503,7 @@ export default function BarCharts ()
                     paddingVertical: 1,
                     borderRadius: 3,
                     textAlign: 'center',
-                    minWidth: 35,
+                    minWidth: 40,
                     marginTop: 2
                 } : {
                     color: 'white',
