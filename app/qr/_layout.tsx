@@ -53,7 +53,7 @@ export default function QRLayout ()
     const handleCreateQR = () =>
     {
         setMenuVisible( false );
-        router.push( "/(tabs)/qr/create" );
+        router.push( "/qr/create" );
     };
     // ---------------------------------- END ------------------------------------- //
 

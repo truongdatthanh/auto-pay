@@ -31,7 +31,7 @@ export default function InfomationLayout ()
     return (
         <GestureHandlerRootView className="flex-1">
             <StatusBar backgroundColor="transparent" translucent barStyle="dark-content" />
-            <SafeAreaView className='flex-1 bg-black'>
+            <SafeAreaView className='flex-1 bg-[#041838]'>
                 <Stack initialRouteName='index'>
                     <Stack.Screen
                         name='index'

@@ -40,10 +40,18 @@ export const formatHourMinuteSecond = ( dateInput: string | Date ): string =>
 };
 
 //Hàm format (dd/mm)
-export const formatDayMonth = ( date: Date ) =>
+export const formatDayMonth = ( date: string | Date ): string =>
 {
-    const day = date.getDate().toString().padStart( 2, '0' );
-    const month = ( date.getMonth() + 1 ).toString().padStart( 2, '0' );
+    const parsedDate = typeof date === 'string' ? new Date( date ) : date;
+
+    if ( isNaN( parsedDate.getTime() ) )
+    {
+        return 'Invalid date';
+    }
+
+    const day = parsedDate.getDate().toString().padStart( 2, '0' );
+    const month = ( parsedDate.getMonth() + 1 ).toString().padStart( 2, '0' );
+
     return `${ day }/${ month }`;
 };
 

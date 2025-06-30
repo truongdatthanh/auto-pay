@@ -37,9 +37,9 @@ export default function UserHome ()
   return (
     <>
       <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
-      <View className='bg-black flex-1'>
+      <View className='flex-1'>
         <ScrollView className="flex-1 bg-gray-100" contentContainerStyle={ { paddingBottom: 30 } } showsVerticalScrollIndicator={ false }>
-          <LinearGradient colors={ [ "#0a0a0a", "#525252" ] } start={ { x: 0, y: 0 } } end={ { x: 1, y: 1 } } className="pt-16 pb-8 rounded-b-3xl">
+          <LinearGradient colors={ [ "#041838", "#525252" ] } start={ { x: 0, y: 0 } } end={ { x: 0, y: 1 } } className="pt-16 pb-8 rounded-b-3xl">
             <TouchableOpacity className="absolute top-12 left-4 p-2 bg-white/20 rounded-full z-10" onPress={ () => router.back() }>
               <Ionicons name="arrow-back-outline" size={ 22 } color="white" />
             </TouchableOpacity>

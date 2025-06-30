@@ -212,14 +212,20 @@ export default function Transaction ()
                                     labelClassName="text-sm text-gray-500"
                                     valueClassName="text-sm text-black font-semibold"
                                 />
-                                <View className="flex-row justify-between items-center">
-                                    <Text className="text-sm text-slate-500">Ngân hàng</Text>
-                                    <View className="flex-row items-center gap-1">
-                                        {/* <View className="w-7 h-7 border items-center border-gray-200 rounded-full"> */ }
-                                        <Image source={ { uri: selectedCard?.logoBanking } } className="w-6 h-6 rounded-full border border-gray-200" resizeMode="contain" />
-                                        {/* </View> */ }
 
-                                        <Text className="text-sm text-black font-semibold">{ selectedCard?.bankName }</Text>
+                                <View className="flex-row justify-between items-start">
+                                    <Text className="text-sm text-slate-500 w-[30%]">Ngân hàng</Text>
+                                    <View className="w-[70%] items-end">
+                                        <View className="flex-row items-start gap-1">
+                                            <Image
+                                                source={ { uri: selectedCard?.logoBanking } }
+                                                className="w-6 h-6 rounded-full border border-gray-200"
+                                                resizeMode="contain"
+                                            />
+                                            <Text className="text-sm text-black font-semibold text-right" style={ { maxWidth: '80%' } }>
+                                                  { selectedCard?.bankName }
+                                            </Text>
+                                        </View>
                                     </View>
                                 </View>
                             </View>
@@ -237,29 +243,31 @@ export default function Transaction ()
                                 <InfoText
                                     label="Số thẻ/TK"
                                     containerClassName="flex-row justify-between items-center"
-                                    value={ data.amount > 0 ? data.senderSTK : data.receiverSTK }
+                                    value={ data.amount > 0 ? data.senderSTK  : data.receiverSTK }
                                     labelClassName="text-sm text-gray-500"
                                     valueClassName="text-sm text-black font-semibold"
                                 />
+
                                 <View className="flex-row justify-between items-start">
                                     <Text className="text-sm text-slate-500 w-[30%]">Ngân hàng</Text>
-                                    <View className="w-[70%]">
-                                        <View className="flex-row gap-1">
+                                    <View className="w-[70%] items-end">
+                                        <View className="flex-row items-start gap-1">
                                             <Image
                                                 source={ { uri: data.amount > 0 ? data.senderBankLogo : data.receiverBankLogo } }
                                                 className="w-6 h-6 rounded-full border border-gray-200"
                                                 resizeMode="contain"
                                             />
-                                            <Text className="text-sm text-black font-semibold flex-1">
+                                            <Text className="text-sm text-black font-semibold text-right" style={ { maxWidth: '80%' } }>
                                                 { data.amount > 0 ? data.senderBankName : data.receiverBankName }
                                             </Text>
                                         </View>
                                     </View>
                                 </View>
-                                <View className="flex-row justify-between items-start">
+
+                                <View className="flex-row justify-between items-start flex-1">
                                     <Text className="text-sm text-slate-500 w-[30%]">Tin nhắn</Text>
-                                    <Text className="text-sm text-black font-semibold w-[70%]">
-                                        { data.description }
+                                    <Text className="text-sm text-black font-semibold w-[70%] text-right">
+                                        { data.description } hsdfsdhfhsdjk
                                     </Text>
                                 </View>
                             </View>

@@ -1,4 +1,3 @@
-
 import { Image, Text, View } from "react-native";
 import WaveButton from "../button/WaveButton";
 import { AntDesign } from "@expo/vector-icons";

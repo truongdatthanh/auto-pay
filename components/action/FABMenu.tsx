@@ -71,20 +71,20 @@ export default function FABMenu ()
             {/* FAB chính */ }
             <TouchableOpacity
                 onPress={ toggleMenu }
-                className="w-14 h-14 bg-[#041838] rounded-full justify-center items-center shadow-lg"
+                className="p-4 bg-[#505678] rounded-full justify-center items-center"
             >
                 <Animated.View style={ rotateStyle }>
                     {/* Icon list */ }
                     <Animated.Image
                         source={ require( "@/assets/images/menu-white.png" ) }
-                        className="w-7 h-7"
+                        className="w-5 h-5"
                         resizeMode="contain"
                         style={ iconListStyle }
                     />
                     {/* Icon close (X) */ }
                     <Animated.Image
                         source={ require( "@/assets/images/plus-white.png" ) }
-                        className="w-7 h-7"
+                        className="w-5 h-5"
                         resizeMode="contain"
                         style={ iconCloseStyle }
                     />

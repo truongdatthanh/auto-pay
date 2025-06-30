@@ -1,4 +1,4 @@
-import {  View } from "react-native";
+import { View } from "react-native";
 import QuickActionsButton from "../button/QuickActionsButton";
 
 export default function QuickActions ()
@@ -11,16 +11,16 @@ export default function QuickActions ()
                     imgIcon={ require( "@/assets/images/credit-card-white.png" ) }
                     url="/bank-account/list"
                 />
-                <QuickActionsButton
+                {/* <QuickActionsButton
                     title="Chuyển tiền"
                     imgIcon={ require( "@/assets/images/send-white.png" ) }
                     url="/payment/transfer"
-                />
-                <QuickActionsButton
+                /> */}
+                {/* <QuickActionsButton
                     title="QR của tôi"
                     imgIcon={ require( "@/assets/images/qr-code-white.png" ) }
                     url={ { pathname: '/(tabs)/qr', params: { tabIndex: 1 } } }
-                />
+                /> */}
                 <QuickActionsButton
                     title="Nhận tiền"
                     imgIcon={ require( "@/assets/images/recieve-money-white.png" ) }

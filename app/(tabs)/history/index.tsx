@@ -19,16 +19,18 @@ const LOAD_MORE_SIZE = 10;
 export default function History ()
 {
   const selectedCard = useCardStore( state => state.selectedCard );
+
   const sectionListRef = useRef<SectionList>( null );
 
-  // Initialize dates properly - show all historical data by default
-  const [ startDate, setStartDate ] = useState( () =>
+  // renderStartDate dùng làm biến trung gian để render các dữ liệu từ (năm hiện tại - 2)
+  const [ renderStartDate, setRenderStartDate ] = useState( () =>
   {
     const pastDate = new Date();
     pastDate.setFullYear( pastDate.getFullYear() - 2 );
     return pastDate;
   } );
 
+  const [ startDate, setStartDate ] = useState( () => new Date() );
   const [ endDate, setEndDate ] = useState( () => new Date() );
   const [ showStartPicker, setShowStartPicker ] = useState( false );
   const [ showEndPicker, setShowEndPicker ] = useState( false );
@@ -40,15 +42,15 @@ export default function History ()
   const [ loadedItemsCount, setLoadedItemsCount ] = useState( INITIAL_LOAD_SIZE );
   const [ isLoadingMore, setIsLoadingMore ] = useState( false );
 
-  // Memoize all filtered transactions (stable reference)
+  // lấy tất cả dữ liệu khi vào history
   const allFilteredTransactions = useMemo( () =>
   {
     if ( !selectedCard?.transactionHistory ) return [];
 
     try
     {
-      const start = new Date( startDate ).setHours( 0, 0, 0, 0 );
-      const end = new Date( endDate ).setHours( 0, 0, 0, 0 );
+      const start = new Date( renderStartDate ).setHours( 0, 0, 0, 0 );//sử dụng renderStartDate để lấy data 2 năm trở lại
+      const end = new Date( endDate ).setHours( 0, 0, 0, 0 );//Ngày hiện tại
 
       return selectedCard.transactionHistory.filter( item =>
       {
@@ -57,12 +59,12 @@ export default function History ()
       } );
     } catch ( error )
     {
-      console.error( 'Error filtering transactions:', error );
+      console.error( 'Lấy dữ liệu thất bại', error );
       return [];
     }
-  }, [ selectedCard?.transactionHistory, startDate, endDate ] );
+  }, [ selectedCard?.transactionHistory, renderStartDate, endDate ] );
 
-  // Memoize grouped sections ONCE and keep stable
+  // Group các dữ liệu thành một nhóm theo ngày
   const allGroupedSections = useMemo( () =>
   {
     if ( !allFilteredTransactions.length ) return [];
@@ -72,7 +74,7 @@ export default function History ()
       return groupByDate( allFilteredTransactions );
     } catch ( error )
     {
-      console.error( 'Error grouping transactions:', error );
+      console.error( 'Có lỗi xảy ra trong việc gộp dữ liệu:', error );
       return [];
     }
   }, [ allFilteredTransactions ] );
@@ -85,18 +87,18 @@ export default function History ()
     let itemCount = 0;
     const sections = [];
 
+    //Lấy từng data từ mảng allGroupedSections đã được group và gán vào sections ví dụ ["01/01/2003: value","02/02/2003": value],
     for ( const section of allGroupedSections )
     {
-      const sectionItemCount = section.data.length;
+      const sectionItemCount = section.data.length;//Đếm số lượng các phần tử có trong sections đó
 
       if ( itemCount + sectionItemCount <= loadedItemsCount )
       {
-        // Include entire section
+        console.log( "itemCount <=: ", itemCount )
         sections.push( section );
         itemCount += sectionItemCount;
       } else if ( itemCount < loadedItemsCount )
       {
-        // Include partial section
         const remainingCount = loadedItemsCount - itemCount;
         sections.push( {
           ...section,
@@ -113,7 +115,7 @@ export default function History ()
     return sections;
   }, [ allGroupedSections, loadedItemsCount ] );
 
-  // Check if has more data
+  // Hàm kiểm tra còn tồn tại dữ liệu không
   const hasMoreData = useMemo( () =>
   {
     const totalItems = allFilteredTransactions.length;
@@ -125,7 +127,7 @@ export default function History ()
   {
     setLoadedItemsCount( INITIAL_LOAD_SIZE );
     setIsLoadingMore( false );
-  }, [ startDate, endDate ] );
+  }, [ renderStartDate, endDate ] );
 
   // Initial loading effect
   useEffect( () =>
@@ -159,7 +161,7 @@ export default function History ()
     } );
   }, [ isLoadingMore, hasMoreData, allFilteredTransactions.length ] );
 
-  // Handle filter by recent days
+  // Hàm chọn khoảng ngày, ví dụ 7 ngày gần nhất, 30 ngày gần nhất
   const handleRecentDays = useCallback( ( days: number ) =>
   {
     if ( !selectedCard?.transactionHistory ) return;
@@ -170,24 +172,27 @@ export default function History ()
 
     setStartDate( past );
     setEndDate( now );
+    setRenderStartDate( past ); // Update renderStartDate for rendering
     setShowFilterModal( false );
   }, [ selectedCard?.transactionHistory ] );
 
-  // Apply custom filter
+  //   // Apply custom filter
   const applyCustomFilter = useCallback( () =>
   {
     if ( !validateDateRange( startDate, endDate ) ) return;
     setShowFilterModal( false );
   }, [ startDate, endDate, validateDateRange ] );
+  //   //------------------------------------ END ------------------------------------//
 
   // Reset filter dates
   const handleResetFilterDate = useCallback( () =>
   {
     const today = new Date();
     const pastDate = new Date();
-    pastDate.setFullYear( pastDate.getFullYear() - 10 );
-    setStartDate( pastDate );
+    pastDate.setFullYear( pastDate.getFullYear() - 2 );
+    setStartDate( today );
     setEndDate( today );
+    setRenderStartDate( pastDate ); // Reset renderStartDate as well
   }, [] );
 
   // Optimized refresh handler
@@ -210,20 +215,18 @@ export default function History ()
   }, [] );
 
   // Handle date picker change
-  const handleDateChange = useCallback( ( type: 'start' | 'end' ) =>
-    ( event: any, selectedDate?: Date ) =>
+  const handleDateChange = useCallback( ( type: 'start' | 'end' ) => ( event: any, selectedDate?: Date ) =>
+  {
+    if ( type === 'start' )
     {
-      if ( type === 'start' )
-      {
-        setShowStartPicker( false );
-        if ( selectedDate ) setStartDate( selectedDate );
-      } else
-      {
-        setShowEndPicker( false );
-        if ( selectedDate ) setEndDate( selectedDate );
-      }
-    }, []
-  );
+      setShowStartPicker( false );
+      if ( selectedDate ) setStartDate( selectedDate );
+    } else
+    {
+      setShowEndPicker( false );
+      if ( selectedDate ) setEndDate( selectedDate );
+    }
+  }, [] );
 
   // Stable render functions with React.memo equivalent optimization
   const renderSectionHeader = useCallback( ( { section: { title } }: any ) => (
@@ -256,7 +259,7 @@ export default function History ()
     {
       return (
         <View className="py-4 items-center">
-          <ActivityIndicator size="large" />
+          <ActivityIndicator size="small" />
         </View>
       );
     }
@@ -265,9 +268,7 @@ export default function History ()
   }, [ hasMoreData, isLoadingMore ] );
 
   // Stable key extractor
-  const keyExtractor = useCallback( ( item: any, index: number ) =>
-    `${ item.transactionId }-${ index }`, []
-  );
+  const keyExtractor = useCallback( ( item: any, index: number ) => `${ item.transactionId }-${ index }`, [] );
 
   // Optimized end reached handler
   const onEndReached = useCallback( () =>
@@ -303,8 +304,6 @@ export default function History ()
     }
   ], [ startDate, endDate, showStartPicker, showEndPicker, handleDateChange ] );
 
-
-
   if ( isLoading ) return <Loading message="Đang tải dữ liệu..." />;
 
   return (
@@ -333,9 +332,7 @@ export default function History ()
             { formatDayMonthYear( startDate ) }
             { startDate.getTime() !== endDate.getTime() && ` - ${ formatDayMonthYear( endDate ) }` }
           </Text>
-
         </View>
-
 
         {/* List */ }
         { visibleSections.length === 0 ? (
@@ -446,10 +443,13 @@ export default function History ()
             </Animated.View>
           </View>
         </Modal>
-      </View >
+      </View>
     </>
   );
 }
+
+
+
 
 //#region base
 // import { View, Text, TouchableOpacity, SectionList, StatusBar, Image, Modal } from 'react-native';
