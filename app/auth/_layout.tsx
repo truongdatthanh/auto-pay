@@ -16,9 +16,7 @@ export default function AuthLayout ()
         <Stack.Screen name='verify-otp' options={ { headerShown: false, } } />
         <Stack.Screen name='term' options={ { headerShown: false, } } />
       </Stack>
-
     </>
-
   )
 }
 

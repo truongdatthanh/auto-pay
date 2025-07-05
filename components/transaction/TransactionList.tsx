@@ -1,3 +1,131 @@
+import { Text, TouchableOpacity, View, FlatList, ActivityIndicator } from "react-native";
+import { useState, useCallback } from "react";
+import { AntDesign, EvilIcons, FontAwesome5, Octicons } from "@expo/vector-icons";
+import { router } from "expo-router";
+import { formatDayMonthYear } from "@/utils/format";
+import { useCardStore } from "@/store/useCardStore";
+import TransactionItem from "./TransactionItem";
+
+export default function TransactionList ()
+{
+    const [ currentDate ] = useState( new Date() );
+    const [ visibleCount, setVisibleCount ] = useState( 4 ); // Hiển thị 4 giao dịch ban đầu
+    const [ isLoadingMore, setIsLoadingMore ] = useState( false ); // Trạng thái tải thêm
+    const selectedCard = useCardStore( ( state ) => state.selectedCard );
+
+    // Lấy tất cả giao dịch và sắp xếp theo thời gian giảm dần
+    const allTransactions =
+        selectedCard?.transactionHistory?.sort( ( a, b ) => new Date( b.date ).getTime() - new Date( a.date ).getTime() ) || [];
+
+    // Danh sách giao dịch hiển thị dựa trên visibleCount
+    const visibleTransactions = allTransactions.slice( 0, visibleCount );
+    console.log("visibleTransactions", visibleTransactions)
+
+    // Hàm tải thêm giao dịch khi cuộn đến cuối
+    const handleLoadMore = useCallback( async () =>
+    {
+        if ( isLoadingMore || visibleCount >= allTransactions.length ) return;
+
+        setIsLoadingMore( true );
+        try
+        {
+            // Giả lập thời gian tải (nếu từ API, gọi API ở đây)
+            await new Promise( ( resolve ) => setTimeout( resolve, 500 ) );
+            setVisibleCount( ( prev ) => Math.min( prev + 4, allTransactions.length ) ); // Tải thêm 4 giao dịch
+        } catch ( error )
+        {
+            console.error( "Lỗi khi tải thêm giao dịch:", error );
+        } finally
+        {
+            setIsLoadingMore( false );
+        }
+    }, [ isLoadingMore, visibleCount, allTransactions.length ] );
+
+    // Xử lý trường hợp không có dữ liệu
+    if ( !selectedCard || !selectedCard.transactionHistory )
+    {
+        return (
+            <View className="flex-1 justify-center items-center min-h-[200px]">
+                <Text className="text-black text-center text-md italic">
+                    Không có dữ liệu giao dịch
+                </Text>
+            </View>
+        );
+    }
+
+    return (
+        <View>
+            {/* Header của danh sách giao dịch */ }
+            <View className="flex-row justify-between items-center px-4 pt-2">
+                <View className="flex-row items-center gap-1">
+                    <Text className="text-lg font-bold text-black">Giao dịch gần đây</Text>
+                </View>
+                <TouchableOpacity
+                    accessibilityLabel="Xem tất cả giao dịch"
+                    onPress={ () => router.push( "/(tabs)/history" ) }
+                    className="flex-row items-center"
+                >
+                    <Text className="text-[#1077fd] text-sm mr-1 italic">Xem tất cả</Text>
+                   <FontAwesome5 name="arrow-circle-right" size={13} color="#1077fd" />
+                </TouchableOpacity>
+            </View>
+
+             <View className="px-4">
+                <Text className="text-[11px] text-gray-400">{ formatDayMonthYear( currentDate ) }</Text>
+            </View>
+
+            {/* Danh sách giao dịch với FlatList */ }
+            <View className="py-2 flex-1 mt-2 min-h-[200px]">
+                <FlatList
+                    className="gap-3"
+                    data={ visibleTransactions }
+                    renderItem={ ( { item } ) => (
+                        <TransactionItem
+                            id={ item.transactionId }
+                            amount={ item.amount }
+                            time={ item.time }
+                            content={ item.description }
+                            date={item.date}
+                        />
+                    ) }
+                    keyExtractor={ ( item ) => item.transactionId }
+                    ListEmptyComponent={
+                        <View className="flex-1 justify-center items-center min-h-[180px]">
+                            <Text className="text-black text-center text-md italic">
+                                Chưa có giao dịch nào
+                            </Text>
+                        </View>
+                    }
+                    contentContainerStyle={ { padding: 8 } }
+                    initialNumToRender={ 4 } // Render 4 mục đầu tiên
+                    maxToRenderPerBatch={ 4 } // Render tối đa 4 mục mỗi lần
+                    windowSize={ 5 } // Giới hạn số mục trong bộ nhớ
+                    onEndReached={ handleLoadMore } // Gọi khi cuộn đến gần cuối
+                    onEndReachedThreshold={ 0.5 } // Kích hoạt handleLoadMore khi còn 50% danh sách
+                    ListFooterComponent={
+                        isLoadingMore ? (
+                            <View className="py-4">
+                                <ActivityIndicator size="small" color="#0000ff" />
+                            </View>
+                        ) : visibleCount < allTransactions.length ? (
+                            <View className="py-4">
+                                <Text className="text-center text-gray-500">Đang tải thêm...</Text>
+                            </View>
+                        ) : null
+                    }
+                    getItemLayout={ ( data, index ) => ( {
+                        length: 60, // Chiều cao ước lượng của TransactionItem
+                        offset: 60 * index,
+                        index,
+                    } ) }
+                />
+            </View>
+        </View>
+    );
+}
+
+
+
 // import { Text, TouchableOpacity, View, FlatList, ActivityIndicator } from "react-native";
 // import { useState, useCallback } from "react";
 // import {FontAwesome5 } from "@expo/vector-icons";
@@ -126,134 +254,6 @@
 //         </View>
 //     );
 // }
-
-
-import { Text, TouchableOpacity, View, FlatList, ActivityIndicator } from "react-native";
-import { useState, useCallback } from "react";
-import { AntDesign, EvilIcons, FontAwesome5, Octicons } from "@expo/vector-icons";
-import { router } from "expo-router";
-import { formatDayMonthYear } from "@/utils/format";
-import { useCardStore } from "@/store/useCardStore";
-import TransactionItem from "./TransactionItem";
-
-export default function TransactionList ()
-{
-    const [ currentDate ] = useState( new Date() );
-    const [ visibleCount, setVisibleCount ] = useState( 4 ); // Hiển thị 4 giao dịch ban đầu
-    const [ isLoadingMore, setIsLoadingMore ] = useState( false ); // Trạng thái tải thêm
-    const selectedCard = useCardStore( ( state ) => state.selectedCard );
-
-    // Lấy tất cả giao dịch và sắp xếp theo thời gian giảm dần
-    const allTransactions =
-        selectedCard?.transactionHistory?.sort( ( a, b ) => new Date( b.date ).getTime() - new Date( a.date ).getTime() ) || [];
-
-    // Danh sách giao dịch hiển thị dựa trên visibleCount
-    const visibleTransactions = allTransactions.slice( 0, visibleCount );
-    console.log("visibleTransactions", visibleTransactions)
-
-    // Hàm tải thêm giao dịch khi cuộn đến cuối
-    const handleLoadMore = useCallback( async () =>
-    {
-        if ( isLoadingMore || visibleCount >= allTransactions.length ) return;
-
-        setIsLoadingMore( true );
-        try
-        {
-            // Giả lập thời gian tải (nếu từ API, gọi API ở đây)
-            await new Promise( ( resolve ) => setTimeout( resolve, 500 ) );
-            setVisibleCount( ( prev ) => Math.min( prev + 4, allTransactions.length ) ); // Tải thêm 4 giao dịch
-        } catch ( error )
-        {
-            console.error( "Lỗi khi tải thêm giao dịch:", error );
-        } finally
-        {
-            setIsLoadingMore( false );
-        }
-    }, [ isLoadingMore, visibleCount, allTransactions.length ] );
-
-    // Xử lý trường hợp không có dữ liệu
-    if ( !selectedCard || !selectedCard.transactionHistory )
-    {
-        return (
-            <View className="flex-1 justify-center items-center min-h-[200px]">
-                <Text className="text-black text-center text-md italic">
-                    Không có dữ liệu giao dịch
-                </Text>
-            </View>
-        );
-    }
-
-    return (
-        <View>
-            {/* Header của danh sách giao dịch */ }
-            <View className="flex-row justify-between items-center px-4 pt-2">
-                <View className="flex-row items-center gap-1">
-                    <Text className="text-lg font-bold text-black">Giao dịch gần đây</Text>
-                </View>
-                <TouchableOpacity
-                    accessibilityLabel="Xem tất cả giao dịch"
-                    onPress={ () => router.push( "/(tabs)/history" ) }
-                    className="flex-row items-center"
-                >
-                    <Text className="text-[#1077fd] text-sm mr-1 italic">Xem tất cả</Text>
-                   <FontAwesome5 name="arrow-circle-right" size={13} color="#1077fd" />
-                </TouchableOpacity>
-            </View>
-
-             <View className="px-4">
-                <Text className="text-[11px] text-gray-400">{ formatDayMonthYear( currentDate ) }</Text>
-            </View>
-
-            {/* Danh sách giao dịch với FlatList */ }
-            <View className="py-2 flex-1 mt-2 min-h-[200px]">
-                <FlatList
-                    className="gap-3"
-                    data={ visibleTransactions }
-                    renderItem={ ( { item } ) => (
-                        <TransactionItem
-                            id={ item.transactionId }
-                            amount={ item.amount }
-                            time={ item.time }
-                            content={ item.description }
-                            date={item.date}
-                        />
-                    ) }
-                    keyExtractor={ ( item ) => item.transactionId }
-                    ListEmptyComponent={
-                        <View className="flex-1 justify-center items-center min-h-[180px]">
-                            <Text className="text-black text-center text-md italic">
-                                Chưa có giao dịch nào
-                            </Text>
-                        </View>
-                    }
-                    contentContainerStyle={ { padding: 8 } }
-                    initialNumToRender={ 4 } // Render 4 mục đầu tiên
-                    maxToRenderPerBatch={ 4 } // Render tối đa 4 mục mỗi lần
-                    windowSize={ 5 } // Giới hạn số mục trong bộ nhớ
-                    onEndReached={ handleLoadMore } // Gọi khi cuộn đến gần cuối
-                    onEndReachedThreshold={ 0.5 } // Kích hoạt handleLoadMore khi còn 50% danh sách
-                    ListFooterComponent={
-                        isLoadingMore ? (
-                            <View className="py-4">
-                                <ActivityIndicator size="small" color="#0000ff" />
-                            </View>
-                        ) : visibleCount < allTransactions.length ? (
-                            <View className="py-4">
-                                <Text className="text-center text-gray-500">Đang tải thêm...</Text>
-                            </View>
-                        ) : null
-                    }
-                    getItemLayout={ ( data, index ) => ( {
-                        length: 60, // Chiều cao ước lượng của TransactionItem
-                        offset: 60 * index,
-                        index,
-                    } ) }
-                />
-            </View>
-        </View>
-    );
-}
-
 
 
 //#region base

@@ -5,7 +5,8 @@ import { Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useFocusEffect } from "@react-navigation/native";
 import { router, Stack } from "expo-router";
 import { useState, useRef, useEffect, useCallback } from "react";
-import { TouchableOpacity, Text, Modal, Animated, StyleSheet } from "react-native";
+import { TouchableOpacity, Text, Modal, Animated, StyleSheet, StatusBar } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function QRLayout ()
 {
@@ -71,52 +72,54 @@ export default function QRLayout ()
 
     return (
         <>
-            <Stack initialRouteName='index'>
-                <Stack.Screen
-                    name="index"
-                    options={ {
-                        header: () =>
-                            <AppHeaderInfo
-                                title="Thanh Toán Với QR"
-                                onPress={ () => router.replace( "/(tabs)/home" ) }
-                                rightComponent={
-                                    <TouchableOpacity
-                                        onPress={ handleToggleMenu }
-                                        className="p-2"
-                                    >
-                                        <Entypo name="dots-three-vertical" size={ 18 } color="white" />
-                                    </TouchableOpacity>
-                                }
-                            />
-                    } }
-                />
-                <Stack.Screen
-                    name='scanner-qr'
-                    options={ {
-                        headerShown: false
-                    } }
-                />
-                <Stack.Screen
-                    name='create'
-                    options={ {
-                        header: () => <AppHeaderInfo title="Tạo mã QR" onPress={ () => router.replace( "/(tabs)/home" ) } />
-                    } }
-                />
-                <Stack.Screen
-                    name='display'
-                    options={ {
-                        headerShown: false
-                    } }
-                />
+            <StatusBar backgroundColor="transparent" translucent barStyle="light-content" />
+            <SafeAreaView className="flex-1 bg-[#041838]">
+                <Stack initialRouteName='index'>
+                    <Stack.Screen
+                        name="index"
+                        options={ {
+                            header: () =>
+                                <AppHeaderInfo
+                                    title="Thanh Toán Với QR"
+                                    onPress={ () => router.replace( "/(tabs)/home" ) }
+                                    rightComponent={
+                                        <TouchableOpacity
+                                            onPress={ handleToggleMenu }
+                                            className="p-2"
+                                        >
+                                            <Entypo name="dots-three-vertical" size={ 18 } color="white" />
+                                        </TouchableOpacity>
+                                    }
+                                />
+                        } }
+                    />
+                    <Stack.Screen
+                        name='scanner-qr'
+                        options={ {
+                            headerShown: false
+                        } }
+                    />
+                    <Stack.Screen
+                        name='create'
+                        options={ {
+                            header: () => <AppHeaderInfo title="Tạo mã QR" onPress={ () => router.replace( "/(tabs)/home" ) } />
+                        } }
+                    />
+                    <Stack.Screen
+                        name='display'
+                        options={ {
+                            headerShown: false
+                        } }
+                    />
 
-                <Stack.Screen
-                    name='my-qr'
-                    options={ {
-                        headerShown: false
-                    } }
-                />
-            </Stack>
-
+                    <Stack.Screen
+                        name='my-qr'
+                        options={ {
+                            headerShown: false
+                        } }
+                    />
+                </Stack>
+            </SafeAreaView>
             {/* Dropdown Menu */ }
             <Modal
                 transparent={ true }

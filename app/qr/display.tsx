@@ -255,7 +255,7 @@ export default function DisplayQR ()
                     {/* Tạo QR mới */ }
                     <TouchableOpacity
                         className="mx-4 mt-6 bg-white rounded-lg shadow-md p-5 flex-row items-center justify-center border border-gray-200"
-                        onPress={ () => router.push( "/(tabs)/qr/create" ) }
+                        onPress={ () => router.push( "/qr/create" ) }
                     >
                         <MaterialCommunityIcons name="qrcode-plus" size={ 24 } color="#1c40f2" />
                         <Text className="ml-2 font-bold text-[#1c40f2]">Tạo mã QR mới</Text>

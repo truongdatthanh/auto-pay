@@ -16,8 +16,8 @@ export default function LoginInput ( {
     ...rest
 }: LoginInputProps )
 {
-    const [ isFocused, setIsFocused ] = useState( false );
     const [ hidePassword, setHidePassword ] = useState( secureTextEntry );
+    const [ isFocused, setIsFocused ] = useState( false );
     const inputRef = useRef<TextInput>( null );
 
     const togglePasswordVisibility = () =>
