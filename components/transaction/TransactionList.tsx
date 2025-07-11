@@ -19,7 +19,7 @@ export default function TransactionList ()
 
     // Danh sách giao dịch hiển thị dựa trên visibleCount
     const visibleTransactions = allTransactions.slice( 0, visibleCount );
-    console.log("visibleTransactions", visibleTransactions)
+    // console.log("visibleTransactions", visibleTransactions)
 
     // Hàm tải thêm giao dịch khi cuộn đến cuối
     const handleLoadMore = useCallback( async () =>

@@ -16,7 +16,7 @@ export const Actions = [
         icon: require( "@/assets/images/qr-code.png" ),
         navigate: () =>
             router.replace( {
-                pathname: "/(tabs)/qr",
+                pathname: "/qr",
                 params: { tabIndex: 1 },
             } ),
     },
@@ -24,7 +24,7 @@ export const Actions = [
         id: 3,
         name: "Nhận tiền",
         icon: require( "@/assets/images/money.png" ),
-        navigate: () => router.push( "/(tabs)/qr/create" ),
+        navigate: () => router.push( "/qr/create" ),
     },
     {
         id: 5,
@@ -36,7 +36,7 @@ export const Actions = [
         id: 4,
         name: "Chi tiết tài khoản",
         icon: require( "@/assets/images/info.png" ),
-        navigate: () => router.push( "/bank-account" ),
+        navigate: () => router.push( "/bank" ),
     },
     {
         id: 6,

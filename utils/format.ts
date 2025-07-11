@@ -1,6 +1,7 @@
 //Hàm format số thẻ cứ 4 số sẽ chèn space
 export const formatCardNumber = ( cardNumber: string | undefined ) =>
 {
+    //trim() dùng loại bỏ khoảng trống
     if ( !cardNumber ) return "";
     return cardNumber.replace( /(\d{4})/g, "$1 " ).trim();
 };

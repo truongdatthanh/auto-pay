@@ -8,7 +8,7 @@ import Animated, { FadeInDown, FadeIn } from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
 import { IUser } from '@/interface/IUser';
 import SettingButton from '@/components/button/SettingButton';
-
+import * as SecureStore from "expo-secure-store";
 
 export default function UserHome ()
 {
@@ -21,8 +21,9 @@ export default function UserHome ()
   {
     const getUser = async () =>
     {
-      const data = await AsyncStorage.getItem( 'user' );
-      if ( !data ) return router.replace( '/auth/login' );
+      const data = await SecureStore.getItemAsync( 'user' );
+      console.log( "user in user: ", data )
+      if ( !data ) return router.replace( '/(modals)' );
       setUser( JSON.parse( data ) );
     };
     getUser();
@@ -30,8 +31,8 @@ export default function UserHome ()
 
   const handleLogout = async () =>
   {
-    await AsyncStorage.removeItem( 'user' );
-    router.replace( '/auth/login' );
+    // await SecureStore.deleteItemAsync( 'user' );
+    router.replace( '/(modals)' );
   };
 
   return (

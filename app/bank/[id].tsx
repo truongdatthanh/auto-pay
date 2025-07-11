@@ -18,11 +18,11 @@ import * as Clipboard from "expo-clipboard";
 import AppHeaderInfo from "@/components/header/App.headerInfo";
 
 
-export default function BankAccount ()
+export default function BankAccountDetail ()
 {
-    const { stk } = useLocalSearchParams();
-    console.log( stk )
-    const indexCard = data.find( ( item ) => item.STK === stk );
+    const { id } = useLocalSearchParams();
+    console.log( id )
+    const indexCard = data.find( ( item ) => item.STK === id );
     const [ currentCard, setCurrentCard ] = useState<IBankingTransaction>();
     const [ isLoading, setIsLoading ] = useState( true );
     const [ qrData, setQrData ] = useState( "" );
@@ -35,7 +35,7 @@ export default function BankAccount ()
     useFocusEffect(
         useCallback( () =>
         {
-            const fetchCardData = async () =>
+            const getCard = async () =>
             {
                 setIsLoading( true );
                 try
@@ -65,8 +65,8 @@ export default function BankAccount ()
                     }, 500 );
                 }
             };
-            fetchCardData();
-        }, [ stk ] )
+            getCard();
+        }, [ id ] )
     );
 
     // Yêu cầu quyền và tải thông tin ngân hàng
@@ -85,7 +85,7 @@ export default function BankAccount ()
     const handleCreateQR = () =>
     {
         router.push( {
-            pathname: '/(tabs)/qr/create',
+            pathname: '/qr/create',
             params: { cardSTK: currentCard?.STK }
         } );
     };
@@ -171,7 +171,7 @@ export default function BankAccount ()
 
     return (
         <>
-            <View className="flex-1">
+            <View className="flex-1  bg-[#041838]">
                 <AppHeaderInfo title="Chi tiết" onPress={ () => router.replace( "/(tabs)/home" ) } />
                 <ScrollView className="flex-1" showsVerticalScrollIndicator={ false } contentContainerStyle={ { paddingBottom: 50 } }>
                     {/* QR Code */ }
@@ -184,7 +184,7 @@ export default function BankAccount ()
                                     </View>
                                     <View className="flex-row justify-between items-center bg-white">
                                         <Text className="font-semibold text-md">{ currentCard?.STK }</Text>
-                                        <TouchableOpacity className="p-1" onPress={copyAccountNumber}>
+                                        <TouchableOpacity className="p-1" onPress={ copyAccountNumber }>
                                             <Ionicons name="copy-outline" size={ 16 } color="#3b82f6" />
                                         </TouchableOpacity>
                                     </View>

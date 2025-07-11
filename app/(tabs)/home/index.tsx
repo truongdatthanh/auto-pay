@@ -83,16 +83,27 @@
 //   );
 // }
 
-import { View, TouchableOpacity, Image, FlatList } from 'react-native';
+import { View, TouchableOpacity, Image, FlatList, Button } from 'react-native';
 import { useRef } from 'react';
 import MyCard from '@/components/card/MyCard';
 import { router } from 'expo-router';
 import QuickActions from '@/components/action/QuickActions';
 import TransactionList from '@/components/transaction/TransactionList';
+import SpeechTestScreen from '@/app/test/speech';
+import { convertNumberToWords } from '@/features/speech/convertNumberToWords';
+import { playAudioSequence } from '@/features/speech/playAudio';
+
 
 export default function Home ()
 {
   console.log( "Home mounted" );
+
+  const handelPressToRead = () =>
+  {
+    const amount = 1000005000;
+    const words = convertNumberToWords( amount );
+    playAudioSequence( [ "success", ...words ] )
+  }
 
   // Tạo ref cho FlatList với type chính xác
   const flatListRef = useRef<FlatList>( null );
@@ -166,8 +177,15 @@ export default function Home ()
           </View>
         </View>
 
-        {/* Content */ }
+        {/* Body 1005000 1001000 1000005000*/ }
         <View className='bg-[#041838]'>
+          <SpeechTestScreen amount='1000005000' />
+          <View className='bg-white'>
+            <Button title="Press to convert" onPress={ () => console.log( "Convert to word: ", convertNumberToWords( 1000005000 ) ) } />
+          </View>
+          <View className='bg-white'>
+            <Button title="Press to read amount" onPress={ handelPressToRead } />
+          </View>
           <FlatList
             ref={ flatListRef }
             data={ sections }

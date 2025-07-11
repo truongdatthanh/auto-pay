@@ -2,16 +2,7 @@ import FloatingInputs from "@/components/input/FloatingInput";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { useRef, useState, useEffect } from "react"; // Thêm useEffect
 import
-{
-    ModalProps,
-    Pressable,
-    ScrollView,
-    Text,
-    TouchableOpacity,
-    View,
-    PanResponder,
-    Animated,
-} from "react-native";
+{ ModalProps, Pressable, ScrollView, Text, TouchableOpacity, View, PanResponder, Animated } from "react-native";
 import Modal from "react-native-modal";
 
 interface RegisterModalProp extends ModalProps
@@ -89,7 +80,7 @@ export default function RegisterModal ( {
             }
         >
             <View
-               
+
                 style={ {
                     backgroundColor: "white",
                     padding: 20,

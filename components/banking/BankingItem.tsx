@@ -13,7 +13,7 @@ export default function BankingItem ( { item }: BankingItemProps )
     return (
         <>
             <WaveButton to={ {
-                pathname: "/bank-account/add",
+                pathname: "/bank/add",
                 params: {
                     data: JSON.stringify( item )
                 }

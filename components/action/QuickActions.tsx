@@ -9,7 +9,7 @@ export default function QuickActions ()
                 <QuickActionsButton
                     title="Tài khoản & thẻ"
                     imgIcon={ require( "@/assets/images/credit-card-white.png" ) }
-                    url="/bank-account/list"
+                    url="/bank"
                 />
                 {/* <QuickActionsButton
                     title="Chuyển tiền"

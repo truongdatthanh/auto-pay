@@ -69,7 +69,7 @@ export default function FloatingInputs ( {
                 <View className="flex-row items-center">
                     <TextInput
                         ref={ inputRef }
-                        className={ `text-base text-gray-400 py-1 flex-1 ${ inputClassName }` }
+                        className={ `text-base text-black py-1 flex-1 ${ inputClassName }` }
                         value={ value }
                         onChangeText={ onChangeText }
                         onFocus={ () => setIsFocused( true ) }
@@ -82,7 +82,7 @@ export default function FloatingInputs ( {
                     { showPasswordToggle && (
                         <TouchableOpacity onPress={ togglePasswordVisibility }>
                             <Ionicons
-                                name={ hidePassword ? 'eye-outline' : 'eye-off-outline' }
+                                name={ hidePassword ? 'eye-off-outline' : 'eye-outline' }
                                 size={ 24 }
                                 color={ isFocused ? '#1c40f2' : 'gray' }
                             />

@@ -1,11 +1,11 @@
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
-import {  useEffect, useMemo, useRef, useState } from "react";
-import { Image, ScrollView, Text, TextInput, TouchableOpacity, View, TouchableWithoutFeedback, Keyboard, StatusBar } from "react-native";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { Image, ScrollView, Text, TextInput, TouchableOpacity, View, TouchableWithoutFeedback, Keyboard, StatusBar, FlatList, Modal, Platform } from "react-native";
 import mockDataBankingCard from "@/assets/banking-card.json";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { IBankingTransaction } from "@/interface/IBanking";
-
+import { KeyboardAvoidingView } from "react-native";
 
 type FormState = {
     accountNumber: string;
@@ -20,7 +20,6 @@ type FormState = {
 export default function CreateMyQR ()
 {
     const data = mockDataBankingCard;
-    const [ isFocused, setIsFocused ] = useState( false );
     const inputRef = useRef<TextInput>( null );
     const [ showSelectionBox, setShowSelectionBox ] = useState<boolean>( false );
     const [ searchText, setSearchText ] = useState( "" );
@@ -29,7 +28,7 @@ export default function CreateMyQR ()
     {
         const hideSub = Keyboard.addListener( 'keyboardDidHide', () =>
         {
-            setIsFocused( false );
+
             inputRef.current?.blur();
             // Delay để tránh đóng selection box quá nhanh
             setTimeout( () =>
@@ -54,12 +53,12 @@ export default function CreateMyQR ()
         bankLogo: "",
     } );
 
-    const scrollViewRef = useRef<KeyboardAwareScrollView | null>( null );
-
     const handleChange = ( field: keyof FormState, value: string ) =>
     {
         setFormData( prev => ( { ...prev, [ field ]: value } ) );
     };
+
+    const scrollViewRef = useRef<KeyboardAwareScrollView | null>( null );
 
     // Hàm submit để tạo mã QR thanh toán
     const handleSubmit = () =>
@@ -139,7 +138,7 @@ export default function CreateMyQR ()
 
     const handleShowSelectionBox = () =>
     {
-        setIsFocused( true );
+
         console.log( "So tai khoan duoc chon" )
         if ( searchText.length >= 0 )
         {
@@ -150,7 +149,7 @@ export default function CreateMyQR ()
     // Xử lý khi focus ra khỏi input
     const handleInputBlur = () =>
     {
-        setIsFocused( false );
+
         // Delay để cho phép người dùng nhấn vào selection box
         setTimeout( () =>
         {
@@ -252,6 +251,23 @@ export default function CreateMyQR ()
                             ) }
                         </View>
                         {/* -----------------------------------------End----------------------------------------- */ }
+
+                        <View className="mb-6">
+                            <Text className="text-white font-medium mb-2 ml-1">Ngân hàng</Text>
+                            <View className="bg-white rounded-lg overflow-hidden border border-gray-300">
+                                <View className="flex-row items-center px-4 py-2">
+                                    <Image source={ require( "@/assets/images/coin.png" ) } className="w-7 h-7 mr-4" />
+                                    <TextInput
+                                        className="flex-1 font-semibold text-md"
+                                        placeholder="Nhập số tiền thanh toán"
+                                        keyboardType="numeric"
+                                        value={ formData.amount }
+                                        onChangeText={ handleAmountChange }
+                                    />
+                                    <Text>VNĐ</Text>
+                                </View>
+                            </View>
+                        </View>
 
                         {/* Tên chủ tài khoản */ }
                         { formData.accountNumber &&

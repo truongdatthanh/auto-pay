@@ -25,7 +25,7 @@ export default function MyCard ()
     //sử dụng useCallback để chắc chắn onViewRef không bị thay đổi giữa các render
     const onViewRef = useCallback( ( { viewableItems }: { viewableItems: any[] } ) =>
     {
-        console.log("viewitem: ", viewableItems)
+        // console.log("viewitem: ", viewableItems)
         if ( viewableItems.length > 0 && viewableItems[ 0 ].index !== null )
         {
             const index = viewableItems[ 0 ].index ?? 0;
@@ -78,7 +78,7 @@ export default function MyCard ()
     // Xem tất cả các banking card
     const handleSeenAllCard = () =>
     {
-        router.push( '/bank-account/list' );
+        router.push( '/bank/list' );
     };
     //-------------------------------------- END -------------------------------------- //
 

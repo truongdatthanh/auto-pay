@@ -1,22 +1,23 @@
-import { FlatList, Text, TouchableOpacity, View } from "react-native";
-import dataBankingCard from "@/assets/banking-card.json";
 import BankingCard from "@/components/card/BankingCard";
 import { router } from "expo-router";
-export default function ListCard ()
+import { TouchableOpacity } from "react-native";
+import { FlatList, Text, View } from "react-native";
+import dataBankingCard from "@/assets/banking-card.json";
+
+export default function BankAccount ()
 {
+
     const data = dataBankingCard;
 
     const handleAddCard = () => 
     {
-        router.push( "/bank-account/add" );
-
+        router.push( "/bank/add" );
     }
-
     return (
         <>
             <View className="flex-1">
                 <FlatList
-                    className="bg-white"
+                    className="bg-[#041838]"
                     data={ data }
                     showsVerticalScrollIndicator={ false }
                     keyExtractor={ ( item ) => item.id }
