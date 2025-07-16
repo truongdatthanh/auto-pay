@@ -75,7 +75,10 @@
     "react-native-webview": "13.13.5",
     "vision-camera-code-scanner": "^0.2.0",
     "zustand": "^5.0.4",
-    "expo-av": "~15.1.7"
+    "expo-av": "~15.1.7",
+    "expo-network": "~7.1.5",
+    "expo-device": "~7.1.4",
+    "expo-application": "~6.1.5"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

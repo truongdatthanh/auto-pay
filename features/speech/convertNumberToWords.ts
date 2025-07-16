@@ -14,7 +14,7 @@ const digitWords: Record<number, string> = {
 
 function readThreeDigits ( n: number ): string[]
 {
-    //Floor dùng làm tròn xuống 4.9 => 4
+    //Floor dùng làm tròn xuống: 4.9 => 4
     const tram = Math.floor( n / 100 );
     const chuc = Math.floor( ( n % 100 ) / 10 );
     const donvi = n % 10;
@@ -23,6 +23,7 @@ function readThreeDigits ( n: number ): string[]
 
     const words: string[] = [];
 
+    // Xử lý hàng trăm
     if ( tram !== 0 )
     {
         console.log( "Push vào trăm: ", digitWords[ tram ] );
@@ -30,6 +31,9 @@ function readThreeDigits ( n: number ): string[]
         words.push( "trăm" );
     }
 
+    // Xử lý hàng chục
+    // Nếu chuc # 0 và chuc = 1 => mười
+    // Nếu chuc # 1 => mươi: 20 => hai muoi
     if ( chuc !== 0 )
     {
         if ( chuc === 1 )
@@ -45,7 +49,9 @@ function readThreeDigits ( n: number ): string[]
     {
         words.push( "linh" );
     }
-
+    
+    // Xử lý hàng đơn vị
+    // 1 1 1
     if ( donvi !== 0 )
     {
         if ( chuc >= 1 )
@@ -65,7 +71,6 @@ function readThreeDigits ( n: number ): string[]
             words.push( digitWords[ donvi ] );
         }
     }
-
     console.log( "word: ", words );
     return words;
 }
@@ -75,24 +80,22 @@ export function convertNumberToWords ( amount: number ): string[]
 {
     if ( amount === 0 ) return [ "khong", "dong" ];
 
-    console.log( amount )
+    // console.log( amount )
 
     const groups: number[] = [];
     let count = 0;
     while ( amount > 0 )
     {
         groups.unshift( amount % 1000 );
-        console.log( `unshift lần ${ count }: ${ amount % 1000 }` );
+        // console.log( `unshift lần ${ count }: ${ amount % 1000 }` );
         amount = Math.floor( amount / 1000 );
-        console.log( `amount : ${ amount }` );
+        // console.log( `amount : ${ amount }` );
         count++;
-        console.log( "Group unshift: ", groups )
+        // console.log( "Group unshift: ", groups )
     }
-
     const result: string[] = [];
     const groupCount = groups.length;
-    console.log( "GroupLenght: ", groupCount );
-
+    // console.log( "GroupLenght: ", groupCount );
     for ( let i = 0; i < groupCount; i++ )
     {
         const group = groups[ i ];

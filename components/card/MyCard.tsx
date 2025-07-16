@@ -125,7 +125,6 @@ export default function MyCard ()
     {
         if ( showViewAllButton )
         {
-            // Animate arrow first, then show the button
             Animated.sequence( [
                 Animated.timing( fadeAnim, {
                     toValue: 1,
