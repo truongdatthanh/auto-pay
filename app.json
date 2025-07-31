@@ -4,26 +4,25 @@
     "slug": "AutoPAY",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/logo-autopay.png",
+    "icon": "./assets/images/info.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/images/logo-autopay-2.png",
+      "image": "./assets/images/info.png",
       "resizeMode": "contain",
-      "backgroundColor": "#000"
+      "backgroundColor": "#144c3d"
     },
     "ios": {
       "supportsTablet": true
     },
     "android": {
+      "softwareKeyboardLayoutMode": "pan",
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/logo-autopay.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#144c3d"
       },
       "permissions": [
-        "android.permission.CAMERA",
-        "android.permission.RECORD_AUDIO",
         "android.permission.CAMERA",
         "android.permission.RECORD_AUDIO"
       ],
@@ -40,9 +39,28 @@
       [
         "expo-camera",
         {
-          "cameraPermission": "Allow AutoPAY to access your camera",
-          "cameraPermissionText": "AutoPAY needs access to your camera to scan QR codes.",
+          "cameraPermission": "Cho phép AutoPAY mở camera của bạn",
+          "cameraPermissionText": "AutoPAY cần quyền truy cập vào camera của bạn để quét mã QR.",
           "recordAudioAndroid": true
+        }
+      ],
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#232323",
+          "image": "./assets/images/info.png",
+          "dark": {
+            "image": "./assets/images/info.png",
+            "backgroundColor": "#31f123"
+          },
+          "imageWidth": 200
+        }
+      ],
+      [
+        "expo-secure-store",
+        {
+          "configureAndroidBackup": true,
+          "faceIDPermission": "Allow AutoPay to access your Face ID biometric data."
         }
       ]
     ],

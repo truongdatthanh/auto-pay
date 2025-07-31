@@ -1,165 +1,251 @@
-import { View, SafeAreaView, Animated } from 'react-native';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { router, Tabs, usePathname } from 'expo-router';
-import { useEffect, useRef } from 'react';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
+import { BlurView } from 'expo-blur';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { router, Tabs } from 'expo-router';
+import { Image, View, Animated, StyleSheet, StatusBar } from 'react-native';
+import { useFabStore } from '@/store/useFABStore';
 import { useTabBarStore } from '@/store/useTabbarStore';
-import { LinearGradient } from 'expo-linear-gradient';
+import useAndroidBackHandler from '@/hooks/useAndroidBackHanler';
+import FABMenu from '@/components/action/FABMenu';
+import { useEffect, useRef } from 'react';
 
-export default function HomeLayout ()
+export default function TabsLayout ()
 {
-  const pathname = usePathname();
-  const isTabbarVisibleZustand = useTabBarStore( ( state ) => state.isTabBarVisible );
-  const setIsTabBarVisibleZustand = useTabBarStore( ( state ) => state.setTabBarVisible );
-  const translateY = useRef( new Animated.Value( 0 ) ).current;
+  const isTabBarVisible = useTabBarStore( state => state.isTabBarVisible );
+  const isVisibleFab = useFabStore( ( state ) => state.visible );
+  const isOpenFab = useFabStore( state => state.isOpen );
+  useAndroidBackHandler();
+  const tabBarHeight = isTabBarVisible ? 80 : 0;
+
+  // Animation cho hiệu ứng quét
+  const scanLineAnim = useRef( new Animated.Value( 0 ) ).current;
 
   useEffect( () =>
   {
-    Animated.timing( translateY, {
-      toValue: isTabbarVisibleZustand ? 0 : 100,
-      duration: 150,
-      useNativeDriver: true,
-    } ).start();
-  }, [ isTabbarVisibleZustand ] );
+    const createScanAnimation = () =>
+      Animated.sequence( [
+        Animated.timing( scanLineAnim, {
+          toValue: 1,
+          duration: 1500,
+          useNativeDriver: false,
+        } ),
+        Animated.timing( scanLineAnim, {
+          toValue: 0,
+          duration: 1500,
+          useNativeDriver: false,
+        } ),
+      ] );
 
-  useEffect( () =>
-  {
-    if ( pathname.includes( '/transaction/' ) )
-    {
-      setIsTabBarVisibleZustand( false );
-    } else
-    {
-      setIsTabBarVisibleZustand( true );
-    }
-  }, [ pathname ] );
+    const animation = Animated.loop( createScanAnimation() );
+    animation.start();
+
+    return () => animation.stop();
+  }, [ scanLineAnim ] );
 
   return (
-    <SafeAreaView style={ { flex: 1 } }>
-      <Tabs
-        initialRouteName="index"
-        screenOptions={ {
-          tabBarShowLabel: true,
-          tabBarActiveTintColor: 'white',
-          tabBarInactiveTintColor: '#ccc',
-          tabBarStyle: {
-            position: 'absolute',
-            bottom: 10,
-            left: 20,
-            right: 20,
-            height: 60,
-            borderRadius: 50,
-            marginHorizontal: 20,
-            elevation: 10,
-            transform: [ { translateY } ],
-          },
-          tabBarBackground: () => (
-            <LinearGradient
-              colors={ [ '#3b82f6', '#6366f1' ] } // blue to indigo
-              start={ { x: 0, y: 0 } }
-              end={ { x: 1, y: 1 } }
+    <SafeAreaView className="flex-1 bg-[#041838]">
+      <StatusBar barStyle={"light-content"} translucent backgroundColor={"transparent"} />
+      <>
+        <Tabs
+          initialRouteName="home/index"
+          screenOptions={ {
+            animation: "none",
+            headerShown: false,
+            tabBarActiveTintColor: '#1c40f2',
+            tabBarInactiveTintColor: 'black',
+
+
+            tabBarLabelStyle: {
+              display: "none",
+              fontSize: 10,
+              width: 100,
+            },
+
+            tabBarItemStyle: {
+              paddingHorizontal: 12,
+              paddingTop: 10,
+              //backgroundColor: "red",
+              paddingVertical: 6,
+              marginHorizontal: 6,
+              justifyContent: 'center',
+              alignItems: 'center',
+              minWidth: 70,
+            },
+
+            //CSS cho thanh Tabbar
+            tabBarStyle: {
+              display: isTabBarVisible ? "flex" : "none",
+              position: 'absolute',
+              // backgroundColor: "blue",
+              alignItems: 'center',
+              justifyContent: "center",
+              height: 60,
+              paddingBottom: 10,
+            },
+          } }
+        >
+          {/* <Tabs
+          initialRouteName="home/index"
+          screenOptions={ {
+            animation: "none",
+            headerShown: false,
+            tabBarActiveTintColor: '#1c40f2',
+            tabBarInactiveTintColor: 'black',
+
+            tabBarLabelStyle: {
+              display: "none",
+            },
+
+            tabBarItemStyle: {
+              paddingVertical: 6,
+              justifyContent: 'center',
+              alignItems: 'center',
+              flex: 1, // Thêm này để các item căng đều
+              // Bỏ minWidth và marginHorizontal
+            },
+
+            tabBarStyle: {
+              display: isTabBarVisible ? "flex" : "none",
+              position: 'absolute',
+              backgroundColor: "white",
+              alignItems: 'center',
+              justifyContent: "center",
+              height: 60,
+              paddingBottom: 10,
+            },
+          } }
+        > */}
+          <Tabs.Screen
+            name="home/index"
+            options={ {
+              title: 'Trang chủ',
+              tabBarIcon: ( { focused } ) =>
+                <Image source={ focused ? require( "@/assets/images/home-black.png" ) : require( "@/assets/images/home-white.png" ) }
+                  className="w-8 h-8"
+                  resizeMode='contain'
+                />
+            } }
+          />
+          {/* <Tabs.Screen
+            name="qr"
+            options={ {
+              title: 'QR',
+              tabBarIcon: () => (
+                <View
+                  style={ {
+                    width: 56,
+                    height: 56,
+                    borderRadius: 28,
+                    backgroundColor: "#1c40f2",
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    marginBottom: 20,
+                    overflow: 'hidden', // Quan trọng để ẩn đường quét khi ra ngoài
+                  } }
+                >
+                  <Image
+                    source={ require( "@/assets/images/scan_blue.png" ) }
+                    style={ {
+                      width: 32,
+                      height: 32,
+                      tintColor: 'white'
+                    } }
+                    resizeMode='contain'
+                  />
+
+              
+                  <Animated.View
+                    style={ {
+                      position: 'absolute',
+                      left: 0,
+                      right: 0,
+                      height: 2,
+                      backgroundColor: '#00ff88', // Màu xanh lá sáng
+                      top: scanLineAnim.interpolate( {
+                        inputRange: [ 0, 1 ],
+                        outputRange: [ 0, 54 ], // Từ top (0) đến bottom (54)
+                      } ),
+                      shadowColor: '#00ff88',
+                      shadowOffset: { width: 0, height: 0 },
+                      shadowOpacity: 0.8,
+                      shadowRadius: 4,
+                      elevation: 5,
+                    } }
+                  />
+                </View>
+              ),
+              tabBarLabelStyle: {
+                // fontSize: 10,
+                // fontWeight: '600',
+                // marginTop: -15,
+                display: "none"
+              }
+            } }
+            listeners={ {
+              tabPress: e =>
+              {
+                e.preventDefault();
+                router.replace( { pathname: '/(tabs)/qr', params: { tabIndex: 0 } } );
+              },
+            } }
+          /> */}
+          <Tabs.Screen
+            name="history/index"
+            options={ {
+              title: 'Lịch sử',
+              tabBarIcon: ( { focused } ) =>
+                <Image source={ focused ? require( "@/assets/images/history-black.png" ) : require( "@/assets/images/history-white.png" ) }
+                  className="w-7 h-7"
+                  resizeMode='contain'
+                />,
+            } }
+            listeners={ {
+              tabPress: ( e ) =>
+              {
+                e.preventDefault();
+                router.replace( "/(tabs)/history" );
+              },
+            } }
+          />
+        </Tabs>
+
+        {/* Khi FAB mở, hiện blur và nền mờ */ }
+        { isOpenFab && (
+          <>
+            <BlurView
+              intensity={ 70 }
+              tint="dark"
               style={ {
-                flex: 1,
-                borderRadius: 50,
+                position: 'absolute',
+                top: 0, left: 0, right: 0, bottom: 0,
+                zIndex: 1000,
               } }
             />
-          ),
-          tabBarItemStyle: {
-            justifyContent: 'center',
-            alignItems: 'center',
-            flexDirection: 'row',
-          },
-          tabBarLabelStyle: {
-            display: 'none',
-          },
-        } }
-      >
-        <Tabs.Screen
-          name="index"
-          options={ {
-            title: 'Home',
-            tabBarIcon: ( { color, focused } ) => (
-              <View
-                style={
-                  focused && {
-                    shadowColor: 'white',               // Đảm bảo có màu shadow
-                    shadowOffset: { width: 0, height: 6 }, // Đẩy bóng xa hơn xuống dưới
-                    shadowOpacity: 0.8,               // Đậm hơn (từ 0 → 1)
-                    shadowRadius: 10,                 // Mượt hơn, tán rộng hơn
-                    elevation: 10,                    // Android: cao hơn = bóng đậm hơn
-                  }
-                }
-                className={ `${ focused ? 'h-14 w-14 bg-black items-center justify-center absolute bottom-2 rounded-full p-2' : 'flex-1' }` }>
-                <MaterialCommunityIcons name="home" size={ focused ? 34 : 28 } color={ color } />
-              </View>
-            ),
-            headerShown: false,
-          } }
-        />
-        <Tabs.Screen
-          name="qr"
-          options={ {
-            tabBarShowLabel: false,
-            title: 'Scan',
-            tabBarStyle: { display: 'none' },
-            headerShown: false,
-            tabBarIcon: ( { color } ) => (
-              <View style={ { flex: 1, justifyContent: 'center', alignItems: 'center' } }>
-                <MaterialCommunityIcons name="qrcode-scan" size={ 24 } color={ color } />
-              </View>
-            ),
-          } }
-          listeners={ {
-            tabPress: ( e ) =>
-            {
-              e.preventDefault();
-              router.replace( { pathname: "/(tabs)/qr", params: { tabIndex: 0 } } );
-            },
-          } }
-        />
-        <Tabs.Screen
-          name="history"
-          options={ {
-            title: 'History',
-            tabBarIcon: ( { color, focused } ) => (
-              <View
-                className={ `${ focused ? 'h-14 w-14 bg-black items-center justify-center absolute bottom-2 rounded-full p-2' : 'flex-1' }` }
-                style={
-                  focused && {
-                    shadowColor: 'white',
-                    shadowOffset: { width: 0, height: 6 },
-                    shadowOpacity: 0.8,
-                    shadowRadius: 10,
-                    elevation: 15,
-                  }
-                }
-              >
-                <MaterialCommunityIcons name="history" size={ focused ? 34 : 28 } color={ color } />
-              </View>
-            ),
-            headerShown: false,
-          } }
-          listeners={ {
-            tabPress: ( e ) =>
-            {
-              e.preventDefault();
-              router.replace( "/(tabs)/history" );
-            },
-          } }
-        />
-        <Tabs.Screen
-          name="user"
-          options={ {
-            title: 'Profile',
-            tabBarIcon: ( { color } ) => (
-              <View style={ { flex: 1, justifyContent: 'center', alignItems: 'center' } }>
-                <FontAwesome name="user-o" size={ 24 } color={ color } />
-              </View>
-            ),
-            headerShown: false,
-            tabBarStyle: { display: 'none' },
-          } }
-        />
-      </Tabs>
+            <View
+              style={ {
+                position: 'absolute',
+                top: 0, left: 0, right: 0, bottom: 0,
+                backgroundColor: 'rgba(0,0,0,0.4)',
+                zIndex: 1001,
+              } }
+            />
+          </>
+        ) }
+
+        {/* Nút FAB luôn nằm trên cùng (zIndex cao nhất) */ }
+        { isVisibleFab && (
+          <SafeAreaView
+            style={ {
+              position: 'absolute',
+              right: 20,
+              bottom: tabBarHeight,
+              zIndex: 1100,
+            } }
+          >
+            <FABMenu />
+          </SafeAreaView>
+        ) }
+
+      </>
     </SafeAreaView>
   );
 }

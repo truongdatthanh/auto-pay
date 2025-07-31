@@ -2,8 +2,8 @@
 import { useState } from 'react';
 import { View, Text, useWindowDimensions, StyleSheet } from 'react-native';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
-import QRScanner from '../(tabs)/qr/scanner-qr';
-import DisplayQR from '../(tabs)/qr/display';
+import QRScanner from '../qr/scanner-qr';
+import DisplayQR from '../qr/display';
 
 const FirstRoute = () => (
     <View style={ [ styles.scene, { backgroundColor: '#ff4081' } ] }>
