@@ -73,7 +73,7 @@ export default function ConfirmPinInput ()
             if ( storedPin === text )
             {
                 // PIN khớp, chuyển đến trang chính
-                router.replace( "/auth/success" );
+                router.replace( "/(auth)/success" );
             } else
             {
                 // PIN không khớp, hiển thị thông báo lỗi

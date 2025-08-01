@@ -7,7 +7,7 @@ export default function RegisterSuccess ()
 
     const handleLogin = () =>
     {
-        router.replace( '/auth/login' );
+        router.replace( '/(auth)/login' );
     }
 
     return (

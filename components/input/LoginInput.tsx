@@ -30,7 +30,7 @@ export default function LoginInput ( {
         const hideSub = Keyboard.addListener( 'keyboardDidHide', () =>
         {
             setIsFocused( false );
-            inputRef.current?.blur(); // 👈 Giải pháp triệt để để ẩn cả con trỏ
+            inputRef.current?.blur();
         } );
 
         return () =>

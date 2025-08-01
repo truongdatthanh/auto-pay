@@ -2,7 +2,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { router, useLocalSearchParams } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useRef, useState } from "react";
-import { ActivityIndicator, Alert, Animated, Keyboard, Platform, Pressable, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, Alert, Animated, Pressable, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function VerifyOTP ()
@@ -36,7 +36,7 @@ export default function VerifyOTP ()
         }, 1000 );
 
         return () => clearInterval( timer );
-    }, [ timeLeft ] );
+    }, [ timeLeft > 0 ] );
 
     // Format thời gian thành mm:ss
     const formatTime = ( seconds: number ) =>
@@ -89,7 +89,7 @@ export default function VerifyOTP ()
         if ( code === '1234' )
         { // Mã OTP mẫu
             Alert.alert( "Thành công", "Xác thực OTP thành công!", [
-                { text: "OK", onPress: () => router.replace( "/auth/success" ) }
+                { text: "OK", onPress: () => router.replace( "/(auth)/success" ) }
             ] );
         } else
         {
@@ -122,18 +122,14 @@ export default function VerifyOTP ()
             }, 500 );
         }
     };
-    const handleBackToRegister = () =>
-    {
-        router.replace( '/auth/register' );
-    };
 
     return (
         <>
             <StatusBar style="light" />
-            <SafeAreaView className="flex-1 bg-[#cbd5e1]">
+            <SafeAreaView className="flex-1 bg-white">
                 <View className="flex-1 px-4">
                     {/* Back button */ }
-                    <TouchableOpacity onPress={ handleBackToRegister } className="absolute top-4 left-4">
+                    <TouchableOpacity onPress={ () => router.back() } className="absolute top-4 left-4">
                         <Ionicons name="return-up-back" size={ 40 } color="black" />
                     </TouchableOpacity>
                     {/* -----------------------------------------End----------------------------------------- */ }
@@ -194,9 +190,9 @@ export default function VerifyOTP ()
                         </Pressable>
 
                         {/* Thời gian đếm ngược */ }
-                        <View className="flex-row items-center justify-center">
+                        <View className="flex-row ">
                             <Text className="text-black">Mã OTP sẽ hết hạn sau </Text>
-                            <Text className={ `font-bold ${ timeLeft > 60 ? 'text-white' : 'text-red-500' }` }>
+                            <Text className={ `text-sm ${ timeLeft > 60 ? 'text-black' : 'text-red-500' }` }>
                                 { formatTime( timeLeft ) }
                             </Text>
                         </View>
@@ -226,7 +222,7 @@ export default function VerifyOTP ()
                     <TouchableOpacity
                         onPress={ () => verifyOtp( otp ) }
                         disabled={ otp.length !== 4 }
-                        className={ `mt-12 py-4 rounded-xl w-[300px] self-center ${ otp.length === 4 ? 'bg-black' : 'bg-gray-600' }` }
+                        className={ `mt-12 py-4 rounded-xl w-[300px] self-center ${ otp.length === 4 ? 'bg-black' : 'bg-gray-200' }` }
                     >
                         <Text className="text-white text-base font-semibold text-center">
                             Xác nhận

@@ -10,6 +10,20 @@ export const ERROR_MESSAGES = {
     NAVIGATION_ERROR: "Có lỗi xảy ra khi tạo mã QR. Vui lòng thử lại.",
     NETWORK_ERROR: "Lỗi kết nối mạng. Vui lòng kiểm tra internet.",
     UNKNOWN_ERROR: "Có lỗi không xác định xảy ra. Vui lòng thử lại.",
+
+    REQUIRED_EMAIL: "Email không được để trống",
+    INVALID_EMAIL: "Email không hợp lệ",
+
+    REQUIRED_PASSWORD: "Mật khẩu không được để trống",
+    SHORT_PASSWORD: ( minLength: number ) => `Mật khẩu phải có ít nhất ${ minLength } ký tự`,
+    PASSWORD_MISMATCH: "Mật khẩu không khớp",
+
+    REQUIRED_CONFIRM_PASSWORD: "Mật khẩu xác nhận không được để trống",
+    SHORT_CONFIRM_PASSWORD: ( minLength: number ) => `Mật khẩu xác nhận phải có ít nhất ${ minLength } ký tự`,
+
+    REQUIRED_FULLNAME: "Họ tên không được để trống",
+    INVALID_FULLNAME: "Họ tên không hợp lệ",
+
 } as const;
 
 export const SUCCESS_MESSAGES = {

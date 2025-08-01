@@ -11,7 +11,7 @@ import Loading from '@/components/loading/Loading';
 import { groupByDate } from '@/utils/groupByDate';
 import { formatDayMonthYear } from '@/utils/format';
 import { useCardStore } from '@/store/useCardStore';
-import { validateDateRange } from '@/utils/validation';
+import { validateDateRange } from '@/utils/validators';
 
 const INITIAL_LOAD_SIZE = 10;
 const LOAD_MORE_SIZE = 10;

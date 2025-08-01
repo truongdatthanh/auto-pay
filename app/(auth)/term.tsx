@@ -1,3 +1,4 @@
+import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import React from 'react';
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
@@ -6,11 +7,22 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 export default function TermsAndConditionsScreen ()
 {
   return (
-    <SafeAreaView className='flex-1 bg-slate-50'>
-      <ScrollView className="flex-1 bg-white px-4 py-6">
-        <TouchableOpacity onPress={ () => router.back() }><Text>Quay lại</Text></TouchableOpacity>
-        <Text className="text-2xl font-bold mb-4 text-center">Chính Sách & Điều Khoản</Text>
+    <SafeAreaView className='flex-1 bg-white'>
+      <View>
+        <TouchableOpacity
+          onPress={ () => router.back() }
+          className="absolute top-4 left-3 z-10"
+        >
+          <Ionicons name="return-up-back" size={ 40 } color="black" />
+        </TouchableOpacity>
 
+        {/* Title */ }
+        <View className="mt-20">
+          <Text className="text-2xl font-bold mb-4 text-center">Chính Sách & Điều Khoản</Text>
+        </View>
+      </View>
+      <ScrollView className="flex-1 px-4 py-6">
+        {/* <Text className="text-2xl font-bold mb-4 text-center">Chính Sách & Điều Khoản</Text> */ }
         <View className="space-y-4">
           <Text className="text-base text-gray-700">
             Chào mừng bạn đến với ứng dụng của chúng tôi. Khi bạn sử dụng ứng dụng này, bạn đồng ý tuân thủ các điều khoản và điều kiện dưới đây.

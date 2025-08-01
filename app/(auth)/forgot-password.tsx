@@ -17,15 +17,15 @@ export default function ForgotPassword ()
             alert( 'Số điện thoại không hợp lệ' );
             return;
         }
-        router.replace( "/auth/success" );
+        router.replace( "/(auth)/success" );
     }
     return (
         <>
             <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
-            <SafeAreaView className="bg-[#cbd5e1] flex-1">
+            <SafeAreaView className="bg-white flex-1">
                 <View className="p-4">
                     {/* Back button */ }
-                    <TouchableOpacity onPress={ () => router.replace( '/auth/login' ) } className="absolute top-4 left-4">
+                    <TouchableOpacity onPress={ () => router.replace( '/(auth)/login' ) } className="absolute top-4 left-4">
                         <Ionicons name="return-up-back" size={ 40 } color="black" />
                     </TouchableOpacity>
                     {/* -----------------------------------------End----------------------------------------- */ }
@@ -33,12 +33,12 @@ export default function ForgotPassword ()
                     {/* Title */ }
                     <View className="mt-16">
                         <Text className="text-4xl font-bold text-black">Quên mật khẩu</Text>
-                        <Text className="text-md text-black mt-1">Vui lòng nhập <Text className="text-white text-lg italic ">*số điện thoại*</Text> đã đăng ký tài khoản</Text>
+                        <Text className="text-md text-black mt-1">Vui lòng nhập <Text className="text-black text-lg italic font-bold">*số điện thoại*</Text> đã đăng ký tài khoản</Text>
                     </View>
                     {/* -----------------------------------------End----------------------------------------- */ }
                 </View>
 
-                <View className="px-5 flex-1 pt-8 rounded-t-3xl bg-[#f1f5f9]">
+                <View className="px-5">
                     <LoginInput iconSource={ require( "@/assets/images/dots.png" ) }
                         value={ phoneNumber }
                         onChangeText={ setPhoneNumber }

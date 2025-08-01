@@ -1,5 +1,5 @@
 import { LinkProps, router } from "expo-router";
-import { Image, ImageSourcePropType, Text, TouchableOpacity } from "react-native";
+import { Image, ImageSourcePropType, Text, TouchableOpacity, View } from "react-native";
 
 interface QuickActionsButtonProps
 {
@@ -17,7 +17,9 @@ export default function QuickActionsButton ( { title, imgIcon, url }: QuickActio
 
     return (
         <TouchableOpacity className="items-center w-1/4" onPress={ handlePress }>
-            <Image source={ imgIcon } className="w-8 h-8" resizeMode='contain' />
+            <View className="bg-white/20 rounded-full p-2">
+                <Image source={ imgIcon } className="w-8 h-8" resizeMode='contain' />
+            </View>
             <Text className="text-white font-medium text-[10px] text-center pt-2">{ title }</Text>
         </TouchableOpacity>
     );

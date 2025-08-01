@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState, useRef } from 'react';
+import React, { useCallback, useEffect, useState, useRef, useMemo } from 'react';
 import { View, Text, FlatList, TouchableOpacity, Animated, NativeSyntheticEvent, NativeScrollEvent, Image } from 'react-native';
 import data from "@/assets/banking-card.json";
 import BankingCard from './BankingCard';
@@ -25,7 +25,6 @@ export default function MyCard ()
     //sử dụng useCallback để chắc chắn onViewRef không bị thay đổi giữa các render
     const onViewRef = useCallback( ( { viewableItems }: { viewableItems: any[] } ) =>
     {
-        // console.log("viewitem: ", viewableItems)
         if ( viewableItems.length > 0 && viewableItems[ 0 ].index !== null )
         {
             const index = viewableItems[ 0 ].index ?? 0;
@@ -164,23 +163,29 @@ export default function MyCard ()
     };
     //-------------------------------------- END -------------------------------------- //
 
-    //Hàm render dot
-    // const renderDotIndicator = useCallback( () => (
-    //     <View className='h-[24px] items-center justify-center'>
-    //         <View className="flex-row justify-center items-center">
-    //             { bankCard.map( ( _, index ) => (
-    //                 <View
-    //                     key={ index }
-    //                     className={ `mx-1 rounded-full ${ currentCardIndex === index
-    //                         ? 'bg-black w-6 h-2'
-    //                         : 'border-2 w-2 h-2'
-    //                         }` }
-    //                 />
-    //             ) ) }
-    //         </View>
-    //     </View>
-    // ), [ bankCard.length, currentCardIndex ] );
-    //-------------------------------------- END -------------------------------------- //
+    // Memoized render item function
+    const renderItem = useCallback( ( { item }: { item: any } ) => (
+        <View className="items-center justify-center" style={ { marginRight: 10 } }>
+            <BankingCard
+                key={ item.id }
+                id={ item.id }
+                STK={ item.STK }
+                name={ item.name }
+                logoBanking={ item.logoBanking }
+                bankName={ item.bankName }
+            />
+        </View>
+    ), [] );
+
+    // Memoized key extractor
+    const keyExtractor = useCallback( ( item: any ) => item.id, [] );
+
+    // Memoized content container style
+    const contentContainerStyle = useMemo( () => ( {
+        paddingHorizontal: 16,
+        paddingRight: isAtLastCard ? 20 + extraPadding : 20,
+    } ), [ isAtLastCard, extraPadding ] );
+
 
     return (
         <View>
@@ -191,31 +196,17 @@ export default function MyCard ()
                     horizontal
                     pagingEnabled={ false }
                     showsHorizontalScrollIndicator={ false }
-                    keyExtractor={ ( item ) => item.id }
+                    keyExtractor={ keyExtractor }
                     snapToInterval={ cardWidth }
                     snapToAlignment="center"
                     onScroll={ handleScroll }
                     onMomentumScrollEnd={ handleScrollEnd }
                     onScrollEndDrag={ handleScrollEndDrag }
                     scrollEventThrottle={ 16 }
-                    renderItem={ ( { item } ) => (
-                        <View className="items-center justify-center" style={ { marginRight: 10 } }>
-                            <BankingCard
-                                key={ item.id }
-                                id={ item.id }
-                                STK={ item.STK }
-                                name={ item.name }
-                                logoBanking={ item.logoBanking }
-                                bankName={ item.bankName }
-                            />
-                        </View>
-                    ) }
+                    renderItem={ renderItem }
                     onViewableItemsChanged={ onViewRef }
                     viewabilityConfig={ viewabilityConfig }
-                    contentContainerStyle={ {
-                        paddingHorizontal: 16,
-                        paddingRight: isAtLastCard ? 20 + extraPadding : 20,
-                    } }
+                    contentContainerStyle={ contentContainerStyle }
                 />
                 {/* -----------------------------------------End----------------------------------------- */ }
 
@@ -250,10 +241,6 @@ export default function MyCard ()
                     </TouchableOpacity>
                 </Animated.View>
             </View>
-            {/* -----------------------------------------End----------------------------------------- */ }
-
-            {/* Active dot */ }
-            {/* { renderDotIndicator() } */ }
             {/* -----------------------------------------End----------------------------------------- */ }
         </View>
     );
