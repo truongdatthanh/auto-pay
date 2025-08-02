@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { View, FlatList, Alert } from 'react-native';
 import mockNotificate from '@/assets/notificate.json';
-import TabbarTop from '@/components/tabbar/TabbarTop';
+import TabbarTop from '@/components/tab/TabbarTop';
 import { INotification } from '@/interface/INotification';
 import { useNotificationSelection } from '@/hooks/useNotificationSelection';
 import NotificationItem from '@/components/notification/NotificationItem';

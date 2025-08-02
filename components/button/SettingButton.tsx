@@ -3,11 +3,11 @@ import { Text, TouchableOpacity, View } from "react-native";
 
 interface SettingButtonProps
 {
-    icon: React.JSX.Element,
-    iconBg: string,
-    label: string,
-    desc: string,
-    onPress: () => void,
+    icon?: React.JSX.Element,
+    iconBg?: string,
+    label?: string,
+    desc?: string,
+    onPress?: () => void,
 }
 
 export default function SettingButton ( { icon, iconBg, label, desc, onPress }: SettingButtonProps )

@@ -1,14 +1,11 @@
 import { BarChart } from 'react-native-gifted-charts';
 import { View, Text, TouchableOpacity } from 'react-native';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import { formatCurrencyWithoutCode, formatDayMonth, formatDayMonthYear } from '@/utils/format';
 import { useCardStore } from '@/store/useCardStore';
+import { BAR_CHART_COLOR } from '@/constants/colors';
 
-const COLORS = {
-    income: 'white',
-    expense: '#1072ff',
-};
 
 const FILTERS = [
     { key: 'week', label: 'Tuần' },
@@ -16,10 +13,14 @@ const FILTERS = [
     { key: 'quarter', label: 'Quý' }
 ] as const;
 
+const MONTH_LABELS = [ 'Th1', 'Th2', 'Th3', 'Th4', 'Th5', 'Th6', 'Th7', 'Th8', 'Th9', 'Th10', 'Th11', 'Th12' ];
+
+type TimeFilter = 'week' | 'month' | 'quarter';
+
 export default function BarCharts ()
 {
     const selectedCard = useCardStore( state => state.selectedCard )
-    const [ timeFilter, setTimeFilter ] = useState<'week' | 'month' | 'quarter'>( 'week' );
+    const [ timeFilter, setTimeFilter ] = useState<TimeFilter>( 'week' );
     const [ showDropdown, setShowDropdown ] = useState( false );
     const [ offset, setOffset ] = useState( 0 ); // only used for week
     const [ selectedQuarter, setSelectedQuarter ] = useState( 0 ); // 0 = Q1
@@ -27,8 +28,12 @@ export default function BarCharts ()
 
     const indexData = selectedCard;
 
-    const currentDate = new Date();
-    currentDate.setHours( 0, 0, 0, 0 );
+    const currentDate = useMemo( () =>
+    {
+        const date = new Date();
+        date.setHours( 0, 0, 0, 0 );
+        return date;
+    }, [] );
 
     const { startDate, endDate, labels } = useMemo( () =>
     {
@@ -39,36 +44,40 @@ export default function BarCharts ()
     
 
         //Set dữ liệu cho label
-        if ( timeFilter === 'week' )
+        switch ( timeFilter )
         {
-            const currentDay = ( currentDate.getDay() + 6 ) % 7;
-            start.setDate( currentDate.getDate() - currentDay + offset * 7 );
-            end = new Date( start );
-            end.setDate( start.getDate() + 6 );
-            for ( let i = 0; i < 7; i++ )
-            {
-                const date = new Date( start );
-                date.setDate( start.getDate() + i );
-                labels.push( formatDayMonth( date ) );
+            case 'week': {
+                const currentDay = ( currentDate.getDay() + 6 ) % 7;
+                start.setDate( currentDate.getDate() - currentDay + offset * 7 );
+                end.setDate( start.getDate() + 6 );
+
+                for ( let i = 0; i < 7; i++ )
+                {
+                    const date = new Date( start );
+                    date.setDate( start.getDate() + i );
+                    labels.push( formatDayMonth( date ) );
+                }
+                break;
             }
-        } else if ( timeFilter === 'month' )
-        {
-            const year = currentDate.getFullYear() + yearOffset;
-            const monthLabels = [ 'Th1', 'Th2', 'Th3', 'Th4', 'Th5', 'Th6', 'Th7', 'Th8', 'Th9', 'Th10', 'Th11', 'Th12' ];
-            labels.push( ...monthLabels );
-            start = new Date( year, 0, 1 );
-            end = new Date( year, 11, 31 );
-        } else if ( timeFilter === 'quarter' )
-        {
-            const year = currentDate.getFullYear() + yearOffset;
-            const quarterStartMonth = selectedQuarter * 3;
-            const monthLabels = [ 'Th1', 'Th2', 'Th3', 'Th4', 'Th5', 'Th6', 'Th7', 'Th8', 'Th9', 'Th10', 'Th11', 'Th12' ];
-            for ( let i = 0; i < 3; i++ )
-            {
-                labels.push( monthLabels[ quarterStartMonth + i ] );
+            case 'month': {
+                const year = currentDate.getFullYear() + yearOffset;
+                labels.push( ...MONTH_LABELS );
+                start.setTime( new Date( year, 0, 1 ).getTime() );
+                end.setTime( new Date( year, 11, 31 ).getTime() );
+                break;
             }
-            start = new Date( year, quarterStartMonth, 1 );
-            end = new Date( year, quarterStartMonth + 3, 0 );
+            case 'quarter': {
+                const year = currentDate.getFullYear() + yearOffset;
+                const quarterStartMonth = selectedQuarter * 3;
+
+                for ( let i = 0; i < 3; i++ )
+                {
+                    labels.push( MONTH_LABELS[ quarterStartMonth + i ] );
+                }
+                start.setTime( new Date( year, quarterStartMonth, 1 ).getTime() );
+                end.setTime( new Date( year, quarterStartMonth + 3, 0 ).getTime() );
+                break;
+            }
         }
 
         end.setHours( 23, 59, 59, 999 );
@@ -88,13 +97,8 @@ export default function BarCharts ()
             const transactionDate = new Date( transaction.date );
             if ( transactionDate >= startDate && transactionDate <= endDate )
             {
-                if ( transaction.amount > 0 )
-                {
-                    income += transaction.amount;
-                } else
-                {
-                    expense += Math.abs( transaction.amount );
-                }
+                if ( transaction.amount > 0 ) income += transaction.amount;
+                else expense += Math.abs( transaction.amount );
             }
         } );
 
@@ -102,28 +106,29 @@ export default function BarCharts ()
     }, [ selectedCard, startDate, endDate ] );
 
     // Hàm kiểm tra xem label có phải là ngày hôm nay không
-    const isToday = ( labelIndex: number ) =>
+    const isToday = useCallback( ( labelIndex: number ): boolean =>
     {
-        const today = new Date();
-        today.setHours( 0, 0, 0, 0 );
-
-        if ( timeFilter === 'week' )
+        switch ( timeFilter )
         {
-            const labelDate = new Date( startDate );
-            labelDate.setDate( startDate.getDate() + labelIndex );
-            return labelDate.getTime() === today.getTime();
-        } else if ( timeFilter === 'month' )
-        {
-            const currentYear = currentDate.getFullYear() + yearOffset;
-            return labelIndex === today.getMonth() && currentYear === today.getFullYear();
-        } else if ( timeFilter === 'quarter' )
-        {
-            const currentYear = currentDate.getFullYear() + yearOffset;
-            const currentQuarterStartMonth = selectedQuarter * 3;
-            return labelIndex + currentQuarterStartMonth === today.getMonth() && currentYear === today.getFullYear();
+            case 'week': {
+                const labelDate = new Date( startDate );
+                labelDate.setDate( startDate.getDate() + labelIndex );
+                return labelDate.getTime() === currentDate.getTime();
+            }
+            case 'month': {
+                const currentYear = currentDate.getFullYear() + yearOffset;
+                return labelIndex === currentDate.getMonth() && currentYear === currentDate.getFullYear();
+            }
+            case 'quarter': {
+                const currentYear = currentDate.getFullYear() + yearOffset;
+                const currentQuarterStartMonth = selectedQuarter * 3;
+                return labelIndex + currentQuarterStartMonth === currentDate.getMonth() &&
+                    currentYear === currentDate.getFullYear();
+            }
+            default:
+                return false;
         }
-        return false;
-    };
+    }, [ timeFilter, startDate, currentDate, currentDate, yearOffset, selectedQuarter ] );
 
     //Set data cho barchart
     const chartData = useMemo( () =>
@@ -165,7 +170,7 @@ export default function BarCharts ()
             data.push( {
                 value: income,
                 label: labels[ i ],
-                frontColor: COLORS.income,
+                frontColor: BAR_CHART_COLOR.INCOME,
                 spacing: 4,
                 // Thêm styling cho label của ngày hôm nay
                 labelTextStyle: isToday( i ) ? {
@@ -189,7 +194,7 @@ export default function BarCharts ()
             } );
             data.push( {
                 value: expense,
-                frontColor: COLORS.expense,
+                frontColor: BAR_CHART_COLOR.EXPENSE,
             } );
         }
 

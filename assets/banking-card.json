@@ -11,7 +11,7 @@
     "transactionHistory": [
       {
         "transactionId": "tx001",
-        "date": "2025-06-23",
+        "date": "2025-08-02",
         "amount": 10500000,
         "time": "09:53:01",
         "type": "Nhận tiền",
@@ -23,7 +23,7 @@
       },
       {
         "transactionId": "tx002",
-        "date": "2025-06-23",
+        "date": "2025-08-02",
         "amount": -15000000,
         "time": "09:53:01",
         "type": "Giao dịch khác",
@@ -47,7 +47,7 @@
       },
       {
         "transactionId": "tx41234006",
-        "date": "2025-06-30",
+        "date": "2025-08-02",
         "amount": -15000000,
         "time": "09:53:01",
         "type": "Giao dịch khác",
@@ -95,7 +95,7 @@
       },
       {
         "transactionId": "sdf5234",
-        "date": "2025-06-30",
+        "date": "2025-08-02",
         "amount": -15000000,
         "time": "09:53:01",
         "type": "Giao dịch khác",
