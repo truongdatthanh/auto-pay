@@ -45,7 +45,7 @@ export default function WaveButton ( { to, children, className = '', ...props }:
         <Pressable { ...props } onPress={ handlePress } className="relative overflow-hidden">
             {/* Wave effect background */ }
             <Animated.View
-                className="absolute left-0 top-0 h-full bg-gray-200 z-0"
+                className="absolute left-0 top-0 h-full bg-gray-200/20 z-0"
                 style={ [ animatedStyle, { borderRadius: 0 } ] }
             />
             <View className={ `relative z-10 px-4 py-3 items-center justify-center ${ className }` }>

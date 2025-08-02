@@ -3,16 +3,17 @@ import { Image, ImageSourcePropType, Text, TouchableOpacity, View } from "react-
 import Animated, { useSharedValue, useAnimatedStyle, withTiming, withDelay, Easing } from "react-native-reanimated";
 import { useEffect } from "react";
 
-interface ActionFABProps
+interface FloatingActionItemProps
 {
     url: Route;
     label: string;
-    icon: ImageSourcePropType; 
+    icon: ImageSourcePropType;
     toggleMenu: () => void;
     index: number;
 }
 
-export default function ActionFAB ( { url, label, icon, toggleMenu, index }: ActionFABProps )
+// Các item trong FloatingAction
+export default function FloatingActionItem ( { url, label, icon, toggleMenu, index }: FloatingActionItemProps )
 {
     const opacity = useSharedValue( 0 );
     const translateY = useSharedValue( 20 );

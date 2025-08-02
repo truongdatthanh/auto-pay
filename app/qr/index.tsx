@@ -1,4 +1,4 @@
-import CustomTabView from "@/components/tabbar/TabView";
+import CustomTabView from "@/components/tab/TabView";
 import QRScanner from "./scanner-qr";
 import MyQR from "./my-qr";
 import { useFocusEffect, useLocalSearchParams } from "expo-router";

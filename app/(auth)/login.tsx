@@ -1,4 +1,4 @@
-import { Image, Text, TouchableOpacity, View, Keyboard, TouchableWithoutFeedback, Alert, BackHandler } from 'react-native';
+import { Image, Text, TouchableOpacity, View, Keyboard, TouchableWithoutFeedback, Alert, BackHandler, ActivityIndicator } from 'react-native';
 import { useState, useCallback } from 'react';
 import { validateEmail, validatePassword } from '@/utils/validators';
 import { useAuthStore } from '@/store/useAuthStore';
@@ -13,6 +13,7 @@ import AuthScreenWrapper from '@/components/auth/AuthScreenWrapper';
 import * as LocalAuthentication from 'expo-local-authentication';
 import InputBorder from '@/components/input/InputBorder';
 
+
 export default function Login ()
 {
     const { values, handleChange } = useForm( {
@@ -23,6 +24,7 @@ export default function Login ()
     const [ passwordError, setPasswordError ] = useState<string | null>( null );
     const isBiometricSupported = useBiometricSupport();
     const biometricEnabled = useBiometricStore( ( state ) => state.biometricEnabled );
+    const [ isSubmit, setIsSubmit ] = useState( false );
     const navigation = useNavigation();
     const { login } = useAuthStore();
 
@@ -71,12 +73,17 @@ export default function Login ()
         if ( emailValidateError || passwordValidateError ) return;
         try
         {
+            setIsSubmit( true );
             const user = { email: values.email.trim() };
             await login( user );
             router.replace( '/(tabs)/home' );
         } catch ( e )
         {
             Alert.alert( 'Lỗi', 'Đăng nhập thất bại' );
+        }
+        finally
+        {
+            setIsSubmit( false )
         }
     }, [ values.email, values.password, login ] );
 
@@ -161,7 +168,7 @@ export default function Login ()
                                 className="bg-black flex-1 rounded-3xl py-4 items-center justify-center"
                                 activeOpacity={ 0.8 }
                             >
-                                <Text className="text-white font-bold text-base">Đăng nhập</Text>
+                                { isSubmit ? <ActivityIndicator size="small" color="white" /> : <Text className="text-white font-bold text-base">Đăng nhập</Text> }
                             </TouchableOpacity>
                             <TouchableOpacity
                                 onPress={ handleBiometricLogin }

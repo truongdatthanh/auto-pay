@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { AntDesign, MaterialIcons, Ionicons } from '@expo/vector-icons';
 import mockFaqs from '@/assets/faqs.json';
 import Animated, { FadeInDown } from 'react-native-reanimated';
-import TabbarTop from '@/components/tabbar/TabbarTop';
+import TabbarTop from '@/components/tab/TabbarTop';
 
 export default function ReportProblem ()
 {

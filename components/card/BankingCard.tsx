@@ -67,7 +67,7 @@ export default function BankingCard ( props: BankingCardProps )
             accessibilityHint="Double tap to view account details"
         >
             <View
-                className="rounded-2xl shadow-lg"
+                className="rounded-2xl"
                 style={ {
                     width: CARD_DIMENSIONS.width,
                     height: CARD_DIMENSIONS.height
