@@ -36,6 +36,7 @@ export default function BarCharts ()
         let start = new Date( currentDate );
         let end = new Date( currentDate );
         const labels: string[] = [];
+    
 
         //Set dữ liệu cho label
         if ( timeFilter === 'week' )
